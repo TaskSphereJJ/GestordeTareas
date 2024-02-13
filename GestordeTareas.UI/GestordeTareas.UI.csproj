@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GestordeTaras.EN\GestordeTaras.EN.csproj" />
+    <ProjectReference Include="..\GestordeTareas.BL\GestordeTareas.BL.csproj" />
+  </ItemGroup>
+
 </Project>
