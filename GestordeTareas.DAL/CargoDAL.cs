@@ -38,6 +38,40 @@ namespace GestordeTareas.DAL
             }
             return result;
         }
-        //--------------------------------METODO MODIFICAR CATEGORIA.--------------------------
+        //--------------------------------METODO ELIMINAR CARGO.--------------------------
+        public static async Task<int> DeleteAsync(Cargo cargo)
+        {
+            int result = 0;
+            using (var bdContexto = new ContextoBD()) //istancio la coneccion
+            {
+                var cargoBD = await bdContexto.Cargo.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id
+                if (cargoBD != null)//verifico que no este nulo
+                {
+                    bdContexto.Cargo.Remove(cargoBD);//elimino anivel de memoria la categoria
+                    result = await bdContexto.SaveChangesAsync();//le digo a la BD que se elimine y se guarde
+                }
+            }
+            return result;
+        }
+        //--------------------------------METODO obtenerporID CATEGORIA.--------------------------
+        public static async Task<Cargo> GetByIdAsync(Cargo cargo)
+        {
+            var cargoBD = new Cargo();
+            using (var bdContexto = new ContextoBD())
+            {
+                var categoryBD = await bdContexto.Categoria.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id
+            }
+            return cargoBD;
+        }
+        //--------------------------------METODO obtener todas las CATEGORIAS.--------------------------
+        public static async Task<List<Cargo>> GetAllAsync()
+        {
+            var cargos = new List<Cargo>(); //una variable de lo que llevara una lista de Categorias
+            using (var bdContexto = new ContextoBD()) //creo el acceso a la BD
+            {
+                cargos = await bdContexto.Cargo.ToListAsync(); //le digo que categories contenga la lista de categorias, osea lo de l BD
+            }
+            return cargos;
+        }
     }
 }
