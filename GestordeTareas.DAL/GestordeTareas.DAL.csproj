@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GestordeTaras.EN\GestordeTaras.EN.csproj" />
+  </ItemGroup>
+
 </Project>
