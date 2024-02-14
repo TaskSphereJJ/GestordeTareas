@@ -37,5 +37,41 @@ namespace GestordeTareas.DAL
                 return resul;
             }
         }
+        //...............--------------METODO ELIMINAR---------------------------
+        public static async Task<int> DeleteAsyc(Prioridad prioridad)
+        {
+            int result = 0;
+            using (var contextoBD = new ContextoBD())
+            {
+                var prioridadBD = await contextoBD.Prioridad.FirstOrDefaultAsync(p => p.Id == prioridad.Id);
+                if (prioridad != null)
+                {
+                    contextoBD.Prioridad.Remove(prioridadBD);
+                    result = await contextoBD.SaveChangesAsync();
+                }
+                return result;
+            }
+        }
+
+        //--------------------------METODO BUSCAR POR ID--------------------------------------------
+        public static async Task<Prioridad> GetByIdAsync(Prioridad prioridad)
+        {
+            var prioridadBD = new Prioridad();
+            using (var bdContexto = new ContextoBD())
+            {
+                var priordadB = await bdContexto.Prioridad.FirstOrDefaultAsync(c => c.Id == prioridad.Id); //busco el id
+            }
+            return prioridadBD;
+        }
+        //--------------------------------METODO obtener todas las PRIORIDADES.--------------------------
+        public static async Task<List<Prioridad>> GetAllAsync()
+        {
+            var priodidades = new List<Prioridad>(); //una variable de lo que llevara una lista de prioridades
+            using (var bdContexto = new ContextoBD()) //creo el acceso a la BD
+            {
+                priodidades = await bdContexto.Prioridad.ToListAsync(); //le digo que categories contenga la lista de categorias, osea lo de l BD
+            }
+            return priodidades;
+        }
     }
 }

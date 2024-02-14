@@ -59,7 +59,7 @@ namespace GestordeTareas.DAL
             var cargoBD = new Cargo();
             using (var bdContexto = new ContextoBD())
             {
-                var categoryBD = await bdContexto.Categoria.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id
+                var cargob = await bdContexto.Cargo.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id
             }
             return cargoBD;
         }
