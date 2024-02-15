@@ -1,20 +1,31 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GestordeTaras.EN;
+using GestordeTareas.BL;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestordeTareas.UI.Controllers
 {
     public class CategoriaController : Controller
     {
-        // GET: CategoriaController
-        public ActionResult Index()
+        private readonly CategoriaBL _categoriaBL;
+
+        public CategoriaController()
         {
-            return View();
+            _categoriaBL = new CategoriaBL(); // Inicializamos la capa de negocio
+        }
+
+        // GET: CategoriaController
+        public async Task<ActionResult> Index()
+        {
+            var categorias = await _categoriaBL.GetAllAsync();
+            return View(categorias);
         }
 
         // GET: CategoriaController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
+            return View(categoria);
         }
 
         // GET: CategoriaController/Create
@@ -26,10 +37,11 @@ namespace GestordeTareas.UI.Controllers
         // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(Categoria categoria)
         {
             try
             {
+                await _categoriaBL.CreateAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -39,18 +51,20 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: CategoriaController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
+            return View(categoria);
         }
 
         // POST: CategoriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, Categoria categoria)
         {
             try
             {
+                await _categoriaBL.UpdateAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -60,18 +74,20 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: CategoriaController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
+            return View(categoria);
         }
 
         // POST: CategoriaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, Categoria categoria)
         {
             try
             {
+                await _categoriaBL.DeliteAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
             catch
