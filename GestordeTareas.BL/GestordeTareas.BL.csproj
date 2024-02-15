@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GestordeTaras.EN\GestordeTaras.EN.csproj" />
+    <ProjectReference Include="..\GestordeTareas.DAL\GestordeTareas.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
