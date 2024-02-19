@@ -14,5 +14,7 @@ namespace GestordeTareas.DAL
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Cargo> Cargo { get; set; }
         public DbSet<Prioridad> Prioridad { get; set; }
+        public DbSet<Tarea> Tarea { get; set; }
+        public DbSet<ImagenTarea> ImagenTarea { get; set; }
     }
 }

@@ -25,5 +25,8 @@ namespace GestordeTaras.EN
         [Display(Name = "Estado de la Tarea")]
         public int IdTarea { get; set; }
 
+        public int Top_Aux { get; set; }
+        public Tarea Tarea { get; set; } = new Tarea();
+        
     }
 }
