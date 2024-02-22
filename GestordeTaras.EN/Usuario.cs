@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GestordeTaras.EN
 {
-    public class UsuarioEN
+    public class Usuario
     {
         [Key]
         public int Id { get; set; }
@@ -38,6 +38,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
+        [Display(Name = "Contraseña")]
         public string Pass {  get; set; } = string.Empty;
 
         [ForeignKey("Cargo")]
