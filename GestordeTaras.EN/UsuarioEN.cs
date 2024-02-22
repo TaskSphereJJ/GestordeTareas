@@ -22,7 +22,7 @@ namespace GestordeTaras.EN
         public string Apellido { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La Fecha nacimiento es requerida")]
-        public DateTime FechaNacimieno { get; set; }
+        public DateTime FechaNacimiento { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(9, ErrorMessage = "Maximo 9 caracteres")]
