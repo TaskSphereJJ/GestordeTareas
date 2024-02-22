@@ -41,11 +41,12 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _categoriaBL.CreateAsync(categoria);
+                int result = await _categoriaBL.CreateAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                ViewBag.Error = ex.Message;
                 return View();
             }
         }
@@ -64,12 +65,13 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _categoriaBL.UpdateAsync(categoria);
+                int result = await _categoriaBL.UpdateAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                return View(categoria);
             }
         }
 
@@ -78,6 +80,7 @@ namespace GestordeTareas.UI.Controllers
         {
             var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
             return View(categoria);
+
         }
 
         // POST: CategoriaController/Delete/5
@@ -90,9 +93,10 @@ namespace GestordeTareas.UI.Controllers
                 await _categoriaBL.DeliteAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                return View(categoria);
             }
         }
     }

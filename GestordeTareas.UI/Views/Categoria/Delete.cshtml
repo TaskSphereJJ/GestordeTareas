@@ -1,11 +1,12 @@
 ﻿@model GestordeTaras.EN.Categoria
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Eliminar";
 }
 
-<h1>Details</h1>
+<h1>Delete</h1>
 
+<h3>¿Quiere eliminar una Categoria?</h3>
 <div>
     <h4>Categoria</h4>
     <hr />
@@ -23,8 +24,9 @@
             @Html.DisplayFor(model => model.Nombre)
         </dd>
     </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Regresar al listado</a>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
 </div>
