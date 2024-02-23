@@ -1,14 +1,14 @@
-------------
-CREATE DATABASE GestorTareasBD;
+------Esta se supone que si es la buena xd------
+CREATE DATABASE GestordeTareasBD;
 GO
 
-USE GestorTareasBD;
+USE GestordeTareasBD;
 GO
 
 
 ----Cargo del usuario-----
 CREATE TABLE Cargo(
-    Id TINYINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
 GO
@@ -16,7 +16,7 @@ GO
 
 -----De que tipo es la tarea-----
 CREATE TABLE Categoria(
-    Id TINYINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
 GO
@@ -24,7 +24,7 @@ GO
 
 -----Prioridad de la tarea-----
 CREATE TABLE Prioridad(
-    Id TINYINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
 GO
@@ -32,7 +32,7 @@ GO
 
 -----Estado de la tarea-----
 CREATE TABLE EstadoTarea(
-    Id TINYINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
 GO
@@ -47,8 +47,8 @@ CREATE TABLE Usuario(
     Telefono VARCHAR (9) NOT NULL,
     NombreUsuario VARCHAR (50) NOT NULL,
     Correo VARCHAR (50) NOT NULL,
-    pass VARCHAR (100) NOT NULL,
-    IdCargo TINYINT NOT NULL FOREIGN KEY REFERENCES Cargo(Id)
+    Pass VARCHAR (100) NOT NULL,
+    IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id)
 );
 GO
 
@@ -65,13 +65,13 @@ GO
 
 -----creación de la tarea y datos-----
 CREATE TABLE Tarea(
-    Id BIGINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
     FechaVencimiento DATETIME NOT NULL,
-    IdCategoria TINYINT NOT NULL FOREIGN KEY REFERENCES Categoria(Id),
-    IdPrioridad TINYINT NOT NULL FOREIGN KEY REFERENCES Prioridad(Id),
-    IdEstadoTarea TINYINT NOT NULL FOREIGN KEY REFERENCES EstadoTarea(Id)
+    IdCategoria INT NOT NULL FOREIGN KEY REFERENCES Categoria(Id),
+    IdPrioridad INT NOT NULL FOREIGN KEY REFERENCES Prioridad(Id),
+    IdEstadoTarea INT NOT NULL FOREIGN KEY REFERENCES EstadoTarea(Id)
 );
 GO
 
@@ -80,16 +80,19 @@ GO
 CREATE TABLE ImagenTarea (
     Id INT PRIMARY KEY IDENTITY(1,1),
     RutaImagen NVARCHAR(MAX) NOT NULL,
-    IdTarea BIGINT NOT NULL FOREIGN KEY REFERENCES Tarea (Id)
+    IdTarea INT NOT NULL FOREIGN KEY REFERENCES Tarea (Id)
 );
 GO
 
 
 -----A quién se le ha asignado la tarea-----
 CREATE TABLE AsignacionTareas(
-    Id BIGINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     FechaAsignada DATE NOT NULL,
     FechaFinalizacion DATETIME NOT NULL,
-    IdTarea BIGINT NOT NULL FOREIGN KEY REFERENCES Tarea(Id),
+    IdTarea INT NOT NULL FOREIGN KEY REFERENCES Tarea(Id),
     IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id)
 );
+
+
+
