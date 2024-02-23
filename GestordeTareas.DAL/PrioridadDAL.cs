@@ -73,5 +73,26 @@ namespace GestordeTareas.DAL
             }
             return priodidades;
         }
+
+        // Método para eliminar prioridad de la base de datos de forma asincrónica.
+        public static async Task<int> DeleteAsync(Prioridad prioridad)
+        {
+            int result = 0;
+            using (var contextoBD = new ContextoBD())
+            {
+                // Busca la prioridad existente por su ID.
+                var prioridadBD = await contextoBD.Prioridad.FirstOrDefaultAsync(p => p.Id == prioridad.Id);
+                if (prioridadBD != null)
+                {
+                    // Elimina la prioridad del DbSet correspondiente en el contexto.
+                    contextoBD.Prioridad.Remove(prioridadBD);
+                    // Guarda los cambios en la base de datos.
+                    result = await contextoBD.SaveChangesAsync();
+                }
+            }
+            // Retorna el resultado (número de filas afectadas en la base de datos).
+            return result;
+        }
+
     }
 }

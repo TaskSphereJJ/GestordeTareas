@@ -21,14 +21,14 @@ namespace GestordeTareas.DAL
         // Método para agregar un objeto IniciarSesionEN a la base de datos de forma asincrónica.
         public async Task AgregarInicioSesionAsync(IniciarSesionEN inicioSesion)
         {
-            _context.IniciarSesionEN.Add(inicioSesion);
+            _context.IniciarSesion.Add(inicioSesion);
             await _context.SaveChangesAsync();
         }
 
         // Método para obtener un objeto IniciarSesionEN por su Id de forma asincrónica.
         public async Task<IniciarSesionEN> ObtenerInicioSesionPorIdAsync(int id)
         {
-            return await _context.IniciarSesionEN.FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.IniciarSesion.FirstOrDefaultAsync(i => i.Id == id);
         }
 
         // Método para crear un nuevo objeto IniciarSesionEN en la base de datos de forma asincrónica.
@@ -42,7 +42,7 @@ namespace GestordeTareas.DAL
         public async Task<int> UpdateAsync(IniciarSesionEN iniciarSesion)
         {
             // Busca el objeto existente en la base de datos por su Id.
-            var inicioSesionDb = await _context.IniciarSesionEN.FirstOrDefaultAsync(i => i.Id == iniciarSesion.Id);
+            var inicioSesionDb = await _context.IniciarSesion.FirstOrDefaultAsync(i => i.Id == iniciarSesion.Id);
 
             // Si el objeto existe, actualiza sus propiedades y guarda los cambios.
             if (inicioSesionDb != null)
@@ -61,12 +61,12 @@ namespace GestordeTareas.DAL
         public async Task DeleteAsync(int id)
         {
             // Busca el objeto existente en la base de datos por su Id.
-            var inicioSesionDb = await _context.IniciarSesionEN.FirstOrDefaultAsync(i => i.Id == id);
+            var inicioSesionDb = await _context.IniciarSesion.FirstOrDefaultAsync(i => i.Id == id);
 
             // Si el objeto existe, elimínalo de la base de datos y guarda los cambios.
             if (inicioSesionDb != null)
             {
-                _context.IniciarSesionEN.Remove(inicioSesionDb);
+                _context.IniciarSesion.Remove(inicioSesionDb);
                 await _context.SaveChangesAsync();
             }
         }

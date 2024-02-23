@@ -99,5 +99,21 @@ namespace GestordeTareas.DAL
             }
             return images;
         }
+
+        public static async Task<int> DeleteAsync(ImagenTarea imagenTarea)
+        {
+            int result = 0;
+            using (var bdContexto = new ContextoBD())
+            {
+                var imagenTareaDB = await bdContexto.ImagenTarea.FirstOrDefaultAsync(i => i.Id == imagenTarea.Id);
+                if (imagenTareaDB != null)
+                {
+                    bdContexto.ImagenTarea.Remove(imagenTareaDB);
+                    result = await bdContexto.SaveChangesAsync();
+                }
+            }
+            return result;
+        }
+
     }
 }

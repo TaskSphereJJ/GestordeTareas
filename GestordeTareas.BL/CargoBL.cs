@@ -18,9 +18,9 @@ namespace GestordeTareas.BL
         {
             return await CargoDAL.UpdateAsync(cargo);
         }
-        public async Task<int> DeliteAsync(Cargo cargo)
+        public async Task<int> DeleteAsync(Cargo cargo)
         {
-            return await CargoDAL.UpdateAsync(cargo);
+            return await CargoDAL.DeleteAsync(cargo);
         }
         public async Task<Cargo> GetById(Cargo cargo)
         {

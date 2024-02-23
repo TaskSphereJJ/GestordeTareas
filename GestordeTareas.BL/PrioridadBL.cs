@@ -18,9 +18,9 @@ namespace GestordeTareas.BL
         {
             return await PrioridadDAL.UpdateAsync(prioridad);
         }
-        public async Task<int> DeliteAsync(Prioridad prioridad)
+        public async Task<int> DeleteAsync(Prioridad prioridad)
         {
-            return await PrioridadDAL.UpdateAsync(prioridad);
+            return await PrioridadDAL.DeleteAsync(prioridad);
         }
         public async Task<Prioridad> GetById(Prioridad prioridad)
         {

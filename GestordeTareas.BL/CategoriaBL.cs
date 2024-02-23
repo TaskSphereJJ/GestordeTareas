@@ -18,10 +18,11 @@ namespace GestordeTareas.BL
         {
             return await CategoriaDAL.UpdateAsync(categoria);
         }
-        public async Task<int> DeliteAsync(Categoria categoria)
+        public async Task<int> DeleteAsync(Categoria categoria)
         {
-            return await CategoriaDAL.UpdateAsync(categoria);
+            return await CategoriaDAL.DeleteAsync(categoria);
         }
+
         public async Task<Categoria> GetById(Categoria categoria)
         {
             return await CategoriaDAL.GetByIdAsync(categoria);

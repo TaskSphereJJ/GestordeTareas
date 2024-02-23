@@ -38,7 +38,7 @@ namespace GestordeTareas.DAL
             }
         }
         //...............--------------METODO ELIMINAR---------------------------
-        public static async Task<int> DeleteAsyc(Tarea tarea)
+        public static async Task<int> DeleteAsync(Tarea tarea)
         {
             int result = 0;
             using (var contextoBD = new ContextoBD())
