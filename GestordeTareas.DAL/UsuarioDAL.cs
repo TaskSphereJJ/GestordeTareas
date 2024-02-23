@@ -58,7 +58,7 @@ namespace GestordeTareas.DAL
         }
 
         // Método para eliminar un usuario de la base de datos de forma asincrónica.
-        public async Task<int> Delete(Usuario usuario)
+        public static async Task<int> Delete(Usuario usuario)
         {
             int result = 0;
             using (var bdContext = new ContextoBD())
