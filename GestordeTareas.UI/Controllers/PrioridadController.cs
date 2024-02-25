@@ -18,8 +18,8 @@ namespace GestordeTareas.UI.Controllers
         // GET: PrioridadController
         public async Task<ActionResult> Index()
         {
-            var prioridades = await _prioridadBL.GetAllAsync();
-            return View(prioridades);
+            List<Prioridad> Lista = await _prioridadBL.GetAllAsync();
+            return View(Lista);
         }
 
         // GET: PrioridadController/Details/5
@@ -91,7 +91,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _prioridadBL.DeliteAsync(prioridad);
+                await _prioridadBL.DeleteAsync(prioridad);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
