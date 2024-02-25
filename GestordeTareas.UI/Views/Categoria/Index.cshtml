@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Crear nueva categoria</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear nueva Categoria</a>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Editar", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Detalles", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Eliminar", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Editar", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Detalles", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }
