@@ -39,7 +39,7 @@ namespace GestordeTareas.DAL
                     // Actualiza las propiedades del usuario con los nuevos valores.
                     usuarioDB.Nombre = usuario.Nombre;
                     usuarioDB.Apellido = usuario.Apellido;
-                    usuarioDB.FechaNacimieno = usuario.FechaNacimieno;
+                    usuarioDB.FechaNacimiento = usuario.FechaNacimiento;
                     usuarioDB.Telefono = usuario.Telefono;
                     usuarioDB.NombreUsuario = usuario.NombreUsuario;
                     usuarioDB.Correo = usuario.Correo;

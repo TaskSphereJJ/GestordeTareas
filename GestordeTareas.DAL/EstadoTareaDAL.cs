@@ -32,7 +32,7 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 // Busca el estado de tarea existente por su ID.
-                var estadoTareaDB = await dbContext.EstadoTareaEN.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
+                var estadoTareaDB = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
                 if (estadoTareaDB != null)
                 {
                     // Actualiza las propiedades del estado de tarea con los nuevos valores.
@@ -55,11 +55,11 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 // Busca el estado de tarea existente por su ID.
-                var estadoTareaDB = await dbContext.EstadoTareaEN.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
+                var estadoTareaDB = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
                 if (estadoTareaDB != null)
                 {
                     // Elimina el estado de tarea del DbSet correspondiente en el contexto.
-                    dbContext.EstadoTareaEN.Remove(estadoTareaDB);
+                    dbContext.EstadoTarea.Remove(estadoTareaDB);
                     // Guarda los cambios en la base de datos.
                     result = await dbContext.SaveChangesAsync();
                 }
@@ -75,7 +75,7 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 // Busca el estado de tarea por su ID y asigna el resultado a la variable estadoTareaDB.
-                estadoTareaDB = await dbContext.EstadoTareaEN.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
+                estadoTareaDB = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
             }
             // Retorna el estado de tarea encontrado.
             return estadoTareaDB;
@@ -88,7 +88,7 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los estados de tarea y los asigna a la variable estadoTareas.
-                estadoTareas = await bdContexto.EstadoTareaEN.ToListAsync();
+                estadoTareas = await bdContexto.EstadoTarea.ToListAsync();
             }
             // Retorna la lista de estados de tarea.
             return estadoTareas;

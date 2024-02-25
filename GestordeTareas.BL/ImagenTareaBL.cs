@@ -20,7 +20,7 @@ namespace GestordeTareas.BL
         }
         public async Task<int> DeleteAsync(ImagenTarea imagenTarea)
         {
-            return await ImagenTareaDAL.UpdateAsync(imagenTarea);
+            return await ImagenTareaDAL.DeleteAsync(imagenTarea);
         }
         public async Task<ImagenTarea> GetById(ImagenTarea imagenTarea)
         {
