@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GestordeTaras.EN.Categoria>
+﻿<!-- Vista Index.cshtml -->
+@model IEnumerable<GestordeTaras.EN.Categoria>
 
 @{
     ViewData["Title"] = "Index";
@@ -39,18 +40,113 @@
     </tbody>
 </table>
 
+<!-- Modales -->
+<!-- Modal Editar -->
+<div class="modal fade" id="modalEditarCategoria" tabindex="-1" role="dialog" aria-labelledby="modalEditarCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarCategoriaLabel">Editar Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalles -->
+<div class="modal fade" id="modalDetallesCategoria" tabindex="-1" role="dialog" aria-labelledby="modalDetallesCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetallesCategoriaLabel">Detalles de la Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Id)</dt>
+                    <dd class="col-sm-10">@Html.DisplayFor(model => model.Id)</dd>
+                    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd class="col-sm-10">@Html.DisplayFor(model => model.Nombre)</dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="modalEliminarCategoria" tabindex="-1" role="dialog" aria-labelledby="modalEliminarCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarCategoriaLabel">Eliminar Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3>¿Está seguro de que desea eliminar esta categoría?</h3>
+                <dl class="row">
+                    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Id)</dt>
+                    <dd class="col-sm-10">@Html.DisplayFor(model => model.Id)</dd>
+                    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd class="col-sm-10">@Html.DisplayFor(model => model.Nombre)</dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Eliminar" class="btn btn-danger" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     <script>
         function abrirModalEditar(id) {
+            // Aquí puedes agregar código para cargar los datos de la categoría en el formulario de edición dentro del modal
             $('#modalEditarCategoria').modal('show');
+            history.pushState(null, null, '/Categoria/Edit/' + id); // Agrega la ruta al historial
         }
 
         function abrirModalDetalles(id) {
+            // Aquí puedes agregar código para cargar los detalles de la categoría en el modal de detalles
             $('#modalDetallesCategoria').modal('show');
+            history.pushState(null, null, '/Categoria/Details/' + id); // Agrega la ruta al historial
         }
 
         function abrirModalEliminar(id) {
+            // Aquí puedes agregar código para cargar los detalles de la categoría en el modal de eliminación
             $('#modalEliminarCategoria').modal('show');
+            history.pushState(null, null, '/Categoria/Delete/' + id); // Agrega la ruta al historial
         }
+
+        $('#modalEditarCategoria, #modalDetallesCategoria, #modalEliminarCategoria').on('hidden.bs.modal', function () {
+            history.pushState(null, null, '/Categoria/Index'); // Vuelve a la vista Index en el historial
+        });
     </script>
 }
