@@ -91,7 +91,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _prioridadBL.DeliteAsync(prioridad);
+                await _prioridadBL.DeleteAsync(prioridad);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
