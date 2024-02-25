@@ -1,36 +1,39 @@
-﻿@model GestordeTaras.EN.Categoria
+﻿@model GestordeTaras.EN.Prioridad
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Nueva Categoria</h1>
+<h1>Crear Prioridad</h1>
 
-<h4>Categoria</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<<<<<<< HEAD
+=======
             @* <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div> *@
+>>>>>>> df53366f07ed3f08ed42297afb3ec24ffd31a79f
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary w-100" />
+                <input type="submit" value="Creaar" class="btn btn-primary w-100" />
             </div>
         </form>
     </div>
 </div>
-
+<hr />
 <div>
-    <a asp-action="Index" class="btn btn-secondary">Regresar a la Lista</a>
+    <a asp-action="Index" class="btn btn-info">Regresar a la lista</a>
 </div>
 
 @section Scripts {
