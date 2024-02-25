@@ -88,7 +88,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _tareaBL.DeliteAsync(tarea);
+                await _tareaBL.DeleteAsync(tarea);
                 return RedirectToAction(nameof(Index));
             }
             catch

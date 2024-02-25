@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">CREAR NUEVA CATEGORIA</a>
+    <a asp-action="Create" class="btn btn-primary">Crear nueva Categoria</a>
 </p>
 <table class="table">
     <thead>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Editar", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Detalles", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Eliminar", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }
