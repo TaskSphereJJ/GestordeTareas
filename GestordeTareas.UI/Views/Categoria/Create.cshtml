@@ -20,8 +20,10 @@
                     <input asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
+                <br />
                 <div class="form-group">
                     <input type="submit" value="Crear" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>
