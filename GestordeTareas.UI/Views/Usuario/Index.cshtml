@@ -1,53 +1,87 @@
 ﻿@model IEnumerable<GestordeTaras.EN.Usuario>
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-<div class="card">
-    <div class="card-header">
-        Lista Usuario
-    </div>
-    <div class="card-body">
-        <!-- Enlace para agregar un nuevo usuario -->
-        <a asp-action="Usuario" asp-controller="Home" asp-route-idUsuario="0" class="btn btn-success btn-sm">Nuevo Usuario</a>
-    </div>
+ <div class="card" style="width: 174vh;">
+            <div class="card-header">
+                Lista Usuario
+            </div>
+            <div class="card-body">
+                <p>
+                    <a asp-action="Create" class="btn btn-success btn-sm">Crear nuevo Usuario</a>
+                </p>
+            </div>
     <hr />
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Fecha Nacimiento</th>
-                <th>Telefono</th>
-                <th>Nombre Usuario</th>
-                <th>Correo</th>
-                <th>Contraseña</th>
-                <th>IdCargo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Bucle para recorrer la lista de usuarios -->
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <!-- Mostrar información de cada usuario -->
-                    <td>@item.Nombre</td>
-                    <td>@item.Apellido</td>
-                    <td>@item.FechaNacimiento</td>
-                    <td>@item.Telefono</td>
-                    <td>@item.Nombre Usuario</td>
-                    <td>@item.Correo</td>
-                    <td>@item.Pass</td>
-                    <td>@item.IdCargo</td>
-                    <td>
-                        <!-- Enlaces para editar y eliminar usuarios -->
-                        <a asp-action="Usuario" asp-controller="Home" asp-route-idUsuario="@item.Id" class="btn btn-primary btn-sm">Editar</a>
-                        <a asp-action="Eliminar" asp-controller="Home" asp-route-idUsuario="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+<table class="table" style="width: 100vh;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaNacimiento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCargo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaNacimiento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pass)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCargo)
+            </td>
+            <td>
+                    @Html.ActionLink("Modificar", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-info" }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-outline-secondary" }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger" })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
 </div>

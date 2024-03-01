@@ -8,10 +8,12 @@ namespace GestordeTareas.UI.Controllers
     public class UsuarioController : Controller
     {
         private readonly UsuarioBL _usuarioBL;
-        public UsuarioController() 
+
+        public UsuarioController()
         {
-            _usuarioBL = new UsuarioBL();
+            _usuarioBL = new UsuarioBL(); // Inicializamos la capa de negocio
         }
+
         // GET: UsuarioController
         public async Task<ActionResult> Index()
         {
@@ -20,69 +22,82 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: UsuarioController/Details/5
-        public async Task<ActionResult> Usuario(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            // Instancia de modelo para representar un usuario
-            Usuario model_usuario = new Usuario();
-
-            // ViewBag para indicar que se está creando un nuevo usuario
-            ViewBag.Accion = "Nuevo Usuario";
-
-            // Si el idUsuario no es 0, significa que se está editando un usuario existente
-            if (id != 0)
-            {
-                // Llama al método Obtener(idUsuario) del servicio para obtener información del usuario con el ID proporcionado
-                model_usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id});
-
-                // Indica que se está editando un usuario
-                ViewBag.Accion = "Editar Usuario";
-            }
-
-            // Devuelve la vista "Usuario" con el modelo(info) de usuario correspondiente
-            return View(model_usuario);
-            
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+            return View(usuario);
         }
 
+        // GET: UsuarioController/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
 
-        // Acción del controlador para guardar cambios en un usuario
+        // POST: UsuarioController/Create
         [HttpPost]
-         
-        public async Task<IActionResult> GuardarCambios(Usuario ob_Usuario)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(Usuario usuario)
         {
-            int resultado;
-
-            // Verifica si el userId del usuario es igual a cero, lo cual indica que es un nuevo usuario
-            if (ob_Usuario.Id == 0)
-                // Llama al método Guardar(ob_Usuario) del servicio para guardar un nuevo usuario
-                resultado = await _usuarioBL.Create(ob_Usuario);
-            else
-                // Llama al método Editar(ob_Usuario) del servicio para editar un usuario existente
-                resultado = await _usuarioBL.Update(ob_Usuario);
-
-            // Verifica el resultado y redirige a la página de inicio si es exitoso
-            if (resultado > 0)
-                return RedirectToAction("Index");
-            else
-                // Si la operación falla o no se obtiene un ID válido, devuelve una respuesta sin contenido
-                return NoContent();
+            try
+            {
+                int result = await _usuarioBL.Create(usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View();
+            }
         }
 
-
-
-
-        // Acción del controlador para eliminar un usuario
-        [HttpGet]
-        public async Task<IActionResult> Eliminar(Usuario usuario)
+        // GET: UsuarioController/Edit/5
+        public async Task<ActionResult> Edit(int id)
         {
-            // Llama al método Eliminar(idUsuario) del servicio para eliminar un usuario
-            var respuesta = await _usuarioBL.Delete(usuario);
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+            return View(usuario);
+        }
 
-            if (respuesta > 0)
-                // Verifica la respuesta del servicio y redirige a la página de inicio si es exitosa
-                return RedirectToAction("Index");
-            else
-                // Si la operación falla o no se eliminan filas, puedes manejarlo según tus necesidades
-                return NoContent();
+        // POST: UsuarioController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int id, Usuario usuario)
+        {
+            try
+            {
+                int result = await _usuarioBL.Update(usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View(usuario);
+            }
+        }
+
+        // GET: UsuarioController/Delete/5
+        public async Task<ActionResult> Delete(int id)
+        {
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+            return View(usuario);
+        }
+
+        // POST: UsuarioController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int id, Usuario usuario)
+        {
+            try
+            {
+                await _usuarioBL.Delete(usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View(usuario);
+            }
         }
     }
+
 }
