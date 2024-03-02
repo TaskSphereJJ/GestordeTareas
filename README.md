@@ -7,6 +7,7 @@ Este proyecto es un sistema para llevar el control de tareas y asignarlas a dife
 ## Arquitectura en N-Capas
 
 ### EN (Entidades)
+
 - **Usuario**
 - **Tarea**
 - **Prioridad**
@@ -49,4 +50,77 @@ En esta capa se encuentra la interfaz de usuario del sistema, implementada con A
 - Microsoft.EntityFrameworkCore
 - Microsoft.EntityFrameworkCore.SqlServer
 - Microsoft.VisualStudio.Web.CodeGeneration.Design
+## LA BASE DE DAROS ESTARIA ASI:
+1. **Cargo**:
+   - Id
+   - Nombre
 
+2. **Categoria**:
+   - Id
+   - Nombre
+
+3. **Prioridad**:
+   - Id
+   - Nombre
+
+4. **EstadoTarea**:
+   - Id
+   - Nombre
+
+5. **Usuarios**:
+   - Id
+   - Nombre
+   - Apellido
+   - Email
+   - Pass
+   - Teléfono
+   - FechaNacimiento
+   - CargoId
+
+6. **Administradores**:
+   - ID
+   - UsuarioID
+
+7. **Colaboradores**:
+   - ID
+   - UsuarioID
+
+8. **Proyecto**:
+   - Id
+   - Descripcion
+   - AdministradorID
+   - CodigoAcceso
+   - FechaFinalizacion
+
+9. **GrupoTrabajo**:
+   - Id
+   - AdministradorId
+   - ColaboradorID
+   - ProyectoID
+   - UQ_AdminColProyecto
+
+10. **Tarea**:
+    - ID
+    - Nombre
+    - Descripcion
+    - FechaVencimiento
+    - FechaCreacion
+    - IdCategoria
+    - IdPrioridad
+    - IdEstadoTarea
+    - ProyectoID
+    - GrupoTrabajoID
+
+11. **ElejirTarea**:
+    - Id
+    - IdTarea
+    - IdColaborador
+    - FechaAsignacion
+    - IdEstadoTarea
+
+12. **TareaFinalizada**:
+    - Id
+    - IdElejirTarea
+    - FechaFinalizacion
+    - Comentarios
+    - ImagenesDePrueba
