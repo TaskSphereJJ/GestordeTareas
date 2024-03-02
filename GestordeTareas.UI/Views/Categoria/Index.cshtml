@@ -2,26 +2,28 @@
 
 @{
     ViewData["Title"] = "Index";
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 }
 
-<h1>Index</h1>
+<h1>Categoria</h1>
 
 <p>
-    <a asp-action="Create">CREAR NUEVA CATEGORIA</a>
+    <a href="#" class="btn btn-success" onclick="cargarVistaCreate()">
+        <i class="fas fa-plus"></i> Crear Nueva Categoria
+    </a>
 </p>
-<table class="table">
+
+
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
+<<<<<<< HEAD
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -37,5 +39,159 @@
             </td>
         </tr>
 }
+=======
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>
+                    <a href="#" class="btn btn-primary btn-sm" onclick="cargarVistaEdit(@item.Id)">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+
+                    <a href="#" class="btn btn-warning btn-sm" onclick="cargarVistaDetails(@item.Id)">
+                        <i class="fas fa-eye"></i> Detalles
+                    </a>
+
+                    <a href="#" class="btn btn-danger btn-sm" onclick="cargarVistaDelete(@item.Id)">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </a>
+
+                </td>
+            </tr>
+        }
+>>>>>>> d16c5957109db5f3d032561863bc02bf8ef07c45
     </tbody>
 </table>
+
+<!-- Modal de creación -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Crear Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="createModalContent">
+                    <!-- Contenido de la vista de edición se cargará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de edición -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editModalContent">
+                    <!-- Contenido de la vista de edición se cargará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de detalles -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Detalles de la categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="detailsModalContent">
+                    <!-- Contenido de la vista de edición se cargará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="deleteModalContent">
+                <!-- Contenido de la vista de eliminación se cargará aquí -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+    function cargarVistaCreate() {
+        $.ajax({
+            url: "/Categoria/Create",
+            type: "GET",
+            success: function (data) {
+                $("#createModalContent").html(data);
+                $("#createModal").modal("show");
+            }
+        });
+    }
+
+    function cargarVistaEdit(id) {
+        $.ajax({
+            url: "/Categoria/Edit/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#editModalContent").html(data);
+                $("#editModal").modal("show");
+            }
+        });
+    }
+
+    function cargarVistaDetails(id) {
+        $.ajax({
+            url: "/Categoria/DetailsPartial/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#detailsModalContent").html(data);
+                $("#detailsModal").modal("show");
+            }
+        });
+    }
+
+    function cargarVistaDelete(id) {
+        $.ajax({
+            url: "/Categoria/Delete/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#deleteModalContent").html(data); // Esto muestra el contenido de la categoria
+                $("#deleteModal").modal("show");
+            },
+            error: function () {
+                alert("Error al cargar la vista de eliminación.");
+            }
+        });
+    }
+
+
+</script>
+
+

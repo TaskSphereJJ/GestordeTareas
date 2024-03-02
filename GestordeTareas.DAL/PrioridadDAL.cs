@@ -59,7 +59,7 @@ namespace GestordeTareas.DAL
             var prioridadBD = new Prioridad();
             using (var bdContexto = new ContextoBD())
             {
-                var priordadB = await bdContexto.Prioridad.FirstOrDefaultAsync(c => c.Id == prioridad.Id); //busco el id
+                 prioridadBD = await bdContexto.Prioridad.FirstOrDefaultAsync(c => c.Id == prioridad.Id); //busco el id
             }
             return prioridadBD;
         }
