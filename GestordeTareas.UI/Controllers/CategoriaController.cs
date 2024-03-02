@@ -1,9 +1,7 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -16,83 +14,91 @@ namespace GestordeTareas.UI.Controllers
             _categoriaBL = new CategoriaBL(); // Inicializamos la capa de negocio
         }
 
-        // GET: Categoria/Index
-        public async Task<IActionResult> Index()
+        // GET: CategoriaController
+        public async Task<ActionResult> Index()
         {
             List<Categoria> Lista = await _categoriaBL.GetAllAsync();
+             
             return View(Lista);
         }
 
+        // GET: CategoriaController/Details/5
+        public async Task<ActionResult> DetailsPartial(int id)
+        {
+            var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
+            return PartialView("Details", categoria);
+        }
+
+        // GET: CategoriaController/Create
+        public ActionResult Create()
+        {
+            return PartialView("Create");
+        }
+
+        // POST: CategoriaController/Create
         [HttpPost]
-        public async Task<IActionResult> Create (Categoria Categoria)
-        {
-            try { 
-            //Logica para crear una nueva categoria
-            await _categoriaBL.CreateAsync(Categoria);
-            return Json(new { Success = true });
-        }
-        catch (Exception ex)
-            {
-                return Json(new {success = false, error = ex.Message});
-            }
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> Edit(int id, Categoria categoria)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(Categoria categoria)
         {
             try
             {
-                // Lógica para actualizar la categoría existente
-                categoria.Id = id; 
-                await _categoriaBL.UpdateAsync(categoria);
-                return Json(new { success = true });
+                int result = await _categoriaBL.CreateAsync(categoria);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                ViewBag.Error = ex.Message;
+                return PartialView("Create", categoria);
             }
         }
 
+        // GET: CategoriaController/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
+            return PartialView("Edit", categoria);
+        }
+
+        // POST: CategoriaController/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int id, Categoria categoria)
         {
             try
             {
-                // Lógica para eliminar la categoría
-                var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
-                if (categoria != null)
-                {
-                    await _categoriaBL.DeleteAsync(categoria);
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    return Json(new { success = false, error = "La categoría no existe." });
-                }
+                int result = await _categoriaBL.UpdateAsync(categoria);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                ViewBag.Error = ex.Message;
+                return View(categoria);
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        // GET: CategoriaController/Delete/5
+        public async Task<ActionResult> Delete(int id)
+        {
+            var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
+            return PartialView("Delete", categoria);
+
+        }
+
+        // POST: CategoriaController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int id, Categoria categoria)
         {
             try
             {
-                // Lógica para obtener los detalles de la categoría
-                var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
-                return View(categoria); 
+                await _categoriaBL.DeleteAsync(categoria);
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                ViewBag.Error = ex.Message;
+                return View(categoria);
             }
         }
-
     }
 }
-
-
-

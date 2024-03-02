@@ -8,10 +8,11 @@
 <h1>Categoria</h1>
 
 <p>
-    <button class="btn btn-success" id="btnCrearCategoria">
+    <a href="#" class="btn btn-success" onclick="cargarVistaCreate()">
         <i class="fas fa-plus"></i> Crear Nueva Categoria
-    </button>
+    </a>
 </p>
+
 
 <table class="table table-hover">
     <thead>
@@ -28,157 +29,151 @@
                 <td>@Html.DisplayFor(modelItem => item.Id)</td>
                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                 <td>
-                    <button class="btn btn-primary btn-sm editar-categoria" data-id="@item.Id" data-nombre="@item.Nombre">
+                    <a href="#" class="btn btn-primary btn-sm" onclick="cargarVistaEdit(@item.Id)">
                         <i class="fas fa-edit"></i> Editar
-                    </button>
-                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-warning btn-sm">
+                    </a>
+
+                    <a href="#" class="btn btn-warning btn-sm" onclick="cargarVistaDetails(@item.Id)">
                         <i class="fas fa-eye"></i> Detalles
                     </a>
-                    <button class="btn btn-danger btn-sm eliminar-categoria" data-id="@item.Id">
+
+                    <a href="#" class="btn btn-danger btn-sm" onclick="cargarVistaDelete(@item.Id)">
                         <i class="fas fa-trash-alt"></i> Eliminar
-                    </button>
+                    </a>
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<!-- Modal para crear/editar categoría -->
-<div class="modal" id="categoriaModal" tabindex="-1" role="dialog">
+<!-- Modal de creación -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="categoriaModalTitle">Crear Nueva Categoria</h5>
+                <h5 class="modal-title" id="createModalLabel">Crear Categoría</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="categoriaForm">
-                    <input type="hidden" id="categoriaId" name="Id" />
-                    <div class="form-group">
-                        <label for="categoriaNombre">Nombre:</label>
-                        <input type="text" class="form-control" id="categoriaNombre" name="Nombre" />
-                        <span id="errorNombre" style="color: red;"></span> <!-- Agregado: Mensaje de error -->
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="guardarCategoria">Guardar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <div id="createModalContent">
+                    <!-- Contenido de la vista de edición se cargará aquí -->
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal de confirmación de eliminación -->
-<div class="modal" id="confirmarEliminarModal" tabindex="-1" role="dialog">
+<!-- Modal de edición -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirmar Eliminación</h5>
+                <h5 class="modal-title" id="editModalLabel">Editar Categoría</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que quieres eliminar la categoría: <span id="categoriaNombreEliminar"></span>?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <div id="editModalContent">
+                    <!-- Contenido de la vista de edición se cargará aquí -->
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Delegación de eventos para botones dentro del modal
-            $('#categoriaModal').on('click', '#guardarCategoria', function () {
-                var id = $("#categoriaId").val();
-                var nombre = $("#categoriaNombre").val();
+<!-- Modal de detalles -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Detalles de la categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="detailsModalContent">
+                    <!-- Contenido de la vista de edición se cargará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                // Validación de nombre
-                if (nombre.trim() == "") {
-                    $("#errorNombre").text("El nombre es obligatorio."); // Mostrar mensaje de error
-                    return; // Detener el envío del formulario si hay errores
-                } else {
-                    $("#errorNombre").text(""); // Borrar mensaje de error si el nombre es válido
-                }
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="deleteModalContent">
+                <!-- Contenido de la vista de eliminación se cargará aquí -->
+            </div>
+        </div>
+    </div>
+</div>
 
-                var url = id ? "/Categoria/Edit" : "/Categoria/Create";
-                var method = id ? "PUT" : "POST";
-                var data = { Id: id, Nombre: nombre };
 
-                $.ajax({
-                    url: url,
-                    type: method,
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        location.reload(); // Recargar la página
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
 
-            $('#categoriaModal').on('click', '[data-dismiss="modal"]', function () {
-                $('#categoriaModal').modal('hide');
-            });
 
-            // Evento para abrir el modal para crear una nueva categoría
-            $("#btnCrearCategoria").click(function () {
-                $("#categoriaModalTitle").text("Crear Nueva Categoria");
-                $("#categoriaId").val("");
-                $("#categoriaNombre").val("");
-                $("#errorNombre").text(""); // Borrar mensaje de error al abrir el modal
-                $("#categoriaModal").modal("show");
-            });
+<script>
 
-            // Evento para abrir el modal para editar una categoría
-            $(".editar-categoria").click(function () {
-                var id = $(this).data("id");
-                var nombre = $(this).data("nombre");
-                $("#categoriaModalTitle").text("Editar Categoria");
-                $("#categoriaId").val(id);
-                $("#categoriaNombre").val(nombre);
-                $("#errorNombre").text(""); // Borrar mensaje de error al abrir el modal
-                $("#categoriaModal").modal("show");
-            });
-
-            // Evento para eliminar una categoría
-            $(".eliminar-categoria").click(function () {
-                var id = $(this).data("id");
-                var nombre = $(this).closest("tr").find("td:eq(1)").text();
-
-                // Mostrar modal de confirmación de eliminación
-                $("#confirmarEliminarModal").modal("show");
-                $("#categoriaNombreEliminar").text(nombre);
-
-                // Confirmar si el usuario realmente quiere eliminar la categoría
-                $("#btnConfirmarEliminar").click(function () {
-                    // Realizar una solicitud DELETE al servidor para eliminar la categoría
-                    $.ajax({
-                        url: "/Categoria/Delete/" + id,
-                        type: "POST",
-                        dataType: "json",
-                        success: function (result) {
-                            // Recargar la página o actualizar la tabla según sea necesario
-                            location.reload(); // Recargar la página
-                        },
-                        error: function (xhr, status, error) {
-                            console.error(error);
-                        }
-                    });
-                });
-            });
+    function cargarVistaCreate() {
+        $.ajax({
+            url: "/Categoria/Create",
+            type: "GET",
+            success: function (data) {
+                $("#createModalContent").html(data);
+                $("#createModal").modal("show");
+            }
         });
-    </script>
-}
+    }
+
+    function cargarVistaEdit(id) {
+        $.ajax({
+            url: "/Categoria/Edit/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#editModalContent").html(data);
+                $("#editModal").modal("show");
+            }
+        });
+    }
+
+    function cargarVistaDetails(id) {
+        $.ajax({
+            url: "/Categoria/DetailsPartial/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#detailsModalContent").html(data);
+                $("#detailsModal").modal("show");
+            }
+        });
+    }
+
+    function cargarVistaDelete(id) {
+        $.ajax({
+            url: "/Categoria/Delete/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#deleteModalContent").html(data); // Esto muestra el contenido de la categoria
+                $("#deleteModal").modal("show");
+            },
+            error: function () {
+                alert("Error al cargar la vista de eliminación.");
+            }
+        });
+    }
+
+
+</script>
+
+
