@@ -56,12 +56,12 @@ namespace GestordeTareas.DAL
         //--------------------------------METODO obtenerporID CATEGORIA.--------------------------
         public static async Task<Categoria> GetByIdAsync(Categoria categoria)
         {
-            var categoriaBD = new Categoria();
+            var categoryBD = new Categoria();
             using (var bdContexto = new ContextoBD())
             {
-                var categoryBD = await bdContexto.Categoria.FirstOrDefaultAsync(c => c.Id == categoria.Id); //busco el id
+                categoryBD = await bdContexto.Categoria.FirstOrDefaultAsync(c => c.Id == categoria.Id); //busco el id
             }
-            return categoriaBD;
+            return categoryBD;
         }
 
         //--------------------------------METODO obtener todas las CATEGORIAS.--------------------------

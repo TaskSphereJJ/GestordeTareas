@@ -17,9 +17,11 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController
         public async Task<ActionResult> Index()
         {
-            var categorias = await _categoriaBL.GetAllAsync();
-            return View(categorias);
+            List<Categoria> Lista = await _categoriaBL.GetAllAsync();
+
+            return View(Lista);
         }
+
 
         // GET: CategoriaController/Details/5
         public async Task<ActionResult> Details(int id)

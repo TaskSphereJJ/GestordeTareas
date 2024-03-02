@@ -6,6 +6,11 @@
     <title>@ViewData["Title"] - GestordeTareas.UI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* agrego el link de tailwind *@
+    <link href="~/css/tailwind.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DfXdz2htPHrenZ9h4z1U1TzXPOOjk4gfaLI9f/+nJF1cPmUz2c4zlr4I9aMIel0t" crossorigin="anonymous">
+
     <link rel="stylesheet" href="~/GestordeTareas.UI.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -24,6 +29,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Categoria" asp-action="Index">Categoria</a>
                         </li>
                     </ul>
                 </div>
