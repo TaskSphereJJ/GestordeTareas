@@ -1,8 +1,7 @@
 ---CREACION DE LA BD
-CREATE DATABASE GestorTareasBD
+CREATE DATABASE GestorTareas
 --usar la bd
-USE GestorTareasBD
-
+USE GestorTareas
 --------------------------------------------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
 CREATE TABLE Cargo(
@@ -57,6 +56,7 @@ CREATE TABLE Colaboradores (
 -- Creación del proyecto
 CREATE TABLE Proyecto (
     Id INT PRIMARY KEY IDENTITY,
+    Titulo VARCHAR(50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
     AdministradorID INT NOT NULL FOREIGN KEY REFERENCES Administradores(Id),
     CodigoAcceso VARCHAR(100) UNIQUE, -- Código de acceso único para el proyecto

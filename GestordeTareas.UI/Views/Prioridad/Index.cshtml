@@ -6,29 +6,7 @@
 }
 
 <h1>Prioridad</h1>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DfXdz2htPHrenZ9h4z1U1TzXPOOjk4gfaLI9f/+nJF1cPmUz2c4zlr4I9aMIel0t" crossorigin="anonymous">
 
-<<<<<<< HEAD
-<a asp-action="Create" class="flex items-center m-2 justify-center focus:outline-none text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-3 py-2 mb-2 dark:focus:ring-purple-900 w-auto">
-    <i class="fas fa-plus"></i> Crear
-</a>
-
-<hr />
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-black uppercase bg-purple-200 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Nombre)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Acciones
-                </th>
-=======
 <p>
     <a asp-action="Create" class="btn btn-success">
         <i class="fas fa-plus"></i> Crear Nueva Prioridad
@@ -60,33 +38,7 @@
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </a>
                 </td>
->>>>>>> d16c5957109db5f3d032561863bc02bf8ef07c45
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-purple-200 dark:hover:bg-gray-600">
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td class="px-6 py-4">
-                        @Html.DisplayFor(modelItem => item.Nombre)
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <div class="inline-flex">
-                            <a href="@Url.Action("Edit", new { id = item.Id })" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-yellow-800">
-                                <i class="fas fa-edit me-1"></i> Editar
-                            </a>
-                            <a href="@Url.Action("Delete", new { id = item.Id })" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-red-600 to-red-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-red-900">
-                                <i class="fas fa-trash-alt me-1"></i> Eliminar
-                            </a>
-                        </div>
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
+        }
+    </tbody>
+</table>
