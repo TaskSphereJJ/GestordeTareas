@@ -1,21 +1,18 @@
-﻿@model IEnumerable<GestordeTaras.EN.Categoria>
+﻿@model IEnumerable<GestordeTaras.EN.Cargo>
 
 @{
     ViewData["Title"] = "Index";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
 }
 
-<h1>Categoria</h1>
+<h1>Cargo</h1>
 
 <p>
     <a href="#" class="btn btn-success" onclick="cargarVistaCreate()">
-        <i class="fas fa-plus"></i> Crear Nueva Categoria
+        <i class="fas fa-plus"></i> Crear Cargo
     </a>
 </p>
-
-
 <table class="table table-hover">
     <thead>
         <tr>
@@ -55,7 +52,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">Crear Categoría</h5>
+                <h5 class="modal-title" id="createModalLabel">Crear Cargo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -74,7 +71,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar Categoría</h5>
+                <h5 class="modal-title" id="editModalLabel">Editar Cargo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -93,14 +90,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles de la categoría</h5>
+                <h5 class="modal-title" id="detailsModalLabel">Detalles del cargo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div id="detailsModalContent">
-                    <!-- Contenido de la vista de detalles se cargará aquí -->
+                    <!-- Contenido de la vista de dealles se cargará aquí -->
                 </div>
             </div>
         </div>
@@ -112,7 +109,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Eliminar Categoría</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Cargo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -133,7 +130,7 @@
 
     function cargarVistaCreate() {
         $.ajax({
-            url: "/Categoria/Create",
+            url: "/Cargo/Create",
             type: "GET",
             success: function (data) {
                 $("#createModalContent").html(data);
@@ -144,7 +141,7 @@
 
     function cargarVistaEdit(id) {
         $.ajax({
-            url: "/Categoria/Edit/" + id,
+            url: "/Cargo/Edit/" + id,
             type: "GET",
             success: function (data) {
                 $("#editModalContent").html(data);
@@ -155,7 +152,7 @@
 
     function cargarVistaDetails(id) {
         $.ajax({
-            url: "/Categoria/DetailsPartial/" + id,
+            url: "/Cargo/DetailsPartial/" + id,
             type: "GET",
             success: function (data) {
                 $("#detailsModalContent").html(data);
@@ -166,10 +163,10 @@
 
     function cargarVistaDelete(id) {
         $.ajax({
-            url: "/Categoria/Delete/" + id,
+            url: "/Cargo/Delete/" + id,
             type: "GET",
             success: function (data) {
-                $("#deleteModalContent").html(data); // Esto muestra el contenido de la categoria
+                $("#deleteModalContent").html(data); // Esto muestra el contenido del cargo
                 $("#deleteModal").modal("show");
             },
             error: function () {
@@ -178,6 +175,6 @@
         });
     }
 
-</script>
 
+</script>
 
