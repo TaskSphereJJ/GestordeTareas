@@ -3,11 +3,8 @@
 @{
     ViewData["Title"] = "Eliminar";
 }
-
 <h5>¿Desea eliminar esta categoria?</h5>
-<br />
 <div>
-
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
@@ -22,9 +19,7 @@
             @Html.DisplayFor(model => model.Nombre)
         </dd>
     </dl>
-    <form asp-action="Delete" method="post">
+    <form asp-action="Delete" id="deleteForm" method="post">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
