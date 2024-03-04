@@ -32,7 +32,6 @@
     <tbody>
         @foreach (var item in Model)
         {
-<<<<<<< HEAD
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="px-6 py-4 text-lg">
                     @Html.DisplayFor(modelItem => item.Id)
@@ -49,7 +48,6 @@
                         <a href="#" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-blue-800" onclick="cargarVistaDetails(@item.Id)">
                             <i class="fas fa-eye me-1"></i> Detalles
                         </a>
-=======
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Id)</td>
                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
@@ -64,8 +62,7 @@
 
                     <a href="#" class="btn btn-danger btn-sm" onclick="cargarVistaDelete(@item.Id)">
                         <i class="fas fa-trash-alt"></i> 
-                    </a>
->>>>>>> 19aa7a2a12091317079c917be20c5806d06f6ba2
+                    </a
 
                         <a href="#" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-red-600 to-red-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-red-900" onclick="cargarVistaDelete(@item.Id)">
                             <i class="fas fa-trash-alt me-1"></i> Eliminar
