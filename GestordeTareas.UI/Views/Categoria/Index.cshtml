@@ -8,22 +8,20 @@
 <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Categoria</h1>
 <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Categorias para clasificar las tareas que se hiran realizando</p>
 
-<a href="#" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" onclick="cargarVistaCreate()">
+<a href="#" onclick="cargarVistaCreate(); return false;" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
     <i class="fas fa-plus"></i> Crear Nueva Categoria
 </a>
-
-
 
 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 shadow-md mt-5">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-            <th scope="col" class="px-6 py-3 ">
+            <th scope="col" class="px-6 py-3 text-xl">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th scope="col" class="px-6 py-3 text-xl">
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
-            <th scope="col" class="px-6 py-3 text-center">
+            <th scope="col" class="px-6 py-3 text-center text-xl">
                 Acciones
             </th>
         </tr>
@@ -33,10 +31,10 @@
         @foreach (var item in Model)
         {
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 text-lg">
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 text-lg">
                     @Html.DisplayFor(modelItem => item.Nombre)
                 </td>
                 <td class="px-6 py-4 text-center">
@@ -54,8 +52,6 @@
                         </a>
                     </div>
                 </td>
-
-
             </tr>
         }
     </tbody>
@@ -135,8 +131,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <script>
