@@ -1,6 +1,7 @@
-﻿@model GestordeTaras.EN.Categoria
+﻿@model GestordeTaras.EN.EstadoTareaEN
 
-<form asp-action="Create" id="createForm">
+<form asp-action="Edit" id="editForm">
+    <input type="hidden" asp-for="Id" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Nombre" class="control-label"></label>

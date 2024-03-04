@@ -18,9 +18,9 @@ namespace GestordeTaras.EN
         [StringLength(50, ErrorMessage = "Maximo de caracteres 50")]
         public string Nombre { get; set; } = string.Empty; //inicializo qeu es un string de logitud cero
 
-        //OTRAS QUE NO ESTAN EN LA Bd
-        [NotMapped]
-        public int Top_Aux { get; set; } //controla cuantos registros quiero traer
+        ////OTRAS QUE NO ESTAN EN LA Bd
+        //[NotMapped]
+        //public int Top_Aux { get; set; } //controla cuantos registros quiero traer
 
     }
 }
