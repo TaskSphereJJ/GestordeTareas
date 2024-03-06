@@ -1,0 +1,25 @@
+﻿@model GestordeTaras.EN.EstadoTareaEN
+
+@{
+    ViewData["Title"] = "Delete";
+}
+<h5>¿Desea eliminar el estado?</h5>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+    </dl>
+    <form asp-action="Delete" id="deleteForm" method="post">
+        <input type="hidden" asp-for="Id" />
+    </form>
+</div>

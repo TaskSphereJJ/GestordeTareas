@@ -1,5 +1,6 @@
------Este trigger insertará el UsuarioID en la tabla Administradores si el CargoId es 1 (administrador) o en la tabla Colaboradores si el -----CargoId es 2 (colaborador).
 
+--usar la bd
+USE GestorTareasJ
 CREATE TRIGGER TR_InsertarAdminColaborador
 ON Usuarios
 AFTER INSERT
