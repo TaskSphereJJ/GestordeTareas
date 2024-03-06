@@ -7,78 +7,49 @@
 
 }
 
-<h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Categoria</h1>
-<p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Categorias para clasificar las tareas que se hiran realizando</p>
+<h1>Categoria</h1>
 
-<a href="#" onclick="cargarVistaCreate(); return false;" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-    <i class="fas fa-plus"></i> Crear Nueva Categoria
-</a>
+<p>
+    <a href="#" class="btn btn-success" onclick="cargarVistaCreate()">
+        <i class="fas fa-plus"></i> Crear Nueva Categoria
+    </a>
+</p>
 
-<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 shadow-md mt-5">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+
+<table class="table table-hover">
+    <thead>
         <tr>
-            <th scope="col" class="px-6 py-3 text-xl">
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th scope="col" class="px-6 py-3 text-xl">
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th scope="col" class="px-6 py-3 text-center text-xl">
-                Acciones
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>Acciones</th>
         </tr>
     </thead>
-
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td class="px-6 py-4 text-lg">
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td class="px-6 py-4 text-lg">
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <div class="flex justify-center">
-                        <a href="#" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-yellow-800" onclick="cargarVistaEdit(@item.Id)">
-                            <i class="fas fa-edit me-1"></i> Editar
-                        </a>
-
-                        <a href="#" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-blue-800" onclick="cargarVistaDetails(@item.Id)">
-                            <i class="fas fa-eye me-1"></i> Detalles
-                        </a>
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Id)</td>
                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                 <td>
                     <a href="#" class="btn btn-primary btn-sm" onclick="cargarVistaEdit(@item.Id)">
-                        <i class="fas fa-edit"></i> 
+                        <i class="fas fa-edit"></i>
                     </a>
 
                     <a href="#" class="btn btn-warning btn-sm" onclick="cargarVistaDetails(@item.Id)">
-                        <i class="fas fa-eye"></i> 
+                        <i class="fas fa-eye"></i>
                     </a>
 
                     <a href="#" class="btn btn-danger btn-sm" onclick="cargarVistaDelete(@item.Id)">
-                        <i class="fas fa-trash-alt"></i> 
-                    </a
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
 
-                        <a href="#" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-red-600 to-red-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-red-900" onclick="cargarVistaDelete(@item.Id)">
-                            <i class="fas fa-trash-alt me-1"></i> Eliminar
-                        </a>
-                    </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<<<<<<< HEAD
-
-=======
 <!-- Modales -->
->>>>>>> 19aa7a2a12091317079c917be20c5806d06f6ba2
 <!-- Modal de creación -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -164,13 +135,10 @@
     </div>
 </div>
 
-<<<<<<< HEAD
-=======
 <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
->>>>>>> 19aa7a2a12091317079c917be20c5806d06f6ba2
 
 <script>
 
@@ -208,7 +176,7 @@
             }
         });
     }
-    
+
     function eliminarCategoria() {
         // Enviar una solicitud AJAX para eliminar la categoría
         $.ajax({
@@ -274,6 +242,6 @@
         });
     }
 
-   
+
 </script>
 
