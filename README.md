@@ -127,5 +127,7 @@ En esta capa se encuentra la interfaz de usuario del sistema, implementada con A
 
 13. **ImagenTareaFinalizada**:
     -Id
-    --Imagen
-    --IdTaresFinalizada
+    -Imagen
+    -IdTaresFinalizada
+
+![image](https://github.com/JeffreyMardoqueo-17/Gestor-de-Tareas/assets/126411958/9ace6bda-a886-4b39-af1a-09d720475665)
