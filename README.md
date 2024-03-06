@@ -125,7 +125,7 @@ En esta capa se encuentra la interfaz de usuario del sistema, implementada con A
     - Comentarios
     - ImagenesDePrueba
 
-13. **ImagenTareaFinalizada**
-   -Id
-   --Imagen
-   --IdTaresFinalizada
+13. **ImagenTareaFinalizada**:
+    -Id
+    --Imagen
+    --IdTaresFinalizada
