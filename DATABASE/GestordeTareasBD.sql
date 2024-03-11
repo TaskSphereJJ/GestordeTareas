@@ -34,7 +34,7 @@ CREATE TABLE Usuarios (
     Apellido VARCHAR(50) NOT NULL,
     Email VARCHAR(100) NOT NULL,
     Pass VARCHAR(100) NOT NULL, -- Encriptar la contraseña
-    Teléfono VARCHAR(20),
+    Telefono VARCHAR(20),
     FechaNacimiento DATE,
     CargoId INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id)
 );
@@ -43,14 +43,14 @@ GO
 CREATE TABLE Administradores (
     ID INT PRIMARY KEY IDENTITY (1,1),
     UsuarioID INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Usuarios(Id),
-    Contraseña VARCHAR(100) NOT NULL -- Encriptar la contraseña
+    Pass VARCHAR(100) NOT NULL -- Encriptar la contraseña
 );
 GO
 -- Tabla para almacenar los colaboradores
 CREATE TABLE Colaboradores (
     ID INT PRIMARY KEY IDENTITY (1,1),
     UsuarioID INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Usuarios(Id),
-    Contraseña VARCHAR(100) NOT NULL -- Encriptar la contraseña
+    Pass VARCHAR(100) NOT NULL -- Encriptar la contraseña
 );
 GO
 -- Creación del proyecto
