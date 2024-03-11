@@ -14,10 +14,10 @@ namespace GestordeTareas.DAL
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Cargo> Cargo { get; set; }
         public DbSet<Prioridad> Prioridad { get; set; }
-        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Usuarios> Usuario { get; set; }
         public DbSet<EstadoTareaEN> EstadoTarea { get; set; }
         public DbSet<Tarea> Tarea { get; set; }
-        public DbSet<ImagenTarea> ImagenTarea { get; set; }
+        public DbSet<ImagenesPruebas> ImagenesPruebas { get; set; }
         public DbSet<AsignacionTareas> AsignacionTareas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -7,25 +7,25 @@ namespace GestordeTareas.UI.Controllers
 {
     public class ImagenTareaController : Controller
     {
-        private readonly ImagenTareaBL _imagenTareaBL;
+        private readonly BL.ImagenesPruebasBL _imagenTareaBL;
 
         public ImagenTareaController()
         {
-            _imagenTareaBL = new ImagenTareaBL();   
+            _imagenTareaBL = new ImagenesPruebasBL();   
         }
 
         // GET: ImagenTareaController
         public async Task <ActionResult> Index()
         {
-            var imagenTareas = await _imagenTareaBL.GetAllAsync();
-            return View(imagenTareas);
+            var imagennesPruebas = await _imagenTareaBL.GetAllAsync();
+            return View(imagennesPruebas);
         }
 
         // GET: ImagenTareaController/Details/5
         public async Task <ActionResult> Details(int id)
         {
-            var imagenTarea = await _imagenTareaBL.GetById(new ImagenTarea { Id = id });
-            return View(imagenTarea);
+            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPruebas { Id = id });
+            return View(imagenesPruebas);
         }
 
         // GET: ImagenTareaController/Create
@@ -37,11 +37,11 @@ namespace GestordeTareas.UI.Controllers
         // POST: ImagenTareaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <ActionResult> Create(ImagenTarea imagenTarea)
+        public async Task <ActionResult> Create(GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
         {
             try
             {
-                await _imagenTareaBL.CreateAsync(imagenTarea);
+                await _imagenTareaBL.CreateAsync(imagenesPruebas);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -53,18 +53,18 @@ namespace GestordeTareas.UI.Controllers
         // GET: ImagenTareaController/Edit/5
         public async Task <ActionResult> Edit(int id)
         {
-            var imagenTarea = await _imagenTareaBL.GetById(new ImagenTarea { Id = id });
-            return View(imagenTarea);
+            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPruebas { Id = id });
+            return View(imagenesPruebas);
         }
 
         // POST: ImagenTareaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, ImagenTarea imagenTarea)
+        public async Task<ActionResult> Edit(int id, GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
         {
             try
             {
-                await _imagenTareaBL.UpdateAsync(imagenTarea);
+                await _imagenTareaBL.UpdateAsync(imagenesPruebas);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -76,18 +76,18 @@ namespace GestordeTareas.UI.Controllers
         // GET: ImagenTareaController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var imagenTarea = await _imagenTareaBL.GetById(new ImagenTarea { Id = id });
-            return View(imagenTarea);
+            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPruebas { Id = id });
+            return View(imagenesPruebas);
         }
 
         // POST: ImagenTareaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, ImagenTarea imagenTarea)
+        public async Task<ActionResult> Delete(int id, GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
         {
             try
             {
-                await _imagenTareaBL.DeleteAsync(imagenTarea);
+                await _imagenTareaBL.DeleteAsync(imagenesPruebas);
                 return RedirectToAction(nameof(Index));
             }
             catch
