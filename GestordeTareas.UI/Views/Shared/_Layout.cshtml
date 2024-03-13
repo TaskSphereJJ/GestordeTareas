@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class = "dark:bg-purple-950">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="~/GestordeTareas.UI.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="dark:bg-gray-900">
     @* header o barra de arriba *@
     <header class="m-auto shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12">
         @* <!-- Icono de hamburguesa --> *@
@@ -47,6 +47,7 @@
                 </div>
             </label>
         </div>
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
         @* <!-- Sección de perfil --> *@
          <div class="flex items-center justify-end gap-4">
@@ -250,6 +251,8 @@
                 }
             });
         });
+
+        //MODO OSCRUO
 
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
