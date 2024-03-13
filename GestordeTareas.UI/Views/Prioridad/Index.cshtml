@@ -3,68 +3,17 @@
 @{
     ViewData["Title"] = "Index";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 }
 
 <h1>Prioridad</h1>
 
-<a asp-action="Create" class="flex items-center m-2 justify-center focus:outline-none text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-3 py-2 mb-2 dark:focus:ring-purple-900 w-auto">
-    <i class="fas fa-plus"></i> Crear
-</a>
-
-<hr />
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-black uppercase bg-purple-200 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Nombre)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Acciones
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-purple-200 dark:hover:bg-gray-600">
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td class="px-6 py-4">
-                        @Html.DisplayFor(modelItem => item.Nombre)
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <div class="inline-flex">
-                            <a href="@Url.Action("Edit", new { id = item.Id })" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-yellow-800">
-                                <i class="fas fa-edit me-1"></i> Editar
-                            </a>
-                            <a href="@Url.Action("Delete", new { id = item.Id })" class="flex items-center justify-center focus:outline-none text-white bg-gradient-to-r from-red-600 to-red-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 me-1 mb-2 dark:focus:ring-red-900">
-                                <i class="fas fa-trash-alt me-1"></i> Eliminar
-                            </a>
-                        </div>
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
 <p>
     <a href="#" class="btn btn-success" onclick="cargarVistaCreate()">
         <i class="fas fa-plus"></i> Crear Nueva Prioridad
     </a>
 </p>
-
-
 <table class="table table-hover">
     <thead>
         <tr>
@@ -98,7 +47,7 @@
     </tbody>
 </table>
 
-
+<!-- Modales -->
 <!-- Modal de creación -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -110,7 +59,7 @@
             </div>
             <div class="modal-body">
                 <div id="createModalContent">
-                    <!-- Contenido de la vista de edición se cargará aquí -->
+                    <!-- Contenido de la vista de creación se cargará aquí -->
                 </div>
             </div>
             <div class="modal-footer">
@@ -148,13 +97,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles de la Prioridad</h5>
+                <h5 class="modal-title" id="detailsModalLabel">Detalles de la prioridad</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
                 <div id="detailsModalContent">
-                    <!-- Contenido de la vista de edición se cargará aquí -->
+                    <!-- Contenido de la vista de detalles se cargará aquí -->
                 </div>
             </div>
             <div class="modal-footer">
@@ -177,19 +126,16 @@
                 <!-- Contenido de la vista de eliminación se cargará aquí -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="eliminarPrioridad()">Eliminar</button>
+                <button type="button" class="btn btn-danger" onclick="eliminarCargo()">Eliminar</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
 
 
 <script>
@@ -197,7 +143,7 @@
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
         $.ajax({
-            url: '/Prioridad/Create', // URL de la acción Create en el controlador Categoria
+            url: '/Prioridad/Create', // URL de la acción Create en el controlador Cargo
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -215,7 +161,7 @@
     function submiteditForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
         $.ajax({
-            url: '/Prioridad/Edit', // URL de la acción Create en el controlador Categoria
+            url: '/Prioridad/Edit', // URL de la acción Create en el controlador Cargo
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -229,22 +175,21 @@
         });
     }
 
-    function eliminarPrioridad() {
-        // Enviar una solicitud AJAX para eliminar la categoría
+    function eliminarCargo() {
+        // Enviar una solicitud AJAX para eliminar el cargo
         $.ajax({
-            url: '/Prioridad/Delete', // URL de la acción POST para eliminar la categoría
+            url: '/Prioridad/Delete', // URL de la acción POST para eliminar el cargo
             type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la categoría)
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del cargo)
             success: function (response) {
-                // Recargar la página después de eliminar la categoría
+                // Recargar la página después de eliminar el cargo
                 window.location.reload();
             },
             error: function (xhr, status, error) {
-                alert('Error al eliminar la categoría: ' + xhr.responseText);
+                alert('Error al eliminar la prioridad: ' + xhr.responseText);
             }
         });
     }
-
 
 
     function cargarVistaCreate() {
@@ -285,7 +230,7 @@
             url: "/Prioridad/Delete/" + id,
             type: "GET",
             success: function (data) {
-                $("#deleteModalContent").html(data); // Esto muestra el contenido de la categoria
+                $("#deleteModalContent").html(data); // Esto muestra el contenido de la prioridad
                 $("#deleteModal").modal("show");
             },
             error: function () {
@@ -293,6 +238,7 @@
             }
         });
     }
+
 
 </script>
 
