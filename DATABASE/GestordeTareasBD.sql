@@ -1,7 +1,8 @@
 ---CREACION DE LA BD
-CREATE DATABASE GestorTareasJ
+CREATE DATABASE GestordeTareasBD
+go
 --usar la bd
-USE GestorTareasJ
+USE GestordeTareasBD
 --------------------------------------------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
 CREATE TABLE Cargo(
@@ -34,7 +35,7 @@ CREATE TABLE Usuarios (
     Apellido VARCHAR(50) NOT NULL,
     Email VARCHAR(100) NOT NULL,
     Pass VARCHAR(100) NOT NULL, -- Encriptar la contraseña
-    Telefono VARCHAR(20),
+    Teléfono VARCHAR(20),
     FechaNacimiento DATE,
     CargoId INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id)
 );
@@ -43,14 +44,14 @@ GO
 CREATE TABLE Administradores (
     ID INT PRIMARY KEY IDENTITY (1,1),
     UsuarioID INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Usuarios(Id),
-    Pass VARCHAR(100) NOT NULL -- Encriptar la contraseña
+    Contraseña VARCHAR(100) NOT NULL -- Encriptar la contraseña
 );
 GO
 -- Tabla para almacenar los colaboradores
 CREATE TABLE Colaboradores (
     ID INT PRIMARY KEY IDENTITY (1,1),
     UsuarioID INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Usuarios(Id),
-    Pass VARCHAR(100) NOT NULL -- Encriptar la contraseña
+    Contraseña VARCHAR(100) NOT NULL -- Encriptar la contraseña
 );
 GO
 -- Creación del proyecto

@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Index";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 }
@@ -15,8 +14,6 @@
         <i class="fas fa-plus"></i> Crear Nueva Prioridad
     </a>
 </p>
-
-
 <table class="table table-hover">
     <thead>
         <tr>
@@ -50,8 +47,11 @@
     </tbody>
 </table>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c8e188c5943ae4e0ace0a43e2068113b081a90eb
 <!-- Modales -->
 <!-- Modal de creación -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -131,7 +131,7 @@
                 <!-- Contenido de la vista de eliminación se cargará aquí -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="eliminarPrioridad()">Eliminar</button>
+                <button type="button" class="btn btn-danger" onclick="eliminarCargo()">Eliminar</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -143,14 +143,21 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c8e188c5943ae4e0ace0a43e2068113b081a90eb
 <script>
 
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
         $.ajax({
+<<<<<<< HEAD
             url: '/Prioridad/Create', // URL de la acción Create en el controladorPrioridad/
+=======
+            url: '/Prioridad/Create', // URL de la acción Create en el controlador Cargo
+>>>>>>> c8e188c5943ae4e0ace0a43e2068113b081a90eb
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -168,7 +175,11 @@
     function submiteditForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
         $.ajax({
+<<<<<<< HEAD
             url: '/Prioridad/Edit', // URL de la acción Create en el controladorPrioridad/
+=======
+            url: '/Prioridad/Edit', // URL de la acción Create en el controlador Cargo
+>>>>>>> c8e188c5943ae4e0ace0a43e2068113b081a90eb
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -182,22 +193,26 @@
         });
     }
 
+<<<<<<< HEAD
     function eliminarPrioridad/) {
         // Enviar una solicitud AJAX para eliminar la categoría
+=======
+    function eliminarCargo() {
+        // Enviar una solicitud AJAX para eliminar el cargo
+>>>>>>> c8e188c5943ae4e0ace0a43e2068113b081a90eb
         $.ajax({
-            url: '/Prioridad/Delete', // URL de la acción POST para eliminar la categoría
+            url: '/Prioridad/Delete', // URL de la acción POST para eliminar el cargo
             type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la categoría)
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del cargo)
             success: function (response) {
-                // Recargar la página después de eliminar la categoría
+                // Recargar la página después de eliminar el cargo
                 window.location.reload();
             },
             error: function (xhr, status, error) {
-                alert('Error al eliminar la categoría: ' + xhr.responseText);
+                alert('Error al eliminar la prioridad: ' + xhr.responseText);
             }
         });
     }
-
 
 
     function cargarVistaCreate() {
@@ -238,7 +253,11 @@
             url: "/Prioridad/Delete/" + id,
             type: "GET",
             success: function (data) {
+<<<<<<< HEAD
                 $("#deleteModalContent").html(data); // Esto muestra el contenido de laPrioridad/
+=======
+                $("#deleteModalContent").html(data); // Esto muestra el contenido de la prioridad
+>>>>>>> c8e188c5943ae4e0ace0a43e2068113b081a90eb
                 $("#deleteModal").modal("show");
             },
             error: function () {
