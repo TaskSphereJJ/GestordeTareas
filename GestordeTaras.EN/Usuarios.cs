@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestordeTaras.EN
 {
-    public class Usuario
+    public class Usuarios
     {
         [Key]
         public int Id { get; set; }
