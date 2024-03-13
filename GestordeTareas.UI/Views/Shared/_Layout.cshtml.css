@@ -46,3 +46,35 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+
+/* MODO OSCURO */
+/* Cambia el fondo del botón al modo oscuro */
+input[type="checkbox"]:checked + .slider {
+    background-color:#1d004f;
+    border: 1px solid #7C3AED;
+}
+
+/* Mueve el círculo al modo oscuro */
+input[type="checkbox"]:checked + .slider .circle {
+    transform: translateX(120%);
+    background-color:transparent;
+    color: #ebe0ff;
+}
+
+/* Cambia el fondo del botón al modo claro */
+input[type="checkbox"]:not(:checked) + .slider {
+    background-color: #fbefff;
+    border: 1px solid #7C3AED;
+}
+
+/* Mueve el círculo al modo claro */
+input[type="checkbox"]:not(:checked) + .slider .circle {
+    transform: translateX(-10%);
+    background: #fffabd;
+    color: rgb(255, 214, 65);
+}
+.circle {
+    border-radius: 50%; /* Hace que el contenedor sea un círculo */
+    background-color: transparent; /* Elimina el color de fondo */
+}
