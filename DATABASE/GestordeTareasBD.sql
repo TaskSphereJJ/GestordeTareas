@@ -1,7 +1,8 @@
 ---CREACION DE LA BD
-CREATE DATABASE GestorTareasJ
+CREATE DATABASE GestordeTareasBD
+go
 --usar la bd
-USE GestorTareasJ
+USE GestordeTareasBD
 --------------------------------------------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
 CREATE TABLE Cargo(

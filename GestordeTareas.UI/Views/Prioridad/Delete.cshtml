@@ -1,15 +1,11 @@
 ﻿@model GestordeTaras.EN.Prioridad
 
+
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar";
 }
-
-<h1>Eliminar Prioriadad</h1>
-
-<h3>¿Seguro que quiere eliminar la prioridad?</h3>
+<h5>¿Desea eliminar esta categoria?</h5>
 <div>
-    <h4>Prioridad</h4>
-    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
@@ -24,10 +20,7 @@
             @Html.DisplayFor(model => model.Nombre)
         </dd>
     </dl>
-
-    <form asp-action="Delete" method="post">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Regresar a la vista</a>
+    <form asp-action="Delete" id="deleteForm" method="post">
+        <input type="hidden" asp-for="Id" />
     </form>
-
 </div>

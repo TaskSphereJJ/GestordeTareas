@@ -18,9 +18,11 @@ namespace GestordeTareas.DAL
         public DbSet<EstadoTareaEN> EstadoTarea { get; set; }
         public DbSet<Tarea> Tarea { get; set; }
         public DbSet<ImagenTarea> ImagenTarea { get; set; }
+        public DbSet<ImagenesPruebas> ImagenesPruebas { get; set; }
         public DbSet<AsignacionTareas> AsignacionTareas { get; set; }
+        public DbSet<Proyecto> Proyecto { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+           protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=localhost;Database=GestorTareasJ;User=Jeffrey;Password=jeffrey20068f;Encrypt=true;TrustServerCertificate=true;");
         }
