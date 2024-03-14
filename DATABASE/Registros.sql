@@ -21,3 +21,5 @@ INSERT INTO Usuarios (Nombre, Apellido, Email, Pass, Telefono, FechaNacimiento, 
 VALUES ('David', 'Hernandez', 'david0@gmail.com','david', '12345678', '2003-02-16', 2);
 GO
 
+
+

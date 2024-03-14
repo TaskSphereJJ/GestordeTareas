@@ -15,7 +15,7 @@ namespace GestordeTaras.EN
 
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        [MaxLength(100,ErrorMessage = "Maximo 100 caracteres")]
+        [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
         [Display(Name = "Titulo")]
         public string Titulo { get; set; } = string.Empty;
 
@@ -26,12 +26,12 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Administradores")]
         [Display(Name = "Admin")]
-        public int AdministradorID { get; set; }  
+        public int AdministradorID { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
         [Display(Name = "Codigo de acceso")]
-        public string CodigoAcceso {  get; set; } = string.Empty;
+        public string CodigoAcceso { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Fecha de finalizacion")]

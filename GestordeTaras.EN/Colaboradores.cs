@@ -23,4 +23,6 @@ namespace GestordeTaras.EN
         [Display(Name = "Contraseña")]
         public string Contraseña { get; set; } = string.Empty;
     }
+
 }
+

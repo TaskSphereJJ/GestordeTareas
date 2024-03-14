@@ -18,9 +18,9 @@ namespace GestordeTareas.DAL
         public DbSet<EstadoTareaEN> EstadoTarea { get; set; }
         public DbSet<Tarea> Tarea { get; set; }
         public DbSet<ImagenesPruebas> ImagenesPruebas { get; set; }
-        public DbSet<AsignacionTareas> AsignacionTareas { get; set; }
+        public DbSet<Proyecto> Proyecto { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+           protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data source = DESKTOP-UMST7PO; Initial Catalog = GestordeTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
         }

@@ -16,7 +16,7 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Administradores")]
         [Display(Name = "Admin")]
-        public int AdministradorID { get; set; } 
+        public int AdministradorID { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Colaboradores")]

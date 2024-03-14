@@ -13,7 +13,6 @@ namespace GestordeTaras.EN
         [Key]
         public int Id { get; set; }
 
-
         [Required(ErrorMessage = "La Ruta de la Imagen es Requerida")]
         [MaxLength(4000, ErrorMessage = "Máximo 4000 Caractéres")]
         [Display(Name = "RutaImagen")]
@@ -25,7 +24,10 @@ namespace GestordeTaras.EN
         [Display(Name = "Estado de la Tarea")]
         public int IdTareaFinalizada { get; set; }
 
+        [NotMapped]
+        public int Top_Aux { get; set; } // propiedad auxiliar
+        public TareaFinalizada TareaFinalizada { get; set; } = new TareaFinalizada(); // propiedad de navegación
 
-        
+
     }
 }

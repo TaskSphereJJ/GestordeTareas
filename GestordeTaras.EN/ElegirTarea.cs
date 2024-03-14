@@ -17,7 +17,7 @@ namespace GestordeTaras.EN
         [ForeignKey("Tarea")]
         [Display(Name = "Tarea")]
         public int IdTarea { get; set; }
-        
+
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Colaboradores")]
         [Display(Name = "Colaboradores")]
