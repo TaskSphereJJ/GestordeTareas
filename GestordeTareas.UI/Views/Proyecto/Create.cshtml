@@ -14,6 +14,12 @@
         <span asp-validation-for="Descripcion" class="text-danger"></span>
     </div>
 
+    @* <div class="form-group">
+        <label asp-for="IdUsuario" class="control-label"></label>
+        <select asp-for="IdUsuario" class="form-control" asp-items="@ViewBag.Usuarios"></select>
+        <span asp-validation-for="IdUsuario" class="text-danger"></span>
+    </div> *@
+
     <div class="form-group">
         <label asp-for="CodigoAcceso" class="control-label"></label>
         <input asp-for="CodigoAcceso" class="form-control" />

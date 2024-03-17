@@ -27,6 +27,10 @@ namespace GestordeTaras.EN
         [Display(Name = "Administrador")]
         public int IdUsuario { get; set; }
 
+        [ForeignKey("IdUsuario")]
+        public virtual Usuarios Usuario { get; set; }
+
+
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
         [Display(Name = "Codigo de acceso")]

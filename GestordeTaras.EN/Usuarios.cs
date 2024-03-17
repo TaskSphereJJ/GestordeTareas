@@ -27,13 +27,13 @@ namespace GestordeTaras.EN
         public string Pass { get; set; } = string.Empty;
 
         [MaxLength(20, ErrorMessage = "Maximo 20 caracteres")]
-        public string Telefono { get; set; } = string.Empty;
+        public string Teléfono { get; set; } = string.Empty;
 
         public DateTime FechaNacimiento { get; set; }
 
         [ForeignKey("Cargo")]
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Cargo")]
-        public int IdCargo { get; set; }
+        public int CargoId { get; set; }
     }
 }

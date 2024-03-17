@@ -17,7 +17,7 @@ namespace GestordeTareas.DAL
             using (var bdContext = new ContextoBD())
             {
                 // Agrega el usuario al DbSet correspondiente en el contexto.
-                bdContext.Usuario.Add(usuario);
+                bdContext.Usuarios.Add(usuario);
                 // Guarda los cambios en la base de datos.
                 await bdContext.SaveChangesAsync();
             }
@@ -33,7 +33,7 @@ namespace GestordeTareas.DAL
             using (var bdContext = new ContextoBD())
             {
                 // Busca el usuario existente por su ID.
-                var usuarioDB = await bdContext.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                var usuarioDB = await bdContext.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
                 if (usuarioDB != null)
                 {
                     // Actualiza las propiedades del usuario con los nuevos valores.
@@ -41,9 +41,9 @@ namespace GestordeTareas.DAL
                     usuarioDB.Apellido = usuario.Apellido;
                     usuarioDB.Email = usuario.Email;
                     usuarioDB.Pass = usuario.Pass;
-                    usuarioDB.Telefono = usuario.Telefono;
+                    usuarioDB.Teléfono = usuario.Teléfono;
                     usuarioDB.FechaNacimiento = usuario.FechaNacimiento;
-                    usuarioDB.IdCargo = usuario.IdCargo;
+                    usuarioDB.CargoId = usuario.CargoId;
 
 
                     // Marca el usuario como modificado en el contexto.
@@ -64,11 +64,11 @@ namespace GestordeTareas.DAL
             using (var bdContext = new ContextoBD())
             {
                 // Busca el usuario existente por su ID.
-                var usuarioDB = await bdContext.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                var usuarioDB = await bdContext.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
                 if (usuarioDB != null)
                 {
                     // Elimina el usuario del DbSet correspondiente en el contexto.
-                    bdContext.Usuario.Remove(usuarioDB);
+                    bdContext.Usuarios.Remove(usuarioDB);
                     // Guarda los cambios en la base de datos.
                     result = await bdContext.SaveChangesAsync();
                 }
@@ -84,7 +84,7 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())
             {
                 // Busca el usuario por su ID y asigna el resultado a la variable usuarioDB.
-                usuarioDB = await bdContexto.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                usuarioDB = await bdContexto.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
             }
             // Retorna el usuario encontrado.
             return usuarioDB;
@@ -97,7 +97,7 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los usuarios y los asigna a la variable usuarios.
-                usuarios = await bdContexto.Usuario.ToListAsync();
+                usuarios = await bdContexto.Usuarios.ToListAsync();
             }
             // Retorna la lista de usuarios.
             return usuarios;
