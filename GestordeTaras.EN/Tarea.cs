@@ -24,13 +24,13 @@ namespace GestordeTaras.EN
         [Display(Name = "Descripcion")]
         public string Descripcion { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "La Fecha de creacion es Requerida")]
+        [Display(Name = "Fecha  de creacion")]
+        public DateTime FechaCreacion { get; set; }
+
         [Required(ErrorMessage = "La Fecha de Vencimiento es Requerida")]
         [Display(Name = "Fecha  de vencimiento")]
         public DateTime FechaVencimiento { get; set; }
-       
-       
-        [Display(Name = "Fecha  de Creacion")]
-        public DateTime FechaCreacion { get; set; }
 
 
         [ForeignKey("Categoria")]
@@ -49,16 +49,10 @@ namespace GestordeTaras.EN
         public int IdEstadoTarea { get; set; }
 
         [ForeignKey("Proyecto")]
-        [Required(ErrorMessage = "El proyecto es Requerido")]
-        [Display(Name = "Proyecto")]
-        public int ProyectoID { get; set; }
-        
-        
-        [ForeignKey("GrupoTrabajo")]
-        [Required(ErrorMessage = "El GrupoTrabajo es Requerido")]
-        [Display(Name = "Grupo de Trabajo")]
-        public int GrupoTrabajoID { get; set; }
 
+        [Required(ErrorMessage = "El proyecto es requerido")]
+        [Display(Name = "Proyecto")]
+        public int IdProyecto { get; set; }
 
     }
 }

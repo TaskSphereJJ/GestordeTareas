@@ -10,23 +10,23 @@ namespace GestordeTareas.BL
 {
     public class ImagenesPruebasBL
     {
-        public async Task<int> CreateAsync(GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task<int> CreateAsync(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             return await ImagenTareaDAL.CreateAsync(imagenesPruebas);
         }
-        public async Task<int> UpdateAsync(GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task<int> UpdateAsync(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             return await ImagenTareaDAL.UpdateAsync(imagenesPruebas);
         }
-        public async Task<int> DeleteAsync(GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task<int> DeleteAsync(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             return await ImagenTareaDAL.DeleteAsync(imagenesPruebas);
         }
-        public async Task<GestordeTaras.EN.ImagenesPruebas> GetById(GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task<GestordeTaras.EN.ImagenesPrueba> GetById(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             return await ImagenTareaDAL.GetByIdAsync(imagenesPruebas);
         }
-        public async Task<List<GestordeTaras.EN.ImagenesPruebas>> GetAllAsync()
+        public async Task<List<GestordeTaras.EN.ImagenesPrueba>> GetAllAsync()
         {
             return await ImagenTareaDAL.GetAllAsync();
         }

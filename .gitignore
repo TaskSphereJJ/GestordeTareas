@@ -9,6 +9,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.GestordeTareas.DAL/ContextoBD.cs
+
+.ContextoBD.cs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

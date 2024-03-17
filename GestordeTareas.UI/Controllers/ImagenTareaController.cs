@@ -24,7 +24,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: ImagenTareaController/Details/5
         public async Task <ActionResult> Details(int id)
         {
-            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPruebas { Id = id });
+            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPrueba { Id = id });
             return View(imagenesPruebas);
         }
 
@@ -37,7 +37,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: ImagenTareaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <ActionResult> Create(GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task <ActionResult> Create(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             try
             {
@@ -53,14 +53,14 @@ namespace GestordeTareas.UI.Controllers
         // GET: ImagenTareaController/Edit/5
         public async Task <ActionResult> Edit(int id)
         {
-            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPruebas { Id = id });
+            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPrueba { Id = id });
             return View(imagenesPruebas);
         }
 
         // POST: ImagenTareaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task<ActionResult> Edit(int id, GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             try
             {
@@ -76,14 +76,14 @@ namespace GestordeTareas.UI.Controllers
         // GET: ImagenTareaController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPruebas { Id = id });
+            var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPrueba { Id = id });
             return View(imagenesPruebas);
         }
 
         // POST: ImagenTareaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, GestordeTaras.EN.ImagenesPruebas imagenesPruebas)
+        public async Task<ActionResult> Delete(int id, GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             try
             {

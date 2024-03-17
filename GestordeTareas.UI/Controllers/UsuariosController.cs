@@ -40,7 +40,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Details(int id)
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuarios { Id = id });
-            user.Cargo = await cargoBL.GetById(new Cargo { Id = user.CargoId });
+            user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
             return View(user);
         }
 
@@ -101,7 +101,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuarios { Id = id });
-            user.Cargo = await cargoBL.GetById(new Cargo { Id = user.CargoId });
+            user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
             ViewBag.Error = "";
             return View(user);
         }
@@ -123,7 +123,7 @@ namespace GestordeTareas.UI.Controllers
                 if (userDb == null)
                     userDb = new Usuarios();
                 if (userDb.Id > 0)
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.CargoId });
+                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                 return View(userDb);
             }
         }
@@ -149,7 +149,7 @@ namespace GestordeTareas.UI.Controllers
                 var userDb = await _usuarioBL.LoginAsync(user);
                 if (userDb != null && userDb.Id > 0 && userDb.NombreUsuario == user.NombreUsuario)
                 {
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.CargoId });
+                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                                 new Claim(ClaimTypes.Role, userDb.Cargo.Nombre)};
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

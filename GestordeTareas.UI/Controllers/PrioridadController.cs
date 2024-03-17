@@ -23,16 +23,16 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: PrioridadController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> DetailsPartial(int id)
         {
             var prioridad = await _prioridadBL.GetById(new Prioridad { Id = id });
-            return View(prioridad);
+            return PartialView("Details", prioridad);
         }
 
         // GET: PrioridadController/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView("Create");
         }
 
         // POST: PrioridadController/Create
@@ -48,7 +48,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View();
+                return PartialView("Create");
             }
         }
 
@@ -56,10 +56,10 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var prioridad = await _prioridadBL.GetById(new Prioridad { Id = id });
-            return View(prioridad);
+            return PartialView("Edit", prioridad);
         }
 
-        // POST: PrioridadController/Edit/5
+        // POST: CategoriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Prioridad prioridad)
@@ -80,7 +80,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var prioridad = await _prioridadBL.GetById(new Prioridad { Id = id });
-            return View(prioridad);
+            return PartialView("Delete", prioridad);
 
         }
 

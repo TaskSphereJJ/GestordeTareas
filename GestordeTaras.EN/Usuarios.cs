@@ -19,10 +19,8 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
-        public string Email { get; set; } = string.Empty;
+        public string NombreUsuario { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Campo obligatorio")]
-        [MaxLength(4000, ErrorMessage = "maximo 100 caracteres")]
         [Display(Name = "Contraseña")]
         public string Pass { get; set; } = string.Empty;
 
@@ -31,28 +29,36 @@ namespace GestordeTaras.EN
 
         public DateTime FechaNacimiento { get; set; }
 
+   
+        [Required(ErrorMessage = "El estado es requerido")]
+        [Display(Name = "Estado")]
+        public byte Status { get; set; }
+
+        [Display(Name = "Fecha de registro")]
+        public DateTime FechaRegistro { get; set; }
+
         [ForeignKey("Cargo")]
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Cargo")]
-        public int CargoId { get; set; }
-
-        [Required(ErrorMessage = "Campo obligatorio")]
-        [MaxLength(100, ErrorMessage = "Maximo 50 caracteres")]
-        public string NombreUsuario { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "El estado es requerido")]
-        [Display(Name = "Estado")]
-        public int Status { get; set; }
-
-        [Display(Name = "Fecha de registro")]
-        public DateTime RegistrationDate { get; set; }
+        public int IdCargo { get; set; }
 
 
         [NotMapped]
         public int Top_Aux { get; set; } // propiedad auxiliar
 
-        public Cargo? Cargo { get; set; }
 
+    
+
+
+        [NotMapped]
+        [Required(ErrorMessage = "La confirmación de contraseña es requerida")]
+        [DataType(DataType.Password)]
+        [StringLength(32, ErrorMessage = "La contraseña debe tener entre 6 y 32 caracteres", MinimumLength = 6)]
+        [Compare("Password", ErrorMessage = "Las contraseñas no coinciden")]
+        [Display(Name = "Confirmar la contraseña")]
+        public string ConfirmPassword_Aux { get; set; } = string.Empty; // propiedad auxiliar
+
+        public Cargo? Cargo { get; set; } // propiedad de navegación
     }
 
     public enum User_Status
