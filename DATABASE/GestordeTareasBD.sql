@@ -1,113 +1,165 @@
----CREACION DE LA BD
+---BASE DE DATOS CON REGISTROS 
 CREATE DATABASE GestordeTareasBD
 go
 --usar la bd
 USE GestordeTareasBD
---------------------------------------------TABLAS
+go
+----------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
 CREATE TABLE Cargo(
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
+
 GO
 -- Categoria: Para saber si es de creación de informes o así
 CREATE TABLE Categoria(
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
+
 GO
 -- Prioridad: Para saber si es alta, media o baja
 CREATE TABLE Prioridad(
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
+
 GO
 -- Estado tarea: Para saber si está en espera, proceso o hecha
 CREATE TABLE EstadoTarea(
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR (50) NOT NULL
 );
+
 GO
+
 -- Tabla Usuarios
-CREATE TABLE Usuarios (
-    Id INT PRIMARY KEY IDENTITY (1,1),
+CREATE TABLE Usuario (
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    Pass VARCHAR(100) NOT NULL, -- Encriptar la contraseña
-    Teléfono VARCHAR(20),
-    FechaNacimiento DATE,
-    CargoId INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id)
+	NombreUsuario VARCHAR(50) NOT NULL,
+    Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
+    Telefono VARCHAR(9) NOT NULL,
+    FechaNacimiento DATE NOT NULL,
+	[Status] INT NOT NULL,
+	FechaRegistro DATETIME NOT NULL,
+    IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id),
+
 );
-GO
--- Tabla para almacenar los administradores
-CREATE TABLE Administradores (
-    ID INT PRIMARY KEY IDENTITY (1,1),
-    UsuarioID INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Usuarios(Id),
-    Contraseña VARCHAR(100) NOT NULL -- Encriptar la contraseña
-);
-GO
--- Tabla para almacenar los colaboradores
-CREATE TABLE Colaboradores (
-    ID INT PRIMARY KEY IDENTITY (1,1),
-    UsuarioID INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Usuarios(Id),
-    Contraseña VARCHAR(100) NOT NULL -- Encriptar la contraseña
-);
+
 GO
 -- Creación del proyecto
 CREATE TABLE Proyecto (
-    Id INT PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Titulo VARCHAR(50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
-    AdministradorID INT NOT NULL FOREIGN KEY REFERENCES Administradores(Id),
-    CodigoAcceso VARCHAR(100) UNIQUE, -- Código de acceso único para el proyecto
-    FechaFinalizacion DATE
+	FechaFinalizacion DATE NOT NULL,
+	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 );
+
 GO
--- Grupo de trabajo: El administrador y el colaborador del proyecto
-CREATE TABLE GrupoTrabajo (
-    Id INT PRIMARY KEY IDENTITY (1,1), -- Identificador único del grupo de trabajo
-    AdministradorId INT NOT NULL FOREIGN KEY REFERENCES Administradores(Id),
-    ColaboradorID INT NOT NULL FOREIGN KEY REFERENCES Colaboradores(ID),
-    ProyectoID INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
-    CONSTRAINT UQ_AdminColProyecto UNIQUE (AdministradorID, ColaboradorID, ProyectoID)
-);
-GO
+
 -- Tarea creada por el administrador
 CREATE TABLE Tarea (
-    ID INT PRIMARY KEY IDENTITY (1,1),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR(100) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
+	FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
     FechaVencimiento DATE NOT NULL,
-    FechaCreacion DATE NOT NULL DEFAULT GETDATE(),
     IdCategoria INT NOT NULL FOREIGN KEY REFERENCES Categoria(Id),
     IdPrioridad INT NOT NULL FOREIGN KEY REFERENCES Prioridad(Id),
     IdEstadoTarea INT NOT NULL FOREIGN KEY REFERENCES EstadoTarea(Id),
-    ProyectoID INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
-    GrupoTrabajoID INT NOT NULL FOREIGN KEY REFERENCES GrupoTrabajo(Id)
+    IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 );
+
 GO
 -- Cuando se asignan las tareas y le aparecen al colaborador, elegirá una
 CREATE TABLE ElegirTarea (
-    Id INT PRIMARY KEY IDENTITY (1,1),
-    IdTarea INT NOT NULL FOREIGN KEY REFERENCES Tarea(ID),
-    IdColaborador INT NOT NULL FOREIGN KEY REFERENCES Colaboradores(ID),
-    FechaAsignacion DATE NOT NULL DEFAULT GETDATE(),
-    IdEstadoTarea INT NOT NULL FOREIGN KEY REFERENCES EstadoTarea(Id)
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
+    IdTarea INT NOT NULL FOREIGN KEY REFERENCES Tarea(Id),
+    IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
+   	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 );
+
 GO
 -- Tabla de tarea finalizada
 CREATE TABLE TareaFinalizada (
-    Id INT PRIMARY KEY IDENTITY (1,1),
-    IdElegirTarea INT NOT NULL FOREIGN KEY REFERENCES ElegirTarea(Id),
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     FechaFinalizacion DATE NOT NULL DEFAULT GETDATE(),
-    Comentarios VARCHAR(MAX)
+    Comentarios VARCHAR(MAX) NOT NULL,
+    IdElegirTarea INT NOT NULL FOREIGN KEY REFERENCES ElegirTarea(Id),
 );
+
 GO
+
 -- Tabla de Imagenes de Pruebas
-CREATE TABLE ImagenesPruebas (
-    Id INT PRIMARY KEY IDENTITY (1,1),
-    Imagen VARCHAR(MAX),
+CREATE TABLE ImagenesPrueba (
+    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    Imagen VARCHAR(MAX) NOT NULL,
     IdTareaFinalizada INT NOT NULL FOREIGN KEY REFERENCES TareaFinalizada(Id)
 );
+
 GO
+
+-- Insertar datos en la tabla Cargo
+INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Supervisor');
+
+-- Insertar datos en la tabla Categoria
+INSERT INTO Categoria (Nombre) VALUES ('Informes'), ('Desarrollo'), ('Gestión');
+
+-- Insertar datos en la tabla Prioridad
+INSERT INTO Prioridad (Nombre) VALUES ('Alta'), ('Media'), ('Baja');
+
+-- Insertar datos en la tabla EstadoTarea
+INSERT INTO EstadoTarea (Nombre) VALUES ('En Espera'), ('En Proceso'), ('Finalizada');
+
+-- Insertar datos en la tabla Usuario
+INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
+VALUES 
+  ('Juan', 'Perez', 'juanperez', '123456', '123456789', '1990-01-01', GETDATE(), 1, 1),
+  ('Maria', 'Gonzalez', 'mariagonzalez', 'abcdef', '987654321', '1985-05-15', GETDATE(), 1, 2 ),
+  ('Pedro', 'Rodriguez', 'pedrorodriguez', 'password', '555555555', '1998-10-20', GETDATE(), 1, 3 );
+
+
+
+
+-- Insertar datos en la tabla Proyecto
+INSERT INTO Proyecto (Titulo, Descripcion, CodigoAcceso, FechaFinalizacion, IdUsuario)
+VALUES 
+  ('Proyecto A', 'Descripción del Proyecto A', '123ABC', '2024-12-31', 1),
+  ('Proyecto B', 'Descripción del Proyecto B', '456DEF', '2025-03-31', 2),
+  ('Proyecto C', 'Descripción del Proyecto C', '789GHI', '2025-06-30', 3);
+
+  -- Insertar datos en la tabla Tarea
+INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
+VALUES 
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1),
+  ('Tarea 2', 'Descripción de la Tarea 2', GETDATE(), '2025-03-31', 2, 2, 1, 2),
+  ('Tarea 3', 'Descripción de la Tarea 3', GETDATE(), '2025-06-30', 3, 3, 1, 3);
+
+-- Insertar datos en la tabla ElegirTarea
+INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
+VALUES 
+  (GETDATE(), 1, 1, 1),
+  (GETDATE(), 2, 2, 2),
+  (GETDATE(), 3, 3, 3);
+
+-- Insertar datos en la tabla TareaFinalizada
+INSERT INTO TareaFinalizada (FechaFinalizacion, Comentarios, IdElegirTarea)
+VALUES 
+  (GETDATE(), 'Tarea finalizada correctamente', 1),
+  (GETDATE(), 'Tarea finalizada con éxito', 2),
+  (GETDATE(), 'Tarea completada', 3);
+
+-- Insertar datos en la tabla ImagenesPrueba
+INSERT INTO ImagenesPrueba (Imagen, IdTareaFinalizada)
+VALUES 
+  ('ruta/imagen1.jpg', 1),
+  ('ruta/imagen2.jpg', 2),
+  ('ruta/imagen3.jpg', 3);
+
+
+ 
