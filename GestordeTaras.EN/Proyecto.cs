@@ -25,11 +25,13 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Fecha de finalizacion")]
+        [DataType(DataType.Date)]
         public DateTime FechaFinalizacion { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Usuario")]
         [Display(Name = "Admin")]
         public int IdUsuario { get; set; }
+        public Usuario Usuario { get; set; }
     }
 }
