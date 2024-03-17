@@ -1,4 +1,4 @@
----NUEVA BASE DE DATOS CON REGISTROS
+---BASE DE DATOS CON REGISTROS 
 CREATE DATABASE GestordeTareasBD
 go
 --usar la bd
@@ -117,11 +117,11 @@ INSERT INTO Prioridad (Nombre) VALUES ('Alta'), ('Media'), ('Baja');
 INSERT INTO EstadoTarea (Nombre) VALUES ('En Espera'), ('En Proceso'), ('Finalizada');
 
 -- Insertar datos en la tabla Usuario
-INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, IdCargo, Estado, FechaRegistro)
+INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
 VALUES 
-  ('Juan', 'Perez', 'juanperez', '123456', '123456789', '1990-01-01', 1, 1, GETDATE()),
-  ('Maria', 'Gonzalez', 'mariagonzalez', 'abcdef', '987654321', '1985-05-15', 2, 1, GETDATE()),
-  ('Pedro', 'Rodriguez', 'pedrorodriguez', 'password', '555555555', '1998-10-20', 3, 1, GETDATE());
+  ('Juan', 'Perez', 'juanperez', '123456', '123456789', '1990-01-01', GETDATE(), 1, 1),
+  ('Maria', 'Gonzalez', 'mariagonzalez', 'abcdef', '987654321', '1985-05-15', GETDATE(), 1, 2 ),
+  ('Pedro', 'Rodriguez', 'pedrorodriguez', 'password', '555555555', '1998-10-20', GETDATE(), 1, 3 );
 
 
 
@@ -162,3 +162,4 @@ VALUES
   ('ruta/imagen3.jpg', 3);
 
 
+ 
