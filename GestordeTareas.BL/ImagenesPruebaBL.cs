@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+<<<<<<< HEAD:GestordeTareas.BL/ImagenesPruebaBL.cs
+=======
+using static System.Net.Mime.MediaTypeNames;
+>>>>>>> dff9044fdaea6a59a1e888c274b2ff2395000048:GestordeTareas.BL/ImagenesPruebasBL.cs
 
 namespace GestordeTareas.BL
 {

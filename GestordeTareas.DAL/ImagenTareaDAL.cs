@@ -11,104 +11,104 @@ namespace GestordeTareas.DAL
 {
     public class ImagenTareaDAL
     {
-        public static async Task<int> CreateAsync(ImagenTarea imagenTarea)
+        public static async Task<int> CreateAsync(ImagenesPruebas imagenesPruebas)
         {
             int result = 0;
             using (var bdContexto = new ContextoBD())
             {
-                bdContexto.Add(imagenTarea);
+                bdContexto.Add(imagenesPruebas);
                 result = await bdContexto.SaveChangesAsync();
             }
             return result;
         }
 
-        public static async Task<int> UpdateAsync(ImagenTarea imagenTarea)
+        public static async Task<int> UpdateAsync(ImagenesPruebas imagenesPruebas)
         {
             int result = 0;
             using (var bdContexto = new ContextoBD())
             {
-                var imagenTareaDB = await bdContexto.ImagenTarea.FirstOrDefaultAsync(i => i.Id == imagenTarea.Id);
-                if (imagenTareaDB != null)
+                var imagenesPruebasDB = await bdContexto.ImagenesPruebas.FirstOrDefaultAsync(i => i.Id == imagenesPruebas.Id);
+                if (imagenesPruebasDB != null)
                 {
-                    imagenTareaDB.IdTarea = imagenTarea.IdTarea;
-                    imagenTareaDB.RutaImagen = imagenTarea.RutaImagen;
-                    bdContexto.Update(imagenTareaDB);
+                    imagenesPruebasDB.Id = imagenesPruebas.Id;
+                    imagenesPruebasDB.Imagen = imagenesPruebas.Imagen;
+                    bdContexto.Update(imagenesPruebasDB);
                     result = await bdContexto.SaveChangesAsync();
                 }
             }
             return result;
         }
 
-        public static async Task<ImagenTarea> GetByIdAsync(ImagenTarea imagenTarea)
+        public static async Task<ImagenesPruebas> GetByIdAsync(ImagenesPruebas imagenesPruebas)
         {
-            var imagenTareaDB = new ImagenTarea();
+            var imagenesPruebasDB = new ImagenesPruebas();
             using (var bdContexto = new ContextoBD())
             {
-                imagenTareaDB = await bdContexto.ImagenTarea.FirstOrDefaultAsync(s => s.Id == imagenTarea.Id);
+                imagenesPruebasDB = await bdContexto.ImagenesPruebas.FirstOrDefaultAsync(s => s.Id == imagenesPruebas.Id);
             }
-            return imagenTareaDB;
+            return imagenesPruebasDB;
         }
 
-        public static async Task<List<ImagenTarea>> GetAllAsync()
+        public static async Task<List<ImagenesPruebas>> GetAllAsync()
         {
-            var images = new List<ImagenTarea>();
+            var images = new List<ImagenesPruebas>();
             using (var bdContexto = new ContextoBD())
             {
-                images = await bdContexto.ImagenTarea.ToListAsync();
+                images = await bdContexto.ImagenesPruebas.ToListAsync();
             }
             return images;
         }
 
-        internal static IQueryable<ImagenTarea> QuerySelect(IQueryable<ImagenTarea> query, ImagenTarea imagenTarea)
+        internal static IQueryable<ImagenesPruebas> QuerySelect(IQueryable<ImagenesPruebas> query, ImagenesPruebas imagenesPruebas)
         {
-            if (imagenTarea.Id > 0)
-                query = query.Where(s => s.Id == imagenTarea.Id);
-            if (imagenTarea.IdTarea > 0)
-                query = query.Where(s => s.IdTarea == imagenTarea.IdTarea);
-            if (!string.IsNullOrWhiteSpace(imagenTarea.RutaImagen))
-                query = query.Where(s => s.RutaImagen.Contains(imagenTarea.RutaImagen));
+            if (imagenesPruebas.Id > 0)
+                query = query.Where(s => s.Id == imagenesPruebas.Id);
+            if (imagenesPruebas.Id > 0)
+                query = query.Where(s => s.Id == imagenesPruebas.Id);
+            if (!string.IsNullOrWhiteSpace(imagenesPruebas.Imagen))
+                query = query.Where(s => s.Imagen.Contains(imagenesPruebas.Imagen));
 
             query = query.OrderByDescending(s => s.Id).AsQueryable();
 
-            if (imagenTarea.Top_Aux > 0)
-                query = query.Take(imagenTarea.Top_Aux).AsQueryable();
+            //if (imagenTarea.Top_Aux > 0)
+            //    query = query.Take(imagenTarea.Top_Aux).AsQueryable();
 
             return query;
         }
 
-        public static async Task<List<ImagenTarea>> SearchAsync(ImagenTarea imagenTarea)
+        public static async Task<List<ImagenesPruebas>> SearchAsync(ImagenesPruebas imagenesPruebas)
         {
-            var images = new List<ImagenTarea>();
+            var images = new List<ImagenesPruebas>();
             using (var bdContexto = new ContextoBD())
             {
-                var select = bdContexto.ImagenTarea.AsQueryable();
-                select = QuerySelect(select, imagenTarea);
+                var select = bdContexto.ImagenesPruebas.AsQueryable();
+                select = QuerySelect(select, imagenesPruebas);
                 images = await select.ToListAsync();
             }
             return images;
         }
 
-        public static async Task<List<ImagenTarea>> SearchIncludeAdAsync(ImagenTarea imagenTarea)
+        public static async Task<List<ImagenesPruebas>> SearchIncludeAdAsync(ImagenesPruebas imagenesPruebas)
         {
-            var images = new List<ImagenTarea>();
+            var images = new List<ImagenesPruebas>();
             using (var bdContexto = new ContextoBD())
             {
-                var select = bdContexto.ImagenTarea.AsQueryable();
-                select = QuerySelect(select, imagenTarea).Include(i => i.Tarea).AsQueryable();
+                var select = bdContexto.ImagenesPruebas.AsQueryable();
+                select = QuerySelect(select, imagenesPruebas).Include(i => i.IdTareaFinalizada).AsQueryable();
                 images = await select.ToListAsync();
             }
             return images;
         }
 
-        public static async Task<int> DeleteAsync(ImagenTarea imagenTarea)
+        public static async Task<int> DeleteAsync(ImagenesPruebas imagenesPruebas)
         {
             int result = 0;
             using (var bdContexto = new ContextoBD())
             {
-                var imagenTareaDB = await bdContexto.ImagenTarea.FirstOrDefaultAsync(i => i.Id == imagenTarea.Id);
-                if (imagenTareaDB != null)
+                var imagenesPruebasDB = await bdContexto.ImagenesPruebas.FirstOrDefaultAsync(i => i.Id == imagenesPruebas.Id);
+                if (imagenesPruebasDB != null)
                 {
-                    bdContexto.ImagenTarea.Remove(imagenTareaDB);
+                    bdContexto.ImagenesPruebas.Remove(imagenesPruebasDB);
                     result = await bdContexto.SaveChangesAsync();
                 }
             }

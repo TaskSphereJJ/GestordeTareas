@@ -15,11 +15,18 @@ namespace GestordeTareas.DAL
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Cargo> Cargo { get; set; }
         public DbSet<Prioridad> Prioridad { get; set; }
+<<<<<<< HEAD
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<EstadoTarea> EstadoTarea { get; set; }
         public DbSet<Tarea> Tarea { get; set; }
         public DbSet<ImagenesPrueba> ImagenesPrueba { get; set; }
         //public DbSet<AsignacionTareas> AsignacionTareas { get; set; }
+=======
+        public DbSet<Usuarios> Usuario { get; set; }
+        public DbSet<EstadoTareaEN> EstadoTarea { get; set; }
+        public DbSet<Tarea> Tarea { get; set; }
+        public DbSet<ImagenesPruebas> ImagenesPruebas { get; set; }
+>>>>>>> dff9044fdaea6a59a1e888c274b2ff2395000048
         public DbSet<Proyecto> Proyecto { get; set; }
 
         public DbSet<ElegirTarea> ElegirTarea { get; set ; }
@@ -27,7 +34,7 @@ namespace GestordeTareas.DAL
 
            protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=localhost;Database=GestorTareasJ;User=Jeffrey;Password=jeffrey20068f;Encrypt=true;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer(@"Data source = DESKTOP-UMST7PO; Initial Catalog = GestordeTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
         }
 
     }
