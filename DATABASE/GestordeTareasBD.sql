@@ -1,8 +1,9 @@
 ---BASE DE DATOS CON REGISTROS 
-CREATE DATABASE GestordeTareasBD
+---CREACION DE LA BD
+CREATE DATABASE GestorTareasBD
 go
 --usar la bd
-USE GestordeTareasBD
+USE GestorTareasBD
 go
 ----------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
@@ -127,11 +128,11 @@ VALUES
 
 
 -- Insertar datos en la tabla Proyecto
-INSERT INTO Proyecto (Titulo, Descripcion, CodigoAcceso, FechaFinalizacion, IdUsuario)
+INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
 VALUES 
-  ('Proyecto A', 'Descripción del Proyecto A', '123ABC', '2024-12-31', 1),
-  ('Proyecto B', 'Descripción del Proyecto B', '456DEF', '2025-03-31', 2),
-  ('Proyecto C', 'Descripción del Proyecto C', '789GHI', '2025-06-30', 3);
+  ('Proyecto A', 'Descripción del Proyecto A', '2024-12-31', 1),
+  ('Proyecto B', 'Descripción del Proyecto B', '2025-03-31', 2),
+  ('Proyecto C', 'Descripción del Proyecto C', '2025-06-30', 3);
 
   -- Insertar datos en la tabla Tarea
 INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
