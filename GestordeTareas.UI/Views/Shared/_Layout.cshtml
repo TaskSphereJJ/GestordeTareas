@@ -15,7 +15,8 @@
 </head>
 <body class="dark:bg-gray-900">
     @* header o barra de arriba *@
-    <header class="m-auto shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12">
+ <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-white mb-7">
+
         @* <!-- Icono de hamburguesa --> *@
         <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
             <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:stroke-slate-400 disabled:text-slate-400 hover:stroke-blue-950 hover:text-blue-950"
@@ -46,10 +47,8 @@
                     </div>
                 </div>
             </label>
-        </div>
-        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-
-        @* <!-- Sección de perfil --> *@
+        </div>   
+             @* <!-- Sección de perfil --> *@
          <div class="flex items-center justify-end gap-4">
             <div
                 class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-purple-300">
@@ -189,7 +188,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container mt-28">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -200,7 +199,12 @@
             &copy; 2024 - GestordeTareas.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer> *@
+
+    <script>
+  AOS.init();
+</script>
        <script>
+
         document.addEventListener('DOMContentLoaded', function () {
             const menuButton = document.querySelector('[aria-label="Menu"]');
             const closeButton = document.querySelector('[data-drawer-hide="drawer-navigation"]');
