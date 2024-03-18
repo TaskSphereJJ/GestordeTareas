@@ -234,7 +234,7 @@
 
     function cargarVistaDetails(id) {
         $.ajax({
-            url: "/EstadoTarea/DetailsPartial/" + id,
+            url: "/EstadoTarea/Details/" + id,
             type: "GET",
             success: function (data) {
                 $("#detailsModalContent").html(data);

@@ -1,0 +1,34 @@
+﻿@model GestordeTaras.EN.Usuario
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"> </div>
+
+            <div class="form-group">
+                <label asp-for="NombreUsuario" class="control-label"></label>
+                <input asp-for="NombreUsuario" class="form-control" />
+                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pass" class="control-label"></label>
+                <input asp-for="Pass" class="form-control" />
+                <span asp-validation-for="Pass" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Iniciar Sesión" class="btn btn-primary" />
+            </div>
+
+            <span class="text-danger">@ViewBag.Error</span>
+
+
+        </form>
+    </div>
+</div>
