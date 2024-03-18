@@ -32,7 +32,6 @@ namespace GestordeTaras.EN
         [Display(Name = "Fecha  de vencimiento")]
         public DateTime FechaVencimiento { get; set; }
 
-
         [ForeignKey("Categoria")]
         [Required(ErrorMessage = " La Categoría es Requerida")]
         [Display(Name = "Categoria")]

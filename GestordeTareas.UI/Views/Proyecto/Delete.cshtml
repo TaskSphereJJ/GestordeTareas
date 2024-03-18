@@ -1,0 +1,39 @@
+﻿@model GestordeTaras.EN.Proyecto
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+<h5>¿Estás seguro de querer eliminar este proyecto?</h5>
+    <hr />
+    <div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Titulo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Titulo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdUsuario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdUsuario)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaFinalizacion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaFinalizacion)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" id="deleteForm" method="post">
+        <input type="hidden" asp-for="Id" />
+    </form>
+</div>

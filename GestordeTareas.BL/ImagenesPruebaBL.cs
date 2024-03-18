@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GestordeTaras.EN;
+using GestordeTareas.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,40 +11,40 @@ namespace GestordeTareas.BL
     public class ImagenesPruebaBL
     {
 
-        public async Task<int> CreateAsync(ImagenesPruebas imagenesPruebas)
+        public async Task<int> CreateAsync(ImagenesPrueba imagenesPrueba)
         {
-            return await ImagenesPruebasDAL.CreateAsync(imagenesPruebas);
+            return await ImagenesPruebaDAL.CreateAsync(imagenesPrueba);
         }
 
-        public async Task<int> UpdateAsync(ImagenesPruebas imagenesPruebas)
+        public async Task<int> UpdateAsync(ImagenesPrueba imagenesPrueba)
         {
-            return await ImagenesPruebasDAL.UpdateAsync(imagenesPruebas);
+            return await ImagenesPruebaDAL.UpdateAsync(imagenesPrueba);
         }
 
-        public async Task<int> DeleteAsync(ImagenesPruebas imagenesPruebas)
+        public async Task<int> DeleteAsync(ImagenesPrueba imagenesPrueba)
         {
-            return await ImagenesPruebasDAL.DeleteAsync(imagenesPruebas);
+            return await ImagenesPruebaDAL.DeleteAsync(imagenesPrueba);
         }
 
-        public async Task<ImagenesPruebas> GetByIdAsync(ImagenesPruebas imagenesPruebas)
+        public async Task<ImagenesPrueba> GetByIdAsync(ImagenesPrueba imagenesPrueba)
         {
-            return await ImagenesPruebasDAL.GetByIdAsync(imagenesPruebas);
+            return await ImagenesPruebaDAL.GetByIdAsync(imagenesPrueba);
         }
 
 
-        public async Task<List<ImagenesPruebas>> GetAllAsync()
+        public async Task<List<ImagenesPrueba>> GetAllAsync()
         {
-            return await ImagenesPruebasDAL.GetAllAsync();
+            return await ImagenesPruebaDAL.GetAllAsync();
         }
 
-        public async Task<List<ImagenesPruebas>> SearchAsync(ImagenesPruebas imagenesPruebas)
+        public async Task<List<ImagenesPrueba>> SearchAsync(ImagenesPrueba imagenesPrueba)
         {
-            return await ImagenesPruebasDAL.SearchAsync(imagenesPruebas);
+            return await ImagenesPruebaDAL.SearchAsync(imagenesPrueba);
         }
 
-        public async Task<List<ImagenesPruebas>> SearchIncludeAdAsync(ImagenesPruebas imagenesPruebas)
+        public async Task<List<ImagenesPrueba>> SearchIncludeAdAsync(ImagenesPrueba imagenesPrueba)
         {
-            return await ImagenesPruebasDAL.SearchIncludeAdAsync(imagenesPruebas);
+            return await ImagenesPruebaDAL.SearchIncludeAdAsync(imagenesPrueba);
         }
     }
 }

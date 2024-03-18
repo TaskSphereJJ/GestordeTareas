@@ -13,7 +13,6 @@ namespace GestordeTaras.EN
         [Key]
         public int Id { get; set; }
 
-
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
         [Display(Name = "Titulo")]
