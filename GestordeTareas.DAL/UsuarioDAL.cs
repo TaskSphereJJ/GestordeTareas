@@ -11,7 +11,7 @@ namespace GestordeTareas.DAL
     public class UsuarioDAL
     {
         // Método para crear un nuevo usuario en la base de datos de forma asincrónica.
-        public static async Task<int> CreateAsync(Usuarios usuario)
+        public static async Task<int> CreateAsync(Usuario usuario)
         {
             int result = 0;
             using (var bdContext = new ContextoBD())
@@ -27,7 +27,7 @@ namespace GestordeTareas.DAL
         }
 
         // Método para actualizar un usuario existente en la base de datos de forma asincrónica.
-        public static async Task<int> UpdateAsync(Usuarios usuario)
+        public static async Task<int> UpdateAsync(Usuario usuario)
         {
             int result = 0;
             using (var bdContext = new ContextoBD())
@@ -39,7 +39,7 @@ namespace GestordeTareas.DAL
                     // Actualiza las propiedades del usuario con los nuevos valores.
                     usuarioDB.Nombre = usuario.Nombre;
                     usuarioDB.Apellido = usuario.Apellido;
-                    usuarioDB.Email = usuario.Email;
+                    usuarioDB.NombreUsuario = usuario.NombreUsuario;
                     usuarioDB.Pass = usuario.Pass;
                     usuarioDB.Telefono = usuario.Telefono;
                     usuarioDB.FechaNacimiento = usuario.FechaNacimiento;
@@ -58,7 +58,7 @@ namespace GestordeTareas.DAL
         }
 
         // Método para eliminar un usuario de la base de datos de forma asincrónica.
-        public static async Task<int> DeleteAsync(Usuarios usuario)
+        public static async Task<int> DeleteAsync(Usuario usuario)
         {
             int result = 0;
             using (var bdContext = new ContextoBD())
@@ -78,9 +78,9 @@ namespace GestordeTareas.DAL
         }
 
         // Método para obtener un usuario por su ID de forma asincrónica.
-        public static async Task<Usuarios> GetByIdAsync(Usuarios usuario)
+        public static async Task<Usuario> GetByIdAsync(Usuario usuario)
         {
-            var usuarioDB = new Usuarios();
+            var usuarioDB = new Usuario();
             using (var bdContexto = new ContextoBD())
             {
                 // Busca el usuario por su ID y asigna el resultado a la variable usuarioDB.
@@ -91,9 +91,9 @@ namespace GestordeTareas.DAL
         }
 
         // Método para obtener todos los usuarios de la base de datos de forma asincrónica.
-        public static async Task<List<Usuarios>> GetAllAsync()
+        public static async Task<List<Usuario>> GetAllAsync()
         {
-            var usuarios = new List<Usuarios>();
+            var usuarios = new List<Usuario>();
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los usuarios y los asigna a la variable usuarios.

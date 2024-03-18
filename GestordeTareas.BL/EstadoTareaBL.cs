@@ -10,23 +10,23 @@ namespace GestordeTareas.BL
 {
     public class EstadoTareaBL
     {
-        public async Task<int> CreateAsync(EstadoTareaEN estadoTarea)
+        public async Task<int> CreateAsync(EstadoTarea estadoTarea)
         {
             return await EstadoTareaDAL.CreateAsync(estadoTarea);
         }
-        public async Task<int> UpdateAsync(EstadoTareaEN estadoTarea)
+        public async Task<int> UpdateAsync(EstadoTarea estadoTarea)
         {
             return await EstadoTareaDAL.UpdateAsync(estadoTarea);
         }
-        public async Task<int> DeleteAsync(EstadoTareaEN estadoTarea)
+        public async Task<int> DeleteAsync(EstadoTarea estadoTarea)
         {
             return await EstadoTareaDAL.DeleteAsync(estadoTarea);
         }
-        public async Task<EstadoTareaEN> GetById(EstadoTareaEN estadoTarea)
+        public async Task<EstadoTarea> GetById(EstadoTarea estadoTarea)
         {
             return await EstadoTareaDAL.GetByIdAsync(estadoTarea);
         }
-        public async Task<List<EstadoTareaEN>> GetAllAsync()
+        public async Task<List<EstadoTarea>> GetAllAsync()
         {
             return await EstadoTareaDAL.GetAllAsync();
         }

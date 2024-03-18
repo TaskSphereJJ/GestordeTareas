@@ -1,15 +1,15 @@
-﻿using GestordeTaras.EN;
-using GestordeTareas.BL;
+﻿using GestordeTareas.BL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GestordeTaras.EN;
 
 namespace GestordeTareas.UI.Controllers
 {
-    public class EstadoTareaENController : Controller
+    public class EstadoTareaController : Controller
     {
         private readonly EstadoTareaBL _estadoTareaBL;
 
-        public EstadoTareaENController()
+        public EstadoTareaController()
         {
             _estadoTareaBL = new EstadoTareaBL(); // Inicializamos la capa de negocio
         }
@@ -17,15 +17,15 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController
         public async Task<ActionResult> Index()
         {
-            List<EstadoTareaEN> Lista = await _estadoTareaBL.GetAllAsync();
+            List<EstadoTarea> Lista = await _estadoTareaBL.GetAllAsync();
 
             return View(Lista);
         }
 
         // GET: CategoriaController/Details/5
-        public async Task<ActionResult> DetailsPartial(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTareaEN { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea { Id = id });
             return PartialView("Details", estadoTarea);
         }
 
@@ -38,7 +38,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(EstadoTareaEN estadoTarea)
+        public async Task<ActionResult> Create(EstadoTarea estadoTarea)
         {
             try
             {
@@ -55,14 +55,14 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTareaEN { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea   { Id = id });
             return PartialView("Edit", estadoTarea);
         }
 
         // POST: CategoriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, EstadoTareaEN estadoTarea)
+        public async Task<ActionResult> Edit(int id, EstadoTarea estadoTarea)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTareaEN { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea { Id = id });
             return PartialView("Delete", estadoTarea);
 
         }
@@ -87,7 +87,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: CategoriaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, EstadoTareaEN estadoTarea)
+        public async Task<ActionResult> Delete(int id, EstadoTarea estadoTarea)
         {
             try
             {
