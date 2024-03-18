@@ -11,7 +11,7 @@ namespace GestordeTareas.DAL
 {
     public class UsuarioDAL
     {
-        private static void EncryptMD5(Usuarios user)
+        private static void EncryptMD5(Usuario user)
         {
             using (var md5 = MD5.Create())
             {
@@ -25,10 +25,10 @@ namespace GestordeTareas.DAL
             }
         }
 
-        private static async Task<bool> ExistsLogin(Usuarios user, ContextoBD context)
+        private static async Task<bool> ExistsLogin(Usuario user, ContextoBD context)
         {
             bool result = false;
-            var userLoginExists = await context.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == user.NombreUsuario && u.Id != user.Id);
+            var userLoginExists = await context.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == user.NombreUsuario && u.Id != user.Id);
             if (userLoginExists != null && userLoginExists.Id > 0 && userLoginExists.NombreUsuario == user.NombreUsuario)
                 result = true;
 
@@ -36,7 +36,7 @@ namespace GestordeTareas.DAL
         }
 
         // Método para crear un nuevo usuario en la base de datos de forma asincrónica.
-        public static async Task<int> Create(Usuarios usuario)
+        public static async Task<int> Create(Usuario usuario)
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
@@ -44,9 +44,9 @@ namespace GestordeTareas.DAL
                 bool existsLogin = await ExistsLogin(usuario, dbContext);
                 if (existsLogin == false)
                 {
-                    usuario.RegistrationDate = DateTime.Now;
+                    usuario.FechaRegistro = DateTime.Now;
                     EncryptMD5(usuario);
-                    dbContext.Usuarios.Add(usuario);
+                    dbContext.Usuario.Add(usuario);
                     result = await dbContext.SaveChangesAsync();
                 }
                 else
@@ -56,7 +56,7 @@ namespace GestordeTareas.DAL
         }
 
         // Método para actualizar un usuario existente en la base de datos de forma asincrónica.
-        public static async Task<int> Update(Usuarios usuario)
+        public static async Task<int> Update(Usuario usuario)
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
@@ -64,14 +64,14 @@ namespace GestordeTareas.DAL
                 bool existsLogin = await ExistsLogin(usuario, dbContext);
                 if (existsLogin == false)
                 {
-                    var userDb = await dbContext.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
-                    userDb.CargoId = usuario.CargoId;
+                    var userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                    userDb.IdCargo = usuario.IdCargo;
                     userDb.Nombre = usuario.Nombre;
                     userDb.Apellido = usuario.Apellido;
                     userDb.Status = usuario.Status;
                     userDb.NombreUsuario = usuario.NombreUsuario;
 
-                    dbContext.Usuarios.Update(userDb);
+                    dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
                 }
                 else
@@ -81,17 +81,17 @@ namespace GestordeTareas.DAL
         }
 
         // Método para eliminar un usuario de la base de datos de forma asincrónica.
-        public static async Task<int> Delete(Usuarios usuario)
+        public static async Task<int> Delete(Usuario usuario)
         {
             int result = 0;
             using (var bdContext = new ContextoBD())
             {
                 // Busca el usuario existente por su ID.
-                var usuarioDB = await bdContext.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                var usuarioDB = await bdContext.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
                 if (usuarioDB != null)
                 {
                     // Elimina el usuario del DbSet correspondiente en el contexto.
-                    bdContext.Usuarios.Remove(usuarioDB);
+                    bdContext.Usuario.Remove(usuarioDB);
                     // Guarda los cambios en la base de datos.
                     result = await bdContext.SaveChangesAsync();
                 }
@@ -101,38 +101,38 @@ namespace GestordeTareas.DAL
         }
 
         // Método para obtener un usuario por su ID de forma asincrónica.
-        public static async Task<Usuarios> GetByIdAsync(Usuarios usuario)
+        public static async Task<Usuario> GetByIdAsync(Usuario usuario)
         {
-            var usuarioDB = new Usuarios();
+            var usuarioDB = new Usuario();
             using (var bdContexto = new ContextoBD())
             {
                 // Busca el usuario por su ID y asigna el resultado a la variable usuarioDB.
-                usuarioDB = await bdContexto.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                usuarioDB = await bdContexto.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
             }
             // Retorna el usuario encontrado.
             return usuarioDB;
         }
 
         // Método para obtener todos los usuarios de la base de datos de forma asincrónica.
-        public static async Task<List<Usuarios>> GetAllAsync()
+        public static async Task<List<Usuario>> GetAllAsync()
         {
-            var usuarios = new List<Usuarios>();
+            var usuarios = new List<Usuario>();
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los usuarios y los asigna a la variable usuarios.
-                usuarios = await bdContexto.Usuarios.ToListAsync();
+                usuarios = await bdContexto.Usuario.ToListAsync();
             }
             // Retorna la lista de usuarios.
             return usuarios;
         }
 
-        internal static IQueryable<Usuarios> QuerySelect(IQueryable<Usuarios> query, Usuarios user)
+        internal static IQueryable<Usuario> QuerySelect(IQueryable<Usuario> query, Usuario user)
         {
             if (user.Id > 0)
                 query = query.Where(u => u.Id == user.Id);
 
-            if (user.CargoId > 0)
-                query = query.Where(u => u.CargoId == user.CargoId);
+            if (user.IdCargo > 0)
+                query = query.Where(u => u.IdCargo == user.IdCargo);
 
             if (!string.IsNullOrWhiteSpace(user.Nombre))
                 query = query.Where(u => u.Nombre.Contains(user.Nombre));
@@ -146,11 +146,11 @@ namespace GestordeTareas.DAL
             if (user.Status > 0)
                 query = query.Where(u => u.Status == user.Status);
 
-            if (user.RegistrationDate.Year > 1000)
+            if (user.FechaRegistro.Year > 1000)
             {
-                DateTime inicialDate = new DateTime(user.RegistrationDate.Year, user.RegistrationDate.Month, user.RegistrationDate.Day, 0, 0, 0);
+                DateTime inicialDate = new DateTime(user.FechaRegistro.Year, user.FechaRegistro.Month, user.FechaRegistro.Day, 0, 0, 0);
                 DateTime finalDate = inicialDate.AddDays(1).AddMilliseconds(-1);
-                query = query.Where(u => u.RegistrationDate >= inicialDate && u.RegistrationDate <= finalDate);
+                query = query.Where(u => u.FechaRegistro >= inicialDate && u.FechaRegistro <= finalDate);
             }
 
             query = query.OrderByDescending(u => u.Id).AsQueryable();
@@ -161,55 +161,55 @@ namespace GestordeTareas.DAL
             return query;
         }
 
-        public static async Task<List<Usuarios>> SearchAsync(Usuarios usuarios)
+        public static async Task<List<Usuario>> SearchAsync(Usuario usuarios)
         {
-            var users = new List<Usuarios>();
+            var users = new List<Usuario>();
             using (var dbContext = new ContextoBD())
             {
-                var select = dbContext.Usuarios.AsQueryable();
+                var select = dbContext.Usuario.AsQueryable();
                 select = QuerySelect(select, usuarios);
                 users = await select.ToListAsync();
             }
             return users;
         }
 
-        public static async Task<List<Usuarios>> SearchIncludeRoleAsync(Usuarios user)
+        public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
         {
-            var users = new List<Usuarios>();
+            var users = new List<Usuario>();
             using (var dbContext = new ContextoBD())
             {
-                var select = dbContext.Usuarios.AsQueryable();
+                var select = dbContext.Usuario.AsQueryable();
                 select = QuerySelect(select, user).Include(u => u.Cargo).AsQueryable();
                 users = await select.ToListAsync();
             }
             return users;
         }
 
-        public static async Task<Usuarios> LoginAsync(Usuarios usuarios)
+        public static async Task<Usuario> LoginAsync(Usuario usuarios)
         {
-            var userDb = new Usuarios();
+            var userDb = new Usuario();
             using (var dbContext = new ContextoBD())
             {
                 EncryptMD5(usuarios);
-                userDb = await dbContext.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == usuarios.NombreUsuario &&
+                userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuarios.NombreUsuario &&
                 u.Pass == usuarios.Pass && u.Status == (byte)User_Status.ACTIVO);
             }
             return userDb!;
         }
 
-        public static async Task<int> ChangePasswordAsync(Usuarios user, string oldPassword)
+        public static async Task<int> ChangePasswordAsync(Usuario user, string oldPassword)
         {
             int result = 0;
-            var userOldPass = new Usuarios { Pass = oldPassword };
+            var userOldPass = new Usuario { Pass = oldPassword };
             EncryptMD5(userOldPass);
             using (var dbContext = new ContextoBD())
             {
-                var userDb = await dbContext.Usuarios.FirstOrDefaultAsync(u => u.Id == user.Id);
+                var userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.Id == user.Id);
                 if (userOldPass.Pass == userDb.Pass)
                 {
                     EncryptMD5(user);
                     userDb.Pass = user.Pass;
-                    dbContext.Usuarios.Update(userDb);
+                    dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
                 }
                 else

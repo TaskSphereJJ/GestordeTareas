@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestordeTaras.EN.Usuarios>
+﻿@model IEnumerable<GestordeTaras.EN.Usuario>
 
 @{
     ViewData["Title"] = "Index";
@@ -20,19 +20,16 @@
                 @Html.DisplayNameFor(model => model.Apellido)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Pass)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Teléfono)
+                @Html.DisplayNameFor(model => model.Telefono)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FechaNacimiento)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CargoId)
+                @Html.DisplayNameFor(model => model.IdCargo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.NombreUsuario)
@@ -41,7 +38,7 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RegistrationDate)
+                @Html.DisplayNameFor(model => model.FechaRegistro)
             </th>
              
             <th></th>
@@ -57,19 +54,16 @@
                 @Html.DisplayFor(modelItem => item.Apellido)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Pass)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Teléfono)
+                @Html.DisplayFor(modelItem => item.Telefono)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FechaNacimiento)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CargoId)
+                @Html.DisplayFor(modelItem => item.IdCargo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NombreUsuario)
@@ -78,7 +72,7 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RegistrationDate)
+                @Html.DisplayFor(modelItem => item.FechaRegistro)
             </td>
                 <td>
                     @Html.ActionLink("Modificar", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-info" })

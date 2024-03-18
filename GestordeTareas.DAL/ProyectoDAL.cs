@@ -34,8 +34,6 @@ namespace GestordeTareas.DAL
                         // Actualizar las propiedades del proyecto existente con los valores del proyecto pasado como parámetro
                         existingProyecto.Titulo = proyecto.Titulo;
                         existingProyecto.Descripcion = proyecto.Descripcion;
-                        existingProyecto.AdministradorID = proyecto.AdministradorID;
-                        existingProyecto.CodigoAcceso = proyecto.CodigoAcceso;
                         existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
 
                         // Marcar la entidad como modificada para que Entity Framework realice el seguimiento de los cambios

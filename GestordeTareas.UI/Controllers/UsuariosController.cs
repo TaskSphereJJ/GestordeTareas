@@ -11,6 +11,7 @@ using System.Security.Claims;
 
 namespace GestordeTareas.UI.Controllers
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador")]
     public class UsuariosController : Controller
     {
         UsuariosBL _usuarioBL = new UsuariosBL();
@@ -18,28 +19,28 @@ namespace GestordeTareas.UI.Controllers
 
 
         // GET: UsuarioController
-        public async Task<ActionResult> Index(Usuarios user = null)
+        public async Task<ActionResult> Index(Usuario user = null)
         {
             //List<Usuarios> Lista = await _usuarioBL.GetAllAsync();
             //return View(Lista);
             if (user == null)
-                user = new Usuarios();
+                user = new Usuario();
             if (user.Top_Aux == 0)
                 user.Top_Aux = 10; // setear la cantidad de registros a mostrar predeterminadamente
             else if (user.Top_Aux == -1)
                 user.Top_Aux = 0;
 
-            var users = await _usuarioBL.SearchIncludeRoleAsync(user);
+            List<Usuario> Lista = await _usuarioBL.SearchIncludeRoleAsync(user);
             ViewBag.Top = user.Top_Aux;
             ViewBag.Roles = await cargoBL.GetAllAsync();
-            return View(users);
+            return View(Lista);
         }
     
 
         // GET: UsuarioController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var user = await _usuarioBL.GetByIdAsync(new Usuarios { Id = id });
+            var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
             return View(user);
         }
@@ -55,7 +56,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: UsuarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Usuarios usuario)
+        public async Task<ActionResult> Create(Usuario usuario)
         {
             try
             {
@@ -73,7 +74,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var userDb = await _usuarioBL.GetByIdAsync(new Usuarios { Id = id });
+            var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             ViewBag.Cargos = await cargoBL.GetAllAsync();
             ViewBag.Error = "";
             return View(userDb);
@@ -82,7 +83,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, Usuarios usuario)
+        public async Task<ActionResult> Edit(int id, Usuario usuario)
         {
             try
             {
@@ -100,7 +101,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: UsuarioController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var user = await _usuarioBL.GetByIdAsync(new Usuarios { Id = id });
+            var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
             ViewBag.Error = "";
             return View(user);
@@ -109,7 +110,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: UsuarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, Usuarios usuario)
+        public async Task<ActionResult> Delete(int id, Usuario usuario)
         {
             try
             {
@@ -121,7 +122,7 @@ namespace GestordeTareas.UI.Controllers
                 ViewBag.Error = ex.Message;
                 var userDb = await _usuarioBL.GetByIdAsync(usuario);
                 if (userDb == null)
-                    userDb = new Usuarios();
+                    userDb = new Usuario();
                 if (userDb.Id > 0)
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                 return View(userDb);
@@ -142,7 +143,7 @@ namespace GestordeTareas.UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(Usuarios user, string returnUrl = null)
+        public async Task<IActionResult> Login(Usuario user, string returnUrl = null)
         {
             try
             {
@@ -167,7 +168,7 @@ namespace GestordeTareas.UI.Controllers
             {
                 ViewBag.Url = returnUrl;
                 ViewBag.Error = ex.Message;
-                return View(new Usuarios { NombreUsuario = user.NombreUsuario });
+                return View(new Usuario { NombreUsuario = user.NombreUsuario });
             }
         }
 
@@ -181,7 +182,7 @@ namespace GestordeTareas.UI.Controllers
         //acción que muestra el formulario para cambiar contraseña
         public async Task<IActionResult> ChangePassword()
         {
-            var users = await _usuarioBL.SearchAsync(new Usuarios { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+            var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
             var actualUser = users.FirstOrDefault();
             ViewBag.Error = "";
             return View(actualUser);
@@ -190,7 +191,7 @@ namespace GestordeTareas.UI.Controllers
         //acción que recibe los datos de la nueva contraseña
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(Usuarios user, string oldPassword)
+        public async Task<IActionResult> ChangePassword(Usuario user, string oldPassword)
         {
             try
             {
@@ -201,7 +202,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                var users = await _usuarioBL.SearchAsync(new Usuarios { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+                var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
                 var actualUser = users.FirstOrDefault();
                 return View(actualUser);
             }

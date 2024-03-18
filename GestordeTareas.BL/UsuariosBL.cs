@@ -10,47 +10,47 @@ namespace GestordeTareas.BL
 {
     public class UsuariosBL
     {
-        public async Task<int> Create(Usuarios usuario)
+        public async Task<int> Create(Usuario usuario)
         {
             return await UsuarioDAL.Create(usuario);
         }
 
-        public async Task<int> Update(Usuarios usuario)
+        public async Task<int> Update(Usuario usuario)
         {
             return await UsuarioDAL.Update(usuario);
         }
 
-        public async Task<int> Delete(Usuarios usuario)
+        public async Task<int> Delete(Usuario usuario)
         {
             return await UsuarioDAL.Delete(usuario);
         }
 
-        public async Task<Usuarios> GetByIdAsync(Usuarios usuario)
+        public async Task<Usuario> GetByIdAsync(Usuario usuario)
         {
             return await UsuarioDAL.GetByIdAsync(usuario);
         }
 
-        public async Task<List<Usuarios>> GetAllAsync()
+        public async Task<List<Usuario>> GetAllAsync()
         {
             return await UsuarioDAL.GetAllAsync();
         }
 
-        public async Task<List<Usuarios>> SearchAsync(Usuarios usuarios)
+        public async Task<List<Usuario>> SearchAsync(Usuario usuarios)
         {
             return await UsuarioDAL.SearchAsync(usuarios);
         }
 
-        public async Task<List<Usuarios>> SearchIncludeRoleAsync(Usuarios user)
+        public async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
         {
             return await UsuarioDAL.SearchIncludeRoleAsync(user);
         }
 
-        public async Task<Usuarios> LoginAsync(Usuarios usuarios)
+        public async Task<Usuario> LoginAsync(Usuario usuarios)
         {
             return await UsuarioDAL.LoginAsync(usuarios);
         }
 
-        public async Task<int> ChangePasswordAsync(Usuarios usuario, string oldPassword)
+        public async Task<int> ChangePasswordAsync(Usuario usuario, string oldPassword)
         {
             return await UsuarioDAL.ChangePasswordAsync(usuario, oldPassword);
         }
