@@ -33,7 +33,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "El estado es requerido")]
         [Display(Name = "Estado")]
-        public byte Status { get; set; }
+        public int Status { get; set; }
 
         [Display(Name = "Fecha de registro")]
         public DateTime FechaRegistro { get; set; }

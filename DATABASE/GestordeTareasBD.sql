@@ -119,10 +119,7 @@ INSERT INTO EstadoTarea (Nombre) VALUES ('En Espera'), ('En Proceso'), ('Finaliz
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
 VALUES 
-  ('Juan', 'Perez', 'juanperez', '123456', '123456789', '1990-01-01', GETDATE(), 1, 1),
-  ('Maria', 'Gonzalez', 'mariagonzalez', 'abcdef', '987654321', '1985-05-15', GETDATE(), 1, 2 ),
-  ('Pedro', 'Rodriguez', 'pedrorodriguez', 'password', '555555555', '1998-10-20', GETDATE(), 1, 3 );
-
+  ('Jeffrey', 'Mardoqueo', 'JeffM', 'be9c71c74df2b9699e073c2c2bf8d8d9', '69842090', '2006-02-08', GETDATE(), 1, 1)
 
 
 
