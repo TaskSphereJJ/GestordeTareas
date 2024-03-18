@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GestordeTaras.EN;
 
 namespace GestordeTaras.EN
 {
@@ -23,6 +24,10 @@ namespace GestordeTaras.EN
         [MaxLength(600, ErrorMessage = "Máximo 600 caracteres")]
         [Display(Name = "Descripcion")]
         public string Descripcion { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "La Fecha de creacion es Requerida")]
+        [Display(Name = "Fecha  de creacion")]
+        public DateTime FechaCreacion { get; set; }
 
         [Required(ErrorMessage = "La Fecha de Vencimiento es Requerida")]
         [Display(Name = "Fecha  de vencimiento")]
@@ -43,5 +48,13 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "El Estado es Requerido")]
         [Display(Name = "Estado de la Tarea")]
         public int IdEstadoTarea { get; set; }
+
+        [ForeignKey("Proyecto")]
+        [Required(ErrorMessage = "El proyecto es requerido")]
+        [Display(Name = "Proyecto")]
+        public int IdProyecto { get; set; }
     }
+
+
 }
+
