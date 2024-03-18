@@ -1,11 +1,11 @@
 ﻿@model GestordeTaras.EN.Prioridad
 
-<form asp-action="Edit" id="editForm">
+<form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
     <input type="hidden" asp-for="Id" />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Nombre" class="control-label"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+    <div asp-validation-summary="ModelOnly" class="text-red-500"></div>
+    <div class="mb-4">
+        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+        <input asp-for="Nombre" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
+        <span asp-validation-for="Nombre" class="text-red-500 text-xs italic"></span>
     </div>
 </form>
