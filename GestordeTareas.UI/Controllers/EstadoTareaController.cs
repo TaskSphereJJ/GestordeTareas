@@ -1,15 +1,18 @@
-﻿using GestordeTaras.EN;
-using GestordeTareas.BL;
+﻿using GestordeTareas.BL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GestordeTaras.EN;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestordeTareas.UI.Controllers
 {
-    public class EstadoTareaENController : Controller
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    public class EstadoTareaController : Controller
     {
         private readonly EstadoTareaBL _estadoTareaBL;
 
-        public EstadoTareaENController()
+        public EstadoTareaController()
         {
             _estadoTareaBL = new EstadoTareaBL(); // Inicializamos la capa de negocio
         }
@@ -23,7 +26,7 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: CategoriaController/Details/5
-        public async Task<ActionResult> DetailsPartial(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea { Id = id });
             return PartialView("Details", estadoTarea);
@@ -55,7 +58,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea   { Id = id });
             return PartialView("Edit", estadoTarea);
         }
 

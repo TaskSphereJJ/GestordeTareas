@@ -1,5 +1,6 @@
 
 -- Para saber si es administrador o colaborador
+
 CREATE DATABASE GestorTareasReal
 GO 
 USE GestorTareasReal

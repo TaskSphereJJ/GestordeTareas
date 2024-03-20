@@ -30,7 +30,7 @@ namespace GestordeTaras.EN
 
         public DateTime FechaNacimiento { get; set; }
 
-   
+
         [Required(ErrorMessage = "El estado es requerido")]
         [Display(Name = "Estado")]
         public int Status { get; set; }

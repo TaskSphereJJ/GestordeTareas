@@ -48,7 +48,6 @@ namespace GestordeTaras.EN
         public int IdEstadoTarea { get; set; }
 
         [ForeignKey("Proyecto")]
-        [Required(ErrorMessage = "El proyecto es requerido")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
     }
