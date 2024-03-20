@@ -20,21 +20,22 @@ namespace GestordeTareas.UI.Controllers
         // GET: TareaController
         public async Task<ActionResult> Index()
         {
-            var tareas = await _tareaBL.GetAllAsync();
-            return View(tareas);
+            List<Tarea> Lista = await _tareaBL.GetAllAsync();
+
+            return View(Lista);
         }
 
         // GET: TareaController/Details/5
         public async Task<ActionResult> Details(int id)
         {
             var tarea = await _tareaBL.GetById(new Tarea { Id = id });
-            return View(tarea);
+            return PartialView("Details", tarea);
         }
 
         // GET: TareaController/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView("Create");
         }
 
         // POST: TareaController/Create
@@ -42,14 +43,15 @@ namespace GestordeTareas.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Tarea tarea)
         {
-            try
+           try
             {
-                await _tareaBL.CreateAsync(tarea);
+                int result = await _tareaBL.CreateAsync(tarea);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                return PartialView("Create", tarea);
             }
         }
 
@@ -57,7 +59,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var tarea = await _tareaBL.GetById(new Tarea { Id = id });
-            return View(tarea);
+            return PartialView("Edit", tarea);
         }
 
         // POST: TareaController/Edit/5
@@ -67,12 +69,13 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _tareaBL.UpdateAsync(tarea);
+                int result = await _tareaBL.UpdateAsync(tarea);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                return View(tarea);
             }
         }
 
@@ -81,7 +84,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var tarea = await _tareaBL.GetById(new Tarea { Id = id });
-            return View(tarea);
+            return PartialView("Delete", tarea);
         }
 
         // POST: TareaController/Delete/5
@@ -94,9 +97,10 @@ namespace GestordeTareas.UI.Controllers
                 await _tareaBL.DeleteAsync(tarea);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                return View(tarea);
             }
         }
     }

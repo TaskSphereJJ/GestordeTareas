@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GestordeTaras.EN;
 
 namespace GestordeTaras.EN
 {
@@ -51,4 +52,7 @@ namespace GestordeTaras.EN
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
     }
+
+
 }
+
