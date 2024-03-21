@@ -3,6 +3,7 @@ using GestordeTareas.BL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -39,7 +40,6 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Create");
         }
 
-
         // POST: ProyectoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -47,6 +47,14 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                // Obtener el IdUsuario del usuario autenticado
+                //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+                var actualUser = users.FirstOrDefault();
+
+                // Asignar el IdUsuario al proyecto
+                proyecto.IdUsuario = actualUser.Id;
+
                 int result = await _proyectoBL.CreateAsync(proyecto);
                 return RedirectToAction(nameof(Index));
             }
@@ -56,6 +64,7 @@ namespace GestordeTareas.UI.Controllers
                 return PartialView("Create", proyecto);
             }
         }
+
 
         // GET: ProyectoController/Edit/5
         public async Task<ActionResult> Edit(int id)

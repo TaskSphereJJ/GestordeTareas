@@ -1,29 +1,18 @@
 ﻿@model GestordeTaras.EN.Proyecto
 
 <form asp-action="Create" method="post" id="createForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Titulo" class="control-label"></label>
         <input asp-for="Titulo" class="form-control" />
         <span asp-validation-for="Titulo" class="text-danger"></span>
     </div>
-     
+
     <div class="form-group">
         <label asp-for="Descripcion" class="control-label"></label>
         <textarea asp-for="Descripcion" class="form-control" rows="4"></textarea>
         <span asp-validation-for="Descripcion" class="text-danger"></span>
     </div>
-
-    @* <!-- Input oculto para el ID del usuario -->
-    <input type="hidden" asp-for="IdUsuario" value="@User.Identity.GetUserId()" />
- *@
-
-    @* <div class="form-group">
-        <label asp-for="IdUsuario" class="control-label"></label>
-        <select asp-for="IdUsuario" asp-items="@(new SelectList(Model.ListaUsuarios, "Id", "Nombre"))" class="form-control"></select>
-        <span asp-validation-for="IdUsuario" class="text-danger"></span>
-    </div> *@
-
 
     <div class="form-group">
         <label asp-for="FechaFinalizacion" class="control-label"></label>

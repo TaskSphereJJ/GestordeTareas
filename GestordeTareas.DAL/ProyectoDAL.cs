@@ -14,6 +14,7 @@ namespace GestordeTareas.DAL
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
+                ////proyecto.IdUsuario = idUsuario; // Asignar el IdUsuario al proyecto
                 dbContext.Proyecto.Add(proyecto);
                 result = await dbContext.SaveChangesAsync();
             }
@@ -75,5 +76,6 @@ namespace GestordeTareas.DAL
                 return proyectos;
             }
         }
+
     }
 }
