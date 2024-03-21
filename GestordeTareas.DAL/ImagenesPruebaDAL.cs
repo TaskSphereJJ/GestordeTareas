@@ -11,31 +11,31 @@ namespace GestordeTareas.DAL
 
     public class ImagenesPruebaDAL
     {
-        public static async Task<int> CreateAsync(ImagenesPrueba imagenesPruebas)
+        public static async Task<int> CreateAsync(ImagenesPrueba imagenesPrueba)
         {
             int result = 0;
             using (var dbContexto = new ContextoBD())
             {
-                dbContexto.ImagenesPrueba.Add(imagenesPruebas);
+                dbContexto.ImagenesPrueba.Add(imagenesPrueba);
                 result = await dbContexto.SaveChangesAsync();
             }
             return result;
         }
 
-        public static async Task<int> UpdateAsync(ImagenesPrueba imagenesPruebas)
+        public static async Task<int> UpdateAsync(ImagenesPrueba imagenesPrueba)
         {
             int result = 0;
             using (var dbContexto = new ContextoBD())
             {
-                var imagenesPruebasDb = await dbContexto.ImagenesPrueba.FirstOrDefaultAsync(i => i.Id == imagenesPruebas.Id);
+                var imagenesPruebaDb = await dbContexto.ImagenesPrueba.FirstOrDefaultAsync(i => i.Id == imagenesPrueba.Id);
 
-                if (imagenesPruebasDb != null)
+                if (imagenesPruebaDb != null)
                 {
-                    imagenesPruebasDb.Imagen = imagenesPruebas.Imagen;
-                    imagenesPruebasDb.IdTareaFinalizada = imagenesPruebas.IdTareaFinalizada;
+                    imagenesPruebaDb.Imagen = imagenesPrueba.Imagen;
+                    imagenesPruebaDb.IdTareaFinalizada = imagenesPrueba.IdTareaFinalizada;
 
 
-                    dbContexto.Update(imagenesPruebas);
+                    dbContexto.Update(imagenesPrueba);
                     result = await dbContexto.SaveChangesAsync();
                 }
                 return result;
@@ -44,15 +44,19 @@ namespace GestordeTareas.DAL
         }
 
 
-        public static async Task<int> DeleteAsync(ImagenesPrueba imagenesPruebas)
+
+        public static async Task<int> DeleteAsync(ImagenesPrueba imagenesPrueba)
+
         {
             int result = 0;
             using (var dbContexto = new ContextoBD())
             {
-                var imagenesPruebasDb = await dbContexto.ImagenesPrueba.FirstOrDefaultAsync(i => i.Id == imagenesPruebas.Id);
-                if (imagenesPruebasDb != null)
+
+                var imagenesPruebaDb = await dbContexto.ImagenesPrueba.FirstOrDefaultAsync(i => i.Id == imagenesPrueba.Id);
+                if (imagenesPruebaDb != null)
                 {
-                    dbContexto.ImagenesPrueba.Remove(imagenesPruebasDb);
+                    dbContexto.ImagenesPrueba.Remove(imagenesPruebaDb);
+
                     result = await dbContexto.SaveChangesAsync();
                 }
             }
@@ -60,66 +64,79 @@ namespace GestordeTareas.DAL
         }
 
 
-        public static async Task<ImagenesPrueba> GetByIdAsync(ImagenesPrueba imagenesPruebas)
+
+        public static async Task<ImagenesPrueba> GetByIdAsync(ImagenesPrueba imagenesPrueba)
         {
-            var imagenesPruebasDb = new ImagenesPrueba();
+            var imagenesPruebaDb = new ImagenesPrueba();
             using (var dbContext = new ContextoBD())
             {
-                imagenesPruebasDb = await dbContext.ImagenesPrueba.FirstOrDefaultAsync(i => i.Id == imagenesPruebas.Id);
+                imagenesPruebaDb = await dbContext.ImagenesPrueba.FirstOrDefaultAsync(i => i.Id == imagenesPrueba.Id);
+
             }
-            return imagenesPruebasDb!;
+            return imagenesPruebaDb!;
         }
 
         public static async Task<List<ImagenesPrueba>> GetAllAsync()
         {
-            var _imagenesPruebas = new List<ImagenesPrueba>();
+
+            var _imagenesPrueba = new List<ImagenesPrueba>();
             using (var dbContexto = new ContextoBD())
             {
-                _imagenesPruebas = await dbContexto.ImagenesPrueba.ToListAsync();
+                _imagenesPrueba = await dbContexto.ImagenesPrueba.ToListAsync();
+
             }
-            return _imagenesPruebas;
+            return _imagenesPrueba;
         }
 
 
-        internal static IQueryable<ImagenesPrueba> QuerySelect(IQueryable<ImagenesPrueba> query, ImagenesPrueba imagenesPruebas)
+
+        internal static IQueryable<ImagenesPrueba> QuerySelect(IQueryable<ImagenesPrueba> query, ImagenesPrueba imagenesPrueba)
         {
-            if (imagenesPruebas.Id > 0)
-                query = query.Where(s => s.Id == imagenesPruebas.Id);
+            if (imagenesPrueba.Id > 0)
+                query = query.Where(s => s.Id == imagenesPrueba.Id);
 
-            if (!string.IsNullOrWhiteSpace(imagenesPruebas.Imagen))
-                query = query.Where(s => s.Imagen.Contains(imagenesPruebas.Imagen));
+            if (!string.IsNullOrWhiteSpace(imagenesPrueba.Imagen))
+                query = query.Where(s => s.Imagen.Contains(imagenesPrueba.Imagen));
 
-            if (imagenesPruebas.IdTareaFinalizada > 0)
-                query = query.Where(s => s.IdTareaFinalizada == imagenesPruebas.IdTareaFinalizada);
+            if (imagenesPrueba.IdTareaFinalizada > 0)
+                query = query.Where(s => s.IdTareaFinalizada == imagenesPrueba.IdTareaFinalizada);
 
 
             query = query.OrderByDescending(s => s.Id).AsQueryable();
 
-            if (imagenesPruebas.Top_Aux > 0)
-                query = query.Take(imagenesPruebas.Top_Aux).AsQueryable();
+            if (imagenesPrueba.Top_Aux > 0)
+                query = query.Take(imagenesPrueba.Top_Aux).AsQueryable();
 
             return query;
         }
 
-        public static async Task<List<ImagenesPrueba>> SearchAsync(ImagenesPrueba imagenesPruebas)
+
+        public static async Task<List<ImagenesPrueba>> SearchAsync(ImagenesPrueba imagenesPrueba)
+
         {
             var images = new List<ImagenesPrueba>();
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.ImagenesPrueba.AsQueryable();
-                select = QuerySelect(select, imagenesPruebas);
+
+                select = QuerySelect(select, imagenesPrueba);
+
                 images = await select.ToListAsync();
             }
             return images;
         }
 
-        public static async Task<List<ImagenesPrueba>> SearchIncludeAdAsync(ImagenesPrueba imagenesPruebas)
+
+        public static async Task<List<ImagenesPrueba>> SearchIncludeAdAsync(ImagenesPrueba imagenesPrueba)
+
         {
             var imagen = new List<ImagenesPrueba>();
             using (var dbContexto = new ContextoBD())
             {
                 var select = dbContexto.ImagenesPrueba.AsQueryable();
-                select = QuerySelect(select, imagenesPruebas).Include(i => i.TareaFinalizada).AsQueryable();
+
+                select = QuerySelect(select, imagenesPrueba).Include(i => i.TareaFinalizada).AsQueryable();
+
                 imagen = await select.ToListAsync();
             }
             return imagen;

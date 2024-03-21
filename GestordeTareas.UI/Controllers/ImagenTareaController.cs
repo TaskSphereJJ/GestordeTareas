@@ -11,18 +11,18 @@ namespace GestordeTareas.UI.Controllers
 
         public ImagenTareaController()
         {
-            _imagenTareaBL = new ImagenesPruebasBL();   
+            _imagenTareaBL = new ImagenesPruebasBL();
         }
 
         // GET: ImagenTareaController
-        public async Task <ActionResult> Index()
+        public async Task<ActionResult> Index()
         {
             var imagennesPruebas = await _imagenTareaBL.GetAllAsync();
             return View(imagennesPruebas);
         }
 
         // GET: ImagenTareaController/Details/5
-        public async Task <ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPrueba { Id = id });
             return View(imagenesPruebas);
@@ -37,7 +37,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: ImagenTareaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <ActionResult> Create(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
+        public async Task<ActionResult> Create(GestordeTaras.EN.ImagenesPrueba imagenesPruebas)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: ImagenTareaController/Edit/5
-        public async Task <ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             var imagenesPruebas = await _imagenTareaBL.GetById(new GestordeTaras.EN.ImagenesPrueba { Id = id });
             return View(imagenesPruebas);

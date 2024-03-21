@@ -29,6 +29,7 @@ namespace GestordeTareas.BL
         public async Task<ImagenesPrueba> GetByIdAsync(ImagenesPrueba imagenesPruebas)
         {
             return await ImagenesPruebaDAL.GetByIdAsync(imagenesPruebas);
+
         }
 
 
@@ -36,6 +37,7 @@ namespace GestordeTareas.BL
         {
             return await ImagenesPruebaDAL.GetAllAsync();
         }
+
 
         public async Task<List<ImagenesPrueba>> SearchAsync(ImagenesPrueba imagenesPruebas)
         {
@@ -45,6 +47,7 @@ namespace GestordeTareas.BL
         public async Task<List<ImagenesPrueba>> SearchIncludeAdAsync(ImagenesPrueba imagenesPruebas)
         {
             return await ImagenesPruebaDAL.SearchIncludeAdAsync(imagenesPruebas);
+
         }
     }
 }

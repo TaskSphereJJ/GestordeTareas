@@ -32,7 +32,6 @@ namespace GestordeTaras.EN
         [Display(Name = "Fecha  de vencimiento")]
         public DateTime FechaVencimiento { get; set; }
 
-
         [ForeignKey("Categoria")]
         [Required(ErrorMessage = " La Categoría es Requerida")]
         [Display(Name = "Categoria")]
@@ -49,7 +48,6 @@ namespace GestordeTaras.EN
         public int IdEstadoTarea { get; set; }
 
         [ForeignKey("Proyecto")]
-
         [Required(ErrorMessage = "El proyecto es requerido")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }

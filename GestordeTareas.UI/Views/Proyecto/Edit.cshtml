@@ -1,0 +1,27 @@
+﻿@model GestordeTaras.EN.Proyecto
+
+        <form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Titulo" class="control-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdUsuario" class="control-label"></label>
+                <input asp-for="IdUsuario" class="form-control" />
+                <span asp-validation-for="IdUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               <label asp-for="FechaFinalizacion" class="control-label"></label>
+               <input asp-for="FechaFinalizacion" type="date" class="form-control" />
+               <span asp-validation-for="FechaFinalizacion" class="text-danger"></span>
+            </div>
+        </form>
+   
