@@ -14,6 +14,7 @@ namespace GestordeTareas.DAL
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
+                ////proyecto.IdUsuario = idUsuario; // Asignar el IdUsuario al proyecto
                 dbContext.Proyecto.Add(proyecto);
                 result = await dbContext.SaveChangesAsync();
             }
@@ -32,7 +33,7 @@ namespace GestordeTareas.DAL
                     existingProyecto.Titulo = proyecto.Titulo;
                     existingProyecto.Descripcion = proyecto.Descripcion;
                     existingProyecto.IdUsuario = proyecto.IdUsuario;
-                    existingProyecto.CodigoAcceso = proyecto.CodigoAcceso;
+                    existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
                     existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
 
                     dbContext.Update(existingProyecto);
@@ -71,9 +72,10 @@ namespace GestordeTareas.DAL
         {
             using (var dbContext = new ContextoBD())
             {
-                var proyectos = await dbContext.Proyecto.ToListAsync();
+                var proyectos = await dbContext.Proyecto.Include(p => p.Usuario).ToListAsync();
                 return proyectos;
             }
         }
+
     }
 }

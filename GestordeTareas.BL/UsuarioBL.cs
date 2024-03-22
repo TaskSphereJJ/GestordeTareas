@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GestordeTareas.BL
 {
-    public class UsuariosBL
+    public class UsuarioBL
     {
         public async Task<int> Create(Usuario usuario)
         {

@@ -3,8 +3,9 @@
 @{
     ViewData["Title"] = "Eliminar";
 }
-<h5>¿Estás seguro de querer eliminar esta categoría?</h5>
+<h5>¿Estás seguro de querer eliminar este proyecto?</h5>
     <hr />
+    <div>
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Titulo)
@@ -23,12 +24,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IdUsuario)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CodigoAcceso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CodigoAcceso)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FechaFinalizacion)

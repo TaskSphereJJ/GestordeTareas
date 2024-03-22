@@ -23,33 +23,39 @@
     </div>
 
     <div class="mb-4">
-        <label asp-for="FechaVencimiento" class="block text-gray-700 text-sm font-bold mb-2">FechaVencimiento</label>
+        <label asp-for="FechaVencimiento" class="block text-gray-700 text-sm font-bold mb-2"  >FechaVencimiento</label>
         <input asp-for="FechaVencimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Vencimiento" />
         <span asp-validation-for="FechaVencimiento" class="text-purple-700 text-xs italic"></span>
     </div>
-
-    <div class="mb-4">
-        <label asp-for="IdCategoria" class="block text-gray-700 text-sm font-bold mb-2">IdCategoria</label>
-        <input asp-for="IdCategoria" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Id de la Categoria" />
-        <span asp-validation-for="IdCategoria" class="text-purple-700 text-xs italic"></span>
+    <div class="form-group">
+        <label asp-for="IdCategoria" class="control-label"></label>
+        <select asp-for="IdCategoria" class="form-control" asp-items="@ViewBag.Categorias">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdCategoria" class="text-danger"></span>
     </div>
 
-    <div class="mb-4">
-        <label asp-for="IdPrioridad" class="block text-gray-700 text-sm font-bold mb-2">IdPrioridad</label>
-        <input asp-for="IdPrioridad" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Id prioridad" />
-        <span asp-validation-for="IdPrioridad" class="text-purple-700 text-xs italic"></span>
+    <div class="form-group">
+        <label asp-for="IdPrioridad" class="control-label"></label>
+        <select asp-for="IdPrioridad" class="form-control" asp-items="@ViewBag.Prioridades">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdPrioridad" class="text-danger"></span>
     </div>
 
-    <div class="mb-4">
-        <label asp-for="IdEstadoTarea" class="block text-gray-700 text-sm font-bold mb-2">IdEstadoTarea</label>
-        <input asp-for="IdEstadoTarea" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Id Estado Tarea" />
-        <span asp-validation-for="IdEstadoTarea" class="text-purple-700 text-xs italic"></span>
+    <div class="form-group">
+        <label asp-for="IdEstadoTarea" class="control-label"></label>
+        <select asp-for="IdEstadoTarea" class="form-control" asp-items="@ViewBag.EstadosTarea">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdEstadoTarea" class="text-danger"></span>
     </div>
 
-    <div class="mb-4">
-        <label asp-for="IdProyecto" class="block text-gray-700 text-sm font-bold mb-2">IdProyecto</label>
-        <input asp-for="IdProyecto" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Id Proyecto" />
-        <span asp-validation-for="IdProyecto" class="text-purple-700 text-xs italic"></span>
+    <div class="form-group">
+        <label asp-for="IdProyecto" class="control-label"></label>
+        <select asp-for="IdProyecto" class="form-control" asp-items="@ViewBag.Proyectos">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdProyecto" class="text-danger"></span>
     </div>
-
 </form>

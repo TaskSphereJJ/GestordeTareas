@@ -19,7 +19,6 @@ namespace GestordeTareas.DAL
         public DbSet<EstadoTarea> EstadoTarea { get; set; }
         public DbSet<Tarea> Tarea { get; set; }
         public DbSet<ImagenesPrueba> ImagenesPrueba { get; set; }
-        //public DbSet<AsignacionTareas> AsignacionTareas { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }
 
         public DbSet<ElegirTarea> ElegirTarea { get; set; }
