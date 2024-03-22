@@ -1,5 +1,6 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
+using GestordeTareas.DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,7 @@ namespace GestordeTareas.UI.Controllers
         private readonly TareaBL _tareaBL;
         private readonly CategoriaBL _categoriaBL;
         private readonly PrioridadBL _prioridadBL;
-        private readonly EstadoTareaBL _estadoTareaBL;
+       // private readonly EstadoTareaBL _estadoTareaBL;
         private readonly ProyectoBL _proyectoBL;
 
         public TareaController()
@@ -22,7 +23,7 @@ namespace GestordeTareas.UI.Controllers
             _tareaBL = new TareaBL(); // Inicializamos la capa de negocio
             _categoriaBL = new CategoriaBL();
             _prioridadBL = new PrioridadBL();
-            _estadoTareaBL = new EstadoTareaBL();
+           // _estadoTareaBL = new EstadoTareaBL();
             _proyectoBL = new ProyectoBL();
         }
 
@@ -57,6 +58,8 @@ namespace GestordeTareas.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
+                    tarea.IdEstadoTarea = estadoPendienteId;
                     await LoadDropDownListsAsync();
 
                     // Lógica para crear la nueva tarea
@@ -77,12 +80,12 @@ namespace GestordeTareas.UI.Controllers
         {
             var categorias = await _categoriaBL.GetAllAsync();
             var prioridades = await _prioridadBL.GetAllAsync();
-            var estadosTarea = await _estadoTareaBL.GetAllAsync();
+           // var estadosTarea = await _estadoTareaBL.GetAllAsync();
             var proyectos = await _proyectoBL.GetAllAsync();
 
             ViewBag.Categorias = new SelectList(categorias, "Id", "Nombre");
             ViewBag.Prioridades = new SelectList(prioridades, "Id", "Nombre");
-            ViewBag.EstadosTarea = new SelectList(estadosTarea, "Id", "Nombre");
+           // ViewBag.EstadosTarea = new SelectList(estadosTarea, "Id", "Nombre");
             ViewBag.Proyectos = new SelectList(proyectos, "Id", "Titulo");
         }
 

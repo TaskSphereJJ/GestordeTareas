@@ -94,6 +94,23 @@ namespace GestordeTareas.DAL
             return estadoTareas;
         }
 
+        public static async Task<int> GetEstadoPendienteIdAsync()
+        {
+            int estadoPendienteId = 0;
+            using (var dbContext = new ContextoBD())
+            {
+                // Busca el estado "Pendiente" en la base de datos y obtén su ID.
+                var estadoPendiente = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Nombre == "Pendiente");
+                if (estadoPendiente != null)
+                {
+                    estadoPendienteId = estadoPendiente.Id;
+                }
+            }
+            // Retorna el ID del estado "Pendiente".
+            return estadoPendienteId;
+        }
+
+
     }
 
 }
