@@ -126,12 +126,16 @@ VALUES
 -- Insertar datos en la tabla Proyecto
 INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
 VALUES 
-  ('Proyecto A', 'Descripción del Proyecto A', '2024-12-31', 1)
+  ('Proyecto A', 'Descripción del Proyecto A', '2024-12-31', 1),
+  ('Proyecto B', 'Descripción del Proyecto B', '2025-03-31', 2),
+  ('Proyecto C', 'Descripción del Proyecto C', '2025-06-30', 3);
 
   -- Insertar datos en la tabla Tarea
 INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
 VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1)
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1),
+  ('Tarea 2', 'Descripción de la Tarea 2', GETDATE(), '2025-03-31', 2, 2, 1, 2),
+  ('Tarea 3', 'Descripción de la Tarea 3', GETDATE(), '2025-06-30', 3, 3, 1, 3);
 
 -- Insertar datos en la tabla ElegirTarea
 INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
@@ -155,26 +159,4 @@ VALUES
   ('ruta/imagen3.jpg', 3);
 
 
- --//PARA HACER FUNSIONAR EL DRAG AND DROP
  
--- Insertar datos en la tabla Usuario
-INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
-VALUES 
-  ('Jeffrey', 'Mardoqueo', 'JeffM', 'be9c71c74df2b9699e073c2c2bf8d8d9', '69842090', '2006-02-08', GETDATE(), 1, 1)
-
-
-
--- Insertar datos en la tabla Proyecto
-INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
-VALUES 
-  ('Proyecto A', 'Descripción del Proyecto A', '2024-12-31', 1)
-
-  -- Insertar datos en la tabla Tarea
-INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
-VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1)
-
-
- SELECT * FROM Proyecto
- SELECT * FROM Tarea
- SELECT * FROM ElegirTarea
