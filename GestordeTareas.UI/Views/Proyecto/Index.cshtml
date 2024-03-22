@@ -28,9 +28,6 @@
                     @Html.DisplayNameFor(model => model.IdUsuario)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CodigoAcceso)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.FechaFinalizacion)
                 </th>
                 <th></th>
@@ -47,10 +44,7 @@
                         @Html.DisplayFor(modelItem => item.Descripcion)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IdUsuario)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CodigoAcceso)
+                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FechaFinalizacion)

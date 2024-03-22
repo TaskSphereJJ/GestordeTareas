@@ -84,7 +84,7 @@ namespace GestordeTareas.DAL
             var tareas = new List<Tarea>(); //una variable de lo que llevara una lista de tarea
             using (var bdContexto = new ContextoBD()) //creo el acceso a la BD
             {
-                tareas = await bdContexto.Tarea.ToListAsync(); //le digo que tarea contenga la lista de tareas, osea lo de l BD
+                tareas = await bdContexto.Tarea.Include(t => t.Categoria).ToListAsync(); //le digo que tarea contenga la lista de tareas, osea lo de l BD
             }
             return tareas;
         }
