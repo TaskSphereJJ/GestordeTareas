@@ -79,14 +79,20 @@ namespace GestordeTareas.DAL
 
 
         //--------------------------------METODO obtener todas las tareas.--------------------------
+        //--------------------------------METODO obtener todas las tareas.--------------------------
         public static async Task<List<Tarea>> GetAllAsync()
         {
-            var tareas = new List<Tarea>(); //una variable de lo que llevara una lista de tarea
-            using (var bdContexto = new ContextoBD()) //creo el acceso a la BD
+            using (var dbContext = new ContextoBD())
             {
-                tareas = await bdContexto.Tarea.Include(t => t.Categoria).ToListAsync(); //le digo que tarea contenga la lista de tareas, osea lo de l BD
+                var tareas = await dbContext.Tarea
+                    .Include(c => c.Categoria)
+                    .Include(p => p.Prioridad)
+                    .Include(e => e.EstadoTarea)
+                    .Include(r => r.Proyecto)
+                    .ToListAsync();
+
+                return tareas;
             }
-            return tareas;
         }
 
     }

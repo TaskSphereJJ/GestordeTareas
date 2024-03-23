@@ -94,6 +94,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var tarea = await _tareaBL.GetById(new Tarea { Id = id });
+            await LoadDropDownListsAsync();
             return PartialView("Edit", tarea);
         }
 
@@ -110,6 +111,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
+                await LoadDropDownListsAsync();
                 return View(tarea);
             }
         }

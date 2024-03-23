@@ -15,36 +15,42 @@
         <span asp-validation-for="Descripcion" class="text-red-500 text-xs italic"></span>
     </div>
     <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">FechaCreacion</label>
+        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Fecha de creacion</label>
         <input asp-for="FechaCreacion" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
         <span asp-validation-for="FechaCreacion" class="text-red-500 text-xs italic"></span>
     </div>
     <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">FechaVencimiento</label>
+        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Fecha de vencimiento</label>
         <input asp-for="FechaVencimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
         <span asp-validation-for="FechaVencimiento" class="text-red-500 text-xs italic"></span>
     </div>
-           <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">IdCategoria</label>
-        <input asp-for="IdCategoria" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
-        <span asp-validation-for="IdCategoria" class="text-red-500 text-xs italic"></span>
+    <div class="form-group">
+        <label asp-for="IdCategoria" class="control-label"></label>
+        <select asp-for="IdCategoria" class="form-control" asp-items="@ViewBag.Categorias">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdCategoria" class="text-danger"></span>
     </div>
-    <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">IdPrioridad</label>
-        <input asp-for="IdPrioridad" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
-        <span asp-validation-for="IdPrioridad" class="text-red-500 text-xs italic"></span>
+
+    <div class="form-group">
+        <label asp-for="IdPrioridad" class="control-label"></label>
+        <select asp-for="IdPrioridad" class="form-control" asp-items="@ViewBag.Prioridades">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdPrioridad" class="text-danger"></span>
     </div>
            <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">IdEstadoTarea</label>
+        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Estado</label>
         <input asp-for="IdEstadoTarea" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
         <span asp-validation-for="IdEstadoTarea" class="text-red-500 text-xs italic"></span>
     </div>
-    <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2"> IdPrioridad</label>
-        <input asp-for="IdProyecto" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
-        <span asp-validation-for="IdProyecto" class="text-red-500 text-xs italic"></span>
+
+    <div class="form-group">
+        <label asp-for="IdProyecto" class="control-label"></label>
+        <select asp-for="IdProyecto" class="form-control" asp-items="@ViewBag.Proyectos">
+            <option value="">Seleccionar</option>
+        </select>
+        <span asp-validation-for="IdProyecto" class="text-danger"></span>
     </div>
-           
-	
-        </form>
+</form>
   

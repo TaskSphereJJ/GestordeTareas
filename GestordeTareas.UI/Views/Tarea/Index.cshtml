@@ -62,9 +62,9 @@
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.IdPrioridad)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.IdEstadoTarea)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.IdProyecto)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Proyecto.Titulo)</td>
                     <td class="px-6 py-4 flex justify-center items-center space-x-2">
                         <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
                             <i class="fas fa-edit text-lg"></i>
