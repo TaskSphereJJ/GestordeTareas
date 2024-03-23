@@ -41,7 +41,6 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Create");
         }
 
-
         // POST: ProyectoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,6 +65,7 @@ namespace GestordeTareas.UI.Controllers
                 return PartialView("Create", proyecto);
             }
         }
+
 
         // GET: ProyectoController/Edit/5
         public async Task<ActionResult> Edit(int id)

@@ -26,7 +26,7 @@ namespace GestordeTaras.EN
         [Display(Name = "Elegir Tarea")]
         public int IdElegirTarea { get; set; }
 
-
+        
     }
 
 }

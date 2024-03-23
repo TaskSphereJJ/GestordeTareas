@@ -62,5 +62,9 @@ namespace GestordeTaras.EN
     {
         ACTIVO = 1, INACTIVO = 2
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 91511954077166a480d69128ddcd1474b9347dd5

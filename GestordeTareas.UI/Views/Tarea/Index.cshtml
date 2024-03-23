@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestordeTaras.EN.Cargo>
+﻿@model IEnumerable<GestordeTaras.EN.Tarea>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,10 +7,10 @@
 
 }
 
-<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Cargo</h1>
+<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 <p>
-    <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center"  onclick="cargarVistaCreate()">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nuevo Cargo
+    <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
+        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
     </a>
 </p>
 
@@ -24,6 +24,29 @@
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.Nombre)
                 </th>
+                 <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+               
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.FechaCreacion)
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.FechaVencimiento)
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.IdCategoria)
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.IdPrioridad)
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.IdEstadoTarea)
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.IdProyecto)
+                </th>
+                
                 <th scope="col" class="px-6 py-3 text-center">
                     Acciones
                 </th>
@@ -35,6 +58,13 @@
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.IdPrioridad)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.IdEstadoTarea)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.IdProyecto)</td>
                     <td class="px-6 py-4 flex justify-center items-center space-x-2">
                         <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
                             <i class="fas fa-edit text-lg"></i>
@@ -52,16 +82,14 @@
     </table>
 </div>
 
-<!-- Modales y scripts... -->
+
 
 <!-- Modales -->
-
-<!-- Modal de creación -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
-                <h5 class="modal-title" id="createModalLabel">Crear Cargo</h5>
+                <h5 class="modal-title" id="createModalLabel">Crear Tarea</h5>
                 <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -78,6 +106,8 @@
                     <i class="fas fa-times"></i> Cancelar
                 </button>
             </div>
+
+
         </div>
     </div>
 </div>
@@ -87,7 +117,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
-                <h5 class="modal-title" id="editModalLabel">Editar Cargo</h5>
+                <h5 class="modal-title" id="editModalLabel">Editar Tarea</h5>
                 <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -113,7 +143,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles del Cargo</h5>
+                <h5 class="modal-title" id="detailsModalLabel">Detalles de la Tarea</h5>
                 <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -131,12 +161,13 @@
     </div>
 </div>
 
+
 <!-- Modal de eliminación -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-red-600 text-white">
-                <h5 class="modal-title" id="deleteModalLabel">Eliminar Cargo</h5>
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Tarea</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -144,25 +175,24 @@
                 <!-- Contenido de la vista de eliminación se cargará aquí -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="eliminarCargo()">Eliminar</button>
+                <button type="button" class="btn btn-danger" onclick="eliminarTarea()">Eliminar</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Scripts -->
-
 <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 
 <script>
 
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
         $.ajax({
-            url: '/Cargo/Create', // URL de la acción Create en el controlador Cargo
+            url: '/Tarea/Create', // URL de la acción Create en el controlador tarea
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -180,7 +210,7 @@
     function submiteditForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
         $.ajax({
-            url: '/Cargo/Edit', // URL de la acción Edit en el controlador Cargo
+            url: '/Tarea/Edit', // URL de la acción Create en el controlador tarea
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -194,25 +224,27 @@
         });
     }
 
-    function eliminarCargo() {
-        // Enviar una solicitud AJAX para eliminar el cargo
+    function eliminarTarea() {
+        // Enviar una solicitud AJAX para eliminar la tarea
         $.ajax({
-            url: '/Cargo/Delete', // URL de la acción POST para eliminar el cargo
+            url: '/Tarea/Delete', // URL de la acción POST para eliminar la tarea
             type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del cargo)
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la categoría)
             success: function (response) {
-                // Recargar la página después de eliminar el cargo
+                // Recargar la página después de eliminar la Tarea
                 window.location.reload();
             },
             error: function (xhr, status, error) {
-                alert('Error al eliminar el cargo: ' + xhr.responseText);
+                alert('Error al eliminar la Tarea: ' + xhr.responseText);
             }
         });
     }
 
+
+
     function cargarVistaCreate() {
         $.ajax({
-            url: "/Cargo/Create",
+            url: "/Tarea/Create",
             type: "GET",
             success: function (data) {
                 $("#createModalContent").html(data);
@@ -223,7 +255,7 @@
 
     function cargarVistaEdit(id) {
         $.ajax({
-            url: "/Cargo/Edit/" + id,
+            url: "/Tarea/Edit/" + id,
             type: "GET",
             success: function (data) {
                 $("#editModalContent").html(data);
@@ -234,7 +266,7 @@
 
     function cargarVistaDetails(id) {
         $.ajax({
-            url: "/Cargo/DetailsPartial/" + id,
+            url: "/Tarea/Details/" + id,
             type: "GET",
             success: function (data) {
                 $("#detailsModalContent").html(data);
@@ -245,10 +277,10 @@
 
     function cargarVistaDelete(id) {
         $.ajax({
-            url: "/Cargo/Delete/" + id,
+            url: "/Tarea/Delete/" + id,
             type: "GET",
             success: function (data) {
-                $("#deleteModalContent").html(data); // Esto muestra el contenido del cargo
+                $("#deleteModalContent").html(data); // Esto muestra el contenido de la tarea
                 $("#deleteModal").modal("show");
             },
             error: function () {
@@ -257,6 +289,5 @@
         });
     }
 
+
 </script>
-
-

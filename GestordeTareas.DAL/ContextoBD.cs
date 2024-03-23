@@ -21,8 +21,8 @@ namespace GestordeTareas.DAL
         public DbSet<ImagenesPrueba> ImagenesPrueba { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }
 
-        public DbSet<ElegirTarea> ElegirTarea { get; set ; }
-        public DbSet<TareaFinalizada> TareaFinalizada { get; set ; }
+        public DbSet<ElegirTarea> ElegirTarea { get; set; }
+        public DbSet<TareaFinalizada> TareaFinalizada { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

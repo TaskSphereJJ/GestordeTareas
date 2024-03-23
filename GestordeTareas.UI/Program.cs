@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Authentication.Google;
 using GestordeTareas.UI.Data;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +19,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
     AddCookie((options) =>
     {
+<<<<<<< HEAD
         options.LoginPath = new PathString("/Usuario/Login");
+=======
+        options.LoginPath = new PathString("/Usuarios/Login");
+>>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
         options.AccessDeniedPath = new PathString("/home/index");
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = true;

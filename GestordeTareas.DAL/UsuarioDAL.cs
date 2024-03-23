@@ -72,8 +72,6 @@ namespace GestordeTareas.DAL
                     userDb.Apellido = usuario.Apellido;
                     userDb.Status = usuario.Status;
                     userDb.NombreUsuario = usuario.NombreUsuario;
-
-
                     dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
                 }
@@ -121,7 +119,6 @@ namespace GestordeTareas.DAL
         public static async Task<List<Usuario>> GetAllAsync()
         {
             var usuarios = new List<Usuario>();
-
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los usuarios y los asigna a la variable usuarios.
@@ -225,4 +222,5 @@ namespace GestordeTareas.DAL
     }
 
 
-} 
+
+}

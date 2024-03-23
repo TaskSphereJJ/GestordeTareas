@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GestordeTaras.EN;
 
 namespace GestordeTaras.EN
 {
@@ -36,21 +37,30 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = " La Categoría es Requerida")]
         [Display(Name = "Categoria")]
         public int IdCategoria { get; set; }
+        public Categoria Categoria { get; set; } // Propiedad de navegación
 
         [ForeignKey("Prioridad")]
         [Required(ErrorMessage = "La Prioridad es Requerida")]
-        [Display(Name = "Prioridad de la Tarea")]
+        [Display(Name = "Prioridad")]
         public int IdPrioridad { get; set; }
+        public Prioridad Prioridad { get; set; } // Propiedad de navegación
 
         [ForeignKey("EstadoTarea")]
         [Required(ErrorMessage = "El Estado es Requerido")]
-        [Display(Name = "Estado de la Tarea")]
+        [Display(Name = "Estado")]
         public int IdEstadoTarea { get; set; }
+        public EstadoTarea EstadoTarea { get; set; } // Propiedad de navegación
 
         [ForeignKey("Proyecto")]
-        [Required(ErrorMessage = "El proyecto es requerido")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
+<<<<<<< HEAD
 
+=======
+        public Proyecto Proyecto { get; set; } // Propiedad de navegación
+>>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
     }
+
+
 }
+

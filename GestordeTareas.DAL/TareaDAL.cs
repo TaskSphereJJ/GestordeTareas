@@ -14,64 +14,80 @@ namespace GestordeTareas.DAL
         public static async Task<int> CreateAsync(Tarea tarea)
         {
             int result = 0;
-            using (var contextoBD = new ContextoBD())
+            using (var dbContexto = new ContextoBD()) //el comando using hace un proceso de ejecucion
             {
-                contextoBD.Add(tarea);
-                result = await contextoBD.SaveChangesAsync();
+                dbContexto.Tarea.Add(tarea); //agrego un nuevo categorua
+                result = await dbContexto.SaveChangesAsync();//se guarda a la base de datos
             }
             return result;
         }
         //--------------------------------METODO MODIFICAR TArea.--------------------------
         public static async Task<int> UpdateAsync(Tarea tarea)
         {
-            int resul = 0;
-            using (var contextoBD = new ContextoBD())
+            int result = 0;
+            using (var bdContexto = new ContextoBD())
             {
-                var tareaBD = await contextoBD.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id);
+                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(c => c.Id == tarea.Id);
                 if (tareaBD != null)
                 {
+                    // Actualizar solo las propiedades que necesitan ser actualizadas
                     tareaBD.Nombre = tarea.Nombre;
-                    contextoBD.Update(tareaBD);
-                    resul = await contextoBD.SaveChangesAsync();
+                    tareaBD.Descripcion = tarea.Descripcion;
+                    tareaBD.FechaCreacion = tarea.FechaCreacion;
+                    tareaBD.FechaVencimiento = tarea.FechaVencimiento;
+                    tareaBD.IdCategoria = tarea.IdCategoria;
+                    tareaBD.IdPrioridad = tarea.IdPrioridad;
+                    tareaBD.IdEstadoTarea = tarea.IdEstadoTarea;
+                    tareaBD.IdProyecto = tarea.IdProyecto;
+                   
+
+                    // Guardar cambios solo si hay propiedades actualizadas
+                    bdContexto.Update(tareaBD);
+                    result = await bdContexto.SaveChangesAsync();
                 }
-                return resul;
             }
+            return result;
         }
+
         //...............--------------METODO ELIMINAR---------------------------
         public static async Task<int> DeleteAsync(Tarea tarea)
         {
-            int result = 0;
-            using (var contextoBD = new ContextoBD())
-            {
-                var tareaBD = await contextoBD.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id);
-                if (tarea != null)
-                {
-                    contextoBD.Tarea.Remove(tareaBD);
-                    result = await contextoBD.SaveChangesAsync();
-                }
-                return result;
-            }
-        }
 
-        //--------------------------METODO BUSCAR POR ID--------------------------------------------
+            int result = 0;
+            using (var bdContexto = new ContextoBD()) //istancio la coneccion
+            {
+                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
+                if (tareaBD != null)//verifico que no este nulo
+                {
+                    bdContexto.Tarea.Remove(tareaBD);//elimino anivel de memoria la tarea
+                    result = await bdContexto.SaveChangesAsync();//le digo a la BD que se elimine y se guarde
+                }
+            }
+            return result;
+        }
+        //--------------------------------METODO obtenerporID Tareas.--------------------------
         public static async Task<Tarea> GetByIdAsync(Tarea tarea)
         {
             var tareaBD = new Tarea();
             using (var bdContexto = new ContextoBD())
             {
-                var priordadB = await bdContexto.Tarea.FirstOrDefaultAsync(c => c.Id == tarea.Id); //busco el id
+                tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
             }
             return tareaBD;
         }
-        //--------------------------------METODO obtener todas las PRIORIDADES.--------------------------
+
+
+
+        //--------------------------------METODO obtener todas las tareas.--------------------------
         public static async Task<List<Tarea>> GetAllAsync()
         {
-            var tareas = new List<Tarea>(); //una variable de lo que llevara una lista de prioridades
+            var tareas = new List<Tarea>(); //una variable de lo que llevara una lista de tarea
             using (var bdContexto = new ContextoBD()) //creo el acceso a la BD
             {
-                tareas = await bdContexto.Tarea.ToListAsync(); //le digo que categories contenga la lista de categorias, osea lo de l BD
+                tareas = await bdContexto.Tarea.Include(t => t.Categoria).ToListAsync(); //le digo que tarea contenga la lista de tareas, osea lo de l BD
             }
             return tareas;
         }
+
     }
 }
