@@ -56,6 +56,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                tarea.FechaCreacion = DateTime.Now;
                 int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
                 tarea.IdEstadoTarea = estadoPendienteId;
 

@@ -27,7 +27,8 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "La Fecha de creacion es Requerida")]
         [Display(Name = "Fecha  de creacion")]
-        public DateTime FechaCreacion { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "La Fecha de Vencimiento es Requerida")]
         [Display(Name = "Fecha  de vencimiento")]
