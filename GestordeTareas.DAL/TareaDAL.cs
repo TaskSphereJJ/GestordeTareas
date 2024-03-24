@@ -76,9 +76,6 @@ namespace GestordeTareas.DAL
             return tareaBD;
         }
 
-
-
-        //--------------------------------METODO obtener todas las tareas.--------------------------
         //--------------------------------METODO obtener todas las tareas.--------------------------
         public static async Task<List<Tarea>> GetAllAsync()
         {

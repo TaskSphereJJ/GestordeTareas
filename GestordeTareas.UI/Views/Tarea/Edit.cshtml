@@ -39,11 +39,14 @@
         </select>
         <span asp-validation-for="IdPrioridad" class="text-danger"></span>
     </div>
-           <div class="mb-4">
-        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Estado</label>
-        <input asp-for="IdEstadoTarea" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Nombre">
-        <span asp-validation-for="IdEstadoTarea" class="text-red-500 text-xs italic"></span>
-    </div>
+
+     <div class="form-group">
+         <label asp-for="IdEstadoTarea" class="control-label"></label>
+          <select asp-for="IdEstadoTarea" class="form-control" asp-items="@ViewBag.EstadosTarea">
+            <option value="">Seleccionar</option>
+         </select>
+    <span asp-validation-for="IdEstadoTarea" class="text-danger"></span>
+    </div> 
 
     <div class="form-group">
         <label asp-for="IdProyecto" class="control-label"></label>
