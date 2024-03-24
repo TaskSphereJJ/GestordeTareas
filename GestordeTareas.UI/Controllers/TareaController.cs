@@ -49,33 +49,26 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Create");
         }
 
-        // POST: TareaController/Create
+        // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Tarea tarea)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
-                    tarea.IdEstadoTarea = estadoPendienteId;
-                    await LoadDropDownListsAsync();
+                int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
+                tarea.IdEstadoTarea = estadoPendienteId;
 
-                    // Lógica para crear la nueva tarea
-                    await _tareaBL.CreateAsync(tarea);
-                    return RedirectToAction(nameof(Index));
-                }
-                await LoadDropDownListsAsync(); // Cargar listas en caso de modelo no válido
-                return PartialView("Create", tarea);
+                int result = await _tareaBL.CreateAsync(tarea);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                await LoadDropDownListsAsync();
                 return PartialView("Create", tarea);
             }
         }
+       
 
         //MÉTODO PARA CARGAR LISTAS DESPLEGABLES SELECCIONABLES 
         private async Task LoadDropDownListsAsync()
