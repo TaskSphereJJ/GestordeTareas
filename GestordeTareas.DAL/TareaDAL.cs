@@ -16,11 +16,12 @@ namespace GestordeTareas.DAL
             int result = 0;
             using (var dbContexto = new ContextoBD()) //el comando using hace un proceso de ejecucion
             {
-                dbContexto.Tarea.Add(tarea); //agrego un nuevo categorua
+                dbContexto.Tarea.Add(tarea); //agrego una nueva tarea
                 result = await dbContexto.SaveChangesAsync();//se guarda a la base de datos
             }
             return result;
         }
+
         //--------------------------------METODO MODIFICAR TArea.--------------------------
         public static async Task<int> UpdateAsync(Tarea tarea)
         {
@@ -76,17 +77,20 @@ namespace GestordeTareas.DAL
             return tareaBD;
         }
 
-
-
         //--------------------------------METODO obtener todas las tareas.--------------------------
         public static async Task<List<Tarea>> GetAllAsync()
         {
-            var tareas = new List<Tarea>(); //una variable de lo que llevara una lista de tarea
-            using (var bdContexto = new ContextoBD()) //creo el acceso a la BD
+            using (var dbContext = new ContextoBD())
             {
-                tareas = await bdContexto.Tarea.Include(t => t.Categoria).ToListAsync(); //le digo que tarea contenga la lista de tareas, osea lo de l BD
+                var tareas = await dbContext.Tarea
+                    .Include(c => c.Categoria)
+                    .Include(p => p.Prioridad)
+                    .Include(e => e.EstadoTarea)
+                    .Include(r => r.Proyecto)
+                    .ToListAsync();
+
+                return tareas;
             }
-            return tareas;
         }
 
     }
