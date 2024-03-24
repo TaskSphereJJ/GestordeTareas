@@ -16,7 +16,7 @@ namespace GestordeTareas.DAL
             int result = 0;
             using (var dbContexto = new ContextoBD()) //el comando using hace un proceso de ejecucion
             {
-                dbContexto.Tarea.Add(tarea); //agrego un nuevo categorua
+                dbContexto.Tarea.Add(tarea); //agrego una nueva tarea
                 result = await dbContexto.SaveChangesAsync();//se guarda a la base de datos
             }
             return result;

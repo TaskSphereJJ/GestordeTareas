@@ -58,7 +58,6 @@ namespace GestordeTareas.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
                     tarea.IdEstadoTarea = estadoPendienteId;
                     await LoadDropDownListsAsync();
@@ -73,6 +72,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
+                await LoadDropDownListsAsync();
                 return PartialView("Create", tarea);
             }
         }
@@ -83,13 +83,13 @@ namespace GestordeTareas.UI.Controllers
             // Obtener todos los datos de cada una disponibles
             var categorias = await _categoriaBL.GetAllAsync();
             var prioridades = await _prioridadBL.GetAllAsync();
-            var estadosTarea = await _estadoTareaBL.GetAllAsync();
+            //var estadosTarea = await _estadoTareaBL.GetAllAsync();
             var proyectos = await _proyectoBL.GetAllAsync();
 
             // Se crean SelectList para cada entidad con las propiedades Id como valor y Nombre como texto visible
             ViewBag.Categorias = new SelectList(categorias, "Id", "Nombre");
             ViewBag.Prioridades = new SelectList(prioridades, "Id", "Nombre");
-            ViewBag.EstadosTarea = new SelectList(estadosTarea, "Id", "Nombre");
+            //ViewBag.EstadosTarea = new SelectList(estadosTarea, "Id", "Nombre");
             ViewBag.Proyectos = new SelectList(proyectos, "Id", "Titulo");
         }
 
