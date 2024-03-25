@@ -57,17 +57,17 @@ namespace GestordeTareas.DAL
             }
             return result;
         }
-
         public static async Task<Proyecto> GetByIdAsync(Proyecto proyecto)
         {
-            var projectBD = new Proyecto();
-            using (var bdContexto = new ContextoBD())
+            using (var dbContext = new ContextoBD())
             {
-                projectBD = await bdContexto.Proyecto.FirstOrDefaultAsync(p => p.Id == proyecto.Id); //busco el id
-            }
-            return projectBD;
-        }
+                var proyectoBD = await dbContext.Proyecto
+                    .Include(p => p.Usuario) // Cargar la propiedad de navegación Usuario
+                    .FirstOrDefaultAsync(p => p.Id == proyecto.Id);
 
+                return proyectoBD;
+            }
+        }
         public static async Task<List<Proyecto>> GetAllAsync()
         {
             using (var dbContext = new ContextoBD())
@@ -76,6 +76,7 @@ namespace GestordeTareas.DAL
                 return proyectos;
             }
         }
+
 
     }
 }
