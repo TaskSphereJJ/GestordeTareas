@@ -33,5 +33,6 @@ namespace GestordeTaras.EN
         [Display(Name = "Admin")]
         public int IdUsuario { get; set; }
         public Usuario Usuario { get; set; }
+
     }
 }
