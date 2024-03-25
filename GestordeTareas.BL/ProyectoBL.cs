@@ -26,6 +26,7 @@ namespace GestordeTareas.BL
         {
             return await ProyectoDAL.GetByIdAsync(proyecto);
         }
+
         public async Task<List<Proyecto>> GetAllAsync()
         {
             return await ProyectoDAL.GetAllAsync();
