@@ -27,7 +27,8 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "La Fecha de creacion es Requerida")]
         [Display(Name = "Fecha  de creacion")]
-        public DateTime FechaCreacion { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "La Fecha de Vencimiento es Requerida")]
         [Display(Name = "Fecha  de vencimiento")]
@@ -41,13 +42,13 @@ namespace GestordeTaras.EN
 
         [ForeignKey("Prioridad")]
         [Required(ErrorMessage = "La Prioridad es Requerida")]
-        [Display(Name = "Prioridad de la Tarea")]
+        [Display(Name = "Prioridad")]
         public int IdPrioridad { get; set; }
         public Prioridad Prioridad { get; set; } // Propiedad de navegación
 
         [ForeignKey("EstadoTarea")]
         [Required(ErrorMessage = "El Estado es Requerido")]
-        [Display(Name = "Estado de la Tarea")]
+        [Display(Name = "Estado")]
         public int IdEstadoTarea { get; set; }
         public EstadoTarea EstadoTarea { get; set; } // Propiedad de navegación
 
