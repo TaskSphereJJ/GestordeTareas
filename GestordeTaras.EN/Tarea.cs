@@ -54,11 +54,9 @@ namespace GestordeTaras.EN
         [ForeignKey("Proyecto")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
-<<<<<<< HEAD
 
-=======
         public Proyecto Proyecto { get; set; } // Propiedad de navegación
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+
     }
 
 

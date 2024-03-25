@@ -12,11 +12,7 @@
 <table class="table">
     <thead>
         <tr>
-<<<<<<< HEAD
-              
-=======
 
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
@@ -44,16 +40,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.FechaRegistro)
             </th>
-<<<<<<< HEAD
-             
-=======
-
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
             <th></th>
         </tr>
     </thead>
     <tbody>
-<<<<<<< HEAD
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -83,51 +73,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FechaRegistro)
             </td>
-=======
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Apellido)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Pass)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Telefono)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaNacimiento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdCargo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombreUsuario)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaRegistro)
-                </td>
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+
                 <td>
                     @Html.ActionLink("Modificar", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-info" })
                     @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-outline-secondary" })
                     @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger" })
                 </td>
-<<<<<<< HEAD
+
         </tr>
 }
     </tbody>
 </table>
-=======
-            </tr>
-        }
-    </tbody>
-</table>
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+

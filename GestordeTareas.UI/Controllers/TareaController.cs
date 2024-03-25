@@ -1,9 +1,6 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
-<<<<<<< HEAD
-=======
 using GestordeTareas.DAL;
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,11 +9,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GestordeTareas.UI.Controllers
 {
-<<<<<<< HEAD
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador")]
-=======
+
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+
     public class TareaController : Controller
     {
         private readonly TareaBL _tareaBL;
@@ -65,6 +60,8 @@ namespace GestordeTareas.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
+
                     int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
                     tarea.IdEstadoTarea = estadoPendienteId;
                     await LoadDropDownListsAsync();

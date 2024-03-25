@@ -14,11 +14,8 @@ namespace GestordeTareas.UI.Controllers
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador")]
     public class UsuarioController : Controller
     {
-<<<<<<< HEAD
         UsuariosBL _usuarioBL = new UsuariosBL();
-=======
-        UsuarioBL _usuarioBL = new UsuarioBL();
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+
         CargoBL cargoBL = new CargoBL();
 
 
@@ -39,11 +36,7 @@ namespace GestordeTareas.UI.Controllers
             ViewBag.Roles = await cargoBL.GetAllAsync();
             return View(Lista);
         }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
 
         // GET: UsuarioController/Details/5
         public async Task<ActionResult> Details(int id)
@@ -184,11 +177,9 @@ namespace GestordeTareas.UI.Controllers
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-<<<<<<< HEAD
+
             return RedirectToAction("Login", "Usuario");
-=======
-            return RedirectToAction("Login", "Usuarios");
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+
         }
 
         //acción que muestra el formulario para cambiar contraseña
@@ -209,11 +200,8 @@ namespace GestordeTareas.UI.Controllers
             {
                 int result = await _usuarioBL.ChangePasswordAsync(user, oldPassword);
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-<<<<<<< HEAD
                 return RedirectToAction("Login", "Usuario");
-=======
-                return RedirectToAction("Login", "Usuarios");
->>>>>>> 91511954077166a480d69128ddcd1474b9347dd5
+
             }
             catch (Exception ex)
             {
