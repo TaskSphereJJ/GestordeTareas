@@ -36,7 +36,6 @@ namespace GestordeTareas.DAL
                     existingProyecto.Descripcion = proyecto.Descripcion;
                     existingProyecto.IdUsuario = proyecto.IdUsuario;
                     existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
-                    existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
 
                     dbContext.Update(existingProyecto);
                     result = await dbContext.SaveChangesAsync();
@@ -65,11 +64,12 @@ namespace GestordeTareas.DAL
             var projectBD = new Proyecto();
             using (var bdContexto = new ContextoBD())
             {
-                projectBD = await bdContexto.Proyecto.FirstOrDefaultAsync(p => p.Id == proyecto.Id); //busco el id
+                projectBD = await bdContexto.Proyecto
+                    .Include(p => p.Usuario) // Cargar la propiedad de navegación Usuario
+                    .FirstOrDefaultAsync(p => p.Id == proyecto.Id); //busco el id
             }
             return projectBD;
         }
-
         public static async Task<List<Proyecto>> GetAllAsync()
         {
             using (var dbContext = new ContextoBD())
@@ -78,6 +78,7 @@ namespace GestordeTareas.DAL
                 return proyectos;
             }
         }
+
 
     }
 }

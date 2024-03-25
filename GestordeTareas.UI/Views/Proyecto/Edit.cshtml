@@ -13,11 +13,14 @@
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="IdUsuario" class="control-label"></label>
-                <input asp-for="IdUsuario" class="form-control" />
+                <label asp-for="Usuario.Nombre" class="control-label"></label>
+                <input asp-for="IdUsuario" class="form-control" type="hidden" />
+                <input asp-for="Usuario.Nombre" class="form-control" readonly />
                 <span asp-validation-for="IdUsuario" class="text-danger"></span>
-            </div>
+            </div> 
+
             <div class="form-group">
                <label asp-for="FechaFinalizacion" class="control-label"></label>
                <input asp-for="FechaFinalizacion" type="date" class="form-control" />
