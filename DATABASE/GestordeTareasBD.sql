@@ -39,12 +39,12 @@ CREATE TABLE Usuario (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
-	NombreUsuario VARCHAR(50) NOT NULL,
+    NombreUsuario VARCHAR(50) NOT NULL,
     Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
     Telefono VARCHAR(9) NOT NULL,
     FechaNacimiento DATE NOT NULL,
-	[Status] INT NOT NULL,
-	FechaRegistro DATETIME NOT NULL,
+    [Status] INT NOT NULL,
+    FechaRegistro DATETIME NOT NULL,
     IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id),
 
 );
@@ -55,8 +55,8 @@ CREATE TABLE Proyecto (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Titulo VARCHAR(50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
-	FechaFinalizacion DATE NOT NULL,
-	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
+    FechaFinalizacion DATE NOT NULL,
+    IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 );
 
 GO
@@ -66,8 +66,8 @@ CREATE TABLE Tarea (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR(100) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
-	FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
-    FechaVencimiento DATE NOT NULL,
+    FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
+    FechaVencimiento DATETIME NOT NULL,
     IdCategoria INT NOT NULL FOREIGN KEY REFERENCES Categoria(Id),
     IdPrioridad INT NOT NULL FOREIGN KEY REFERENCES Prioridad(Id),
     IdEstadoTarea INT NOT NULL FOREIGN KEY REFERENCES EstadoTarea(Id),
@@ -81,7 +81,7 @@ CREATE TABLE ElegirTarea (
     FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
     IdTarea INT NOT NULL FOREIGN KEY REFERENCES Tarea(Id),
     IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
-   	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
+    IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 );
 
 GO
