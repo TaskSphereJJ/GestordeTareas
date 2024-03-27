@@ -41,25 +41,25 @@
             @Html.DisplayNameFor(model => model.IdCategoria)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdCategoria)
+            @Html.DisplayFor(model => model.Categoria.Nombre)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdPrioridad)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdPrioridad)
+            @Html.DisplayFor(model => model.Prioridad.Nombre)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdEstadoTarea)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdEstadoTarea)
+            @Html.DisplayFor(model => model.EstadoTarea.Nombre)
         </dd>
         <dt class = "col-sm-2">
         @Html.DisplayNameFor(model => model.IdProyecto)
         </dt>
         <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.IdProyecto)
+        @Html.DisplayFor(model => model.Proyecto.Titulo)
         </dd>
      
     </dl>

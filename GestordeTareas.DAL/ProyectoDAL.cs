@@ -34,7 +34,6 @@ namespace GestordeTareas.DAL
                     existingProyecto.Descripcion = proyecto.Descripcion;
                     existingProyecto.IdUsuario = proyecto.IdUsuario;
                     existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
-                    existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
 
                     dbContext.Update(existingProyecto);
                     result = await dbContext.SaveChangesAsync();
@@ -57,16 +56,17 @@ namespace GestordeTareas.DAL
             }
             return result;
         }
+
         public static async Task<Proyecto> GetByIdAsync(Proyecto proyecto)
         {
-            using (var dbContext = new ContextoBD())
+            var projectBD = new Proyecto();
+            using (var bdContexto = new ContextoBD())
             {
-                var proyectoBD = await dbContext.Proyecto
+                projectBD = await bdContexto.Proyecto
                     .Include(p => p.Usuario) // Cargar la propiedad de navegación Usuario
-                    .FirstOrDefaultAsync(p => p.Id == proyecto.Id);
-
-                return proyectoBD;
+                    .FirstOrDefaultAsync(p => p.Id == proyecto.Id); //busco el id
             }
+            return projectBD;
         }
         public static async Task<List<Proyecto>> GetAllAsync()
         {
