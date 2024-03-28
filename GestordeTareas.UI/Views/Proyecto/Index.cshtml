@@ -15,10 +15,11 @@
         <i class="fas fa-plus text-lg ml-2"></i> Crear Nuevo Proyecto
     </a>
 </p>
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     @foreach (var item in Model)
     {
-        <div class="relative bg-blue-800 rounded-lg shadow-md p-6 opacity-90" style="background-color: rgba(255, 255, 255, 0.5);">
+        <div class="relative bg-blue-800 rounded-lg shadow-md p-6 opacity-90 max-h-96" style="background-color: rgba(255, 255, 255, 0.5);" draggable="true">
             <div class="absolute top-0 right-0 mt-1 mr-1">
                 <div class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center">
                     <i class="fas fa-tools text-gray-600 text-2xl"></i>
@@ -48,7 +49,6 @@
         </div>
     }
 </div>
-
 
 <!-- Modales -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -154,7 +154,57 @@
 
 
 <script>
-    
+    // Espera a que el contenido HTML esté completamente cargado
+document.addEventListener('DOMContentLoaded', function () {
+    // Selecciona todas las tarjetas dentro de elementos con la clase 'grid-cols-1'
+    const tarjetas = document.querySelectorAll('.grid-cols-1 .relative');
+
+    // Variable para almacenar la tarjeta que se está arrastrando
+    let tarjetaArrastrada = null;
+
+    // Itera sobre cada tarjeta seleccionada
+    tarjetas.forEach(tarjeta => {
+        // Cuando se inicia el arrastre de una tarjeta
+        tarjeta.addEventListener('dragstart', () => {
+            // Almacena la tarjeta arrastrada en la variable
+            tarjetaArrastrada = tarjeta;
+            // Oculta la tarjeta mientras se está arrastrando
+            setTimeout(() => {
+                tarjeta.style.display = 'none';
+            }, 0);
+        });
+
+        // Cuando se termina el arrastre de una tarjeta
+        tarjeta.addEventListener('dragend', () => {
+            // Muestra nuevamente la tarjeta
+            setTimeout(() => {
+                tarjeta.style.display = 'block';
+                // Resetea la variable de tarjeta arrastrada
+                tarjetaArrastrada = null;
+            }, 0);
+        });
+    });
+
+    // Selecciona el contenedor de tarjetas donde se pueden soltar las tarjetas arrastradas
+    const tarjetasContainer = document.querySelector('.grid-cols-1');
+
+    // Evita que el navegador maneje el evento por defecto cuando se arrastra sobre el contenedor
+    tarjetasContainer.addEventListener('dragover', e => {
+        e.preventDefault();
+    });
+
+    // Cuando se suelta una tarjeta en el contenedor
+    tarjetasContainer.addEventListener('drop', () => {
+        // Verifica si hay una tarjeta arrastrada
+        if (tarjetaArrastrada) {
+            // Agrega la tarjeta al contenedor
+            tarjetasContainer.appendChild(tarjetaArrastrada);
+            // Resetea la variable de tarjeta arrastrada
+            tarjetaArrastrada = null;
+        }
+    });
+});
+
 
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
