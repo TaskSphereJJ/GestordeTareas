@@ -72,7 +72,12 @@ namespace GestordeTareas.DAL
             var tareaBD = new Tarea();
             using (var bdContexto = new ContextoBD())
             {
-                tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
+                tareaBD = await bdContexto.Tarea
+                    .Include(c => c.Categoria)
+                    .Include(p => p.Prioridad)
+                    .Include(e => e.EstadoTarea)
+                    .Include(r => r.Proyecto)
+                    .FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
             }
             return tareaBD;
         }
