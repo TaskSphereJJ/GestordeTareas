@@ -14,47 +14,47 @@
 
     <link rel="stylesheet" href="~/GestordeTareas.UI.styles.css" asp-append-version="true" />
 </head>
-<body class="dark:bg-gray-900">
+<body class="dark:bg-darkPurple dark:text-darkText light:bg-lightPurple light:text-lightText">
     @* header o barra de arriba *@
-    <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-white mb-7">
-
+    <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
         @* <!-- Icono de hamburguesa --> *@
         <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
-            <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:stroke-slate-400 disabled:text-slate-400 hover:stroke-blue-950 hover:text-blue-950"
-                    aria-label="Menu" id="menuButton" onclick="toggleSidebar()">
-                <span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                         stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                         class="stroke-inherit">
-                        <path d="M4 6H20"></path>
-                        <path d="M4 12H20"></path>
-                        <path d="M4 18H20"></path>
-                    </svg>
-                </span>
-            </button>
+            <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:text-slate-400 hover:text-blue-950 dark:text-[#FFEF00] dark:hover:text-white"
+            aria-label="Menu" id="menuButton" onclick="toggleSidebar()">
+                        <span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                class="stroke-inherit">
+                                <path d="M4 6H20"></path>
+                                <path d="M4 12H20"></path>
+                                <path d="M4 18H20"></path>
+                            </svg>
+                        </span>
+        </button>
         </div>
 
-        @* MODO OSCURO A MEDIAS *@
-        <div class="flex items-center mr-4">
-            <label class="relative inline-block w-10 h-6">
+            @* MODO OSCURO A MEDIAS *@
+            <div class="flex items-center mr-4">
+                <label class="relative inline-block w-10 h-6">
                 <input type="checkbox" class="hidden" id="darkModeToggle">
-                <div class="slider bg-gray-400 rounded-full w-10 h-6 duration-300 ease-in-out">
-                    <div class="circle absolute left-1 top-1 duration-300 ease-in-out">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
-                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
-                        </svg>
-                    </div>
-                </div>
-            </label>
-        </div>
 
-        @* <!-- Sección de perfil --> *@
+                    <div class="slider bg-gray-400 rounded-full w-10 h-6 duration-300 ease-in-out">
+                        <div class="circle absolute left-1 top-1 duration-300 ease-in-out">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                            </svg>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+             @* <!-- Sección de perfil --> *@
         <div class="flex items-center justify-end gap-4">
-            <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-purple-300">
+            <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
                 <img src="./img/FOOTOO.png" alt="" class="aspect-square">
             </div>
-            <span class="hidden text-sm font-semibold md:inline text-purple-600 font-bold">User</span>
+            <span class="hidden text-sm font-semibold md:inline text-purple-600 dark:text-darkText font-bold">User</span>
             <div class="relative inline-block">
                 <button id="userMenuButton"
                         class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
@@ -69,33 +69,34 @@
                     </span>
                 </button>
                 <div id="userMenuOptions"
-                     class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
-                     style="display: none;">
-                    <a href="Index.html"
-                       class="block px-4 font-semibold py-2 text-sm text-gray-700  hover:text-purple-900 hover:bg-purple-50"
-                       role="menuitem">
-                        Editar
-                        perfil
-                    </a>
-                    <a href="#"
-                       class="block px-4 py-2 font-semibold text-sm text-gray-700 hover:text-purple-900 hover:bg-purple-50"
-                       role="menuitem">
-                        Cerrar
-                        sesión
-                    </a>
-                </div>
+                    class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
+                    style="display: none;">
+                    <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
+                   <li>
+                        <a href="#"
+                            class="block px-4 py-2 relative transition-colors duration-300 dark:hover:bg-opacity-25 dark:hover:bg-gray-800 dark:hover:text-white hover:bg-opacity-25 hover:bg-gray-200 dark:text-white dark:hover:text-white  hover:text-white transition-opacity duration-300 text-white ">
+                            <span class="absolute inset-0 bg-transparent transition-opacity duration-300"></span>
+                            Dashboard
+                        </a>
+                    </li>
+
+
+                    </ul>
+
+            </div>
+
             </div>
 
         </div>
     </header>
 
-    @* SIDEBAR *@
-    @* <!-- drawer component --> *@
-    @* SIDEBAR *@
+     @* SIDEBAR *@
     @* <!-- drawer component --> *@
     <div id="drawer-navigation"
-         class="border-r-purple-900 border-2 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto bg-white dark:bg-gray-800 transform -translate-x-full transition-transform ease-in-out duration-300 flex flex-col"
-         tabindex="-1" aria-labelledby="drawer-navigation-label">
+        class="border-r-purple-900 border-t-purple-900 border-b-purple-900 border-2 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transform -translate-x-full transition-transform ease-in-out duration-300 flex flex-col"
+        tabindex="-1" aria-labelledby="drawer-navigation-label">
+
+
         <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
             Menu
         </h5>
@@ -206,7 +207,7 @@
 
                             <button class="p-0.5 hover:bg-purple-600 hover:text-white duration-200 transition-colors text-gray-500 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 border rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                     stroke="currentColor" class="w-4 h-4">
+                                    stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                 </svg>
                             </button>
@@ -229,6 +230,7 @@
             </div>
         </div>
     </div>
+   
     <div class="container mt-28">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -245,6 +247,36 @@
         AOS.init();
     </script>
     <script>
+
+            const darkModeToggle = document.getElementById('darkModeToggle');
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark');
+
+            // Guardar la preferencia del usuario en el almacenamiento local
+            localStorage.setItem('darkMode', isDarkMode ? 'dark' : 'light');
+
+            // Cambiar el icono del botón
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            darkModeIcon.innerHTML = isDarkMode ? '<i class="bi bi-moon-fill text-white"></i>' : '<i class="bi bi-sun-fill text-yellow-500"></i>';
+        });
+
+        // Función que se ejecuta al cargar la vista
+        window.addEventListener('load', () => {
+            // Comprobar si hay una preferencia guardada en el almacenamiento local
+            const savedMode = localStorage.getItem('darkMode');
+
+            // Aplicar el modo correspondiente si hay una preferencia guardada
+            if (savedMode === 'dark') {
+                document.body.classList.add('dark');
+            }
+
+            // Cambiar el icono del botón al cargar la página
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            darkModeIcon.innerHTML = savedMode === 'dark' ? '<i class="bi bi-moon-fill text-white"></i>' : '<i class="bi bi-sun-fill text-yellow-500"></i>';
+        });
+
+
 
         document.addEventListener('DOMContentLoaded', function () {
             const menuButton = document.querySelector('[aria-label="Menu"]');
@@ -297,21 +329,9 @@
             });
         });
 
-        //MODO OSCRUO
-
     </script>
-    <script>
-        document.getElementById('darkModeToggle').addEventListener('change', function () {
-            if (this.checked) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        });
-    </script>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></scrip>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
