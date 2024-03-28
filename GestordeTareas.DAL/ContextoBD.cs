@@ -29,5 +29,6 @@ namespace GestordeTareas.DAL
             optionsBuilder.UseSqlServer(@"Server=localhost;Database=GestorTareasBD;User=Jeffrey;Password=jeffrey20068f;Encrypt=true;TrustServerCertificate=true;");
         }
 
+
     }
 }
