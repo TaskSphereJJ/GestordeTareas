@@ -27,24 +27,37 @@
         <tbody>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
                 <td class="border p-2 px-0 py-4 droppable" id="todo-tasks">
-                    @foreach (var item in Model)
-                    {
-                        <div class="task" draggable="true">
-                            <div class="mx-auto w-56">
-                                <div class="bg-white rounded-lg p-4 shadow-md text-left">
-                                    <h2 class="text-lg font-semibold mb-1">@item.Nombre</h2>
-                                    <div class="mt-2 flex justify-between">
-                                        <p class="text-xs">Fecha de Vencimiento: @item.FechaVencimiento.ToString("yyyy-MM-dd")</p>
-                                        <p class="text-xs">Categoría: @item.Categoria.Nombre</p>
-                                    </div>
-                                    <div class="mt-1">
-                                        <p class="text-xs">Prioridad: @item.Prioridad.Nombre</p>
-                                    </div>
-                                    <button class="mt-2 px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">Ver más</button>
+                    <!-- diseño de tarjeta -->
+                    <div class="task" draggable="true">
+                        <div class="mx-auto w-56">
+                            <div class="bg-white rounded-lg p-4 shadow-md text-left">
+                                <h2 class="text-lg font-semibold mb-1">Nombre de la tarea</h2>
+                                <div class="mt-2 flex justify-between">
+                                    <p class="text-xs">Fecha de Vencimiento: 2024-03-29</p>
+                                    <p class="text-xs">Categoría: Desarrollo</p>
                                 </div>
+                                <div class="mt-1">
+                                    <p class="text-xs">Prioridad: Alta</p>
+                                </div>
+                                <button class="mt-2 px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">Ver más</button>
                             </div>
                         </div>
-                    }
+                    </div>
+                    <div class="task mt-2 mb-2" draggable="true">
+                        <div class="mx-auto w-56">
+                            <div class="bg-white rounded-lg p-4 shadow-md text-left">
+                                <h2 class="text-lg font-semibold mb-1">asas</h2>
+                                <div class="mt-2 flex justify-between">
+                                    <p class="text-xs">Fecha de Vencimiento: 2024-03-29</p>
+                                    <p class="text-xs">Categoría: Desarrollo</p>
+                                </div>
+                                <div class="mt-1">
+                                    <p class="text-xs">Prioridad: Alta</p>
+                                </div>
+                                <button class="mt-2 px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">Ver más</button>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <td class="border p-2 px-0 py-4 droppable" id="progress-tasks"></td>
                 <td class="border p-2 px-0 py-4 droppable" id="doing-tasks"></td>
@@ -53,6 +66,7 @@
         </tbody>
     </table>
 </div>
+
 
 
 <!-- Modales -->
@@ -161,40 +175,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     const tasks = document.querySelectorAll('.task');
-    const taskContainers = document.querySelectorAll('.task-container');
+    const droppables = document.querySelectorAll('.droppable');
 
     let draggedTask = null;
 
     tasks.forEach(task => {
-        task.addEventListener('dragstart', () => {
-            draggedTask = task;
-            setTimeout(() => {
-                task.style.display = 'none';
-            }, 0);
+        task.addEventListener('dragstart', (e) => {
+            draggedTask = e.target;
         });
 
         task.addEventListener('dragend', () => {
-            setTimeout(() => {
-                draggedTask.style.display = 'block';
-                draggedTask = null;
-            }, 0);
+            draggedTask = null;
         });
     });
 
-    taskContainers.forEach(container => {
-        container.addEventListener('dragover', e => {
+    droppables.forEach(droppable => {
+        droppable.addEventListener('dragover', e => {
             e.preventDefault();
         });
 
-        container.addEventListener('drop', () => {
+        droppable.addEventListener('drop', () => {
             if (draggedTask) {
-                container.appendChild(draggedTask);
-                draggedTask = null;
+                droppable.appendChild(draggedTask);
             }
         });
     });
 });
-
 
 
     function submitcreateForm(formId) {
