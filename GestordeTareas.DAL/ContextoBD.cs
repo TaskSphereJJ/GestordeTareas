@@ -29,5 +29,6 @@ namespace GestordeTareas.DAL
             optionsBuilder.UseSqlServer(@"Data source = DESKTOP-UMST7PO; Initial Catalog = GestordeTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
         }
 
+
     }
 }
