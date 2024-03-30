@@ -1,6 +1,7 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
 using GestordeTareas.DAL;
+using Humanizer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,9 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GestordeTareas.UI.Controllers
 {
-
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-
     public class TareaController : Controller
     {
         private readonly TareaBL _tareaBL;
@@ -22,7 +21,7 @@ namespace GestordeTareas.UI.Controllers
 
         public TareaController()
         {
-            _tareaBL = new TareaBL(); 
+            _tareaBL = new TareaBL();
             _categoriaBL = new CategoriaBL();
             _prioridadBL = new PrioridadBL();
             _estadoTareaBL = new EstadoTareaBL();
@@ -43,6 +42,12 @@ namespace GestordeTareas.UI.Controllers
             var tarea = await _tareaBL.GetById(new Tarea { Id = id });
             return PartialView("Details", tarea);
         }
+        private async Task<int> GetProyectoIdAsync(Proyecto proyecto)
+        {
+            var result = await ProyectoDAL.GetByIdAsync(proyecto);
+            int proyectoId = Convert.ToInt32(result);
+            return proyectoId;
+        }
 
         // GET: TareaController/Create
         public async Task<ActionResult> Create()
@@ -54,14 +59,23 @@ namespace GestordeTareas.UI.Controllers
         // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Tarea tarea)
+        public async Task<ActionResult> Create(Tarea tarea, Proyecto proyecto)
         {
+         
             try
             {
+                // Aca quiero asignar el id del proyecto automaticamente de modo que
+                // no tenga que seleccionar al proyecto del que quiero crear la tarea si no que 
+                // ya tendria que traer el id del proyecto al que pertence dicha tarea
+                // Obtener el ID del proyecto del contexto de ruta
+                int proyectoId = Convert.ToInt32(RouteData.Values["id"]);
+
+                // Asignar el ID del proyecto a la tarea
+                tarea.IdProyecto = proyectoId;
+
                 tarea.FechaCreacion = DateTime.Now;
                 int estadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
                 tarea.IdEstadoTarea = estadoPendienteId;
-
 
                 int result = await _tareaBL.CreateAsync(tarea);
                 return RedirectToAction(nameof(Index));
@@ -69,10 +83,11 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
+                ViewBag.ProyectoId = GetProyectoIdAsync(proyecto);
                 return PartialView("Create", tarea);
             }
         }
-       
+
 
         //MÉTODO PARA CARGAR LISTAS DESPLEGABLES SELECCIONABLES 
         private async Task LoadDropDownListsAsync()

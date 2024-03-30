@@ -40,7 +40,7 @@ namespace GestordeTareas.DAL
                     tareaBD.IdPrioridad = tarea.IdPrioridad;
                     tareaBD.IdEstadoTarea = tarea.IdEstadoTarea;
                     tareaBD.IdProyecto = tarea.IdProyecto;
-                   
+
 
                     // Guardar cambios solo si hay propiedades actualizadas
                     bdContexto.Update(tareaBD);

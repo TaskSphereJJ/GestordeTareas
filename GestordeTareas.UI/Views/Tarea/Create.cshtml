@@ -1,6 +1,5 @@
 ﻿@model GestordeTaras.EN.Tarea
 
-
 <form asp-action="Create" id="createForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
     <div asp-validation-summary="ModelOnly" class="text-purple-700"></div>
     <div class="mb-4">
@@ -45,11 +44,17 @@
     <!-- Agregar campo oculto para el ID del estado "Pendiente" -->
     @Html.HiddenFor(model => model.IdEstadoTarea, new { Value = ViewBag.EstadoPendienteId })
 
-    <div class="form-group">
+   @*  <div class="form-group">
         <label asp-for="IdProyecto" class="control-label"></label>
         <select asp-for="IdProyecto" class="form-control" asp-items="@ViewBag.Proyectos">
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdProyecto" class="text-danger"></span>
-    </div>
+    </div> *@
+    @Html.HiddenFor(model => model.IdProyecto, new { Value = ViewBag.ProyectoId })
+
+
+   @*  <input type="hidden" asp-for="IdProyecto" value="@ViewBag.ProyectoId" /> *@
+
+
 </form>
