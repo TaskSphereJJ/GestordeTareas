@@ -29,11 +29,15 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: TareaController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int id)
         {
-            List<Tarea> Lista = await _tareaBL.GetAllAsync();
+            //List<Tarea> Lista = await _tareaBL.GetAllAsync();
 
-            return View(Lista);
+            //return View(Lista);
+
+            // Aquí cargas las tareas asociadas al proyecto con el ID proporcionado
+            var tareas = await TareaDAL.GetTareasByProyectoIdAsync(id);
+            return View(tareas);
         }
 
         // GET: TareaController/Details/5
@@ -42,6 +46,7 @@ namespace GestordeTareas.UI.Controllers
             var tarea = await _tareaBL.GetById(new Tarea { Id = id });
             return PartialView("Details", tarea);
         }
+        // Nuevo
         private async Task<int> GetProyectoIdAsync(Proyecto proyecto)
         {
             var result = await ProyectoDAL.GetByIdAsync(proyecto);
@@ -50,10 +55,11 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: TareaController/Create
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int idProyecto)
         {
             await LoadDropDownListsAsync(); //Se llama al método y se espera que cargue
-            return PartialView("Create");
+            var tarea = new Tarea { IdProyecto = idProyecto };
+            return PartialView("Create", tarea);
         }
 
         // POST: CategoriaController/Create
