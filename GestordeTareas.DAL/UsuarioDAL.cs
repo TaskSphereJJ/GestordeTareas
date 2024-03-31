@@ -37,10 +37,12 @@ namespace GestordeTareas.DAL
 
         // Método para crear un nuevo usuario en la base de datos de forma asincrónica.
         public static async Task<int> Create(Usuario usuario)
+
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
+
                 bool existsLogin = await ExistsLogin(usuario, dbContext);
                 if (existsLogin == false)
                 {
@@ -70,7 +72,6 @@ namespace GestordeTareas.DAL
                     userDb.Apellido = usuario.Apellido;
                     userDb.Status = usuario.Status;
                     userDb.NombreUsuario = usuario.NombreUsuario;
-
                     dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
                 }
@@ -82,6 +83,7 @@ namespace GestordeTareas.DAL
 
         // Método para eliminar un usuario de la base de datos de forma asincrónica.
         public static async Task<int> Delete(Usuario usuario)
+
         {
             int result = 0;
             using (var bdContext = new ContextoBD())
@@ -218,6 +220,7 @@ namespace GestordeTareas.DAL
             return result;
         }
     }
+
 
 
 }

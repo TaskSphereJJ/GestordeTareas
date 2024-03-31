@@ -131,29 +131,30 @@
                     </a>
 
 
-                    @*  Validadcion para User    ---INICIO---- *@
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
+
+                   @*  Validadcion para User    ---INICIO---- *@
+                 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
 
                         <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                           asp-area="" asp-controller="Categoria" asp-action="Index">
+                        asp-area="" asp-controller="Categoria" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-5 h-5">
+                            stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                                d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                                d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
                             </svg>
 
                             <span class="mx-2 text-sm font-medium">Categoria</span>
                         </a>
 
                         <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                           asp-area="" asp-controller="Prioridad" asp-action="Index">
+                        asp-area="" asp-controller="Prioridad" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-5 h-5">
+                            stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                                d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
                             </svg>
 
                             <span class="mx-2 text-sm font-medium">Prioridad</span>
@@ -161,7 +162,7 @@
 
                         @* CARGOOO *@
                         <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                           asp-area="" asp-controller="Cargo" asp-action="Index">
+                        asp-area="" asp-controller="Cargo" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                             </svg>
@@ -169,21 +170,40 @@
                             <span class="mx-2 text-sm font-medium">Cargo</span>
                         </a>
 
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuario</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index">Usuario</a>
+
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ChangePassword">Cambiar clave</a>
+
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
                     }
 
-                    @*  FIN *@
+                   @*  FIN *@
 
-                    </a
+                    @* PROYECTO *@
+                    <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
+                       asp-area="" asp-controller="Proyecto" asp-action="Index">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
+                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
+                        </svg>
+
+                        <span class="mx-2 text-sm font-medium">Proyecto</span>
+                    </a>
 
                     @*  Validadcion para Supervisor    ---INICIO---- *@
 
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Supervisor"))
                     {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ChangePassword">Cambiar clave</a>
 
-
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
                     }
+
+
                     @*  FIN *@
+
+
+
+
                     @*  Validadcion para Colaborador   ---INICIO---- *@
 
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Colaborador"))
@@ -199,9 +219,17 @@
                             <span class="mx-2 text-sm font-medium">Cargo</span>
                         </a>
 
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ChangePassword">Cambiar clave</a>
 
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
+                     
                     }
+
+
+
                     @*  FIN *@
+
+             
                     @* <!-- SECCION DE PROYECTOS --> *@
                     <div>
                         <div class="flex items-center justify-between">
@@ -235,7 +263,7 @@
    
     <div class="container mt-28">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @RenderBody() n
         </main>
     </div>
 

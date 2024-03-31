@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TuNamespace
 {
+
     public class ElegirTarea
     {
         [Key]
@@ -27,5 +28,6 @@ namespace TuNamespace
         [Required(ErrorMessage = "El proyecto es requerido")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
+
     }
 }

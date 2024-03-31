@@ -14,7 +14,8 @@ namespace GestordeTareas.UI.Controllers
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador")]
     public class UsuarioController : Controller
     {
-        UsuarioBL _usuarioBL = new UsuarioBL();
+        UsuariosBL _usuarioBL = new UsuariosBL();
+
         CargoBL cargoBL = new CargoBL();
 
 
@@ -176,7 +177,9 @@ namespace GestordeTareas.UI.Controllers
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Usuarios");
+
+            return RedirectToAction("Login", "Usuario");
+
         }
 
         //acción que muestra el formulario para cambiar contraseña
@@ -197,7 +200,8 @@ namespace GestordeTareas.UI.Controllers
             {
                 int result = await _usuarioBL.ChangePasswordAsync(user, oldPassword);
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return RedirectToAction("Login", "Usuarios");
+                return RedirectToAction("Login", "Usuario");
+
             }
             catch (Exception ex)
             {

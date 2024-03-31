@@ -19,8 +19,8 @@ namespace GestordeTaras.EN
         public string Nombre { get; set; } = string.Empty; //inicializo qeu es un string de logitud cero
 
         ////OTRAS QUE NO ESTAN EN LA Bd
-        //[NotMapped]
-        //public int Top_Aux { get; set; } //controla cuantos registros quiero traer
+        [NotMapped]
+        public int Top_Aux { get; set; } //controla cuantos registros quiero traer
 
     }
 }

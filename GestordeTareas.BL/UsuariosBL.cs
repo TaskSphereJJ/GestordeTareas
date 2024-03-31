@@ -1,6 +1,4 @@
-﻿
-
-using GestordeTaras.EN;
+﻿using GestordeTaras.EN;
 using GestordeTareas.DAL;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GestordeTareas.BL
 {
-    public class UsuarioBL
+    public class UsuariosBL
     {
         public async Task<int> Create(Usuario usuario)
         {
@@ -57,5 +55,6 @@ namespace GestordeTareas.BL
             return await UsuarioDAL.ChangePasswordAsync(usuario, oldPassword);
         }
 
+       
     }
 }

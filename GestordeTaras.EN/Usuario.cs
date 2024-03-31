@@ -6,6 +6,7 @@ namespace GestordeTaras.EN
 {
     public class Usuario
     {
+
         [Key]
         public int Id { get; set; }
 
@@ -33,7 +34,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "El estado es requerido")]
         [Display(Name = "Estado")]
-        public int Status { get; set; }
+        public byte Status { get; set; }
 
         [Display(Name = "Fecha de registro")]
         public DateTime FechaRegistro { get; set; }
@@ -61,4 +62,6 @@ namespace GestordeTaras.EN
     {
         ACTIVO = 1, INACTIVO = 2
     }
+
 }
+
