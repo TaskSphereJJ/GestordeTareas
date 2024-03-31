@@ -16,7 +16,9 @@
 </head>
 <body class="dark:bg-darkPurple dark:text-darkText light:bg-lightPurple light:text-lightText">
     @* header o barra de arriba *@
-    <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
+   @if(Context.Request.Path.Value != "/Usuario/login"){ 
+
+        <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
         @* <!-- Icono de hamburguesa --> *@
         <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
             <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:text-slate-400 hover:text-blue-950 dark:text-[#FFEF00] dark:hover:text-white"
@@ -32,7 +34,6 @@
                         </span>
         </button>
         </div>
-
             @* MODO OSCURO A MEDIAS *@
             <div class="flex items-center mr-4">
                 <label class="relative inline-block w-10 h-6">
@@ -89,6 +90,7 @@
 
         </div>
     </header>
+    }
 
      @* SIDEBAR *@
     @* <!-- drawer component --> *@
