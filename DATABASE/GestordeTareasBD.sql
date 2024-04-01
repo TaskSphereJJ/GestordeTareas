@@ -1,8 +1,8 @@
----BASE DE DATOS CON REGISTROS FUNCIONALES
-CREATE DATABASE GestorTareasBD
+---CREACION DE LA BD
+CREATE DATABASE GestordeTareasBD
 go
 --usar la bd
-USE GestorTareasBD
+USE GestordeTareasBD
 go
 ----------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
@@ -67,7 +67,7 @@ CREATE TABLE Tarea (
     Nombre VARCHAR(100) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
 	FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
-    FechaVencimiento DATE NOT NULL,
+    FechaVencimiento DATETIME NOT NULL,
     IdCategoria INT NOT NULL FOREIGN KEY REFERENCES Categoria(Id),
     IdPrioridad INT NOT NULL FOREIGN KEY REFERENCES Prioridad(Id),
     IdEstadoTarea INT NOT NULL FOREIGN KEY REFERENCES EstadoTarea(Id),
@@ -111,18 +111,18 @@ INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Supervis
 INSERT INTO Categoria (Nombre) VALUES ('Informes'), ('Desarrollo'), ('Gestión');
 
 -- Insertar datos en la tabla Prioridad
-INSERT INTO Prioridad (Nombre) VALUES ('Alta'), ('Media'), ('Baja');
+INSERT INTO Prioridad (Nombre) VALUES ('Baja'), ('Media'), ('Alta');
 
 -- Insertar datos en la tabla EstadoTarea
 INSERT INTO EstadoTarea (Nombre) VALUES ('Pendiente'), ('En Proceso'), ('Finalizada');
 
-
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
 VALUES 
-  ('Jeffrey', 'Mardoqueo', 'JeffM', 'be9c71c74df2b9699e073c2c2bf8d8d9', '69842090', '2006-02-08', GETDATE(), 1, 1)
-
-
+  ('Juan', 'Perez', 'juanperez', '123456', '123456789', '1990-01-01', GETDATE(), 1, 1),
+  ('Maria', 'Gonzalez', 'mariagonzalez', 'abcdef', '987654321', '1985-05-15', GETDATE(), 1, 2 ),
+  ('Pedro', 'Rodriguez', 'pedrorodriguez', 'password', '555555555', '1998-10-20', GETDATE(), 1, 3 ),
+  ('lester', 'serrano', 'lesterserrano', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
 
 -- Insertar datos en la tabla Proyecto
 INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
@@ -134,9 +134,17 @@ VALUES
   -- Insertar datos en la tabla Tarea
 INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
 VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1),
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 2),
   ('Tarea 2', 'Descripción de la Tarea 2', GETDATE(), '2025-03-31', 2, 2, 1, 2),
   ('Tarea 3', 'Descripción de la Tarea 3', GETDATE(), '2025-06-30', 3, 3, 1, 3);
+
+
+
+
+
+
+
+
 
 -- Insertar datos en la tabla ElegirTarea
 INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
@@ -159,5 +167,3 @@ VALUES
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
 
-
- 
