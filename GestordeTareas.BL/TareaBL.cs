@@ -30,5 +30,9 @@ namespace GestordeTareas.BL
         {
             return await TareaDAL.GetAllAsync();
         }
+        public async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
+        {
+            return await TareaDAL.GetTareasByProyectoIdAsync(proyectoId);
+        }
     }
 }

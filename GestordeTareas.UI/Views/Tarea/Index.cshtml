@@ -9,7 +9,7 @@
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 <p>
-    <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
+    <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
         <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
     </a>
 </p>
@@ -244,15 +244,18 @@
 
 
     function cargarVistaCreate() {
+        var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
         $.ajax({
             url: "/Tarea/Create",
             type: "GET",
+            data: { idProyecto: proyectoId }, // Enviar el ID del proyecto como parte de los datos
             success: function (data) {
                 $("#createModalContent").html(data);
                 $("#createModal").modal("show");
             }
         });
     }
+
 
     function cargarVistaEdit(id) {
         $.ajax({

@@ -98,5 +98,22 @@ namespace GestordeTareas.DAL
             }
         }
 
+        // Filtra las tareas por el ID del proyecto proporcionado 
+        public static async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                var tareas = await dbContext.Tarea
+                    .Include(c => c.Categoria)
+                    .Include(p => p.Prioridad)
+                    .Include(e => e.EstadoTarea)
+                    .Include(r => r.Proyecto)
+                    .Where(t => t.IdProyecto == proyectoId)  // Filtrar por el ID del proyecto
+                    .ToListAsync();
+
+                return tareas;
+            }
+        }
+
     }
 }
