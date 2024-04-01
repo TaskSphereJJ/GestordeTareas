@@ -32,9 +32,11 @@ namespace GestordeTaras.EN
         [ForeignKey("Usuario")]
         [Display(Name = "Admin")]
         public int IdUsuario { get; set; }
-        public Usuario Usuario { get; set; }
+
+        public Usuario? Usuario { get; set; }
 
         public List<Tarea> Tareas { get; set; } // Propiedad de navegación
 
     }
 }
+

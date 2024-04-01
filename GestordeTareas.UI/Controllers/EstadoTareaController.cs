@@ -1,4 +1,4 @@
-﻿using GestordeTareas.BL;
+using GestordeTareas.BL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GestordeTaras.EN;
@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GestordeTareas.UI.Controllers
 {
+
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class EstadoTareaController : Controller
+
     {
         private readonly EstadoTareaBL _estadoTareaBL;
 
