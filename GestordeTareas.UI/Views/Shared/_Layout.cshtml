@@ -197,15 +197,6 @@
 
                         <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
                     }
-
-
-                    @*  FIN *@
-
-
-
-
-                    @*  Validadcion para Colaborador   ---INICIO---- *@
-
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Colaborador"))
                     {
 
@@ -263,7 +254,7 @@
    
     <div class="container mt-28">
         <main role="main" class="pb-3">
-            @RenderBody() n
+            @RenderBody() 
         </main>
     </div>
 

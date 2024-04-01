@@ -114,7 +114,8 @@ INSERT INTO Categoria (Nombre) VALUES ('Informes'), ('Desarrollo'), ('Gestión')
 INSERT INTO Prioridad (Nombre) VALUES ('Alta'), ('Media'), ('Baja');
 
 -- Insertar datos en la tabla EstadoTarea
-INSERT INTO EstadoTarea (Nombre) VALUES ('En Espera'), ('En Proceso'), ('Finalizada');
+INSERT INTO EstadoTarea (Nombre) VALUES ('Pendiente'), ('En Proceso'), ('Finalizada');
+
 
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)

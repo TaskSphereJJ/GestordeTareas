@@ -28,11 +28,11 @@
             <tbody>
                 @foreach (var items in Model)
                 {
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td class="border p-2 px-0 py-4 droppable" id="todo-tasks">
+                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <td class=" p-2 px-0 py-4 droppable" id="todo-tasks">
                             <div class="tarjeta" draggable="true">
                                 <div class="mx-auto w-56">
-                                    <div class="bg-white rounded-lg p-4 shadow-md text-left">
+                                    <div class="bg-gray-100 cuerpo rounded-lg p-4 shadow-md text-left">
                                         <h2 class="text-lg font-semibold mb-1">@items.Nombre</h2>
                                         <div class="mt-2 flex justify-between">
                                             <p class="text-xs">Fecha de Vencimiento: @items.FechaVencimiento.ToShortDateString()</p>
@@ -46,9 +46,9 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="border p-2 px-0 py-4 droppable" id="progress-tasks"></td>
-                    <td class="border p-2 px-0 py-4 droppable" id="doing-tasks"></td>
-                    <td class="border p-2 px-0 py-4 droppable" id="done-tasks"></td>
+                        <td class=" p-2 px-0 py-4 droppable" id="progress-tasks"></td>
+                    <td class=" p-2 px-0 py-4 droppable" id="doing-tasks"></td>
+                    <td class=" p-2 px-0 py-4 droppable" id="done-tasks"></td>
                     </tr>
                 }
             </tbody>

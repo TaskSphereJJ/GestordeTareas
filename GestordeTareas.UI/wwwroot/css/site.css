@@ -160,5 +160,85 @@ body.light {
     left: 100%;
   }
 }
+/* MODO DARK DE LAS TABLAS
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+}
 
+table th,
+table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ff88fb;
+    text-align: left;
+}
 
+/* Dark Mode Styles */
+.dark table {
+    border-color: #374151;
+}
+.dark table th,
+.dark table td {
+    border-color: #374151;
+    color: #fff;
+}
+
+.dark table th {
+    background-color: #0d0c13;
+}
+
+.dark table tr {
+    background-color: #1f2937; /* Color oscuro de cebra */
+}
+
+.dark table tr td {
+    background-color: #1f2937; /* Color oscuro de cebra */
+}
+
+.dark table tr td:hover {
+    background-color: #374151; /* Color de hover */
+}
+
+/* Light Mode Styles */
+.light table th,
+.light table td {
+    color: #000; /* Color de texto en modo claro */
+}
+
+.light table th {
+    background-color: #f3f4f6; /* Color de fondo en modo claro */
+}
+
+.light table tr {
+    background-color: #f9fafb; /* Color claro de cebra */
+}
+
+.light table tr td {
+    background-color: #f9fafb; /* Color claro de cebra */
+}
+
+.light table tr:hover {
+    background-color: #e5e7eb; /* Color de hover */
+}
+
+/* modales diseño */
+/* Dark Mode Styles for Modal Body and Footer */
+.dark .modal-body,
+.dark .modal-footer {
+    background-color: #1F232A; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
+
+.dark #createForm {
+    background-color: #1F232A; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
+
+/* //tarjetas */
+
+.dark .cuerpo {
+    background-color: #0D0C13; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
