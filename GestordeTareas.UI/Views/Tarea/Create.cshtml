@@ -21,7 +21,7 @@
     </div> *@
 
     <div class="mb-4">
-        <label asp-for="FechaVencimiento" class="block text-gray-700 text-sm font-bold mb-2"  >FechaVencimiento</label>
+        <label asp-for="FechaVencimiento" class="block text-gray-700 text-sm font-bold mb-2">FechaVencimiento</label>
         <input asp-for="FechaVencimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Vencimiento" />
         <span asp-validation-for="FechaVencimiento" class="text-purple-700 text-xs italic"></span>
     </div>
@@ -51,7 +51,7 @@
         </select>
         <span asp-validation-for="IdProyecto" class="text-danger"></span>
     </div> *@
-    @Html.HiddenFor(model => model.IdProyecto, new { Value = ViewBag.ProyectoId })
+    @Html.HiddenFor(model => model.IdProyecto, new { Value = ViewBag.idProyecto })
 
 
    @*  <input type="hidden" asp-for="IdProyecto" value="@ViewBag.ProyectoId" /> *@
