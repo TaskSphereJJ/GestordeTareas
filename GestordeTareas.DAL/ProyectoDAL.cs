@@ -9,6 +9,7 @@ namespace GestordeTareas.DAL
 {
     public class ProyectoDAL
     {
+
         public static async Task<int> CreateAsync(Proyecto proyecto)
         {
             int result = 0;
@@ -20,6 +21,7 @@ namespace GestordeTareas.DAL
             }
             return result;
         }
+
 
         public static async Task<int> UpdateAsync(Proyecto proyecto)
         {

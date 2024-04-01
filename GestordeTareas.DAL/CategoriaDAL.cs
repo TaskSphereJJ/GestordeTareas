@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GestordeTareas.DAL
-{
+{      
     public class CategoriaDAL
     {
         //--------------------------------METODO CREAR CATEGORIA.--------------------------
