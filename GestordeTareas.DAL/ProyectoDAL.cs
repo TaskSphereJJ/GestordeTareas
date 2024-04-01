@@ -61,15 +61,24 @@ namespace GestordeTareas.DAL
 
         public static async Task<Proyecto> GetByIdAsync(Proyecto proyecto)
         {
-            var projectBD = new Proyecto();
             using (var bdContexto = new ContextoBD())
             {
-                projectBD = await bdContexto.Proyecto
-                    .Include(p => p.Usuario) // Cargar la propiedad de navegación Usuario
-                    .FirstOrDefaultAsync(p => p.Id == proyecto.Id); //busco el id
+                // Buscar el proyecto por su ID y cargar la propiedad de navegación Usuario si es necesario
+                var projectBD = await bdContexto.Proyecto
+                    .Include(p => p.Usuario)
+                    .FirstOrDefaultAsync(p => p.Id == proyecto.Id);
+
+                // Manejar el caso cuando no se encuentra ningún proyecto
+                if (projectBD == null)
+                {
+                    // Puedes lanzar una excepción, retornar null u otro valor según tu lógica de negocio
+                    throw new Exception("El proyecto no existe en la base de datos.");
+                }
+
+                return projectBD;
             }
-            return projectBD;
         }
+
         public static async Task<List<Proyecto>> GetAllAsync()
         {
             using (var dbContext = new ContextoBD())
