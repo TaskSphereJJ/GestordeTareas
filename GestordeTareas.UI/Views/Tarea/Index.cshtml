@@ -10,17 +10,7 @@
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 
-@* <p>
-    <a href="" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
-    </a>
-</p> *@
 
-@* <p>
-    <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
-    </a>
-</p> *@
 
 @* En esta parte si Model es diferente de null quiere decir que hay tareas existente y mostrara desde la primera tarea hasta las que hayan*@
 @if (Model != null && Model.Any())
@@ -57,71 +47,45 @@ else
 
 
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Nombre)
-                </th>
-                 <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.Descripcion)
-                </th>
-              
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.FechaCreacion)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.FechaVencimiento)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.IdCategoria)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.IdPrioridad)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.IdEstadoTarea)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.IdProyecto)
-                </th>
-                
-                <th scope="col" class="px-6 py-3 text-center">
-                    Acciones
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Proyecto.Titulo)</td>
-                    <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                        <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
-                            <i class="fas fa-edit text-lg"></i>
-                        </a>
-                        <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
-                            <i class="fas fa-eye text-lg"></i>
-                        </a>
-                        <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
-                            <i class="fas fa-trash-alt text-lg"></i>
-                        </a>
-                    </td>
+<div class="container mx-auto">
+        <table
+            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3 w-1/4">Tareas</th>
+                    <th scope="col" class="px-6 py-3 w-1/4 text-center">Hacer</th>
+                    <th scope="col" class="px-6 py-3 w-1/4 text-center">En progreso</th>
+                    <th scope="col" class="px-6 py-3 w-1/4 text-center">Finalizado</th>
                 </tr>
-            }
-        </tbody>
+            </thead>
+            <tbody>
+    @foreach (var item in Model)
+    {
+        <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <td class="p-2 px-0 py-4 droppable" id="todo-tasks">
+                <div class="tarjeta" draggable="true">
+                    <div class="mx-auto w-56">
+                        <div class="bg-gray-100 cuerpo rounded-lg p-4 shadow-md text-left">
+                            <h2 class="text-lg font-semibold mb-1">@item.Nombre</h2>
+                            <div class="mt-2 flex justify-between">
+                                <p class="text-xs">Fecha de Vencimiento: @item.FechaVencimiento.ToShortDateString()</p>
+                                <p class="text-xs">Categoría: @item.Categoria.Nombre</p>
+                            </div>
+                            <div class="mt-1">
+                                <p class="text-xs">Prioridad: @item.Prioridad.Nombre</p>
+                            </div>
+                          <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaEdit(@item.Id)">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="p-2 px-0 py-4 droppable" id="progress-tasks"></td>
+            <td class="p-2 px-0 py-4 droppable" id="doing-tasks"></td>
+            <td class="p-2 px-0 py-4 droppable" id="done-tasks"></td>
+        </tr>
+    }
+</tbody>
+
     </table>
 </div>
 
@@ -231,6 +195,34 @@ else
 
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const tarjetas = document.querySelectorAll('.tarjeta');
+    const droppables = document.querySelectorAll('.droppable');
+
+    let tarjetaArrastrada = null;
+
+    tarjetas.forEach(tarjeta => {
+        tarjeta.addEventListener('dragstart', () => {
+            tarjetaArrastrada = tarjeta;
+        });
+
+        tarjeta.addEventListener('dragend', () => {
+            tarjetaArrastrada = null;
+        });
+    });
+
+    droppables.forEach(droppable => {
+        droppable.addEventListener('dragover', e => {
+            e.preventDefault();
+        });
+
+        droppable.addEventListener('drop', () => {
+            if (tarjetaArrastrada) {
+                droppable.appendChild(tarjetaArrastrada);
+            }
+        });
+    });
+});
 
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
@@ -285,12 +277,12 @@ else
 
 
 
-    function cargarVistaCreate(id) {
-        // var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
+    function cargarVistaCreate() {
+        var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
         $.ajax({
-            url: "/Tarea/Create/",
+            url: "/Tarea/Create",
             type: "GET",
-            data: { idProyecto: id }, // Enviar el ID del proyecto como parte de los datos
+            data: { idProyecto: proyectoId }, // Enviar el ID del proyecto como parte de los datos
             success: function (data) {
                 $("#createModalContent").html(data);
                 $("#createModal").modal("show");

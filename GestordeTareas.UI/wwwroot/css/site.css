@@ -2,6 +2,10 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+:root{
+  --Morado: #6D28D9;
+}
+
 
 html {
   font-size: 14px;
@@ -24,4 +28,228 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+body.dark {
+    background-color: #1F232A;
+    color: #f9f0ff;
+}
+
+body.light {
+    background-color: #fef9ff;
+    color: #280133;
+}
+
+#drawer-navigation.dark{
+    background-color: #1F232A;
+    color: #f9f0ff;
+}
+#drawer-navigation.light{
+      background-color: #fef9ff;
+    color: #280133;
+}
+
+
+/* //estilo de la barra de desplasamiento */
+ ::selection {
+   background-color: var(--Morado);
+   /* Cambia el color de fondo de la selección */
+   color: #fff;
+   /* Cambia el color del texto seleccionado */
+ }
+
+ /* Barra de desplazamiento horizontal */
+ ::-webkit-scrollbar {
+   height: 6px;
+   /* Cambiado a height para afectar la barra de desplazamiento horizontal */
+   width: 6px;
+   /* Ancho de la barra de desplazamiento vertical */
+ }
+
+ /* Estilo para el riel de la barra de desplazamiento */
+ ::-webkit-scrollbar-track {
+   background: #62645A;
+   /* Color de fondo del riel */
+ }
+
+ /* Estilo para el pulgar de la barra de desplazamiento (la parte que se arrastra) */
+ ::-webkit-scrollbar-thumb {
+   background: var(--Morado);/* Color del pulgar de la barra de desplazamiento */
+ }
+
+ /* Estilo para el pulgar de la barra de desplazamiento al pasar el mouse sobre él */
+ ::-webkit-scrollbar-thumb:hover {
+   background: #2C2F39;
+   cursor: pointer;
+ }
+
+ .card {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.card.visible {
+    opacity: 1;
+}
+
+.ingresar {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding-block: 0.5rem;
+  padding-inline: 1.25rem;
+  background-color: #5B21B6;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffff;
+  gap: 10px;
+  font-weight: bold;
+  border: 3px solid #ffffff4d;
+  outline: none;
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.flecha {
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s ease-in-out;
+}
+
+.ingresar:hover {
+  transform: scale(1.05);
+  border-color: #fff9;
+}
+
+.ingresar:hover .flecha {
+  transform: translate(4px);
+}
+
+.ingresar:hover::before {
+  animation: shine 1.5s ease-out infinite;
+}
+
+.ingresar::before {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100%;
+  background-image: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0) 70%
+  );
+  top: 0;
+  left: -100px;
+  opacity: 0.6;
+}
+
+@keyframes shine {
+  0% {
+    left: -100px;
+  }
+
+  60% {
+    left: 100%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+/* MODO DARK DE LAS TABLAS
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+table th{
+  background-color: #dbc6ff;
+}
+table th,
+table td {
+    padding: 1rem;
+    border-bottom: 0.1px solid #dac4ff;
+    text-align: left;
+}
+
+/* Dark Mode Styles */
+.dark table {
+    border-color: #374151;
+}
+.dark table th,
+.dark table td {
+    border-color: #374151;
+    color: #fff;
+}
+
+.dark table th {
+    background-color: #0d0c13;
+}
+
+.dark table tr {
+    background-color: #1f2937; /* Color oscuro de cebra */
+}
+
+.dark table tr td {
+    background-color: #1f2937; /* Color oscuro de cebra */
+}
+
+.dark table tr td:hover {
+    background-color: #374151; /* Color de hover */
+}
+
+/* Light Mode Styles */
+.light table th,
+.light table td {
+    color: #000; /* Color de texto en modo claro */
+}
+
+.light table th {
+    background-color: #f3f4f6; /* Color de fondo en modo claro */
+}
+
+.light table tr {
+    background-color: #f9fafb; /* Color claro de cebra */
+}
+
+.light table tr td {
+    background-color: #f9fafb; /* Color claro de cebra */
+}
+
+.light table tr:hover {
+    background-color: #e5e7eb; /* Color de hover */
+}
+
+/* modales diseño */
+/* Dark Mode Styles for Modal Body and Footer */
+.dark .modal-body,
+.dark .modal-footer {
+    background-color: #1F232A; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
+
+.dark #createForm {
+    background-color: #1F232A; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
+
+/* //tarjetas */
+
+.dark .cuerpo {
+    background-color: #0D0C13; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
+.proyecto{
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+.dark .proyecto {
+    background-color: #0D0C13; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
 }
