@@ -168,10 +168,13 @@ table {
     overflow: hidden;
 }
 
+table th{
+  background-color: #dbc6ff;
+}
 table th,
 table td {
     padding: 1rem;
-    border-bottom: 1px solid #ff88fb;
+    border-bottom: 0.1px solid #dac4ff;
     text-align: left;
 }
 
@@ -239,6 +242,14 @@ table td {
 /* //tarjetas */
 
 .dark .cuerpo {
+    background-color: #0D0C13; /* Color de fondo en modo oscuro */
+    color: #fff; /* Color de texto en modo oscuro */
+}
+.proyecto{
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+.dark .proyecto {
     background-color: #0D0C13; /* Color de fondo en modo oscuro */
     color: #fff; /* Color de texto en modo oscuro */
 }
