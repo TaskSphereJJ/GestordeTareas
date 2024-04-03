@@ -14,7 +14,7 @@ namespace GestordeTareas.UI.Controllers
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador")]
     public class UsuarioController : Controller
     {
-        UsuariosBL _usuarioBL = new UsuariosBL();
+        UsuarioBL _usuarioBL = new UsuarioBL();
 
         CargoBL cargoBL = new CargoBL();
 

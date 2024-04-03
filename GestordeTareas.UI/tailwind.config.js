@@ -4,10 +4,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        darkPurple: '#0A002C',
-        lightPurple: '#ffff',
+        darkPurple: '#1F232A',
+        lightPurple: '#fef9ff',
         lightText: '#280133',
+        darkText: "#deacff",
         hoverBG: '#e070ff',
+        borderColor:'#6E41FA',
+        darkMenu: "#060214",
+        lightMenu: "#fef9ff"
       },
     },
   },

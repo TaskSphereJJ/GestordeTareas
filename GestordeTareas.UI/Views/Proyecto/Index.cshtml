@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
 }
 
@@ -13,62 +15,39 @@
         <i class="fas fa-plus text-lg ml-2"></i> Crear Nuevo Proyecto
     </a>
 </p>
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Titulo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Descripcion)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdUsuario)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FechaFinalizacion)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Titulo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descripcion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FechaFinalizacion)
-                    </td>
-                    <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                        <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
-                            <i class="fas fa-edit text-lg"></i>
-                        </a>
-                        <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
-                            <i class="fas fa-eye text-lg"></i>
-                        </a>
-                        <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
-                            <i class="fas fa-trash-alt text-lg"></i>
-                        </a>
-                        <a href="/Tarea/Index/@item.Id" class="btn btn-info btn-sm flex items-center p-2">
-                            <i class="fas fa-arrow-right text-lg"></i> Acceder
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    @foreach (var item in Model)
+    {
+        <div class="relative bg-blue-800 rounded-lg shadow-md p-6 opacity-90" style="background-color: rgba(255, 255, 255, 0.5);">
+            <div class="absolute top-0 right-0 mt-1 mr-1">
+                <div class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center">
+                    <i class="fas fa-tools text-gray-600 text-2xl"></i>
+                </div>
+            </div>
+            <h2 class="text-lg font-semibold dark:text-white mb-2 break-words">@item.Titulo</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600 dark:text-purple-400 font-bold">Descripcion:</span> 
+                @{
+                    if (item.Descripcion.Length > 200)
+                    {
+                        <text>@item.Descripcion.Substring(0, 200)...</text>
+                    }
+                    else
+                    {
+                        <text>@item.Descripcion</text>
+                    }
+                }
+            </p>
+            <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600  dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre</p>
+            <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600  dark:text-purple-400 font-bold">Fecha de finalizacion:</span> @item.FechaFinalizacion.ToShortDateString()</p>
+            <button class="ingresar">
+                Ingresar
+                <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
+                    <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+    }
 </div>
-
 
 
 <!-- Modales -->
@@ -169,18 +148,13 @@
     </div>
 </div>
 
-@* Aca estara el boton acceder y cuando haga click me mande a la lista de tareas *@
-@* <a href="/Tarea/Index" class="btn btn-info btn-sm flex items-center p-2">
-    <i class="fas fa-arrow-right text-lg"></i> Acceder *@
-</a>
-
-
 <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
 <script>
+    
 
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
@@ -284,4 +258,3 @@
 
 
 </script>
-
