@@ -95,7 +95,7 @@ namespace GestordeTareas.UI.Controllers
                 // Volver a cargar las listas desplegables u otros datos necesarios para la vista
                 await LoadDropDownListsAsync();
 
-                ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
+              //  ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
                 // Devolver la vista parcial "Create" con la tarea y el ID de proyecto
                 return PartialView("Create", new Tarea { IdProyecto = idProyecto });
                // return PartialView("Create", tarea);
