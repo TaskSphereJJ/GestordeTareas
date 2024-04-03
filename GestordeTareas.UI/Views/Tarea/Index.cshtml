@@ -10,17 +10,7 @@
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 
-@* <p>
-    <a href="" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
-    </a>
-</p> *@
 
-@* <p>
-    <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
-    </a>
-</p> *@
 
 @* En esta parte si Model es diferente de null quiere decir que hay tareas existente y mostrara desde la primera tarea hasta las que hayan*@
 @if (Model != null && Model.Any())
@@ -69,32 +59,33 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var items in Model)
-                {
-                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td class=" p-2 px-0 py-4 droppable" id="todo-tasks">
-                            <div class="tarjeta" draggable="true">
-                                <div class="mx-auto w-56">
-                                    <div class="bg-gray-100 cuerpo rounded-lg p-4 shadow-md text-left">
-                                        <h2 class="text-lg font-semibold mb-1">@items.Nombre</h2>
-                                        <div class="mt-2 flex justify-between">
-                                            <p class="text-xs">Fecha de Vencimiento: @items.FechaVencimiento.ToShortDateString()</p>
-                                            <p class="text-xs">Categoría: @items.Categoria</p>
-                                        </div>
-                                        <div class="mt-1">
-                                            <p class="text-xs">Prioridad: @items.Prioridad</p>
-                                        </div>
-                                        <button class="mt-2 px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">Ver más</button>
-                                    </div>
-                                </div>
+    @foreach (var item in Model)
+    {
+        <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <td class="p-2 px-0 py-4 droppable" id="todo-tasks">
+                <div class="tarjeta" draggable="true">
+                    <div class="mx-auto w-56">
+                        <div class="bg-gray-100 cuerpo rounded-lg p-4 shadow-md text-left">
+                            <h2 class="text-lg font-semibold mb-1">@item.Nombre</h2>
+                            <div class="mt-2 flex justify-between">
+                                <p class="text-xs">Fecha de Vencimiento: @item.FechaVencimiento.ToShortDateString()</p>
+                                <p class="text-xs">Categoría: @item.Categoria.Nombre</p>
                             </div>
-                        </td>
-                        <td class=" p-2 px-0 py-4 droppable" id="progress-tasks"></td>
-                    <td class=" p-2 px-0 py-4 droppable" id="doing-tasks"></td>
-                    <td class=" p-2 px-0 py-4 droppable" id="done-tasks"></td>
-                    </tr>
-                }
-            </tbody>
+                            <div class="mt-1">
+                                <p class="text-xs">Prioridad: @item.Prioridad.Nombre</p>
+                            </div>
+                          <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaEdit(@item.Id)">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="p-2 px-0 py-4 droppable" id="progress-tasks"></td>
+            <td class="p-2 px-0 py-4 droppable" id="doing-tasks"></td>
+            <td class="p-2 px-0 py-4 droppable" id="done-tasks"></td>
+        </tr>
+    }
+</tbody>
+
     </table>
 </div>
 
@@ -286,12 +277,12 @@ else
 
 
 
-    function cargarVistaCreate(id) {
-        // var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
+    function cargarVistaCreate() {
+        var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
         $.ajax({
-            url: "/Tarea/Create/",
+            url: "/Tarea/Create",
             type: "GET",
-            data: { idProyecto: id }, // Enviar el ID del proyecto como parte de los datos
+            data: { idProyecto: proyectoId }, // Enviar el ID del proyecto como parte de los datos
             success: function (data) {
                 $("#createModalContent").html(data);
                 $("#createModal").modal("show");
