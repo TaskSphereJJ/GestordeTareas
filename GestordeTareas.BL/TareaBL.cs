@@ -34,5 +34,12 @@ namespace GestordeTareas.BL
         {
             return await TareaDAL.GetTareasByProyectoIdAsync(proyectoId);
         }
+
+        //modificar el estado 
+        public async Task<int> ActualizarEstadoTareaAsync(int idTarea, int idEstadoTarea)
+        {
+            return await TareaDAL.ActualizarEstadoTareaAsync(idTarea, idEstadoTarea);
+        }
+
     }
 }

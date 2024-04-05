@@ -2,7 +2,7 @@
 CREATE DATABASE GestordeTareasBD
 go
 --usar la bd
-USE GestordeTareasBD
+USE GestorTareasBD
 go
 ----------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
@@ -167,3 +167,5 @@ VALUES
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
 
+
+  

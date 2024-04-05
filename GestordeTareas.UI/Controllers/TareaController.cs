@@ -170,5 +170,24 @@ namespace GestordeTareas.UI.Controllers
                 return View(tarea);
             }
         }
+
+        //ACTUALIZAR ESTADO
+        [HttpPost]
+        [HttpPost]
+        public async Task<ActionResult> ActualizarEstadoTarea(Tarea tarea)
+        {
+            try
+            {
+                await _tareaBL.UpdateAsync(tarea);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+
+
     }
 }

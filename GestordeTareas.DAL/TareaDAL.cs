@@ -115,5 +115,24 @@ namespace GestordeTareas.DAL
             }
         }
 
+        //metodo para poder cambiar el estado de las tareas
+        public static async Task<int> ActualizarEstadoTareaAsync(int idTarea, int idEstadoTarea)
+        {
+            int result = 0;
+            using (var bdContexto = new ContextoBD())
+            {
+                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == idTarea);
+                if (tareaBD != null)
+                {
+                    //accedo a actualizar la atera
+                    tareaBD.IdEstadoTarea = idEstadoTarea;
+                    bdContexto.Update(tareaBD);
+                                               //aqui se guardan los cambios
+                    result = await bdContexto.SaveChangesAsync();
+                }
+            }
+            return result;
+        }
+
     }
 }

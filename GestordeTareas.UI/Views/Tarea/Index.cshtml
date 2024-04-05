@@ -103,17 +103,15 @@
     </div>
 </div>
 
-
 <div id="tarjetas" class="hidden">
     <!-- Contenido de la vista de tarjetas -->
     <div class="container mx-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
             <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3 w-1/4">Tareas</th>
-                    <th scope="col" class="px-6 py-3 w-1/4 text-center">Hacer</th>
-                    <th scope="col" class="px-6 py-3 w-1/4 text-center">En progreso</th>
-                    <th scope="col" class="px-6 py-3 w-1/4 text-center">Finalizado</th>
+                    <th scope="col" class="px-6 py-3 w-1/3">Pendiente</th>
+                    <th scope="col" class="px-6 py-3 w-1/3">En Progreso</th>
+                    <th scope="col" class="px-6 py-3 w-1/3">Finalizado</th>
                 </tr>
             </thead>
             <tbody>
@@ -121,10 +119,10 @@
                 {
                     <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <td class="p-2 px-0 py-4 droppable" id="todo-tasks">
-                            <div class="tarjeta" draggable="true">
+                            <div class="tarjeta" draggable="true" data-id="@item.Id">
                                 <div class="mx-auto w-56">
                                     <div class="bg-gray-100 cuerpo rounded-lg p-4 shadow-md text-left">
-                                        <h2 class="text-lg font-semibold mb-1">@item.Nombre</h2>
+                                        <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
                                         <div class="mt-2 flex justify-between">
                                             <p class="text-xs">Fecha de Vencimiento: @item.FechaVencimiento.ToShortDateString()</p>
                                             <p class="text-xs">Categoría: @item.Categoria.Nombre</p>
@@ -132,14 +130,16 @@
                                         <div class="mt-1">
                                             <p class="text-xs">Prioridad: @item.Prioridad.Nombre</p>
                                         </div>
+                                        <div class="mt-1">
+                                            <p class="text-xs">Estado: @item.EstadoTarea.Nombre</p>
+                                        </div>
                                         <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaEdit(@item.Id)">Ver más</button>
                                     </div>
                                 </div>
                             </div>
                         </td>
-                        <td class="p-2 px-0 py-4 droppable" id="progress-tasks"></td>
-                        <td class="p-2 px-0 py-4 droppable" id="doing-tasks"></td>
-                        <td class="p-2 px-0 py-4 droppable" id="done-tasks"></td>
+                        <td class="p-2 px-0 py-4 droppable" id="progress-tasks" data-estado="EnProgreso"></td>
+                        <td class="p-2 px-0 py-4 droppable" id="done-tasks" data-estado="Finalizado"></td>
                     </tr>
                 }
             </tbody>
@@ -252,6 +252,7 @@
 
 
 <script>
+
     document.addEventListener('DOMContentLoaded', function () {
         const tarjetas = document.querySelectorAll('.tarjeta');
         const droppables = document.querySelectorAll('.droppable');
@@ -259,8 +260,8 @@
         let tarjetaArrastrada = null;
 
         tarjetas.forEach(tarjeta => {
-            tarjeta.addEventListener('dragstart', () => {
-                tarjetaArrastrada = tarjeta;
+            tarjeta.addEventListener('dragstart', (e) => {
+                tarjetaArrastrada = e.target;
             });
 
             tarjeta.addEventListener('dragend', () => {
@@ -273,13 +274,41 @@
                 e.preventDefault();
             });
 
-            droppable.addEventListener('drop', () => {
+            droppable.addEventListener('drop', async (e) => {
+                e.preventDefault();
                 if (tarjetaArrastrada) {
+                    const idEstadoTarea = droppable.id;
+                    const idTarea = tarjetaArrastrada.dataset.id;
+                    tarjetaArrastrada.dataset.estado = idEstadoTarea;
                     droppable.appendChild(tarjetaArrastrada);
+
+                    const tarea = { Id: parseInt(idTarea), IdEstadoTarea: idEstadoTarea };
+                    const success = await actualizarEstadoTarea(tarea);
+                    if (success) {
+                        alert('Estado de tarea actualizado correctamente');
+                    } else {
+                        alert('Error al actualizar estado de tarea');
+                    }
                 }
             });
         });
     });
+
+    async function actualizarEstadoTarea(tarea) {
+        const response = await fetch(`/Tarea/ActualizarEstadoTarea`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tarea)
+        });
+        if (response.ok) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     //OCULTAR y mostarr la tabla
     function toggleView() {
