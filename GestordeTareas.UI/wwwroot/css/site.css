@@ -93,23 +93,24 @@ body.light {
 }
 
 .ingresar {
-  position: relative;
-  transition: all 0.3s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding-block: 0.5rem;
-  padding-inline: 1.25rem;
-  background-color: #5B21B6;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffff;
-  gap: 10px;
-  font-weight: bold;
-  border: 3px solid #ffffff4d;
-  outline: none;
-  overflow: hidden;
-  font-size: 15px;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    padding-block: 0.5rem;
+    padding-inline: 1.25rem;
+    background-color: #7B3DB8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffff;
+    gap: 10px;
+    font-weight: bold;
+    border: 3px solid #ffffff4d;
+    outline: none;
+    overflow: hidden;
+    font-size: 15px;
+    width: 45%;
 }
 
 .flecha {
@@ -121,6 +122,7 @@ body.light {
 .ingresar:hover {
   transform: scale(1.05);
   border-color: #fff9;
+  color:#fff;
 }
 
 .ingresar:hover .flecha {
