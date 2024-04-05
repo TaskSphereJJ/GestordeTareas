@@ -26,12 +26,7 @@ namespace GestordeTareas.DAL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=localhost;Database=GestorTareasBD;User=Jeffrey;Password=jeffrey20068f;Encrypt=true;TrustServerCertificate=true;");
-<<<<<<< HEAD
             
-=======
->>>>>>> 69e9af6180d1147e787bf16a5ba694ebc344a927
         }
-
-
     }
 }

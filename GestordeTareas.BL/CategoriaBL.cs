@@ -31,5 +31,9 @@ namespace GestordeTareas.BL
         {
             return await CategoriaDAL.GetAllAsync();
         }
+        public async Task<List<Categoria>> SearchAsync(Categoria category)
+        {
+            return await CategoriaDAL.SearchAsync(category);
+        }
     }
 }

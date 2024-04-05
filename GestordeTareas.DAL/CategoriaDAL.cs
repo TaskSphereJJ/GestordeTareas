@@ -74,5 +74,32 @@ namespace GestordeTareas.DAL
             }
             return categorias;
         }
+         internal static IQueryable<Categoria> QuerySelect(IQueryable<Categoria> query, Categoria category)
+        {
+            if(category.Id > 0)
+                query = query.Where(c => c.Id == category.Id);
+
+            if(!string.IsNullOrWhiteSpace(category.Nombre))
+                query = query.Where(c => c.Nombre.Contains(category.Nombre));
+
+            query = query.OrderByDescending(c => c.Id);
+
+            if (category.Top_Aux > 0)
+                query = query.Take(category.Top_Aux).AsQueryable();
+
+            return query;
+        }
+
+        public static async Task<List<Categoria>> SearchAsync(Categoria category)
+        {
+            var categories = new List<Categoria>();
+            using(var dbContext = new ContextoBD())
+            {
+                var select = dbContext.Categoria.AsQueryable();
+                select = QuerySelect(select, category);
+                categories = await select.ToListAsync();
+            }
+            return categories;
+        }
     }
 }
