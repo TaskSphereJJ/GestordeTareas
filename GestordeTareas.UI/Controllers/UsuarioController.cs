@@ -192,18 +192,28 @@ namespace GestordeTareas.UI.Controllers
                 if (userDb != null && userDb.Id > 0 && userDb.NombreUsuario == user.NombreUsuario)
                 {
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                    var claims = new[] {new Claim(ClaimTypes.Name, userDb.NombreUsuario),
-                                new Claim(ClaimTypes.Role, userDb.Cargo.Nombre)};
+                    var claims = new[] {
+                new Claim(ClaimTypes.Name, userDb.NombreUsuario),
+                new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
+                new Claim("Nombre", userDb.Nombre),
+                new Claim("Apellido", userDb.Apellido)
+            };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                 }
                 else
+                {
                     throw new Exception("Credenciales de usuario incorrectas");
+                }
 
                 if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
                     return Redirect(returnUrl);
+                }
                 else
+                {
                     return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex)
             {

@@ -1,4 +1,4 @@
-﻿﻿
+﻿@using GestordeTaras.EN;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,11 +16,9 @@
 </head>
 <body class="dark:bg-darkPurple dark:text-darkText light:bg-lightPurple light:text-lightText">
     @{
-    var userName = User.Identity.Name;
-    var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = userName, Top_Aux = 1 });
-    var actualUser = users.FirstOrDefault();
-    var fullName = actualUser != null ? $"{actualUser.Nombre} {actualUser.Apellido}" : "";
-}
+        var nombre = User.Claims.FirstOrDefault(c => c.Type == "Nombre")?.Value;
+        var apellido = User.Claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
+    }
     @* header o barra de arriba *@
    @if(Context.Request.Path.Value != "/Usuario/login"){ 
 
@@ -57,9 +55,9 @@
             </div>
             @if (User.Identity.IsAuthenticated)
             {
-                <span class="text-sm font-semibold md:inline text-purple-600 dark:text-darkText font-bold mr-2">@ViewBag.NombreUsuario</span>
+                 <span class="text-sm font-semibold md:inline text-purple-600 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>                
             }
-                @* <!-- Sección de perfil --> *@
+            @* <!-- Sección de perfil --> *@
                 <div class="flex items-center justify-end gap-4">
                     <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
                         <img src="~/img/FOOTOO.png" alt="" class="aspect-square">
