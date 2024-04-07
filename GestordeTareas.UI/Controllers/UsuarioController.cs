@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace GestordeTareas.UI.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador")]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador, Colaborador")]
     public class UsuarioController : Controller
     {
         UsuariosBL _usuarioBL = new UsuariosBL();
@@ -35,6 +35,46 @@ namespace GestordeTareas.UI.Controllers
             ViewBag.Top = user.Top_Aux;
             ViewBag.Roles = await cargoBL.GetAllAsync();
             return View(Lista);
+        }
+
+        public async Task<ActionResult> Perfil()
+        {
+            try
+            {
+                // Obtener el nombre de usuario
+                string nombreUsuario = User.Identity.Name;
+
+                // Pasar el nombre de usuario a la vista
+                ViewBag.NombreUsuario = nombreUsuario;
+                var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+                var actualUser = users.FirstOrDefault();
+
+                //ESTO ES PARA OBTENER EL NOMBRE Y APELLIDO Y PONERLO EN EL LAYOUT 
+                // Obtener el nombre y apellido del usuario
+                string nombre = actualUser.Nombre;
+                string apellido = actualUser.Apellido;
+
+                // Pasar el nombre y apellido del usuario a la vista
+                ViewBag.NombreUsuario = $"{nombre} {apellido}";
+                if (actualUser == null)
+                {
+                    // Manejar el caso en que no se encuentra el usuario autenticado
+                    return NotFound();
+                }
+
+                // Utiliza el ID del usuario autenticado para buscar sus datos específicos
+                int userId = actualUser.Id;
+                Usuario user = await _usuarioBL.GetByIdAsync(new Usuario { Id = userId });
+
+                // Pasa los datos del usuario a la vista
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción de forma adecuada, por ejemplo, registrándola o mostrando un mensaje de error
+                ViewBag.ErrorMessage = "Ocurrió un error al cargar la información del usuario.";
+                return View(); // Puedes redirigir a una vista de error específica si lo deseas
+            }
         }
 
 

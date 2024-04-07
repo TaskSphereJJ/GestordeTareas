@@ -1,0 +1,42 @@
+﻿@model GestordeTaras.EN.Usuario
+<h1>Index</h1>
+
+
+
+<h1>Perfil de Usuario</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Contraseña</th>
+            <th>Teléfono</th>
+            <th>Fecha de Nacimiento</th>
+            <th>ID de Cargo</th>
+            <th>Nombre de Usuario</th>
+            <th>Estado</th>
+            <th>Fecha de Registro</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.DisplayFor(model => model.Nombre)</td>
+            <td>@Html.DisplayFor(model => model.Apellido)</td>
+            <td>@Html.DisplayFor(model => model.Pass)</td>
+            <td>@Html.DisplayFor(model => model.Telefono)</td>
+            <td>@Html.DisplayFor(model => model.FechaNacimiento)</td>
+            <td>@Html.DisplayFor(model => model.IdCargo)</td>
+            <td>@Html.DisplayFor(model => model.NombreUsuario)</td>
+            <td>@Html.DisplayFor(model => model.Status)</td>
+            <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
+            <td>
+                @Html.ActionLink("Modificar", "Edit", new { id = Model.Id }, new { @class = "btn btn-outline-info" })
+                @Html.ActionLink("Detalles", "Details", new { id = Model.Id }, new { @class = "btn btn-outline-secondary" })
+                @Html.ActionLink("Eliminar", "Delete", new { id = Model.Id }, new { @class = "btn btn-outline-danger" })
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -14,12 +14,6 @@
         <span asp-validation-for="Descripcion" class="text-purple-700 text-xs italic"></span>
     </div>
 
-    @* <div class="mb-4">
-        <label asp-for="FechaCreacion" class="block text-gray-700 text-sm font-bold mb-2">FechaCreacion</label>
-        <input asp-for="FechaCreacion" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Creacion" />
-        <span asp-validation-for="FechaCreacion" class="text-purple-700 text-xs italic"></span>
-    </div> *@
-
     <div class="mb-4">
         <label asp-for="FechaVencimiento" class="block text-gray-700 text-sm font-bold mb-2">FechaVencimiento</label>
         <input asp-for="FechaVencimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Vencimiento" />
@@ -44,17 +38,8 @@
     <!-- Agregar campo oculto para el ID del estado "Pendiente" -->
     @Html.HiddenFor(model => model.IdEstadoTarea, new { Value = ViewBag.EstadoPendienteId })
 
-   @*  <div class="form-group">
-        <label asp-for="IdProyecto" class="control-label"></label>
-        <select asp-for="IdProyecto" class="form-control" asp-items="@ViewBag.Proyectos">
-            <option value="">Seleccionar</option>
-        </select>
-        <span asp-validation-for="IdProyecto" class="text-danger"></span>
-    </div> *@
+
     @Html.HiddenFor(model => model.IdProyecto, new { Value = ViewBag.idProyecto })
-
-
-   @*  <input type="hidden" asp-for="IdProyecto" value="@ViewBag.ProyectoId" /> *@
 
 
 </form>

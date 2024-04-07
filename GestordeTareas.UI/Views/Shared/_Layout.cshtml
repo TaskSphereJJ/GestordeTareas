@@ -15,6 +15,12 @@
     <link rel="stylesheet" href="~/GestordeTareas.UI.styles.css" asp-append-version="true" />
 </head>
 <body class="dark:bg-darkPurple dark:text-darkText light:bg-lightPurple light:text-lightText">
+    @{
+    var userName = User.Identity.Name;
+    var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = userName, Top_Aux = 1 });
+    var actualUser = users.FirstOrDefault();
+    var fullName = actualUser != null ? $"{actualUser.Nombre} {actualUser.Apellido}" : "";
+}
     @* header o barra de arriba *@
    @if(Context.Request.Path.Value != "/Usuario/login"){ 
 
@@ -49,41 +55,45 @@
                     </div>
                 </label>
             </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <span class="text-sm font-semibold md:inline text-purple-600 dark:text-darkText font-bold mr-2">@ViewBag.NombreUsuario</span>
+            }
+                @* <!-- Sección de perfil --> *@
+                <div class="flex items-center justify-end gap-4">
+                    <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
+                        <img src="~/img/FOOTOO.png" alt="" class="aspect-square">
+                    </div>
+                    <div class="relative inline-block">
+                        <button id="userMenuButton"
+                                class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
+                                aria-label="User Menu">
+                            <span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                     class="stroke-inherit stroke-purple-800">
+                                    <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
+                                </svg>
 
-             @* <!-- Sección de perfil --> *@
-            <div class="flex items-center justify-end gap-4">
-                <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
-                    <img src="./img/FOOTOO.png" alt="" class="aspect-square">
-                </div>
-                <span class="hidden text-sm font-semibold md:inline text-purple-600 dark:text-darkText font-bold">User</span>
-                <div class="relative inline-block">
-                    <button id="userMenuButton"
-                            class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
-                            aria-label="User Menu">
-                        <span>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="stroke-inherit stroke-purple-800">
-                                <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
-                            </svg>
-
-                        </span>
-                    </button>
-                    <div id="userMenuOptions"
-                        class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
-                        style="display: none;">
-                        <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 relative transition-colors duration-300 dark:hover:bg-opacity-25 dark:hover:bg-gray-800 dark:hover:text-white hover:bg-opacity-25 hover:bg-gray-200 dark:text-white dark:hover:text-white  hover:text-white transition-opacity duration-300 text-white ">
-                                    <span class="absolute inset-0 bg-transparent transition-opacity duration-300"></span>
-                                    Dashboard
-                                </a>
-                            </li>
-                        </ul>
+                            </span>
+                        </button>
+                        <div id="userMenuOptions"
+                             class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
+                             style="display: none;">
+                            <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
+                                <li>
+                                    <a href="#"
+                                       class="block px-4 py-2 relative transition-colors duration-300 dark:hover:bg-opacity-25 dark:hover:bg-gray-800 dark:hover:text-white hover:bg-opacity-25 hover:bg-gray-200 dark:text-white dark:hover:text-white  hover:text-white transition-opacity duration-300 text-white ">
+                                        <span class="absolute inset-0 bg-transparent transition-opacity duration-300"></span>
+                                        Dashboard
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+
     </header>
     }
 
@@ -119,6 +129,14 @@
                                 d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                         </svg>
                         <span class="mx-2 text-sm font-medium">Inicio</span>
+                    </a>
+                    <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
+                       asp-area="" asp-controller="Usuario" asp-action="Perfil">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
+                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
+                        </svg>
+
+                        <span class="mx-2 text-sm font-medium">Perfil</span>
                     </a>
                    @*  Validadcion para User    ---INICIO---- *@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
@@ -174,6 +192,9 @@
 
                             <span class="mx-2 text-sm font-medium">Cambiar contraseña</span>
                         </a>
+
+                        
+
                         @* CERRAR SESION *@
                         <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
                         asp-area="" asp-controller="Usuario" asp-action="Logout">
@@ -218,12 +239,9 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ChangePassword">Cambiar clave</a>
 
                         <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
-                     
+
+                        
                     }
-
-
-
-                    @*  FIN *@
 
              
                     @* <!-- SECCION DE PROYECTOS --> *@
