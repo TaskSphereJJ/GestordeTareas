@@ -36,13 +36,13 @@
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                        <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
+                        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded" onclick="cargarVistaEdit(@item.Id)">
                             <i class="fas fa-edit text-lg"></i>
                         </a>
-                        <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
+                        <a href="#" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-2 rounded" onclick="cargarVistaDetails(@item.Id)">
                             <i class="fas fa-eye text-lg"></i>
                         </a>
-                        <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
+                        <a href="#" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded" onclick="cargarVistaDelete(@item.Id)">
                             <i class="fas fa-trash-alt text-lg"></i>
                         </a>
                     </td>
@@ -136,7 +136,7 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-red-600 text-white">
                 <h5 class="modal-title" id="deleteModalLabel">Eliminar Categoría</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>

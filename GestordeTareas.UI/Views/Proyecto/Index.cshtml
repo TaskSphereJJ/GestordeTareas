@@ -10,22 +10,27 @@
 }
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyecto</h1>
-<p>
-    <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nuevo Proyecto
-    </a>
-</p>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cv                                                                                              v    vvvols-3 gap-4">
+@if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
+{
+    <p>
+        <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
+            <i class="fas fa-plus text-lg ml-2"></i> Crear Nuevo Proyecto
+        </a>
+    </p>
+}
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     @foreach (var item in Model)
     {
-        <div class="relative cuegggfdddddddddddddddddrpo proyecto rounded-lg shadow-md p-6 opacity-90">
+        <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90">
             <div class="absolute top-0 right-0 mt-1 mr-1">
                 <div class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center">
                     <i class="fas fa-tools text-gray-600 text-2xl"></i>
                 </div>
             </div>
             <h2 class="text-lg font-semibold dark:text-white mb-2 break-words">@item.Titulo</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600 dark:text-purple-400 font-bold">Descripcion:</span> 
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                <span class="text-purple-600 dark:text-purple-400 font-bold">Descripcion:</span>
                 @{
                     if (item.Descripcion.Length > 200)
                     {
@@ -39,15 +44,32 @@
             </p>
             <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600  dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre</p>
             <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600  dark:text-purple-400 font-bold">Fecha de finalizacion:</span> @item.FechaFinalizacion.ToShortDateString()</p>
-            <a class="ingresar"  href="/Tarea/Index/@item.Id">
-                Ingresar
-                <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                    <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
-                </svg>
-            </a>
+            <div class="flex justify-end space-x-1 items-center">
+                <a class="ingresar mr-7" href="/Tarea/Index/@item.Id">
+                    Ingresar
+                    <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
+                        <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
+                    </svg>
+                </a>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
+                {
+                    <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaEdit(@item.Id)">
+                        <i class="fas fa-edit text-lg"></i>
+                    </a>
+                    <a href="#" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDetails(@item.Id)">
+                        <i class="fas fa-eye text-lg"></i>
+                    </a>
+                    <a href="#" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDelete(@item.Id)">
+                        <i class="fas fa-trash-alt text-lg"></i>
+                    </a>
+                }
+            </div>
         </div>
     }
 </div>
+
+
+
 
 <!-- Modales -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">

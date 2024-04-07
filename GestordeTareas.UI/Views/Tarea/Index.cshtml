@@ -12,6 +12,11 @@
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 <button onclick="toggleView()" class="btn btn-primary mb-4">Cambiar Vista</button>
 
+@* <p>
+    <a href="" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
+        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
+    </a>
+</p> *@
 
     @if (Model != null && Model.Any())
     {
@@ -252,6 +257,7 @@
 
 
 <script>
+<<<<<<< HEAD
 
     document.addEventListener('DOMContentLoaded', function () {
         const tarjetas = document.querySelectorAll('.tarjeta');
@@ -323,6 +329,8 @@
             tarjetas.classList.remove('hidden');
         }
     }
+=======
+>>>>>>> c8928bfc97c010649be5f261ae0e8c2e90aa9b71
 
     function submitcreateForm(formId) {
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
