@@ -3,28 +3,29 @@
         <form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
+            <div class="mb-4">
+                <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+                <input asp-for="Titulo" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Titulo del Proyecto">
+                <span asp-validation-for="Titulo" class="text-red-500 text-xs italic"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
+            <div class="mb-4">
+                <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+              <input asp-for="Descripcion" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 pulsating-cursor" id="nombre" type="text" placeholder="Descripcion del Proyecto">
+              <span asp-validation-for="Descripcion" class="text-red-500 text-xs italic"></span>
+          </div>
 
             <div class="form-group">
-                <label asp-for="Usuario.Nombre" class="control-label"></label>
+                <label asp-for="IdUsuario" class="control-label"></label>
                 <input asp-for="IdUsuario" class="form-control" type="hidden" />
                 <input asp-for="Usuario.Nombre" class="form-control" readonly />
                 <span asp-validation-for="IdUsuario" class="text-danger"></span>
             </div> 
 
-            <div class="form-group">
-               <label asp-for="FechaFinalizacion" class="control-label"></label>
-               <input asp-for="FechaFinalizacion" type="date" class="form-control" />
-               <span asp-validation-for="FechaFinalizacion" class="text-danger"></span>
+
+            <div class="mb-4">
+               <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Finalización</label>
+              <input asp-for="FechaFinalizacion" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Finalización" />
+               <span asp-validation-for="FechaFinalizacion" class="text-purple-700 text-xs italic"></span>
             </div>
         </form>
    

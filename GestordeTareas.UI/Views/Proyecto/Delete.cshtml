@@ -3,37 +3,24 @@
 @{
     ViewData["Title"] = "Eliminar";
 }
-<h5>¿Estás seguro de querer eliminar este proyecto?</h5>
-    <hr />
-    <div>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdUsuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaFinalizacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaFinalizacion)
-        </dd>
-    </dl>
-
-    <form asp-action="Delete" id="deleteForm" method="post">
-        <input type="hidden" asp-for="Id" />
-    </form>
+<div class="flex justify-center items-center">
+    <div class="p-4 md:p-5 text-center">
+        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">¿Estás seguro de eliminar el proyecto <span class="text-red-600 font-bold">@Html.DisplayFor(model => model.Titulo)</span>?</h3>
+        <dl class="grid grid-cols-2 gap-x-4 text-left">
+            <dt class="col-span-1 font-bold text-gray-600">Título:</dt>
+            <dd class="col-span-1">@Html.DisplayFor(model => model.Titulo)</dd>
+            <dt class="col-span-1 font-bold text-gray-600">Descripción:</dt>
+            <dd class="col-span-1">@Html.DisplayFor(model => model.Descripcion)</dd>
+            <dt class="col-span-1 font-bold text-gray-600">Admin:</dt>
+            <dd class="col-span-1">@Html.DisplayFor(model => model.Usuario.Nombre)</dd>
+            <dt class="col-span-1 font-bold text-gray-600">Fecha de Finalización:</dt>
+            <dd class="col-span-1">@Html.DisplayFor(model => model.FechaFinalizacion)</dd>
+        </dl>
+        <form asp-action="Delete" id="deleteForm" method="post">
+            <input type="hidden" asp-for="Id" />
+        </form>
+    </div>
 </div>
