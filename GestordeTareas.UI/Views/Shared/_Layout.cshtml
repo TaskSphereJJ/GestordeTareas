@@ -11,7 +11,9 @@
     <link href="~/css/tailwind.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DfXdz2htPHrenZ9h4z1U1TzXPOOjk4gfaLI9f/+nJF1cPmUz2c4zlr4I9aMIel0t" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-rfwlPRxWExv5sf0pd4l71r5Id3vYkQIm0IaOH1VlqzLX8ASwbS7qHwXy1Fm5zH4JAr6Drl7HDe5Kr1yzE+yyCg==" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/GestordeTareas.UI.styles.css" asp-append-version="true" />
 </head>
 <body class="dark:bg-darkPurple dark:text-darkText light:bg-lightPurple light:text-lightText">
@@ -38,25 +40,23 @@
                         </span>
         </button>
         </div>
-            @* MODO OSCURO A MEDIAS *@
-            <div class="flex items-center mr-4">
-                <label class="relative inline-block w-10 h-6">
-                <input type="checkbox" class="hidden" id="darkModeToggle">
-
-                    <div class="slider bg-gray-400 rounded-full w-10 h-6 duration-300 ease-in-out">
-                        <div class="circle absolute left-1 top-1 duration-300 ease-in-out">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
-                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
-                            </svg>
-                        </div>
-                    </div>
-                </label>
+            <!-- Botón con ícono de sol y luna para cambiar entre modo claro y oscuro -->
+            <div id="darkModeToggle" class="mr-2">
+                <span id="darkModeIcon">
+                    <!-- El ícono se actualizará dinámicamente aquí -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
+                        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                    </svg>
+                </span>
             </div>
+
+
+
+
             @if (User.Identity.IsAuthenticated)
             {
-                 <span class="text-sm font-semibold md:inline text-purple-600 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>                
-            }
+                 <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>                
+            
             @* <!-- Sección de perfil --> *@
                 <div class="flex items-center justify-end gap-4">
                     <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
@@ -279,43 +279,32 @@
         </main>
     </div>
 
-    @* <footer class="border-top footer text-muted">
-    <div class="container">
-    &copy; 2024 - GestordeTareas.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-    </footer> *@
 
     <script>
-        AOS.init();
-    </script>
-    <script>
-
-            const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeToggle = document.getElementById('darkModeToggle');
 
         darkModeToggle.addEventListener('click', () => {
             const isDarkMode = document.body.classList.toggle('dark');
-
-            // Guardar la preferencia del usuario en el almacenamiento local
             localStorage.setItem('darkMode', isDarkMode ? 'dark' : 'light');
 
             // Cambiar el icono del botón
             const darkModeIcon = document.getElementById('darkModeIcon');
-            darkModeIcon.innerHTML = isDarkMode ? '<i class="bi bi-moon-fill text-white"></i>' : '<i class="bi bi-sun-fill text-yellow-500"></i>';
+            darkModeIcon.innerHTML = isDarkMode
+                ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="text-white" style="fill: #ffffff;"><path d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142 3.906 3.906 10.237 3.905 14.143 0a9.946 9.946 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z"></path></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/></svg>';
         });
 
-        // Función que se ejecuta al cargar la vista
         window.addEventListener('load', () => {
-            // Comprobar si hay una preferencia guardada en el almacenamiento local
             const savedMode = localStorage.getItem('darkMode');
 
-            // Aplicar el modo correspondiente si hay una preferencia guardada
             if (savedMode === 'dark') {
                 document.body.classList.add('dark');
             }
 
-            // Cambiar el icono del botón al cargar la página
             const darkModeIcon = document.getElementById('darkModeIcon');
-            darkModeIcon.innerHTML = savedMode === 'dark' ? '<i class="bi bi-moon-fill text-white"></i>' : '<i class="bi bi-sun-fill text-yellow-500"></i>';
+            darkModeIcon.innerHTML = savedMode === 'dark'
+                ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="text-white" style="fill: #ffffff;"><path d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142 3.906 3.906 10.237 3.905 14.143 0a9.946 9.946 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z"></path></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/></svg>';
         });
 
 
