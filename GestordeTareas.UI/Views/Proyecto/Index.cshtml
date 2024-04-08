@@ -9,12 +9,12 @@
 
 }
 
-<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyecto</h1>
+<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyectos</h1>
 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
 {
     <p>
         <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
-            <i class="fas fa-plus text-lg ml-2"></i> Crear Nuevo Proyecto
+            <i class="fas fa-plus text-lg mr-2"></i> Nuevo Proyecto
         </a>
     </p>
 }
@@ -45,7 +45,7 @@
             <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600  dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre</p>
             <p class="text-gray-600 dark:text-gray-400 mb-4"><span class="text-purple-600  dark:text-purple-400 font-bold">Fecha de finalizacion:</span> @item.FechaFinalizacion.ToShortDateString()</p>
             <div class="flex justify-end space-x-1 items-center">
-                <a class="ingresar mr-7" href="/Tarea/Index/@item.Id">
+                <a class="ingresar mr-4" href="/Tarea/Index/@item.Id">
                     Ingresar
                     <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
                         <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
@@ -153,7 +153,7 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-red-600 text-white">
                 <h5 class="modal-title" id="deleteModalLabel">Eliminar Proyecto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
@@ -177,102 +177,98 @@
 <script>
     
 
-    function submitcreateForm(formId) {
-        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
-        $.ajax({
+    function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
             url: '/Proyecto/Create', // URL de la acción Create en el controlador Proyecto
-            type: 'POST',
-            data: formData,
-            success: function (response) {
+            type: 'POST',  // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) { // Función a ejecutar si la solicitud es exitosa
                 // Manejar la respuesta del servidor si es necesario
-                window.location.reload();
-                $('#createModal').modal('hide');
+                window.location.reload(); // Recarga la página después de enviar el formulario
+                $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
             },
-            error: function (xhr, status, error) {
-                // Manejar errores si ocurrieron durante la solicitud AJAX
-                console.error(xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
             }
         });
     }
 
-    function submiteditForm(formId) {
-        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
-        $.ajax({
-            url: '/Proyecto/Edit', // URL de la acción Create en el controlador Proyecto
-            type: 'POST',
-            data: formData,
-            success: function (response) {
+    function submiteditForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
+            url: '/Proyecto/Edit', // URL de la acción Edit en el controlador Proyecto
+            type: 'POST', // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) { // Función a ejecutar si la solicitud es exitosa
                 // Recargar la página después de enviar el formulario
-                window.location.reload();
+                window.location.reload(); // Recarga la página después de enviar el formulario
             },
-            error: function (xhr, status, error) {
-                // Manejar errores si ocurrieron durante la solicitud AJAX
-                console.error(xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA
+                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
             }
         });
     }
 
-    function eliminarProyecto() {
-        // Enviar una solicitud AJAX para eliminar el proyecto
-        $.ajax({
+    function eliminarProyecto() { // Función para eliminar un proyecto mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar el proyecto
             url: '/Proyecto/Delete', // URL de la acción POST para eliminar el proyecto
             type: 'POST', // Método POST para enviar la solicitud
             data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del Proyecto)
-            success: function (response) {
-                // Recargar la página después de eliminar el Proyecto
-                window.location.reload();
+            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
+                window.location.reload(); // Recargar la página después de eliminar el Proyecto
             },
-            error: function (xhr, status, error) {
-                alert('Error al eliminar el proyecto: ' + xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                alert('Error al eliminar el proyecto: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
             }
         });
     }
 
 
 
-    function cargarVistaCreate() {
-        $.ajax({
-            url: "/Proyecto/Create",
-            type: "GET",
-            success: function (data) {
-                $("#createModalContent").html(data);
-                $("#createModal").modal("show");
+    function cargarVistaCreate() { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista create
+            url: "/Proyecto/Create", // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#createModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "createModalContent"
+                $("#createModal").modal("show"); // Muestra el modal con ID "createModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaEdit(id) {
-        $.ajax({
-            url: "/Proyecto/Edit/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#editModalContent").html(data);
-                $("#editModal").modal("show");
+    function cargarVistaEdit(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista edit
+            url: "/Proyecto/Edit/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#editModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "editModalContent"
+                $("#editModal").modal("show"); // Muestra el modal con ID "editModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaDetails(id) {
-        $.ajax({
-            url: "/Proyecto/DetailsPartial/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#detailsModalContent").html(data);
-                $("#detailsModal").modal("show");
+    function cargarVistaDetails(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista details
+            url: "/Proyecto/DetailsPartial/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#detailsModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "detailsModalContent"
+                $("#detailsModal").modal("show"); // Muestra el modal con ID "detailsModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaDelete(id) {
-        $.ajax({
-            url: "/Proyecto/Delete/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#deleteModalContent").html(data); // Esto muestra el contenido del Proyecto
-                $("#deleteModal").modal("show");
+    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista delete
+            url: "/Proyecto/Delete/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
+                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
             },
-            error: function () {
-                alert("Error al cargar la vista de eliminación.");
+            error: function () { // Función a ejecutar si la solicitud AJAX falla
+                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
             }
         });
     }

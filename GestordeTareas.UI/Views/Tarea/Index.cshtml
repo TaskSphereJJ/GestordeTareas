@@ -9,8 +9,13 @@
   
 }
 
+<<<<<<< HEAD
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 <button onclick="toggleView()" class="btn btn-primary mb-4">Cambiar Vista</button>
+=======
+
+<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tareas</h1>
+>>>>>>> db86e5f9b0ee8e9efb342bd30535e39bfd1b912d
 
 @* <p>
     <a href="" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
@@ -37,6 +42,7 @@
         </p>
     }
 
+<<<<<<< HEAD
     <div id="tabla" class="tabla">
     <!-- Contenido de la vista de tabla -->
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
@@ -52,6 +58,31 @@
                     <th scope="col" class="px-6 py-3">
                         @Html.DisplayNameFor(model => model.Descripcion)
                     </th>
+=======
+@* En esta parte si Model es diferente de null quiere decir que hay tareas existente y mostrara desde la primera tarea hasta las que hayan*@
+@if (Model != null && Model.Any())
+{
+    var tarea = Model.First();
+    // Inicializar 'tarea' con el primer elemento de 'Model'
+    <p>
+        <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
+            <i class="fas fa-plus text-lg mr-2"></i> Nueva Tarea
+        </a>
+    </p>
+}
+else
+{
+    @*Por otro lado si es null quiere decir que no hay tarea y mostrara el texto No hay tareas disponibles
+      Y mostrara el boton crear nueva tarea para agregar una tarea. Cuando se haya creado la primer tarea se cumplira 
+      la primera condicion por lo que el texto No hay tareas disponibles desaparecera 
+    *@
+    <h4>No hay tareas disponibles</h4>
+    <p>
+        <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(1002)">
+            <i class="fas fa-plus text-lg mr-2"></i> Nueva Tarea
+        </a>
+    </p>
+>>>>>>> db86e5f9b0ee8e9efb342bd30535e39bfd1b912d
 
                     <th scope="col" class="px-6 py-3">
                         @Html.DisplayNameFor(model => model.FechaCreacion)
@@ -337,97 +368,90 @@
             data: formData,
             success: function (response) {
                 // Manejar la respuesta del servidor si es necesario
-                window.location.reload();
-                $('#createModal').modal('hide');
+                window.location.reload(); // Recarga la página después de enviar el formulario
+                $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
             },
-            error: function (xhr, status, error) {
-                // Manejar errores si ocurrieron durante la solicitud AJAX
-                console.error(xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
             }
         });
     }
 
-    function submiteditForm(formId) {
-        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
-        $.ajax({
-            url: '/Tarea/Edit', // URL de la acción Create en el controlador tarea
-            type: 'POST',
-            data: formData,
-            success: function (response) {
+    function submiteditForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
+            url: '/Tarea/Edit', // URL de la acción Edit en el controlador Tarea
+            type: 'POST', // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) { // Función a ejecutar si la solicitud es exitosa
                 // Recargar la página después de enviar el formulario
-                window.location.reload();
+                window.location.reload(); // Recarga la página después de enviar el formulario
             },
-            error: function (xhr, status, error) {
-                // Manejar errores si ocurrieron durante la solicitud AJAX
-                console.error(xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA
+                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
             }
         });
     }
 
-    function eliminarTarea() {
-        // Enviar una solicitud AJAX para eliminar la tarea
-        $.ajax({
-            url: '/Tarea/Delete', // URL de la acción POST para eliminar la tarea
+    function eliminarTarea() { // Función para eliminar un Tarea mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar el Tarea
+            url: '/Tarea/Delete', // URL de la acción POST para eliminar la Tarea
             type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la categoría)
-            success: function (response) {
-                // Recargar la página después de eliminar la Tarea
-                window.location.reload();
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la Tarea)
+            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
+                window.location.reload(); // Recargar la página después de eliminar el Tarea
             },
-            error: function (xhr, status, error) {
-                alert('Error al eliminar la Tarea: ' + xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                alert('Error al eliminar la Tarea: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
             }
         });
     }
 
 
 
-    function cargarVistaCreate(id) {
-        // var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
-        $.ajax({
-            url: "/Tarea/Create/",
-            type: "GET",
-            data: { idProyecto: id }, // Enviar el ID del proyecto como parte de los datos
-            success: function (data) {
-                $("#createModalContent").html(data);
-                $("#createModal").modal("show");
+    function cargarVistaCreate() { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista create
+            url: "/Tarea/Create", // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#createModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "createModalContent"
+                $("#createModal").modal("show"); // Muestra el modal con ID "createModal" después de cargar la vista
             }
         });
     }
 
-
-    function cargarVistaEdit(id) {
-        $.ajax({
-            url: "/Tarea/Edit/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#editModalContent").html(data);
-                $("#editModal").modal("show");
+    function cargarVistaEdit(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista edit
+            url: "/Tarea/Edit/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#editModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "editModalContent"
+                $("#editModal").modal("show"); // Muestra el modal con ID "editModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaDetails(id) {
-        $.ajax({
-            url: "/Tarea/Details/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#detailsModalContent").html(data);
-                $("#detailsModal").modal("show");
+    function cargarVistaDetails(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista details
+            url: "/Tarea/DetailsPartial/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#detailsModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "detailsModalContent"
+                $("#detailsModal").modal("show"); // Muestra el modal con ID "detailsModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaDelete(id) {
-        $.ajax({
-            url: "/Tarea/Delete/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#deleteModalContent").html(data); // Esto muestra el contenido de la tarea
-                $("#deleteModal").modal("show");
+    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista delete
+            url: "/Tarea/Delete/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
+                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
             },
-            error: function () {
-                alert("Error al cargar la vista de eliminación.");
+            error: function () { // Función a ejecutar si la solicitud AJAX falla
+                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
             }
         });
     }

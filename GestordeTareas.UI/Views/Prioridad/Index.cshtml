@@ -7,10 +7,10 @@
 
 }
 
-<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Prioridad</h1>
+<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Prioridades</h1>
 <p>
     <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center"  onclick="cargarVistaCreate()">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Prioridad
+        <i class="fas fa-plus text-lg mr-2"></i> Nueva Prioridad
     </a>
 </p>
 
@@ -155,102 +155,98 @@
 
 <script>
 
-    function submitcreateForm(formId) {
-        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
-        $.ajax({
+    function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
             url: '/Prioridad/Create', // URL de la acción Create en el controlador Prioridad
-            type: 'POST',
-            data: formData,
-            success: function (response) {
+            type: 'POST',  // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) { // Función a ejecutar si la solicitud es exitosa
                 // Manejar la respuesta del servidor si es necesario
-                window.location.reload();
-                $('#createModal').modal('hide');
+                window.location.reload(); // Recarga la página después de enviar el formulario
+                $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
             },
-            error: function (xhr, status, error) {
-                // Manejar errores si ocurrieron durante la solicitud AJAX
-                console.error(xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
             }
         });
     }
 
-    function submiteditForm(formId) {
-        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
-        $.ajax({
+    function submiteditForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
             url: '/Prioridad/Edit', // URL de la acción Edit en el controlador Prioridad
-            type: 'POST',
-            data: formData,
-            success: function (response) {
+            type: 'POST', // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) { // Función a ejecutar si la solicitud es exitosa
                 // Recargar la página después de enviar el formulario
-                window.location.reload();
+                window.location.reload(); // Recarga la página después de enviar el formulario
             },
-            error: function (xhr, status, error) {
-                // Manejar errores si ocurrieron durante la solicitud AJAX
-                console.error(xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA
+                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
             }
         });
     }
-
-    function eliminarPrioridad() {
-        // Enviar una solicitud AJAX para eliminar la prioridad
-        $.ajax({
-            url: '/Prioridad/Delete', // URL de la acción POST para eliminar la prioridad
+    
+    function eliminarPrioridad() { // Función para eliminar una Prioridad mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar la Prioridad
+            url: '/Prioridad/Delete', // URL de la acción POST para eliminar la Prioridad
             type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la prioridad)
-            success: function (response) {
-                // Recargar la página después de eliminar la prioridad
-                window.location.reload();
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la Prioridad)
+            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
+                window.location.reload(); // Recargar la página después de eliminar la Prioridad
             },
-            error: function (xhr, status, error) {
-                alert('Error al eliminar la prioridad: ' + xhr.responseText);
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                alert('Error al eliminar la Prioridad: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
             }
         });
     }
 
 
 
-    function cargarVistaCreate() {
-        $.ajax({
-            url: "/Prioridad/Create",
-            type: "GET",
-            success: function (data) {
-                $("#createModalContent").html(data);
-                $("#createModal").modal("show");
+    function cargarVistaCreate() { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista create
+            url: "/Prioridad/Create", // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#createModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "createModalContent"
+                $("#createModal").modal("show"); // Muestra el modal con ID "createModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaEdit(id) {
-        $.ajax({
-            url: "/Prioridad/Edit/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#editModalContent").html(data);
-                $("#editModal").modal("show");
+    function cargarVistaEdit(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista edit
+            url: "/Prioridad/Edit/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#editModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "editModalContent"
+                $("#editModal").modal("show"); // Muestra el modal con ID "editModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaDetails(id) {
-        $.ajax({
-            url: "/Prioridad/DetailsPartial/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#detailsModalContent").html(data);
-                $("#detailsModal").modal("show");
+    function cargarVistaDetails(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista details
+            url: "/Prioridad/DetailsPartial/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#detailsModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "detailsModalContent"
+                $("#detailsModal").modal("show"); // Muestra el modal con ID "detailsModal" después de cargar la vista
             }
         });
     }
 
-    function cargarVistaDelete(id) {
-        $.ajax({
-            url: "/Prioridad/Delete/" + id,
-            type: "GET",
-            success: function (data) {
-                $("#deleteModalContent").html(data); // Esto muestra el contenido de la prioridad
-                $("#deleteModal").modal("show");
+    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista delete
+            url: "/Prioridad/Delete/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
+                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
             },
-            error: function () {
-                alert("Error al cargar la vista de eliminación.");
+            error: function () { // Función a ejecutar si la solicitud AJAX falla
+                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
             }
         });
     }
