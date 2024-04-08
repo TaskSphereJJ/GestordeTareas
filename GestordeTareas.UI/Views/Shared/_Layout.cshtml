@@ -97,9 +97,8 @@
 
      @* SIDEBAR *@
     @* <!-- drawer component --> *@
-    <div id="drawer-navigation"
-        class="border-r-purple-900 border-t-purple-900 border-b-purple-900 border-2 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transform -translate-x-full transition-transform ease-in-out duration-300 flex flex-col"
-        tabindex="-1" aria-labelledby="drawer-navigation-label">
+    <div id="drawer-navigation" class="border-r-purple-900 dark:bg-darkPurple  menupa border-t-purple-900 border-b-purple-900 border-2 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transform -translate-x-full          transition-transform ease-in-out duration-300 flex flex-col menu"
+            tabindex="-1" aria-labelledby="drawer-navigation-label">
             <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
                 Menu
             </h5>
@@ -114,9 +113,9 @@
                 <span class="sr-only">Close menu</span>
             </button>
 
-        <div class="py-4 flex-1">
+        <div class="py-4 flex-1 menu">
             @* <!-- Contenido del sidebar --> *@
-            <div class="flex flex-col justify-between">
+            <div class="flex flex-col justify-between menu">
                 <nav class="space-y-3">
                     <!-- home -->
                     <a class="flex no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
