@@ -42,7 +42,6 @@
         </p>
     }
 
-<<<<<<< HEAD
     <div id="tabla" class="tabla">
     <!-- Contenido de la vista de tabla -->
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
@@ -58,31 +57,6 @@
                     <th scope="col" class="px-6 py-3">
                         @Html.DisplayNameFor(model => model.Descripcion)
                     </th>
-=======
-@* En esta parte si Model es diferente de null quiere decir que hay tareas existente y mostrara desde la primera tarea hasta las que hayan*@
-@if (Model != null && Model.Any())
-{
-    var tarea = Model.First();
-    // Inicializar 'tarea' con el primer elemento de 'Model'
-    <p>
-        <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
-            <i class="fas fa-plus text-lg mr-2"></i> Nueva Tarea
-        </a>
-    </p>
-}
-else
-{
-    @*Por otro lado si es null quiere decir que no hay tarea y mostrara el texto No hay tareas disponibles
-      Y mostrara el boton crear nueva tarea para agregar una tarea. Cuando se haya creado la primer tarea se cumplira 
-      la primera condicion por lo que el texto No hay tareas disponibles desaparecera 
-    *@
-    <h4>No hay tareas disponibles</h4>
-    <p>
-        <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(1002)">
-            <i class="fas fa-plus text-lg mr-2"></i> Nueva Tarea
-        </a>
-    </p>
->>>>>>> db86e5f9b0ee8e9efb342bd30535e39bfd1b912d
 
                     <th scope="col" class="px-6 py-3">
                         @Html.DisplayNameFor(model => model.FechaCreacion)

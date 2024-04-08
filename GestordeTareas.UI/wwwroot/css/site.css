@@ -162,6 +162,9 @@ body.light {
     left: 100%;
   }
 }
+.dark .infor{
+  color: #e5e5e5;
+}
 /* MODO DARK DE LAS TABLAS
 /* Table Styles */
 table {
