@@ -9,13 +9,9 @@
   
 }
 
-<<<<<<< HEAD
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tarea</h1>
 <button onclick="toggleView()" class="btn btn-primary mb-4">Cambiar Vista</button>
-=======
 
-<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tareas</h1>
->>>>>>> db86e5f9b0ee8e9efb342bd30535e39bfd1b912d
 
 @* <p>
     <a href="" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
@@ -28,7 +24,7 @@
         var tarea = Model.First();
         <p>
             <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
-                <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
+                <i class="fas fa-plus text-lg mr-2"></i> Nueva Tarea
             </a>
         </p>
     }
@@ -37,7 +33,7 @@
         <h4>No hay tareas disponibles</h4>
         <p>
             <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(1002)">
-                <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
+                <i class="fas fa-plus text-lg mr-2"></i> Nueva Tarea
             </a>
         </p>
     }
@@ -334,14 +330,13 @@
         }
     }
 
-    function submitcreateForm(formId) {
-        var formData = $('#' + formId).serialize(); // Recopila los datos del formulario
-        $.ajax({
-            url: '/Tarea/Create', // URL de la acción Create en el controlador tarea
-            type: 'POST',
-            data: formData,
-            success: function (response) {
-                // Manejar la respuesta del servidor si es necesario
+    function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
+            url: '/Tarea/Create', // URL de la acción Create en el controlador Tarea
+            type: 'POST',  // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) { // Función a ejecutar si la solicitud es exitosa
                 window.location.reload(); // Recarga la página después de enviar el formulario
                 $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
             },
@@ -358,7 +353,6 @@
             type: 'POST', // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
             success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                // Recargar la página después de enviar el formulario
                 window.location.reload(); // Recarga la página después de enviar el formulario
             },
             error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA

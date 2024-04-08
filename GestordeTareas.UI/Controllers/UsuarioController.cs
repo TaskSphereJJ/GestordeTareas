@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -15,8 +16,24 @@ namespace GestordeTareas.UI.Controllers
     public class UsuarioController : Controller
     {
         UsuarioBL _usuarioBL = new UsuarioBL();
-
         CargoBL cargoBL = new CargoBL();
+        private readonly CargoBL _cargoBL;
+
+        public UsuarioController()
+        {
+            _cargoBL = new CargoBL();
+
+        }
+
+        //MÉTODO PARA CARGAR LISTAS DESPLEGABLES SELECCIONABLES 
+        private async Task LoadDropDownListsAsync()
+        {
+            // Obtener todos los datos 
+            var cargos = await _cargoBL.GetAllAsync();
+
+            // Se crean SelectList para cada entidad con las propiedades Id como valor y Nombre como texto visible
+            ViewBag.Cargos = new SelectList(cargos, "Id", "Nombre");
+        }
 
 
         // GET: UsuarioController
@@ -116,8 +133,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-            ViewBag.Cargos = await cargoBL.GetAllAsync();
-            ViewBag.Error = "";
+            await LoadDropDownListsAsync(); //Se llama al método y se espera que cargue
             return View(userDb);
         }
 
@@ -134,7 +150,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                ViewBag.Cargos = await cargoBL.GetAllAsync();
+                await LoadDropDownListsAsync();
                 return View(usuario);
             }
         }

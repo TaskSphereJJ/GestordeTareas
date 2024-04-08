@@ -12,14 +12,14 @@
             <div class="w-full flex-1 mt-4">
                 <div class="my-6 border-b text-center">
                     <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2">
-                        Ingrese su correo de Usuario y contraseña
+                        Ingrese su correo electrónico y contraseña
                     </div>
                 </div>
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="mx-auto max-w-xs">
-                        <input asp-for="NombreUsuario" class="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Nombre de Usuario" />
+                        <input asp-for="NombreUsuario" class="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Correo electrónico" />
                         <span asp-validation-for="NombreUsuario" class="text-danger"></span>
                         <input asp-for="Pass" type="password" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Password" />
                         <span asp-validation-for="Pass" class="text-danger"></span>

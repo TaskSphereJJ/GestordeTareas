@@ -37,7 +37,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdCargo" class="control-label"></label>
-                <input asp-for="IdCargo" class="form-control" />
+                <select asp-for="IdCargo" class="form-control" asp-items="@ViewBag.Cargos">
+                    <option value="">Seleccionar</option>
+                </select>
                 <span asp-validation-for="IdCargo" class="text-danger"></span>
             </div>
             <div class="form-group">

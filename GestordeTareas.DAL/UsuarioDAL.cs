@@ -122,7 +122,7 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los usuarios y los asigna a la variable usuarios.
-                usuarios = await bdContexto.Usuario.ToListAsync();
+                usuarios = await bdContexto.Usuario.Include(c => c.Cargo).ToListAsync();
             }
             // Retorna la lista de usuarios.
             return usuarios;
