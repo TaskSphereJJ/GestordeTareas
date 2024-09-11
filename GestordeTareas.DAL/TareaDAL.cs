@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,19 +102,31 @@ namespace GestordeTareas.DAL
         // Filtra las tareas por el ID del proyecto proporcionado 
         public static async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
         {
-            using (var dbContext = new ContextoBD())
+            try
             {
-                var tareas = await dbContext.Tarea
-                    .Include(c => c.Categoria)
-                    .Include(p => p.Prioridad)
-                    .Include(e => e.EstadoTarea)
-                    .Include(r => r.Proyecto)
-                    .Where(t => t.IdProyecto == proyectoId)  // Filtrar por el ID del proyecto
-                    .ToListAsync();
+                using (var dbContext = new ContextoBD())
+                {
+                    var tareas = await dbContext.Tarea
+                        .Include(c => c.Categoria)
+                        .Include(p => p.Prioridad)
+                        .Include(e => e.EstadoTarea)
+                        .Include(r => r.Proyecto)
+                        .Where(t => t.IdProyecto == proyectoId)
+                        .ToListAsync();
 
-                return tareas;
+                    // Verificar el conteo de tareas
+                    Debug.WriteLine($"Tareas encontradas: {tareas.Count}");
+
+                    return tareas;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                return new List<Tarea>(); // Retorna una lista vacía en caso de error
             }
         }
+
 
         //metodo para poder cambiar el estado de las tareas
         public static async Task<int> ActualizarEstadoTareaAsync(int idTarea, int idEstadoTarea)

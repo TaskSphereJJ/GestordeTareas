@@ -15,7 +15,7 @@ var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// configurar la autenticación
+// configurar la autenticaciï¿½n
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
     AddCookie((options) =>
     {
@@ -53,7 +53,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseAuthentication(); // poner en uso la autenticación
+app.UseAuthentication(); // poner en uso la autenticaciï¿½n
 
 app.MapControllerRoute(
     name: "default",

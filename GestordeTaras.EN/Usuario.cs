@@ -56,7 +56,7 @@ namespace GestordeTaras.EN
         [Display(Name = "Confirmar la contraseña")]
         public string ConfirmPassword_Aux { get; set; } = string.Empty; // propiedad auxiliar
 
-        public Cargo? Cargo { get; set; } // propiedad de navegación
+        public Cargo Cargo { get; set; } // propiedad de navegación
     }
     public enum User_Status
     {

@@ -35,7 +35,7 @@ namespace GestordeTaras.EN
 
         public Usuario Usuario { get; set; }
 
-        public List<Tarea> Tareas { get; set; } // Propiedad de navegación
+        public List<Tarea> Tareas { get; set; } = new List<Tarea>(); // Inicializar la lista de tareas
 
     }
 }

@@ -104,14 +104,15 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: UsuarioController/Create
+        [AllowAnonymous]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Cargos = await cargoBL.GetAllAsync();
-            ViewBag.Error = "";
+            await LoadDropDownListsAsync();
             return View();
         }
 
         // POST: UsuarioController/Create
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Usuario usuario)
