@@ -9,112 +9,104 @@
 }
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tareas</h1>
-<button onclick="toggleView()" class="btn btn-primary mb-4">Cambiar Vista</button>
-
-
-@* <p>
-    <a href="" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
-        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
-    </a>
-</p> *@
 
 @* En esta parte si Model es diferente de null quiere decir que hay tareas existente y mostrara desde la primera tarea hasta las que hayan*@
 @if (Model != null && Model.Any())
 {
     var tarea = Model.First();
 // Inicializar 'tarea' con el primer elemento de 'Model'
+
+    <p>
+        <button onclick="toggleView()" class="btn btn-primary mb-4">Cambiar Vista</button>
+    </p>
     <p>
         <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
             <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
         </a>
     </p>
+
+    <div id="tabla" class="tabla">
+        <!-- Contenido de la vista de tabla -->
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <thead class=" text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.FechaCreacion)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.FechaVencimiento)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.IdCategoria)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.IdPrioridad)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.IdEstadoTarea)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Html.DisplayNameFor(model => model.IdProyecto)
+                        </th>
+
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
+                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Proyecto.Titulo)</td>
+                            <td class="px-6 py-4 flex justify-center items-center space-x-2">
+                                <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
+                                    <i class="fas fa-edit text-lg"></i>
+                                </a>
+                                <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
+                                    <i class="fas fa-eye text-lg"></i>
+                                </a>
+                                <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
+                                    <i class="fas fa-trash-alt text-lg"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 }
 else
 {
-    @*Por otro lado si es null quiere decir que no hay tarea y mostrara el texto No hay tareas disponibles
-      Y mostrara el boton crear nueva tarea para agregar una tarea. Cuando se haya creado la primer tarea se cumplira
-      la primera condicion por lo que el texto No hay tareas disponibles desaparecera
-    *@
-    <h4>No hay tareas disponibles</h4>
-    <p>
-        <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(27)">
-            <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
-        </a>
-    </p>
+    <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-4 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
+        <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
+    </a>
+    <div class="text-center">      
+        <h1 class="text-3xl font-extrabold text-gray-700">No hay tareas disponibles</h1>
+    </div>
 
 }
-
-
-    <div id="tabla" class="tabla">
-    <!-- Contenido de la vista de tabla -->
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <thead class=" text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.Id)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.Nombre)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.Descripcion)
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.FechaCreacion)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.FechaVencimiento)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.IdCategoria)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.IdPrioridad)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.IdEstadoTarea)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        @Html.DisplayNameFor(model => model.IdProyecto)
-                    </th>
-
-                    <th scope="col" class="px-6 py-3 text-center">
-                        Acciones
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
-                        <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Proyecto.Titulo)</td>
-                        <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                            <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
-                                <i class="fas fa-edit text-lg"></i>
-                            </a>
-                            <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
-                                <i class="fas fa-eye text-lg"></i>
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
-                                <i class="fas fa-trash-alt text-lg"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
 
 <div id="tarjetas" class="hidden">
     <!-- Contenido de la vista de tarjetas -->
@@ -384,13 +376,15 @@ else
 
 
 
-    function cargarVistaCreate() { // Funcion para cargar la vista en un modal
-        $.ajax({ //solicitud AJAX para obtener la vista create
-            url: "/Tarea/Create", // URL de la vista que se va a cargar
-            type: "GET", // Solicitud para obtener la vista
-            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
-                $("#createModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "createModalContent"
-                $("#createModal").modal("show"); // Muestra el modal con ID "createModal" después de cargar la vista
+    function cargarVistaCreate(id) {
+        // var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
+        $.ajax({
+            url: "/Tarea/Create/",
+            type: "GET",
+            data: { idProyecto: id }, // Enviar el ID del proyecto como parte de los datos
+            success: function (data) {
+                $("#createModalContent").html(data);
+                $("#createModal").modal("show");
             }
         });
     }

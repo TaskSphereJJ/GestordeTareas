@@ -37,6 +37,7 @@ namespace GestordeTareas.UI.Controllers
 
             // Aquí cargas las tareas asociadas al proyecto con el ID proporcionado
             var tareas = await _tareaBL.GetTareasByProyectoIdAsync(proyectoId);
+            ViewBag.ProyectoId = proyectoId;
             return View(tareas);
         }
 
@@ -65,6 +66,7 @@ namespace GestordeTareas.UI.Controllers
 
             // Pasar el IdProyecto a la vista a través del ViewBag
             ViewBag.ProyectoId = tarea.IdProyecto;
+            ViewBag.EstadoPendienteId = await EstadoTareaDAL.GetEstadoPendienteIdAsync();
 
             // Devolver una vista parcial con el modelo de tarea
             return PartialView("Create", tarea);
