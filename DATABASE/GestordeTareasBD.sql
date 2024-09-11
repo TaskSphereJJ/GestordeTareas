@@ -49,6 +49,7 @@ CREATE TABLE Usuario (
 
 );
 
+select * from usuario;
 GO
 -- Creación del proyecto
 CREATE TABLE Proyecto (
@@ -119,36 +120,34 @@ INSERT INTO EstadoTarea (Nombre) VALUES ('Pendiente'), ('En Proceso'), ('Finaliz
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
 VALUES 
-  ('Juan', 'Perez', 'juanperez', '123456', '123456789', '1990-01-01', GETDATE(), 1, 1),
-  ('Maria', 'Gonzalez', 'mariagonzalez', 'abcdef', '987654321', '1985-05-15', GETDATE(), 1, 2 ),
-  ('Pedro', 'Rodriguez', 'pedrorodriguez', 'password', '555555555', '1998-10-20', GETDATE(), 1, 3 ),
   ('lester', 'serrano', 'lesterserrano', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
+  --La contraseña de este usuario es 12345
+
 
 -- Insertar datos en la tabla Proyecto
 INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
 VALUES 
   ('Proyecto A', 'Descripción del Proyecto A', '2024-12-31', 1),
-  ('Proyecto B', 'Descripción del Proyecto B', '2025-03-31', 2),
-  ('Proyecto C', 'Descripción del Proyecto C', '2025-06-30', 3);
+  ('Proyecto B', 'Descripción del Proyecto B', '2025-03-31', 1),
+  ('Proyecto C', 'Descripción del Proyecto C', '2025-06-30', 1);
 
   -- Insertar datos en la tabla Tarea
 INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
 VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 2),
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1),
   ('Tarea 2', 'Descripción de la Tarea 2', GETDATE(), '2025-03-31', 2, 2, 1, 2),
   ('Tarea 3', 'Descripción de la Tarea 3', GETDATE(), '2025-06-30', 3, 3, 1, 3);
 
   INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
 VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 20);
-
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1);
 
 -- Insertar datos en la tabla ElegirTarea
 INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
 VALUES 
   (GETDATE(), 1, 1, 1),
-  (GETDATE(), 2, 2, 2),
-  (GETDATE(), 3, 3, 3);
+  (GETDATE(), 2, 1, 2),
+  (GETDATE(), 3, 1, 3);
 
 -- Insertar datos en la tabla TareaFinalizada
 INSERT INTO TareaFinalizada (FechaFinalizacion, Comentarios, IdElegirTarea)
@@ -164,5 +163,3 @@ VALUES
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
 
-
-  
