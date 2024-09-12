@@ -28,7 +28,7 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())//hago una instancia de la base de datos
             {
                 //expresion landam
-                var cargoBD = await bdContexto.Categoria.FirstOrDefaultAsync(c => c.Id == cargo.Id); //lo busco 
+                var cargoBD = await bdContexto.Cargo.FirstOrDefaultAsync(c => c.Id == cargo.Id); //lo busco 
                 if (cargoBD != null)//verifico que no este nulo
                 {
                     cargoBD.Nombre = cargo.Nombre; //actualizo las propiedades
@@ -53,16 +53,17 @@ namespace GestordeTareas.DAL
             }
             return result;
         }
-        //--------------------------------METODO obtenerporID CATEGORIA.--------------------------
+        //--------------------------------METODO obtenerporID CARGO.--------------------------
         public static async Task<Cargo> GetByIdAsync(Cargo cargo)
         {
             var cargoBD = new Cargo();
             using (var bdContexto = new ContextoBD())
             {
-                var cargob = await bdContexto.Cargo.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id
+                cargoBD = await bdContexto.Cargo.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id y asigno el resultado a cargoBD
             }
             return cargoBD;
         }
+
         //--------------------------------METODO obtener todas las CATEGORIAS.--------------------------
         public static async Task<List<Cargo>> GetAllAsync()
         {

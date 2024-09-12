@@ -18,10 +18,11 @@ namespace GestordeTareas.BL
         {
             return await CategoriaDAL.UpdateAsync(categoria);
         }
-        public async Task<int> DeliteAsync(Categoria categoria)
+        public async Task<int> DeleteAsync(Categoria categoria)
         {
-            return await CategoriaDAL.UpdateAsync(categoria);
+            return await CategoriaDAL.DeleteAsync(categoria);
         }
+
         public async Task<Categoria> GetById(Categoria categoria)
         {
             return await CategoriaDAL.GetByIdAsync(categoria);
@@ -29,6 +30,10 @@ namespace GestordeTareas.BL
         public async Task<List<Categoria>> GetAllAsync()
         {
             return await CategoriaDAL.GetAllAsync();
+        }
+        public async Task<List<Categoria>> SearchAsync(Categoria category)
+        {
+            return await CategoriaDAL.SearchAsync(category);
         }
     }
 }

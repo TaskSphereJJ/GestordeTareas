@@ -18,9 +18,9 @@ namespace GestordeTareas.BL
         {
             return await TareaDAL.UpdateAsync(tarea);
         }
-        public async Task<int> DeliteAsync(Tarea tarea)
+        public async Task<int> DeleteAsync(Tarea tarea)
         {
-            return await TareaDAL.UpdateAsync(tarea);
+            return await TareaDAL.DeleteAsync(tarea);
         }
         public async Task<Tarea> GetById(Tarea tarea)
         {
@@ -30,5 +30,16 @@ namespace GestordeTareas.BL
         {
             return await TareaDAL.GetAllAsync();
         }
+        public async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
+        {
+            return await TareaDAL.GetTareasByProyectoIdAsync(proyectoId);
+        }
+
+        //modificar el estado 
+        public async Task<int> ActualizarEstadoTareaAsync(int idTarea, int idEstadoTarea)
+        {
+            return await TareaDAL.ActualizarEstadoTareaAsync(idTarea, idEstadoTarea);
+        }
+
     }
 }

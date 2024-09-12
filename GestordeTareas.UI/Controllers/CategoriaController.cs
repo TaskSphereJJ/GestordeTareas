@@ -1,10 +1,13 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestordeTareas.UI.Controllers
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class CategoriaController : Controller
     {
         private readonly CategoriaBL _categoriaBL;
@@ -17,21 +20,23 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController
         public async Task<ActionResult> Index()
         {
-            var categorias = await _categoriaBL.GetAllAsync();
-            return View(categorias);
+            List<Categoria> Lista = await _categoriaBL.GetAllAsync();
+
+            return View(Lista);
         }
 
+
         // GET: CategoriaController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> DetailsPartial(int id)
         {
             var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
-            return View(categoria);
+            return PartialView("Details", categoria);
         }
 
         // GET: CategoriaController/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView("Create");
         }
 
         // POST: CategoriaController/Create
@@ -47,7 +52,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View();
+                return PartialView("Create", categoria);
             }
         }
 
@@ -55,7 +60,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
-            return View(categoria);
+            return PartialView("Edit", categoria);
         }
 
         // POST: CategoriaController/Edit/5
@@ -79,7 +84,7 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var categoria = await _categoriaBL.GetById(new Categoria { Id = id });
-            return View(categoria);
+            return PartialView("Delete", categoria);
 
         }
 
@@ -90,7 +95,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _categoriaBL.DeliteAsync(categoria);
+                await _categoriaBL.DeleteAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)

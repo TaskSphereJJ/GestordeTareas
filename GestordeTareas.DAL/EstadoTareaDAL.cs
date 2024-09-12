@@ -11,7 +11,7 @@ namespace GestordeTareas.DAL
     public class EstadoTareaDAL
     {
         // Método para crear un nuevo estado de tarea en la base de datos de forma asincrónica.
-        public static async Task<int> CreateAsync(EstadoTareaEN estadoTarea)
+        public static async Task<int> CreateAsync(EstadoTarea estadoTarea)
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
@@ -26,13 +26,13 @@ namespace GestordeTareas.DAL
         }
 
         // Método para actualizar un estado de tarea existente en la base de datos de forma asincrónica.
-        public static async Task<int> UpdateAsync(EstadoTareaEN estadoTarea)
+        public static async Task<int> UpdateAsync(EstadoTarea estadoTarea)
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
                 // Busca el estado de tarea existente por su ID.
-                var estadoTareaDB = await dbContext.EstadoTareaEN.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
+                var estadoTareaDB = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
                 if (estadoTareaDB != null)
                 {
                     // Actualiza las propiedades del estado de tarea con los nuevos valores.
@@ -49,17 +49,17 @@ namespace GestordeTareas.DAL
         }
 
         // Método para eliminar un estado de tarea de la base de datos de forma asincrónica.
-        public static async Task<int> DeleteAsync(EstadoTareaEN estadoTarea)
+        public static async Task<int> DeleteAsync(EstadoTarea estadoTarea)
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
                 // Busca el estado de tarea existente por su ID.
-                var estadoTareaDB = await dbContext.EstadoTareaEN.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
+                var estadoTareaDB = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
                 if (estadoTareaDB != null)
                 {
                     // Elimina el estado de tarea del DbSet correspondiente en el contexto.
-                    dbContext.EstadoTareaEN.Remove(estadoTareaDB);
+                    dbContext.EstadoTarea.Remove(estadoTareaDB);
                     // Guarda los cambios en la base de datos.
                     result = await dbContext.SaveChangesAsync();
                 }
@@ -69,30 +69,47 @@ namespace GestordeTareas.DAL
         }
 
         // Método para obtener un estado de tarea por su ID de forma asincrónica.
-        public static async Task<EstadoTareaEN> GetByIdAsync(EstadoTareaEN estadoTarea)
+        public static async Task<EstadoTarea> GetByIdAsync(EstadoTarea estadoTarea)
         {
-            var estadoTareaDB = new EstadoTareaEN();
+            var estadoTareaDB = new EstadoTarea();
             using (var dbContext = new ContextoBD())
             {
                 // Busca el estado de tarea por su ID y asigna el resultado a la variable estadoTareaDB.
-                estadoTareaDB = await dbContext.EstadoTareaEN.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
+                estadoTareaDB = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Id == estadoTarea.Id);
             }
             // Retorna el estado de tarea encontrado.
             return estadoTareaDB;
         }
 
         // Método para obtener todos los estados de tarea de la base de datos de forma asincrónica.
-        public static async Task<List<EstadoTareaEN>> GetAllAsync()
+        public static async Task<List<EstadoTarea>> GetAllAsync()
         {
-            var estadoTareas = new List<EstadoTareaEN>();
+            var estadoTareas = new List<EstadoTarea>();
             using (var bdContexto = new ContextoBD())
             {
                 // Obtiene todos los estados de tarea y los asigna a la variable estadoTareas.
-                estadoTareas = await bdContexto.EstadoTareaEN.ToListAsync();
+                estadoTareas = await bdContexto.EstadoTarea.ToListAsync();
             }
             // Retorna la lista de estados de tarea.
             return estadoTareas;
         }
+
+        public static async Task<int> GetEstadoPendienteIdAsync()
+        {
+            int estadoPendienteId = 0;
+            using (var dbContext = new ContextoBD())
+            {
+                // Busca el estado "Pendiente" en la base de datos y obtén su ID.
+                var estadoPendiente = await dbContext.EstadoTarea.FirstOrDefaultAsync(e => e.Nombre == "Pendiente");
+                if (estadoPendiente != null)
+                {
+                    estadoPendienteId = estadoPendiente.Id;
+                }
+            }
+            // Retorna el ID del estado "Pendiente".
+            return estadoPendienteId;
+        }
+
 
     }
 
