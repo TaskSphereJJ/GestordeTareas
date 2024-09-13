@@ -203,9 +203,6 @@ namespace GestordeTareas.UI.Controllers
             }
         }
 
-
-
-
         public class TareaUpdateModel
         {
             public int IdTarea { get; set; }

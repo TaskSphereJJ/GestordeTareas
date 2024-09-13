@@ -91,6 +91,10 @@ else
 
 }
 
+<div id="message-box" class="fixed bottom-4 right-4 p-4 rounded-md text-white bg-green-500 hidden">
+    <!-- El contenido del mensaje se actualizará desde JavaScript -->
+</div>
+
 <div id="tarjetas" class="hidden">
     <!-- Contenido de la vista de tarjetas -->
     <div class="container mx-auto">
@@ -274,6 +278,19 @@ else
     document.addEventListener('DOMContentLoaded', function () {
         const draggables = document.querySelectorAll('.draggable-card');
         const containers = document.querySelectorAll('.droppable');
+        const messageBox = document.getElementById('message-box');
+
+        function showMessage(message, type) {
+            // Actualiza el contenido y el estilo del mensaje
+            messageBox.textContent = message;
+            messageBox.className = `fixed bottom-4 right-4 p-4 rounded-md text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} transition-opacity duration-300`;
+            messageBox.classList.remove('hidden');
+
+            // Oculta el mensaje después de 5 segundos
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000);
+        }
 
         draggables.forEach(draggable => {
             draggable.addEventListener('dragstart', () => {
@@ -292,19 +309,13 @@ else
 
             container.addEventListener('drop', async e => {
                 e.preventDefault();
-                console.log('Drop event triggered');
                 const dragging = document.querySelector('.dragging');
                 if (dragging) {
-                    console.log('Dragging element:', dragging);
-                    // Obtener el nuevo estado basado en la columna
-                    const newState = container.getAttribute('data-state'); // Asegúrate de definir este atributo en tu HTML
-
-                    // Obtener el ID de la tarea arrastrada
+                    const newState = container.getAttribute('data-state'); 
                     const taskId = dragging.getAttribute('data-id');
 
-                    // Actualizar la tarea en el servidor
                     try {
-                        const response = await fetch('/Tarea/update-state', {  // Usa la ruta para MVC
+                        const response = await fetch('/Tarea/update-state', {  
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -316,25 +327,22 @@ else
                         });
 
                         if (response.ok) {
-                            // La actualización fue exitosa, puedes manejar la respuesta aquí si es necesario
-                            console.log('Tarea actualizada con éxito');
+                            dragging.setAttribute('data-state', newState);
+                            console.log('Updated Data State:', dragging.getAttribute('data-state'));
+                            showMessage('Tarea actualizada con éxito', 'success');
+                            container.appendChild(dragging);
+                            
                         } else {
-                            console.error('Error al actualizar la tarea');
+                            showMessage('Error al actualizar la tarea', 'error');
                         }
                     } catch (error) {
-                        console.error('Error de red:', error);
+                        showMessage('Error de red: ' + error.message, 'error');
                     }
-
-                    // Mover la tarea a la nueva columna
-                    container.appendChild(dragging);
+                                        
                 }
             });
         });
     });
-
-
-
-
 
 
     function toggleView() {
