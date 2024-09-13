@@ -76,7 +76,7 @@ namespace GestordeTareas.UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Tarea tarea, int idProyecto)
-        {         
+        {
             try
             {
                 // Asignar el ID del proyecto a la tarea
@@ -86,7 +86,7 @@ namespace GestordeTareas.UI.Controllers
                 tarea.IdEstadoTarea = estadoPendienteId;
 
                 int result = await _tareaBL.CreateAsync(tarea);
-                return RedirectToAction(nameof(Index), new {id = idProyecto});
+                return RedirectToAction(nameof(Index), new { id = idProyecto });
             }
             catch (Exception ex)
             {
@@ -95,10 +95,10 @@ namespace GestordeTareas.UI.Controllers
                 // Volver a cargar las listas desplegables u otros datos necesarios para la vista
                 await LoadDropDownListsAsync();
 
-              //  ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
+                //  ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
                 // Devolver la vista parcial "Create" con la tarea y el ID de proyecto
                 return PartialView("Create", new Tarea { IdProyecto = idProyecto });
-               // return PartialView("Create", tarea);
+                // return PartialView("Create", tarea);
             }
         }
 
@@ -136,7 +136,7 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _tareaBL.UpdateAsync(tarea);
-                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto});
+                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
@@ -162,7 +162,7 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _tareaBL.DeleteAsync(tarea);
-                return RedirectToAction(nameof(Index), new {id = tarea.IdProyecto});
+                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
@@ -173,21 +173,40 @@ namespace GestordeTareas.UI.Controllers
 
         //ACTUALIZAR ESTADO
         [HttpPost]
-        [HttpPost]
-        public async Task<ActionResult> ActualizarEstadoTarea(Tarea tarea)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActualizarEstadoTarea([FromBody] TareaEstadoUpdateModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                await _tareaBL.UpdateAsync(tarea);
-                return Json(new { success = true });
+                try
+                {
+                    var tarea = await _tareaBL.GetById(new Tarea { Id = model.IdTarea });
+
+                    if (tarea == null)
+                    {
+                        return Json(new { success = false, message = "Tarea no encontrada" });
+                    }
+
+                    // Actualizar el estado de la tarea
+                    tarea.IdEstadoTarea = model.IdEstadoTarea;
+                    await _tareaBL.UpdateAsync(tarea);
+
+                    return Json(new { success = true });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message });
+                }
             }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, error = ex.Message });
-            }
+
+            return Json(new { success = false, message = "Datos inválidos" });
         }
 
-
+        public class TareaEstadoUpdateModel
+        {
+            public int IdTarea { get; set; }
+            public int IdEstadoTarea { get; set; } // Ajusta el tipo de datos según tu implementación
+        }
 
     }
 }
