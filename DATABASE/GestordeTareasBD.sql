@@ -105,6 +105,7 @@ CREATE TABLE ImagenesPrueba (
 
 GO
 
+<<<<<<< HEAD
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Supervisor');
 
@@ -163,3 +164,5 @@ VALUES
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
 
+=======
+>>>>>>> 8ce03b7f573a4decd8853c95a47d499887380b05
