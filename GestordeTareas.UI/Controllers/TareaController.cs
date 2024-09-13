@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -171,41 +172,44 @@ namespace GestordeTareas.UI.Controllers
             }
         }
 
-        //ACTUALIZAR ESTADO
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ActualizarEstadoTarea([FromBody] TareaEstadoUpdateModel model)
+        [Route("Tarea/update-state")]
+        public async Task<IActionResult> ActualizarEstadoTarea([FromBody] TareaUpdateModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                using (var bdContexto = new ContextoBD())
                 {
-                    var tarea = await _tareaBL.GetById(new Tarea { Id = model.IdTarea });
-
-                    if (tarea == null)
+                    var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == model.IdTarea);
+                    if (tareaBD != null)
                     {
-                        return Json(new { success = false, message = "Tarea no encontrada" });
+                        var estadoValido = await bdContexto.EstadoTarea.FindAsync(model.IdEstadoTarea);
+                        if (estadoValido == null) return BadRequest("Estado no válido.");
+
+                        tareaBD.IdEstadoTarea = model.IdEstadoTarea;
+                        bdContexto.Update(tareaBD);
+                        await bdContexto.SaveChangesAsync();
+                        return Ok();
                     }
-
-                    // Actualizar el estado de la tarea
-                    tarea.IdEstadoTarea = model.IdEstadoTarea;
-                    await _tareaBL.UpdateAsync(tarea);
-
-                    return Json(new { success = true });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { success = false, message = ex.Message });
+                    else
+                    {
+                        return NotFound("Tarea no encontrada.");
+                    }
                 }
             }
-
-            return Json(new { success = false, message = "Datos inválidos" });
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al actualizar la tarea: {ex.Message}");
+            }
         }
 
-        public class TareaEstadoUpdateModel
+
+
+
+        public class TareaUpdateModel
         {
             public int IdTarea { get; set; }
-            public int IdEstadoTarea { get; set; } // Ajusta el tipo de datos según tu implementación
+            public int IdEstadoTarea { get; set; }
         }
 
     }
