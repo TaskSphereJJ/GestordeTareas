@@ -59,7 +59,7 @@
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
+                            <td class="px-6 py-4 text-center estado" data-id="@item.Id">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
                             <td class="px-6 py-4 flex justify-center items-center space-x-2">
                                 <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
@@ -119,7 +119,7 @@ else
                                         <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
                                         <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
                                         <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
-                                        <p class="text-xs mt-1"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
+                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
                                         <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
                                         <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
                                     </div>
@@ -137,7 +137,7 @@ else
                                         <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
                                         <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
                                         <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
-                                        <p class="text-xs mt-1"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
+                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
                                         <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
                                         <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
                                     </div>
@@ -155,7 +155,7 @@ else
                                         <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
                                         <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
                                         <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
-                                        <p class="text-xs mt-1"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
+                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
                                         <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
                                         <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
                                     </div>
@@ -327,8 +327,19 @@ else
                         });
 
                         if (response.ok) {
+                            const data = await response.json();
                             dragging.setAttribute('data-state', newState);
-                            console.log('Updated Data State:', dragging.getAttribute('data-state'));
+
+                            const tabla = dragging.querySelector('.estado');
+                            if (tabla) {
+                                // Actualiza solo el texto del estado manteniendo el prefijo
+                                tabla.innerHTML = `<strong>Estado:</strong> ${data.nombreEstado}`;
+                            }
+                            const celda = document.querySelectorAll(`.estado[data-id="${taskId}"]`);
+                            celda.forEach(cell => {
+                                cell.textContent = data.nombreEstado;
+                            });
+
                             showMessage('Tarea actualizada con éxito', 'success');
                             container.appendChild(dragging);
                             

@@ -189,7 +189,7 @@ namespace GestordeTareas.UI.Controllers
                         tareaBD.IdEstadoTarea = model.IdEstadoTarea;
                         bdContexto.Update(tareaBD);
                         await bdContexto.SaveChangesAsync();
-                        return Ok();
+                        return Ok(new { nombreEstado = estadoValido.Nombre });
                     }
                     else
                     {
