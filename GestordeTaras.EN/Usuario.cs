@@ -20,6 +20,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
+        [Display(Name = "Correo Electronico")]
         public string NombreUsuario { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Campo obligatorio")]
@@ -29,6 +30,7 @@ namespace GestordeTaras.EN
         [MaxLength(20, ErrorMessage = "Maximo 20 caracteres")]
         public string Telefono { get; set; } = string.Empty;
 
+        [Display(Name = "Fecha de Nacimiento")]
         public DateTime FechaNacimiento { get; set; }
 
 
@@ -57,6 +59,9 @@ namespace GestordeTaras.EN
         public string ConfirmPassword_Aux { get; set; } = string.Empty; // propiedad auxiliar
 
         public Cargo Cargo { get; set; } // propiedad de navegación
+        
+
+
     }
     public enum User_Status
     {

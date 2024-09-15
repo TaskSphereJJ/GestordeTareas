@@ -81,26 +81,23 @@ namespace GestordeTareas.DAL
             return result;
         }
 
-        // Método para eliminar un usuario de la base de datos de forma asincrónica.
-        public static async Task<int> Delete(Usuario usuario)
-
+        //--------------------------------METODO Eliminar .--------------------------
+        public static async Task<int> DeleteAsync(Usuario usuario)
         {
             int result = 0;
-            using (var bdContext = new ContextoBD())
+            using (var bdContexto = new ContextoBD()) //istancio la coneccion
             {
-                // Busca el usuario existente por su ID.
-                var usuarioDB = await bdContext.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
-                if (usuarioDB != null)
+                var usuarioBD = await bdContexto.Usuario.FirstOrDefaultAsync(c => c.Id == usuario.Id); //busco el id
+                if (usuarioBD != null)//verifico que no este nulo
                 {
-                    // Elimina el usuario del DbSet correspondiente en el contexto.
-                    bdContext.Usuario.Remove(usuarioDB);
-                    // Guarda los cambios en la base de datos.
-                    result = await bdContext.SaveChangesAsync();
+                    bdContexto.Usuario.Remove(usuarioBD);//elimino anivel de memoria la usuario
+                    result = await bdContexto.SaveChangesAsync();//le digo a la BD que se elimine y se guarde
                 }
             }
-            // Retorna el resultado (número de filas afectadas en la base de datos).
             return result;
         }
+
+
 
         // Método para obtener un usuario por su ID de forma asincrónica.
         public static async Task<Usuario> GetByIdAsync(Usuario usuario)
@@ -192,9 +189,17 @@ namespace GestordeTareas.DAL
             var userDb = new Usuario();
             using (var dbContext = new ContextoBD())
             {
-                EncryptMD5(usuarios);
-                userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuarios.NombreUsuario &&
-                u.Pass == usuarios.Pass && u.Status == (byte)User_Status.ACTIVO);
+                try
+                {
+                    EncryptMD5(usuarios);
+                    userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuarios.NombreUsuario &&
+                    u.Pass == usuarios.Pass && u.Status == (byte)User_Status.ACTIVO);
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception("Error");
+                }
+                
             }
             return userDb!;
         }

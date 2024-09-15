@@ -27,7 +27,7 @@ namespace GestordeTareas.DAL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=HERNANDEZ\SQLEXPRESS;
-                                           Initial Catalog = GestorTareasBD;
+                                           Initial Catalog = GestordeTareasBD;
                                            Integrated Security = true;
                                            Encrypt = false;
                                            TrustServerCertificate = true;");

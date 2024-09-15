@@ -96,11 +96,11 @@ namespace GestordeTareas.UI.Controllers
 
 
         // GET: UsuarioController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> DetailsPartial(int id)
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
-            return View(user);
+            return View("Details",user);
         }
 
         // GET: UsuarioController/Create
@@ -108,10 +108,9 @@ namespace GestordeTareas.UI.Controllers
         public async Task<IActionResult> Create()
         {
             await LoadDropDownListsAsync();
-            return View();
+            return PartialView(); 
         }
 
-        // POST: UsuarioController/Create
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -119,24 +118,49 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                int result = await _usuarioBL.Create(usuario);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid) // Verificar si el modelo es válido
+                {
+                    int result = await _usuarioBL.Create(usuario);
+                    if (result > 0)
+                    {
+                        // Si la creación fue exitosa, devolver un JSON que indique éxito
+                        return Json(new { success = true });
+                    }
+                }
+
+                // Si hay errores de validación, recargar la vista del modal con los errores
+                await LoadDropDownListsAsync();
+                return PartialView("Create", usuario);
             }
             catch (Exception ex)
             {
+                // Manejar errores y recargar la vista del modal con los errores
                 ViewBag.Error = ex.Message;
-                ViewBag.Cargos = await cargoBL.GetAllAsync();
-                return View(usuario);
+                await LoadDropDownListsAsync();
+                return PartialView("Create", usuario);
             }
         }
+
 
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-            await LoadDropDownListsAsync(); //Se llama al método y se espera que cargue
-            return View(userDb);
+            // Obtener el usuario por ID
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+
+            // Verificar si el usuario fue encontrado
+            if (usuario == null)
+            {
+                return NotFound(); // Devolver un error 404 si el usuario no se encuentra
+            }
+
+            // Cargar listas desplegables necesarias para la vista
+            await LoadDropDownListsAsync();
+
+            // Devolver la vista parcial "Edit" con el usuario
+            return PartialView("Edit", usuario);
         }
+
 
         // POST: UsuarioController/Edit/5
         [HttpPost]
@@ -159,11 +183,12 @@ namespace GestordeTareas.UI.Controllers
         // GET: UsuarioController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-            user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+            usuario.Cargo = await cargoBL.GetById(new Cargo { Id = usuario.IdCargo });
             ViewBag.Error = "";
-            return View(user);
+            return PartialView("Delete", usuario);
         }
+
 
         // POST: UsuarioController/Delete/5
         [HttpPost]
@@ -172,20 +197,21 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                int result = await _usuarioBL.Delete(usuario);
+                await _usuarioBL.DeleteAsync(usuario); // Llama al método Delete que acepta un int id
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                var userDb = await _usuarioBL.GetByIdAsync(usuario);
+                var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
                 if (userDb == null)
                     userDb = new Usuario();
                 if (userDb.Id > 0)
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                return View(userDb);
+                return View(userDb); // Usa la vista Delete para mostrar detalles del usuario en caso de error
             }
         }
+
 
         // acción que muestra el formulario de inicio de sesión
         [AllowAnonymous]

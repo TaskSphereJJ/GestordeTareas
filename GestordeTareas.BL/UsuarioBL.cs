@@ -1,5 +1,4 @@
 ﻿
-
 using GestordeTaras.EN;
 using GestordeTareas.DAL;
 using System;
@@ -22,9 +21,9 @@ namespace GestordeTareas.BL
             return await UsuarioDAL.Update(usuario);
         }
 
-        public async Task<int> Delete(Usuario usuario)
+        public async Task<int> DeleteAsync(Usuario usuario)
         {
-            return await UsuarioDAL.Delete(usuario);
+            return await UsuarioDAL.DeleteAsync(usuario);
         }
 
         public async Task<Usuario> GetByIdAsync(Usuario usuario)
