@@ -46,12 +46,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _cargoBL.CreateAsync(cargo);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Cargo creado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return PartialView("Create", cargo);
+                return Json(new { success = false, message = $"Error al crear el cargo: {ex.Message}" });
             }
         }
 
@@ -70,12 +70,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _cargoBL.UpdateAsync(cargo);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Cargo editado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(cargo);
+                return Json(new { success = false, message = $"Error al editar el cargo: {ex.Message}" });
             }
         }
 
@@ -95,12 +95,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _cargoBL.DeleteAsync(cargo);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Cargo eliminado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(cargo);
+                return Json(new { success = false, message = $"Error al eliminar el cargo: {ex.Message}" });
             }
         }
     }

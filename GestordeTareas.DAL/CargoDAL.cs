@@ -47,6 +47,13 @@ namespace GestordeTareas.DAL
                 var cargoBD = await bdContexto.Cargo.FirstOrDefaultAsync(c => c.Id == cargo.Id); //busco el id
                 if (cargoBD != null)//verifico que no este nulo
                 {
+                    // Verificar si la categoría está asociada con alguna tarea
+                    bool isAssociatedWithUsuario = await bdContexto.Usuario.AnyAsync(t => t.IdCargo == cargoBD.Id);
+                    if (isAssociatedWithUsuario)
+                    {
+                        // Si está asociada, lanzar una excepción
+                        throw new Exception("No se puede eliminar el cargo porque está asociado con un usuario.");
+                    }
                     bdContexto.Cargo.Remove(cargoBD);//elimino anivel de memoria la categoria
                     result = await bdContexto.SaveChangesAsync();//le digo a la BD que se elimine y se guarde
                 }
