@@ -119,13 +119,42 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+
+                usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
+
+                if (User.IsInRole("Administrador"))
+                {
+                    // Si es administrador, puedes permitir que el rol sea seleccionado
+                    if (ModelState.IsValid)
+                    {
+                        int createresult = await _usuarioBL.Create(usuario);
+                        TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                else
+                {
+                    // Si no es administrador, asigna un rol predeterminado
+                    // Obtén el ID del cargo predeterminado para colaboradores
+                    var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
+                    usuario.IdCargo = cargoColaboradorId;
+
+                }
+                if (ModelState.IsValid)
+                {
+                    await LoadDropDownListsAsync(); // Vuelve a cargar la lista desplegable en caso de error
+                    return View(usuario);
+
+                }
+
                 int result = await _usuarioBL.Create(usuario);
+                TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                ViewBag.Cargos = await cargoBL.GetAllAsync();
+                await LoadDropDownListsAsync();
                 return View(usuario);
             }
         }

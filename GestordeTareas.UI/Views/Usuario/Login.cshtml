@@ -3,6 +3,20 @@
     ViewData["Title"] = "Login";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
 <div class="login_container max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
     <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
         <div class="mt-8 flex flex-col items-center">
@@ -42,7 +56,7 @@
         </div>
     </div>
     <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
-        <div class="m-6 xl:m-8 w-full bg-contain bg-center bg-no-repeat" style="background-image: url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg');">
+        <div class="m-6 xl:m-8 w-full bg-contain bg-center bg-no-repeat" style="background-image: url('/img/login-amico.svg');">
         </div>
     </div>
 </div>

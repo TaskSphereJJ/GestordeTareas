@@ -217,7 +217,7 @@
 
                     @*  Validadcion para Supervisor    ---INICIO---- *@
 
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Supervisor"))
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Gerente"))
                     {
                         <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ChangePassword">Cambiar clave</a>
 

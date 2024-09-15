@@ -81,5 +81,21 @@ namespace GestordeTareas.DAL
             }
             return cargos;
         }
+
+        public static async Task<int> GetCargoColaboradorIdAsync()
+        {
+            int cargoColaboradorId = 0;
+            using (var dbContext = new ContextoBD())
+            {
+                // Busca el cargo "Colaborador" en la base de datos y obtén su ID.
+                var cargoColaborador = await dbContext.Cargo.FirstOrDefaultAsync(c => c.Nombre == "Colaborador");
+                if (cargoColaborador != null)
+                {
+                    cargoColaboradorId = cargoColaborador.Id;
+                }
+            }
+            // Retorna el ID del cargo "Colaborador".
+            return cargoColaboradorId;
+        }
     }
 }
