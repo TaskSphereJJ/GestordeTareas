@@ -3,8 +3,10 @@
     ViewData["Title"] = "Crear Cuenta";
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <div class="login_container max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
-    <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
+    <div class="lg:w-1/2 flex-1 xl:w-5/12 p-6 sm:p-12">
         <div class="mt-8 flex flex-col items-center">
             <h1 class="text-lg no-underline inicio xl:text-2xl font-extrabold underline">
                 Crear Cuenta
@@ -63,14 +65,13 @@
 
                         <button type="submit" class="mt-6 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-2 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                             <span class="ml-3">
+                                <i class="fas fa-user-plus"></i>
                                 Crear Cuenta
                             </span>
                         </button>
                         <div class="flex justify-center mt-4">
                             <a asp-action="Index" class="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-500 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                    <path d="M15 19l-7-7 7-7"></path>
-                                </svg>
+                                <i class="fas fa-arrow-left mr-2"></i>
                                 Regresar
                             </a>
                         </div>

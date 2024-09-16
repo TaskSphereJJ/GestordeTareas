@@ -96,11 +96,11 @@ namespace GestordeTareas.UI.Controllers
 
 
         // GET: UsuarioController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> DetailsPartial(int id)
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
-            return View(user);
+            return View("Details",user);
         }
 
         // GET: UsuarioController/Create
@@ -132,25 +132,17 @@ namespace GestordeTareas.UI.Controllers
                         return RedirectToAction(nameof(Index));
                     }
                 }
-                else
-                {
-                    // Si no es administrador, asigna un rol predeterminado
-                    // Obtén el ID del cargo predeterminado para colaboradores
-                    var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
-                    usuario.IdCargo = cargoColaboradorId;
 
-                }
-                if (ModelState.IsValid)
-                {
-                    await LoadDropDownListsAsync(); // Vuelve a cargar la lista desplegable en caso de error
-                    return View(usuario);
-
-                }
+                // Si no es administrador, asigna un rol predeterminado
+                // Obtén el ID del cargo predeterminado para colaboradores
+                var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
+                usuario.IdCargo = cargoColaboradorId;
 
                 int result = await _usuarioBL.Create(usuario);
                 TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
                 return RedirectToAction(nameof(Index));
             }
+
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
@@ -164,9 +156,20 @@ namespace GestordeTareas.UI.Controllers
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-            await LoadDropDownListsAsync(); //Se llama al método y se espera que cargue
-            return View(userDb);
+            // Obtener el usuario por ID
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+
+            // Verificar si el usuario fue encontrado
+            if (usuario == null)
+            {
+                return NotFound(); // Devolver un error 404 si el usuario no se encuentra
+            }
+
+            // Cargar listas desplegables necesarias para la vista
+            await LoadDropDownListsAsync();
+
+            // Devolver la vista parcial "Edit" con el usuario
+            return PartialView("Edit", usuario);
         }
 
         // POST: UsuarioController/Edit/5
@@ -190,10 +193,10 @@ namespace GestordeTareas.UI.Controllers
         // GET: UsuarioController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-            user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+            usuario.Cargo = await cargoBL.GetById(new Cargo { Id = usuario.IdCargo });
             ViewBag.Error = "";
-            return View(user);
+            return PartialView("Delete", usuario);
         }
 
         // POST: UsuarioController/Delete/5
