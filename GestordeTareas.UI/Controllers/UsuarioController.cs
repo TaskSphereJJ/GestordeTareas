@@ -159,6 +159,8 @@ namespace GestordeTareas.UI.Controllers
             }
         }
 
+
+
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {

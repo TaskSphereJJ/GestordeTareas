@@ -3,6 +3,9 @@
     ViewData["Title"] = "Login";
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
@@ -21,34 +24,33 @@
     <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
         <div class="mt-8 flex flex-col items-center">
             <h1 class="text-lg no-underline inicio xl:text-2xl font-extrabold underline">
-                Iniciar Sesión
+                INICIAR SESIÓN
             </h1>
             <div class="w-full flex-1 mt-4">
                 <div class="my-6 border-b text-center">
                     <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2">
-                        Ingrese su correo electrónico y contraseña
+                        Ingrese su Usuario y Contraseña
                     </div>
                 </div>
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="mx-auto max-w-xs">
-                        <input asp-for="NombreUsuario" class="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Correo electrónico" />
+                        <input asp-for="NombreUsuario" class="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Nombre de usuario" />
                         <span asp-validation-for="NombreUsuario" class="text-danger"></span>
-                        <input asp-for="Pass" type="password" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Password" />
+                        <input asp-for="Pass" type="password" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white search-bar" placeholder="Contraseña" />
                         <span asp-validation-for="Pass" class="text-danger"></span>
                         <button type="submit" class="mt-6 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-2 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                            <svg class="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
-                                <circle cx="8.5" cy="7" r="4"></circle>
-                                <path d="M20 8v6M23 11h-6"></path>
-                            </svg>
+                            <i class="fas fa-key mr-2"></i>
                             <span class="ml-3">
                                 Iniciar Sesión
                             </span>
                         </button>
-                        <div class="mt-2 text-center">
-                            <a asp-action="Create" class="text-sm text-indigo-500 hover:text-indigo-600">Crear una cuenta</a>
+                        <div class="flex justify-center mt-4">
+                            <a asp-action="Create" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-green-700 rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300 ease-in-out">
+                                <i class="fas fa-user-plus mr-2"></i>
+                                Crear cuenta
+                            </a>
                         </div>
                     </div>
                 </form>
