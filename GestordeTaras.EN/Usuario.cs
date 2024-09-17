@@ -20,6 +20,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(100, ErrorMessage = "Maximo 100 caracteres")]
+        [Display(Name = "Correo Electrónico")]
         public string NombreUsuario { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Campo obligatorio")]
@@ -29,6 +30,8 @@ namespace GestordeTaras.EN
         [MaxLength(20, ErrorMessage = "Maximo 20 caracteres")]
         public string Telefono { get; set; } = string.Empty;
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Fecha de nacimiento")]
         public DateTime FechaNacimiento { get; set; }
 
 

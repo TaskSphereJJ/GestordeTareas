@@ -2,12 +2,6 @@
 @{
     ViewData["Title"] = "Index";
 
-    // Definir el diccionario para mapear los valores del estado a nombres
-    var statusDictionary = new Dictionary<byte, string>
-    {
-        { 1, "ACTIVO" },
-        { 2, "INACTIVO" }
-    };
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -38,7 +32,10 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
         <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
+            <tr>                
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.First().Id)
+                </th>
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Nombre)
                 </th>
@@ -70,13 +67,20 @@
             @foreach (var item in Model)
             {
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Apellido)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Telefono)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaNacimiento)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Cargo.Nombre)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
-                    <td class="px-6 py-4">@statusDictionary[item.Status]</td>
+                    <td class="px-6 py-4">
+                        @{
+                            var statusName = Enum.GetName(typeof(GestordeTaras.EN.User_Status), item.Status);
+                        }
+                        @statusName
+                    </td>
+
                     <td class="px-6 py-4 flex justify-center items-center space-x-2">
                         <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaEdit(@item.Id)">
                             <i class="fas fa-edit text-lg"></i>

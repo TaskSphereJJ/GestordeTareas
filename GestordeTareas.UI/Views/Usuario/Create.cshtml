@@ -5,13 +5,13 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<div class="login_container max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
-    <div class="lg:w-1/2 flex-1 xl:w-5/12 p-6 sm:p-12">
+<div class="login_container max-w-screen-xl mx-auto my-6 bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
+    <div class="lg:w-1/2 flex-1 xl:w-5/12 p-4 sm:p-6">
         <div class="mt-8 flex flex-col items-center">
             <h1 class="text-lg no-underline inicio xl:text-2xl font-extrabold underline">
-                Crear Cuenta
+                CREAR UNA CUENTA
             </h1>
-            <div class="w-full flex-1 mt-4">
+            <div class="w-full flex-1 mt-2 mb-4">
                 <div class="my-6 border-b text-center">
                     <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2">
                         Complete los campos para crear una nueva cuenta
@@ -20,22 +20,26 @@
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <div class="mx-auto max-w-xs">
+                    <div class="mx-auto max-w-sm">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <!-- Columna 1 -->
                             <div>
+                                <label for="Nombre" class="block text-gray-700 text-sm font-medium mb-2">Nombre</label>
                                 <input asp-for="Nombre" class="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre" />
                                 <span asp-validation-for="Nombre" class="text-danger"></span>
 
-                                <input asp-for="NombreUsuario" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre de usuario" />
+                                <label for="NombreUsuario" class="block text-gray-700 text-sm font-medium mt-4">Correo electrónico</label>
+                                <input asp-for="NombreUsuario" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre de usuario" />
                                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
 
-                                <input asp-for="Pass" type="password" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Contraseña" />
+                                <label for="Pass" class="block text-gray-700 text-sm font-medium mt-4">Contraseña</label>
+                                <input asp-for="Pass" type="password" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Contraseña" />
                                 <span asp-validation-for="Pass" class="text-danger"></span>
 
                                 @if (User.IsInRole("Administrador"))
                                 {
-                                    <select asp-for="IdCargo" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white">
+                                    <label for="IdCargo" class="block text-gray-700 text-sm font-medium mt-4">Cargo</label>
+                                    <select asp-for="IdCargo" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white">
                                         <option value="">Seleccionar Cargo</option>
                                         @foreach (var item in ViewBag.Cargos)
                                         {
@@ -52,13 +56,16 @@
 
                             <!-- Columna 2 -->
                             <div>
+                                <label for="Apellido" class="block text-gray-700 text-sm font-medium mb-2">Apellido</label>
                                 <input asp-for="Apellido" class="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Apellido" />
                                 <span asp-validation-for="Apellido" class="text-danger"></span>
 
-                                <input asp-for="Telefono" maxlength="12" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Teléfono" />
+                                <label for="Telefono" class="block text-gray-700 text-sm font-medium mt-4">Teléfono</label>
+                                <input asp-for="Telefono" maxlength="12" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Teléfono" />
                                 <span asp-validation-for="Telefono" class="text-danger"></span>
 
-                                <input asp-for="FechaNacimiento" type="date" class="w-full px-4 py-2 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Fecha de Nacimiento" />
+                                <label for="FechaNacimiento" class="block text-gray-700 text-sm font-medium mt-4">Fecha de nacimiento</label>
+                                <input asp-for="FechaNacimiento" type="date" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Fecha de Nacimiento" />
                                 <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
                             </div>
                         </div>
