@@ -35,7 +35,6 @@ namespace GestordeTareas.UI.Controllers
             ViewBag.Cargos = new SelectList(cargos, "Id", "Nombre");
         }
 
-
         // GET: UsuarioController
         public async Task<ActionResult> Index(Usuario user = null)
         {
@@ -49,6 +48,7 @@ namespace GestordeTareas.UI.Controllers
                 user.Top_Aux = 0;
 
             List<Usuario> Lista = await _usuarioBL.SearchIncludeRoleAsync(user);
+            Lista = Lista.OrderBy(u => u.Id).ToList();
             ViewBag.Top = user.Top_Aux;
             ViewBag.Roles = await cargoBL.GetAllAsync();
             return View(Lista);
