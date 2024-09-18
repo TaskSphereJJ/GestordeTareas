@@ -197,7 +197,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                await _usuarioBL.DeleteAsync(usuario); // Llama al método Delete que acepta un int id
+                int result = await _usuarioBL.DeleteAsync(usuario); // Llama al método Delete que acepta un int id
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

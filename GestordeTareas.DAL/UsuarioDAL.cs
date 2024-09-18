@@ -72,6 +72,7 @@ namespace GestordeTareas.DAL
                     userDb.Apellido = usuario.Apellido;
                     userDb.Status = usuario.Status;
                     userDb.NombreUsuario = usuario.NombreUsuario;
+                    userDb.FechaNacimiento = usuario.FechaNacimiento; 
                     dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
                 }
