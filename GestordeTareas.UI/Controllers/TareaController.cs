@@ -19,6 +19,8 @@ namespace GestordeTareas.UI.Controllers
         private readonly PrioridadBL _prioridadBL;
         private readonly EstadoTareaBL _estadoTareaBL;
         private readonly ProyectoBL _proyectoBL;
+        private readonly UsuarioBL _usuarioBL;
+        private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
 
         public TareaController()
         {
@@ -27,14 +29,18 @@ namespace GestordeTareas.UI.Controllers
             _prioridadBL = new PrioridadBL();
             _estadoTareaBL = new EstadoTareaBL();
             _proyectoBL = new ProyectoBL();
+            _usuarioBL = new UsuarioBL();
+            _proyectoUsuarioBL = new ProyectoUsuarioBL();
         }
 
         // GET: TareaController
         public async Task<ActionResult> Index(int proyectoId)
         {
-            //List<Tarea> Lista = await _tareaBL.GetAllAsync();
-
-            //return View(Lista);
+            if (!await VerificarAcceso(proyectoId))
+            {
+                TempData["ErrorMessage"] = "No tienes acceso a este proyecto.";
+                return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos
+            }
 
             // Aquí cargas las tareas asociadas al proyecto con el ID proporcionado
             var tareas = await _tareaBL.GetTareasByProyectoIdAsync(proyectoId);
@@ -78,6 +84,11 @@ namespace GestordeTareas.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Tarea tarea, int idProyecto)
         {
+            if (!User.IsInRole("Administrador"))
+            {
+                TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                return View(tarea);
+            }
             try
             {
                 // Asignar el ID del proyecto a la tarea
@@ -134,6 +145,11 @@ namespace GestordeTareas.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Tarea tarea)
         {
+            if (!User.IsInRole("Administrador"))
+            {
+                TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                return View(tarea);
+            }
             try
             {
                 int result = await _tareaBL.UpdateAsync(tarea);
@@ -160,6 +176,11 @@ namespace GestordeTareas.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, Tarea tarea)
         {
+            if (!User.IsInRole("Administrador"))
+            {
+                TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                return View(tarea);
+            }
             try
             {
                 await _tareaBL.DeleteAsync(tarea);
@@ -207,6 +228,31 @@ namespace GestordeTareas.UI.Controllers
         {
             public int IdTarea { get; set; }
             public int IdEstadoTarea { get; set; }
+        }
+
+        // MÉTODO PARA VERIFICAR EL ACCESO A LAS TAREAS
+        private async Task<bool> VerificarAcceso(int idProyecto)
+        {
+            var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+            var actualUser = users.FirstOrDefault();
+
+            if (actualUser == null)
+            {
+                return false; // Usuario no encontrado
+            }
+
+            int idUsuario = actualUser.Id;
+
+            // Verificar si el usuario es administrador
+            bool esAdmin = User.IsInRole("Administrador");
+            if (esAdmin)
+            {
+                return true; // Acceso permitido para administradores
+            }
+
+            // Verificar si el usuario está unido al proyecto
+            var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
+            return usuariosUnidos.Any(u => u.Id == idUsuario); // Devuelve true si está unido, false si no
         }
 
     }

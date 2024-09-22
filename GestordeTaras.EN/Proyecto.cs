@@ -36,6 +36,7 @@ namespace GestordeTaras.EN
         public Usuario Usuario { get; set; }
 
         public List<Tarea> Tareas { get; set; } = new List<Tarea>(); // Inicializar la lista de tareas
+        public virtual ICollection<ProyectoUsuario> ProyectoUsuario { get; set; }
 
     }
 }

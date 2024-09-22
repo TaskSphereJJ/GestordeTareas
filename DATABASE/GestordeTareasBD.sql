@@ -2,7 +2,7 @@
 CREATE DATABASE GestordeTareasBD
 go
 --usar la bd
-USE GestorTareasBD
+USE GestordeTareasBD
 go
 ----------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
@@ -141,7 +141,7 @@ VALUES
 
   INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
 VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1);
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 3, 28);
 
 -- Insertar datos en la tabla ElegirTarea
 INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
@@ -164,5 +164,4 @@ VALUES
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
 
-=======
->>>>>>> 8ce03b7f573a4decd8853c95a47d499887380b05
+  select*from EstadoTarea
