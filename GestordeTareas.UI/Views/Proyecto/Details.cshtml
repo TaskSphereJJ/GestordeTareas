@@ -1,22 +1,84 @@
 ﻿@model GestordeTaras.EN.Proyecto
-
+@using GestordeTaras.EN
 @{
     ViewData["Title"] = "Detalles del Proyecto";
 }
 
-<div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <dl class="row">
-        <dt class="col-sm-2">Título:</dt>
-        <dd class="col-sm-10">@Model.Titulo</dd>
-        
-        <dt class="col-sm-2">Descripción:</dt>
-        <dd class="col-sm-10">@Model.Descripcion</dd>
-        
-        <dt class="col-sm-2">Admin:</dt>
-        <dd class="col-sm-10">@Model.Usuario.Nombre</dd>
-        
-        <dt class="col-sm-2">Fecha de Finalización:</dt>
-        <dd class="col-sm-10">@Model.FechaFinalizacion</dd>
-    </dl>
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '@TempData["SuccessMessage"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '@TempData["ErrorMessage"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+
+<div class="container mx-auto mt-6">
+    <h3 class="text-2xl font-semibold mb-4 text-center">Detalles del Proyecto</h3>
+
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <dl class="row">
+            <dt class="col-sm-4 font-bold">Título:</dt>
+            <dd class="col-sm-8">@Model.Titulo</dd>
+
+            <dt class="col-sm-4 font-bold">Descripción:</dt>
+            <dd class="col-sm-8">@Model.Descripcion</dd>
+
+            <dt class="col-sm-4 font-bold">Encargado:</dt>
+            <dd class="col-sm-8">@Model.Usuario.Nombre</dd>
+
+            <dt class="col-sm-4 font-bold">Fecha de Finalización:</dt>
+            <dd class="col-sm-8">@Model.FechaFinalizacion.ToShortDateString()</dd>
+        </dl>
+    </div>
+
+    @if (User.IsInRole("Colaborador"))
+    {
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg mb-6">
+            <h4 class="text-lg font-semibold">¿Quieres unirte a este Proyecto?</h4>
+            <form asp-action="UnirUsuarioAProyecto" method="post" class="mt-4">
+                <input type="hidden" name="idProyecto" value="@Model.Id" />
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Unirme</button>
+            </form>
+        </div>
+    }
+
+    <h3 class="text-lg font-semibold mt-6 text-center">Usuarios Unidos</h3>
+    <div class="bg-white shadow-md rounded-lg p-4">
+        @if (ViewBag.UsuariosUnidos != null && ((List<Usuario>)ViewBag.UsuariosUnidos).Any())
+        {
+            <ul class="list-disc ml-5 mt-2">
+                @foreach (var usuario in (List<Usuario>)ViewBag.UsuariosUnidos)
+                {
+                    <li>@usuario.Nombre @usuario.Apellido</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="mt-2 text-center">No hay usuarios unidos a este proyecto.</p>
+        }
+    </div>
+
+    <div class="text-center mt-6">
+        <a asp-action="Index" class="text-blue-500 hover:underline">Volver</a>
+    </div>
 </div>

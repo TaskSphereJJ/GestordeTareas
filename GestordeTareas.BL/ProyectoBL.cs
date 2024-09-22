@@ -31,5 +31,36 @@ namespace GestordeTareas.BL
         {
             return await ProyectoDAL.GetAllAsync();
         }
+
+        public static async Task<int> UnirUsuarioAProyectoAsync(int idProyecto, int idUsuario)
+        {
+            // Llama al método en la capa DAL
+            return await ProyectoDAL.UnirUsuarioAProyectoAsync(idProyecto, idUsuario);
+        }
+
+        public static async Task<List<Proyecto>> ObtenerProyectosPorUsuarioAsync(int idUsuario)
+        {
+            // Llama al método en la capa DAL
+            return await ProyectoDAL.ObtenerProyectosPorUsuarioAsync(idUsuario);
+        }
+
+        public static async Task<List<Proyecto>> ObtenerProyectosDisponiblesAsync(int idUsuario)
+        {
+            // Llama al método en la capa DAL
+            return await ProyectoDAL.ObtenerProyectosDisponiblesAsync(idUsuario);
+        }
+
+        public async Task<List<Usuario>> ObtenerUsuariosUnidosAsync(int idProyecto)
+        {
+            return await ProyectoDAL.ObtenerUsuariosUnidosAsync(idProyecto);
+        }
+
+        public static async Task<int> EliminarUsuarioDeProyectoAsync(int idProyecto, int idUsuario)
+        {
+            // Llamar al método de ProyectoDAL para eliminar la relación
+            return await ProyectoDAL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
+        }
+
+
     }
 }
