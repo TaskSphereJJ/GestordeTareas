@@ -3,29 +3,26 @@
 
 @{
     ViewData["Title"] = "Index";
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    //var tarea = Model.First();
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 }
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tareas</h1>
 
-@* En esta parte si Model es diferente de null quiere decir que hay tareas existente y mostrara desde la primera tarea hasta las que hayan*@
 @if (Model != null && Model.Any())
 {
     var tarea = Model.First();
-// Inicializar 'tarea' con el primer elemento de 'Model'
 
     <p>
         <button onclick="toggleView()" class="btn btn-primary mb-4">Cambiar Vista</button>
     </p>
     <p>
         <a href="#" id="proyectoId" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@tarea.IdProyecto)">
-            <i class="fas fa-plus text-lg ml-2"></i> Crear Nueva Tarea
+            <i class="fas fa-plus text-lg ml-2"></i> Nueva Tarea
         </a>
     </p>
 
-    <div id="tabla" class="tabla">
+    <div id="tabla" class="tabla flex justify-center">
         <!-- Contenido de la vista de tabla -->
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -38,16 +35,6 @@
                             @Html.DisplayNameFor(model => model.Nombre)
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.Descripcion)
-                        </th>
-
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.FechaCreacion)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.FechaVencimiento)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
                             @Html.DisplayNameFor(model => model.IdCategoria)
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -57,9 +44,8 @@
                             @Html.DisplayNameFor(model => model.IdEstadoTarea)
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdProyecto)
+                            @Html.DisplayNameFor(model => model.FechaVencimiento)
                         </th>
-
                         <th scope="col" class="px-6 py-3 text-center">
                             Acciones
                         </th>
@@ -69,15 +55,12 @@
                     @foreach (var item in Model)
                     {
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
-                            <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Proyecto.Titulo)</td>
+                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
+                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
+                            <td class="px-6 py-4 text-center estado" data-id="@item.Id">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
+                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
                             <td class="px-6 py-4 flex justify-center items-center space-x-2">
                                 <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
                                     <i class="fas fa-edit text-lg"></i>
@@ -108,45 +91,79 @@ else
 
 }
 
+<div id="message-box" class="fixed bottom-4 right-4 p-4 rounded-md text-white bg-green-500 hidden">
+    <!-- El contenido del mensaje se actualizará desde JavaScript -->
+</div>
+
 <div id="tarjetas" class="hidden">
     <!-- Contenido de la vista de tarjetas -->
     <div class="container mx-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
             <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3 w-1/3">Pendiente</th>
-                    <th scope="col" class="px-6 py-3 w-1/3">En Progreso</th>
-                    <th scope="col" class="px-6 py-3 w-1/3">Finalizado</th>
+                    <th scope="col" class="px-6 py-3 w-1/3 text-center">Pendiente</th>
+                    <th scope="col" class="px-6 py-3 w-1/3 text-center">En Proceso</th>
+                    <th scope="col" class="px-6 py-3 w-1/3 text-center">Finalizada</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td class="p-2 px-0 py-4 droppable" id="todo-tasks">
-                            <div class="tarjeta" draggable="true" data-id="@item.Id">
-                                <div class="mx-auto w-56">
-                                    <div class="bg-gray-100 cuerpo rounded-lg p-4 shadow-md text-left">
+                <!-- Fila de tarjetas -->
+                <tr>
+                    <td class="p-2 px-0 py-4 droppable" data-state="4">
+                        <!-- Área de destino para tareas Pendientes -->
+                        <div class="flex flex-col items-center">
+                            <div class="flex flex-wrap gap-4 justify-center w-full">
+                                @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "Pendiente"))
+                                {
+                                    <div class="bg-gray-100 rounded-lg p-4 shadow-md text-left draggable-card w-56" draggable="true" data-id="@item.Id">
                                         <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
-                                        <div class="mt-2 flex justify-between">
-                                            <p class="text-xs">Fecha de Vencimiento: @item.FechaVencimiento.ToShortDateString()</p>
-                                            <p class="text-xs">Categoría: @item.Categoria.Nombre</p>
-                                        </div>
-                                        <div class="mt-1">
-                                            <p class="text-xs">Prioridad: @item.Prioridad.Nombre</p>
-                                        </div>
-                                        <div class="mt-1">
-                                            <p class="text-xs">Estado: @item.EstadoTarea.Nombre</p>
-                                        </div>
-                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaEdit(@item.Id)">Ver más</button>
+                                        <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
+                                        <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
+                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
+                                        <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
+                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
                                     </div>
-                                </div>
+                                }
                             </div>
-                        </td>
-                        <td class="p-2 px-0 py-4 droppable" id="progress-tasks" data-estado="EnProgreso"></td>
-                        <td class="p-2 px-0 py-4 droppable" id="done-tasks" data-estado="Finalizado"></td>
-                    </tr>
-                }
+                        </div>
+                    </td>
+                    <td class="p-2 px-0 py-4 droppable" data-state="2">
+                        <!-- Área de destino para tareas En Proceso -->
+                        <div class="flex flex-col items-center">
+                            <div class="flex flex-wrap gap-4 justify-center w-full">
+                                @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "En Proceso"))
+                                {
+                                    <div class="bg-gray-100 rounded-lg p-4 shadow-md text-left draggable-card w-56" draggable="true" data-id="@item.Id">
+                                        <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
+                                        <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
+                                        <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
+                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
+                                        <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
+                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-2 px-0 py-4 droppable" data-state="3">
+                        <!-- Área de destino para tareas Finalizadas -->
+                        <div class="flex flex-col items-center">
+                            <div class="flex flex-wrap gap-4 justify-center w-full">
+                                @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "Finalizada"))
+                                {
+                                    <div class="bg-gray-100 rounded-lg p-4 shadow-md text-left draggable-card w-56" draggable="true" data-id="@item.Id">
+                                        <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
+                                        <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
+                                        <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
+                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
+                                        <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
+                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -256,66 +273,89 @@ else
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
-<script>
+    <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-        const tarjetas = document.querySelectorAll('.tarjeta');
-        const droppables = document.querySelectorAll('.droppable');
+        const draggables = document.querySelectorAll('.draggable-card');
+        const containers = document.querySelectorAll('.droppable');
+        const messageBox = document.getElementById('message-box');
 
-        let tarjetaArrastrada = null;
+        function showMessage(message, type) {
+            // Actualiza el contenido y el estilo del mensaje
+            messageBox.textContent = message;
+            messageBox.className = `fixed bottom-4 right-4 p-4 rounded-md text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} transition-opacity duration-300`;
+            messageBox.classList.remove('hidden');
 
-        tarjetas.forEach(tarjeta => {
-            tarjeta.addEventListener('dragstart', (e) => {
-                tarjetaArrastrada = e.target;
+            // Oculta el mensaje después de 5 segundos
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('dragging');
             });
 
-            tarjeta.addEventListener('dragend', () => {
-                tarjetaArrastrada = null;
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
             });
         });
 
-        droppables.forEach(droppable => {
-            droppable.addEventListener('dragover', e => {
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
                 e.preventDefault();
             });
 
-            droppable.addEventListener('drop', async (e) => {
+            container.addEventListener('drop', async e => {
                 e.preventDefault();
-                if (tarjetaArrastrada) {
-                    const idEstadoTarea = droppable.id;
-                    const idTarea = tarjetaArrastrada.dataset.id;
-                    tarjetaArrastrada.dataset.estado = idEstadoTarea;
-                    droppable.appendChild(tarjetaArrastrada);
+                const dragging = document.querySelector('.dragging');
+                if (dragging) {
+                    const newState = container.getAttribute('data-state'); 
+                    const taskId = dragging.getAttribute('data-id');
 
-                    const tarea = { Id: parseInt(idTarea), IdEstadoTarea: idEstadoTarea };
-                    const success = await actualizarEstadoTarea(tarea);
-                    if (success) {
-                        alert('Estado de tarea actualizado correctamente');
-                    } else {
-                        alert('Error al actualizar estado de tarea');
+                    try {
+                        const response = await fetch('/Tarea/update-state', {  
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                IdTarea: parseInt(taskId),
+                                IdEstadoTarea: parseInt(newState)
+                            })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            dragging.setAttribute('data-state', newState);
+
+                            const tabla = dragging.querySelector('.estado');
+                            if (tabla) {
+                                // Actualiza solo el texto del estado manteniendo el prefijo
+                                tabla.innerHTML = `<strong>Estado:</strong> ${data.nombreEstado}`;
+                            }
+                            const celda = document.querySelectorAll(`.estado[data-id="${taskId}"]`);
+                            celda.forEach(cell => {
+                                cell.textContent = data.nombreEstado;
+                            });
+
+                            showMessage('Tarea actualizada con éxito', 'success');
+                            container.appendChild(dragging);
+                            
+                        } else {
+                            showMessage('Error al actualizar la tarea', 'error');
+                        }
+                    } catch (error) {
+                        showMessage('Error de red: ' + error.message, 'error');
                     }
+                                        
                 }
             });
         });
     });
 
-    async function actualizarEstadoTarea(tarea) {
-        const response = await fetch(`/Tarea/ActualizarEstadoTarea`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(tarea)
-        });
-        if (response.ok) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-
-    //OCULTAR y mostarr la tabla
     function toggleView() {
         var tabla = document.getElementById('tabla');
         var tarjetas = document.getElementById('tarjetas');
@@ -329,21 +369,21 @@ else
         }
     }
 
-    function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
-        var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
-        $.ajax({ //Solicitud AJAX
-            url: '/Tarea/Create', // URL de la acción Create en el controlador Tarea
-            type: 'POST',  // Método de la solicitud
-            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
-            success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                window.location.reload(); // Recarga la página después de enviar el formulario
-                $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
-            },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
-                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
-            }
-        });
-    }
+        function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+            var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
+            $.ajax({ //Solicitud AJAX
+                url: '/Tarea/Create', // URL de la acción Create en el controlador Tarea
+                type: 'POST',  // Método de la solicitud
+                data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+                success: function (response) { // Función a ejecutar si la solicitud es exitosa
+                    window.location.reload(); // Recarga la página después de enviar el formulario
+                    $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
+                },
+                error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                    console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
+                }
+            });
+        }
 
     function submiteditForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario con el ID proporcionado
@@ -402,7 +442,7 @@ else
 
     function cargarVistaDetails(id) { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista details
-            url: "/Tarea/DetailsPartial/" + id, // URL de la vista que se va a cargar
+            url: "/Tarea/Details/" + id, // URL de la vista que se va a cargar
             type: "GET", // Solicitud para obtener la vista
             success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
                 $("#detailsModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "detailsModalContent"
@@ -424,6 +464,7 @@ else
             }
         });
     }
+
 
 
 </script>

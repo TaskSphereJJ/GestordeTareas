@@ -71,6 +71,9 @@ namespace GestordeTareas.DAL
                     userDb.Nombre = usuario.Nombre;
                     userDb.Apellido = usuario.Apellido;
                     userDb.Status = usuario.Status;
+                    userDb.Telefono = usuario.Telefono;
+                    userDb.FechaNacimiento = usuario.FechaNacimiento;
+                    userDb.FechaRegistro = usuario.FechaRegistro;
                     userDb.NombreUsuario = usuario.NombreUsuario;
                     userDb.FechaNacimiento = usuario.FechaNacimiento; 
                     dbContext.Usuario.Update(userDb);

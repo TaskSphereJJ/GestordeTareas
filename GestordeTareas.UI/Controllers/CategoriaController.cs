@@ -47,12 +47,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _categoriaBL.CreateAsync(categoria);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Categoría creada correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return PartialView("Create", categoria);
+                return Json(new { success = false, message = $"Error al crear la categoría: {ex.Message}" });
             }
         }
 
@@ -71,12 +71,13 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _categoriaBL.UpdateAsync(categoria);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Categoría editada correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(categoria);
+                return Json(new { success = false, message = $"Error al editar la categoría: {ex.Message}" });
+
             }
         }
 
@@ -96,12 +97,13 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _categoriaBL.DeleteAsync(categoria);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Categoría eliminada correctamente." });
             }
             catch(Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(categoria);
+                return Json(new { success = false, message = $"Error al eliminar la categoría: {ex.Message}" });
+
             }
         }
     }

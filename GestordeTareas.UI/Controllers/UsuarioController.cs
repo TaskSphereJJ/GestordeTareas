@@ -118,29 +118,38 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                if (ModelState.IsValid) // Verificar si el modelo es válido
+
+                usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
+
+                if (User.IsInRole("Administrador"))
                 {
-                    int result = await _usuarioBL.Create(usuario);
-                    if (result > 0)
+                    // Si es administrador, puedes permitir que el rol sea seleccionado
+                    if (ModelState.IsValid)
                     {
-                        // Si la creación fue exitosa, devolver un JSON que indique éxito
-                        return Json(new { success = true });
+                        int createresult = await _usuarioBL.Create(usuario);
+                        TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
 
-                // Si hay errores de validación, recargar la vista del modal con los errores
-                await LoadDropDownListsAsync();
-                return PartialView("Create", usuario);
+                // Si no es administrador, asigna un rol predeterminado
+                // Obtén el ID del cargo predeterminado para colaboradores
+                var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
+                usuario.IdCargo = cargoColaboradorId;
+
+                int result = await _usuarioBL.Create(usuario);
+                TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
+                return RedirectToAction(nameof(Index));
             }
+
             catch (Exception ex)
             {
                 // Manejar errores y recargar la vista del modal con los errores
                 ViewBag.Error = ex.Message;
-                await LoadDropDownListsAsync();
-                return PartialView("Create", usuario);
+                ViewBag.Cargos = await cargoBL.GetAllAsync();
+                return View(usuario);
             }
         }
-
 
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)

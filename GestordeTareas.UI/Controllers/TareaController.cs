@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -76,7 +77,7 @@ namespace GestordeTareas.UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Tarea tarea, int idProyecto)
-        {         
+        {
             try
             {
                 // Asignar el ID del proyecto a la tarea
@@ -86,7 +87,7 @@ namespace GestordeTareas.UI.Controllers
                 tarea.IdEstadoTarea = estadoPendienteId;
 
                 int result = await _tareaBL.CreateAsync(tarea);
-                return RedirectToAction(nameof(Index), new {id = idProyecto});
+                return RedirectToAction(nameof(Index), new { id = idProyecto });
             }
             catch (Exception ex)
             {
@@ -95,10 +96,10 @@ namespace GestordeTareas.UI.Controllers
                 // Volver a cargar las listas desplegables u otros datos necesarios para la vista
                 await LoadDropDownListsAsync();
 
-              //  ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
+                //  ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
                 // Devolver la vista parcial "Create" con la tarea y el ID de proyecto
                 return PartialView("Create", new Tarea { IdProyecto = idProyecto });
-               // return PartialView("Create", tarea);
+                // return PartialView("Create", tarea);
             }
         }
 
@@ -136,7 +137,7 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _tareaBL.UpdateAsync(tarea);
-                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto});
+                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
@@ -162,7 +163,7 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _tareaBL.DeleteAsync(tarea);
-                return RedirectToAction(nameof(Index), new {id = tarea.IdProyecto});
+                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
@@ -171,23 +172,42 @@ namespace GestordeTareas.UI.Controllers
             }
         }
 
-        //ACTUALIZAR ESTADO
         [HttpPost]
-        [HttpPost]
-        public async Task<ActionResult> ActualizarEstadoTarea(Tarea tarea)
+        [Route("Tarea/update-state")]
+        public async Task<IActionResult> ActualizarEstadoTarea([FromBody] TareaUpdateModel model)
         {
             try
             {
-                await _tareaBL.UpdateAsync(tarea);
-                return Json(new { success = true });
+                using (var bdContexto = new ContextoBD())
+                {
+                    var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == model.IdTarea);
+                    if (tareaBD != null)
+                    {
+                        var estadoValido = await bdContexto.EstadoTarea.FindAsync(model.IdEstadoTarea);
+                        if (estadoValido == null) return BadRequest("Estado no válido.");
+
+                        tareaBD.IdEstadoTarea = model.IdEstadoTarea;
+                        bdContexto.Update(tareaBD);
+                        await bdContexto.SaveChangesAsync();
+                        return Ok(new { nombreEstado = estadoValido.Nombre });
+                    }
+                    else
+                    {
+                        return NotFound("Tarea no encontrada.");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                return StatusCode(500, $"Error al actualizar la tarea: {ex.Message}");
             }
         }
 
-
+        public class TareaUpdateModel
+        {
+            public int IdTarea { get; set; }
+            public int IdEstadoTarea { get; set; }
+        }
 
     }
 }
