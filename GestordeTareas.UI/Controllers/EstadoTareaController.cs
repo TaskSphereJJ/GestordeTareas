@@ -48,12 +48,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _estadoTareaBL.CreateAsync(estadoTarea);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Estado creado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return PartialView("Create", estadoTarea);
+                return Json(new { success = false, message = $"Error al crear el estado: {ex.Message}" });
             }
         }
 
@@ -72,12 +72,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _estadoTareaBL.UpdateAsync(estadoTarea);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Estado editado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(estadoTarea);
+                return Json(new { success = false, message = $"Error al editar el estado: {ex.Message}" });
             }
         }
 
@@ -97,12 +97,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _estadoTareaBL.DeleteAsync(estadoTarea);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Estado eliminado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(estadoTarea);
+                return Json(new { success = false, message = $"Error al eliminar el estado: {ex.Message}" });
             }
         }
     }

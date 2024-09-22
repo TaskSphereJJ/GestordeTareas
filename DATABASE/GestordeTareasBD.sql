@@ -49,7 +49,6 @@ CREATE TABLE Usuario (
 
 );
 
-select * from usuario;
 GO
 -- Creación del proyecto
 CREATE TABLE Proyecto (
@@ -61,6 +60,7 @@ CREATE TABLE Proyecto (
 );
 
 GO
+
 
 -- Tarea creada por el administrador
 CREATE TABLE Tarea (
@@ -105,7 +105,15 @@ CREATE TABLE ImagenesPrueba (
 
 GO
 
-<<<<<<< HEAD
+CREATE TABLE ProyectoUsuario(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
+	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
+	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE()
+)
+delete from ProyectoUsuario
+Select * from ProyectoUsuario
+insert into ProyectoUsuario (IdUsuario,IdProyecto) values (30,20)
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Supervisor');
 
@@ -141,7 +149,7 @@ VALUES
 
   INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
 VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 3, 28);
+  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1);
 
 -- Insertar datos en la tabla ElegirTarea
 INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
@@ -163,5 +171,3 @@ VALUES
   ('ruta/imagen1.jpg', 1),
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
-
-  select*from EstadoTarea

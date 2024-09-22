@@ -71,12 +71,12 @@ namespace GestordeTareas.UI.Controllers
                 proyecto.IdUsuario = actualUser.Id;
 
                 int result = await _proyectoBL.CreateAsync(proyecto);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Proyecto creado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return PartialView("Create", proyecto);
+                return Json(new { success = false, message = $"Error al crear el proyecto: {ex.Message}" });
             }
         }
 
@@ -96,12 +96,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _proyectoBL.UpdateAsync(proyecto);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Proyecto editado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(proyecto);
+                return Json(new { success = false, message = $"Error al editar el proyecto: {ex.Message}" });
             }
         }
 
@@ -121,12 +121,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _proyectoBL.DeleteAsync(proyecto);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Proyecto eliminado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(proyecto);
+                return Json(new { success = false, message = $"Error al eliminar el proyecto: {ex.Message}" });
             }
         }
     }

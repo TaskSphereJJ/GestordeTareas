@@ -46,12 +46,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _prioridadBL.CreateAsync(prioridad);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Prioridad creada correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return PartialView("Create");
+                return Json(new { success = false, message = $"Error al crear la prioridad: {ex.Message}" });
             }
         }
 
@@ -70,12 +70,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _prioridadBL.UpdateAsync(prioridad);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Prioridad editada correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(prioridad);
+                return Json(new { success = false, message = $"Error al editar la prioridad: {ex.Message}" });
             }
         }
 
@@ -95,12 +95,12 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _prioridadBL.DeleteAsync(prioridad);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Prioridad eliminada correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View(prioridad);
+                return Json(new { success = false, message = $"Error al eliminar la prioridad: {ex.Message}" });
             }
         }
     }

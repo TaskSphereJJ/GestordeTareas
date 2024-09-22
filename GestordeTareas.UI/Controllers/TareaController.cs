@@ -79,7 +79,7 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Create", tarea);
         }
 
-        // POST: CategoriaController/Create
+        // POST: TareaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Tarea tarea, int idProyecto)
@@ -98,19 +98,12 @@ namespace GestordeTareas.UI.Controllers
                 tarea.IdEstadoTarea = estadoPendienteId;
 
                 int result = await _tareaBL.CreateAsync(tarea);
-                return RedirectToAction(nameof(Index), new { id = idProyecto });
+                return Json(new { success = true, message = "Tarea creada correctamente.", id = idProyecto });
+
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-
-                // Volver a cargar las listas desplegables u otros datos necesarios para la vista
-                await LoadDropDownListsAsync();
-
-                //  ViewBag.idProyecto = GetProyectoIdAsync(proyecto);
-                // Devolver la vista parcial "Create" con la tarea y el ID de proyecto
-                return PartialView("Create", new Tarea { IdProyecto = idProyecto });
-                // return PartialView("Create", tarea);
+                return Json(new { success = false, message = "Error al crear la tarea: " + ex.Message });
             }
         }
 
@@ -153,13 +146,11 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _tareaBL.UpdateAsync(tarea);
-                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto });
+                return Json(new { success = true, message = "Tarea editada correctamente.", id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                await LoadDropDownListsAsync();
-                return View(tarea);
+                return Json(new { success = false, message = $"Error al editar la tarea: {ex.Message}" });
             }
         }
 
@@ -184,12 +175,11 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _tareaBL.DeleteAsync(tarea);
-                return RedirectToAction(nameof(Index), new { id = tarea.IdProyecto });
+                return Json(new { success = true, message = "Tarea eliminada correctamente.", id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                return View(tarea);
+                return Json(new { success = false, message = $"Error al eliminar la tarea: {ex.Message}" });
             }
         }
 
