@@ -23,63 +23,65 @@
         var apellido = User.Claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
     }
     @* header o barra de arriba *@
-   @if(Context.Request.Path.Value != "/Usuario/login"){ 
+    @if (Context.Request.Path.Value != "/Usuario/login")
+    {
 
-         @if (User.Identity.IsAuthenticated){
-                    <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
-        @* <!-- Icono de hamburguesa --> *@
-        <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
-            <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:text-slate-400 hover:text-blue-950 dark:text-[#FFEF00] dark:hover:text-white"
-            aria-label="Menu" id="menuButton" onclick="toggleSidebar()">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
+                @* <!-- Icono de hamburguesa --> *@
+                <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
+                    <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:text-slate-400 hover:text-blue-950 dark:text-[#FFEF00] dark:hover:text-white"
+                            aria-label="Menu" id="menuButton" onclick="toggleSidebar()">
                         <span>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="stroke-inherit">
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                 class="stroke-inherit">
                                 <path d="M4 6H20"></path>
                                 <path d="M4 12H20"></path>
                                 <path d="M4 18H20"></path>
                             </svg>
                         </span>
-        </button>
-        </div>
-            <!-- Botón con ícono de sol y luna para cambiar entre modo claro y oscuro -->
-            <div id="darkModeToggle" class="mr-2">
-                <span id="darkModeIcon">
-                    <!-- El ícono se actualizará dinámicamente aquí -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
-                        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
-                    </svg>
-                </span>
-            </div>
+                    </button>
+                </div>
+                <!-- Botón con ícono de sol y luna para cambiar entre modo claro y oscuro -->
+                <div id="darkModeToggle" class="mr-2">
+                    <span id="darkModeIcon">
+                        <!-- El ícono se actualizará dinámicamente aquí -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                        </svg>
+                    </span>
+                </div>
 
 
 
 
-            @if (User.Identity.IsAuthenticated)
-            {
-                 <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>                
-            
-            @* <!-- Sección de perfil --> *@
-                <div class="flex items-center justify-end gap-4">
-                    <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
-                        <img src="~/img/FOOTOO.png" alt="" class="aspect-square">
-                    </div>
-                    <div class="relative inline-block">
-                        <button id="userMenuButton"
-                                class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
-                                aria-label="User Menu">
-                            <span>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                     class="stroke-inherit stroke-purple-800">
-                                    <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
-                                </svg>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>
 
-                            </span>
-                        </button>
-                        <div id="userMenuOptions"
-                             class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
-                             style="display: none;">
+                    @* <!-- Sección de perfil --> *@
+                    <div class="flex items-center justify-end gap-4">
+                        <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
+                            <img src="~/img/FOOTOO.png" alt="" class="aspect-square">
+                        </div>
+                        <div class="relative inline-block">
+                            <button id="userMenuButton"
+                                    class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
+                                    aria-label="User Menu">
+                                <span>
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                         class="stroke-inherit stroke-purple-800">
+                                        <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
+                                    </svg>
+
+                                </span>
+                            </button>
+                            <div id="userMenuOptions"
+                                 class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
+                                 style="display: none;">
                                 <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
                                     <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
                                        asp-area="" asp-controller="Usuario" asp-action="Logout">
@@ -100,33 +102,33 @@
                                     </a>
 
                                 </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
-    </header>
-         }
+            </header>
+        }
 
     }
 
-     @* SIDEBAR *@
+    @* SIDEBAR *@
     @* <!-- drawer component --> *@
     <div id="drawer-navigation" class="border-r-purple-900 dark:bg-darkPurple  menupa border-t-purple-900 border-b-purple-900 border-2 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transform -translate-x-full          transition-transform ease-in-out duration-300 flex flex-col menu"
-            tabindex="-1" aria-labelledby="drawer-navigation-label">
-            <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
-                Menu
-            </h5>
-            <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
-                    class="text-gray-400 bg-transparent hover:shadow-md hover:bg-purple-600 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 hover:border-2 hover:border-purple-700 dark:hover:text-white">
-                <svg aria-hidden="true" class="w-5 h-5 text-purple-800 hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span class="sr-only">Close menu</span>
-            </button>
+         tabindex="-1" aria-labelledby="drawer-navigation-label">
+        <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+            Menu
+        </h5>
+        <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
+                class="text-gray-400 bg-transparent hover:shadow-md hover:bg-purple-600 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 hover:border-2 hover:border-purple-700 dark:hover:text-white">
+            <svg aria-hidden="true" class="w-5 h-5 text-purple-800 hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"></path>
+            </svg>
+            <span class="sr-only">Close menu</span>
+        </button>
 
         <div class="py-4 flex-1 menu">
             @* <!-- Contenido del sidebar --> *@
@@ -134,11 +136,11 @@
                 <nav class="space-y-3">
                     <!-- home -->
                     <a class="flex no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                    asp-area="" asp-controller="Home" asp-action="Index">
+                       asp-area="" asp-controller="Home" asp-action="Index">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
+                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                  d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                         </svg>
                         <span class="mx-2 text-sm font-medium">Inicio</span>
                     </a>
@@ -153,35 +155,35 @@
                         <span class="mx-2 text-sm font-medium">Perfil</span>
                     </a>
 
-                   @*  Validadcion para User    ---INICIO---- *@
+                    @*  Validadcion para User    ---INICIO---- *@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
                         @* categoria *@
                         <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100 no-underline"
-                        asp-area="" asp-controller="Categoria" asp-action="Index">
+                           asp-area="" asp-controller="Categoria" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
+                                 stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                                      d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                                      d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
                             </svg>
                             <span class="mx-2 text-sm font-medium">Categoria</span>
                         </a>
                         @* Prioridad *@
                         <a class="flex  no-underline items-center no-in px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                        asp-area="" asp-controller="Prioridad" asp-action="Index">
+                           asp-area="" asp-controller="Prioridad" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
+                                 stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                                      d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
                             </svg>
                             <span class="mx-2 text-sm font-medium">Prioridad</span>
                         </a>
 
                         @* CARGOOO *@
                         <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                        asp-area="" asp-controller="Cargo" asp-action="Index">
+                           asp-area="" asp-controller="Cargo" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                             </svg>
@@ -204,7 +206,7 @@
 
                         @* usuario *@
                         <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                        asp-area="" asp-controller="Usuario" asp-action="Index">
+                           asp-area="" asp-controller="Usuario" asp-action="Index">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                             </svg>
@@ -213,7 +215,7 @@
                         </a>
                         @* CAMBIAR CONTRASEÑA *@
                         <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                        asp-area="" asp-controller="Usuario" asp-action="ChangePassword">
+                           asp-area="" asp-controller="Usuario" asp-action="ChangePassword">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                             </svg>
@@ -221,11 +223,11 @@
                             <span class="mx-2 text-sm font-medium">Cambiar contraseña</span>
                         </a>
 
-                        
+
 
                         @* CERRAR SESION *@
                         <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                        asp-area="" asp-controller="Usuario" asp-action="Logout">
+                           asp-area="" asp-controller="Usuario" asp-action="Logout">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                             </svg>
@@ -235,7 +237,7 @@
                     }
                     @* PROYECTO *@
                     <a class="flex  no-underline no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
-                        asp-area="" asp-controller="Proyecto" asp-action="Index">
+                       asp-area="" asp-controller="Proyecto" asp-action="Index">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
                             <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                         </svg>
@@ -275,10 +277,10 @@
 
                         <a class="nav-link text-dark  no-underline" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
 
-                        
+
                     }
 
-             
+
                     @* <!-- SECCION DE PROYECTOS --> *@
                     <div>
                         <div class="flex items-center justify-between">
@@ -286,7 +288,7 @@
 
                             <button class="p-0.5 hover:bg-purple-600 hover:text-white duration-200 transition-colors text-gray-500 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 border rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-4 h-4">
+                                     stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                 </svg>
                             </button>
@@ -300,7 +302,7 @@
                                 </div>
 
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-4 h-4 rtl:rotate-180">
+                                     stroke="currentColor" class="w-4 h-4 rtl:rotate-180">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                 </svg>
                             </button>
@@ -309,10 +311,10 @@
             </div>
         </div>
     </div>
-   
+
     <div class="container mt-28">
         <main role="main" class="pb-3">
-            @RenderBody() 
+            @RenderBody()
         </main>
     </div>
 
@@ -399,8 +401,9 @@
 
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></scrip>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js">
+        </scrip>
+            <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

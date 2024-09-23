@@ -1,0 +1,75 @@
+﻿@* Vista Centralizada para Accesos *@
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-6">
+
+    @* Tarjeta para Proyecto *@
+    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 text-center">
+        <a class="flex justify-center mb-4" asp-area="" asp-controller="Proyecto" asp-action="Index">
+            <img src="https://cdn-icons-png.flaticon.com/128/4300/4300059.png" alt="Proyecto" class="w-16 h-16">
+        </a>
+        <h2 class="text-lg font-semibold text-purple-700 mb-4">Proyectos</h2>
+        <h3 class="text-sm text-gray-600 mb-4">Creación de proyectos por administradores con permiso de crear tareas y a los cuales podrán unirse colaboradores</h3>
+        <a href="@Url.Action("Index", "Proyecto")" class="mt-2 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+            Ingresar
+        </a>
+    </div>
+
+    @* Tarjeta para Usuario *@
+    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 text-center">
+        <a class="flex justify-center mb-4" asp-area="" asp-controller="Usuario" asp-action="Index">
+            <img src="https://cdn-icons-png.flaticon.com/128/1999/1999625.png" alt="Usuario" class="w-16 h-16">
+        </a>
+        <h2 class="text-lg font-semibold text-purple-700 mb-4">Usuarios</h2>
+        <h3 class="text-sm text-gray-600 mb-4">Lista de todos los usuarios registrados en el sistema con acceso único para los administradores</h3>
+        <a href="@Url.Action("Index", "Usuario")" class="mt-2 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+            Ingresar
+        </a>
+    </div>
+
+    @* Tarjeta para Categoria *@
+    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 text-center">
+        <a class="flex justify-center mb-4" asp-area="" asp-controller="Categoria" asp-action="Index">
+            <img src="https://cdn-icons-png.flaticon.com/128/6724/6724239.png" alt="Categoría" class="w-16 h-16">
+        </a>
+        <h2 class="text-lg font-semibold text-purple-700 mb-2">Categorías</h2>
+        <h3 class="text-sm text-gray-600 mb-4">Para relacionarlas con las tareas que serán desarrolladas por los colaboradores</h3>
+        <a href="@Url.Action("Index", "Categoria")" class="mt-2 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+            Ingresar
+        </a>
+    </div>
+
+    @* Tarjeta para Prioridad *@
+    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 text-center">
+        <a class="flex justify-center mb-4" asp-area="" asp-controller="Prioridad" asp-action="Index">
+            <img src="https://cdn-icons-png.flaticon.com/128/7179/7179199.png" alt="Prioridad" class="w-16 h-16">
+        </a>
+        <h2 class="text-lg font-semibold text-purple-700 mb-4">Prioridad</h2>
+        <h3 class="text-sm text-gray-600 mb-4">Para relacionarlas con las tareas que serán desarrolladas por los colaboradores</h3>
+        <a href="@Url.Action("Index", "Prioridad")" class="mt-2 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+            Ingresar
+        </a>
+    </div>
+
+    @* Tarjeta para Cargo *@
+    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 text-center">
+        <a class="flex justify-center mb-4" asp-area="" asp-controller="Cargo" asp-action="Index">
+            <img src="https://cdn-icons-png.flaticon.com/128/647/647847.png" alt="Cargo" class="w-16 h-16">
+        </a>
+        <h2 class="text-lg font-semibold text-purple-700 mb-4">Roles</h2>
+        <h3 class="text-sm text-gray-600 mb-4">Para relacionarlos con los roles de los usuarios del sistema</h3>
+        <a href="@Url.Action("Index", "Cargo")" class="mt-2 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+            Ingresar
+        </a>
+    </div>
+
+    @* Tarjeta para Estado Tarea *@
+    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 text-center">
+        <a class="flex justify-center mb-4" asp-area="" asp-controller="EstadoTarea" asp-action="Index">
+            <img src="https://cdn-icons-png.flaticon.com/128/8767/8767583.png" alt="Estado Tarea" class="w-16 h-16">
+        </a>
+        <h2 class="text-lg font-semibold text-purple-700 mb-4">Estado Tareas</h2>
+        <h3 class="text-sm text-gray-600 mb-4">Para relacionarlas con las tareas que serán desarrolladas por los colaboradores</h3>
+        <a href="@Url.Action("Index", "EstadoTarea")" class="mt-2 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+            Ingresar
+        </a>
+    </div>
+</div>

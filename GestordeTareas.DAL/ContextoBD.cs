@@ -24,7 +24,6 @@ namespace GestordeTareas.DAL
         public DbSet<TareaFinalizada> TareaFinalizada { get; set; }
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=HERNANDEZ\SQLEXPRESS;
@@ -58,5 +57,6 @@ namespace GestordeTareas.DAL
                 .WithMany(p => p.ProyectoUsuario)  // Cambia si tienes una colección en Proyecto
                 .HasForeignKey(pu => pu.IdProyecto);
         }
+
     }
 }
