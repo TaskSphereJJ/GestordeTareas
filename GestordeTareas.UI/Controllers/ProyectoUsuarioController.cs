@@ -92,7 +92,7 @@ namespace GestordeTareas.UI.Controllers
             var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
             var actualUser = users.FirstOrDefault();
 
-            if (actualUser == null)
+            if (actualUser == null) 
             {
                 return NotFound(); // Manejar el caso en que no se encuentra el usuario autenticado
             }
