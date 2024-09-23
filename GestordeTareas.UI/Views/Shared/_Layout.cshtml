@@ -59,6 +59,10 @@
                         @* Opciones del menú desplegable *@
                         <div id="userMenuOptions" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md hidden z-30">
                             <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-100 dark:text-white" asp-area=""
+                                asp-controller="usuario" asp-action="perfil">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Perfil
+                            </a>
+                            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-100 dark:text-white" asp-area=""
                                 asp-controller="Usuario" asp-action="Logout">
                                 <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
                             </a>
@@ -71,62 +75,95 @@
 
     @* Sidebar (menú lateral) *@
     <div id="drawer-navigation"
-        class="fixed top-0 left-0 w-64 h-screen p-4 bg-lightPurple dark:bg-darkPurple transform -translate-x-full transition-transform z-30 shadow-lg">
-
+        class="fixed top-0 left-0 w-64 h-screen p-4 bg-lightPurple dark:bg-darkPurple transform -translate-x-full transition-transform z-30 border-t-2">
         @* Logo del Sidebar *@
         <div class="flex justify-center mb-6">
-            <img src="~/img/logo.png" alt="Logo" class="w-24 h-auto">
+            <img src="~/img/logo.svg" alt="Logo" class="w-24 h-auto">
         </div>
 
         <div class="flex justify-between items-center mb-4">
-            <h5 class="text-lg font-semibold text-gray-800 dark:text-white uppercase tracking-wide">Menú</h5>
             <button type="button"
-                class="text-gray-400 hover:bg-purple-600 hover:text-white rounded-full p-2 transition duration-300 absolute top-2 right-2"
+                class="text-gray-400 hover:bg-gray-300 hover:text-white rounded-full p-2 transition duration-300 absolute top-2 right-2"
                 onclick="toggleSidebar()">
                 <i class="fas fa-times text-2xl"></i>
             </button>
         </div>
 
         <nav class="space-y-4">
-            <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-purple-500 hover:text-white rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "bg-purple-500 text-white" : "")"
+            <!-- Ruta Inicio -->
+            <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "text-purple-500" : "")"
                 asp-area="" asp-controller="Home" asp-action="Index">
                 <i
-                    class="fas fa-home mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "text-white" : "text-gray-600 dark:text-gray-300")"></i>
-                <span class="font-semibold text-lg">Inicio</span>
+                    class="fas fa-home mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")"></i>
+                <span
+                    class="font-medium text-lg @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")">Inicio</span>
             </a>
 
+            <!-- Validación de usuario Administrador -->
             @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
             {
-                <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-purple-500 hover:text-white rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "Admin" ? "bg-purple-500 text-white" : "")"
+                <!-- Ruta Dashboard -->
+                <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "Admin" ? "text-purple-500" : "")"
                     asp-area="" asp-controller="Admin" asp-action="Dashboard">
                     <i
-                        class="fas fa-tachometer-alt mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "Admin" ? "text-white" : "text-gray-600 dark:text-gray-300")"></i>
-                    <span class="font-semibold text-lg">Dashboard</span>
+                        class="fas fa-tachometer-alt mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "Admin" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")"></i>
+                    <span
+                        class="font-medium text-lg @(ViewContext.RouteData.Values["controller"].ToString() == "Admin" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")">Dashboard</span>
+                </a>
+            }
+
+            <!-- Validación de usuario Colaborador -->
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Colaborador"))
+            {
+                <!-- Ruta Perfil -->
+                <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "Usuario" ? "text-purple-500" : "")"
+                    asp-area="" asp-controller="Usuario" asp-action="Perfil">
+                    <i
+                        class="fas fa-user mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "Usuario" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")"></i>
+                    <span
+                        class="font-medium text-lg @(ViewContext.RouteData.Values["controller"].ToString() == "Usuario" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")">Perfil</span>
+                </a>
+
+                <!-- Ruta Proyecto -->
+                <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "Proyecto" ? "text-purple-500" : "")"
+                    asp-area="" asp-controller="Proyecto" asp-action="Index">
+                    <i
+                        class="fas fa-briefcase mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "Proyecto" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")"></i>
+                    <span
+                        class="font-medium text-lg @(ViewContext.RouteData.Values["controller"].ToString() == "Proyecto" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")">Proyecto</span>
+                </a>
+
+                <!-- Ruta Mis Proyectos -->
+                <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300 @(ViewContext.RouteData.Values["controller"].ToString() == "ProyectoUsuario" ? "text-purple-500" : "")"
+                    asp-area="" asp-controller="ProyectoUsuario" asp-action="MisProyectos">
+                    <i
+                        class="fas fa-tasks mr-3 text-2xl @(ViewContext.RouteData.Values["controller"].ToString() == "ProyectoUsuario" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")"></i>
+                    <span
+                        class="font-medium text-lg @(ViewContext.RouteData.Values["controller"].ToString() == "ProyectoUsuario" ? "text-purple-500" : "text-gray-600 dark:text-gray-300")">Mis
+                        Proyectos</span>
                 </a>
             }
         </nav>
 
         @* Otras opciones adicionales *@
         <div class="mt-auto space-y-4">
-            <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-purple-500 hover:text-white rounded-lg transition-all duration-300"
+            <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300"
                 href="#">
                 <i class="fas fa-question-circle mr-3 text-2xl"></i>
-                <span class="font-semibold text-lg">Ayuda</span>
+                <span class="font-medium text-lg">Ayuda</span>
             </a>
 
-            <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-purple-500 hover:text-white rounded-lg transition-all duration-300"
-                href="#">
+            <a class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-500 rounded-lg transition-all duration-300"
+                asp-controller="Usuario" asp-action="Logout">
                 <i class="fas fa-sign-out-alt mr-3 text-2xl"></i>
-                <span class="font-semibold text-lg">Cerrar Sesión</span>
+                <span class="font-medium text-lg">Cerrar Sesión</span>
             </a>
         </div>
-
     </div>
 
-
     @* Contenido Principal *@
-    <div class="container mx-auto mt-28">
-        <main role="main" class="pb-3">
+    <div class="container mx-auto mt-20">
+        <main role="main" class="">
             @RenderBody()
         </main>
     </div>
@@ -134,6 +171,7 @@
     <script>
         const darkModeToggle = document.getElementById('darkModeToggle');
         const darkModeIcon = document.getElementById('darkModeIcon');
+        const sidebar = document.getElementById('drawer-navigation');
 
         // Función para alternar entre temas
         function toggleDarkMode() {
@@ -157,11 +195,11 @@
 
         // Control del sidebar (menú lateral)
         const menuButton = document.getElementById('menuButton');
-        const sidebar = document.getElementById('drawer-navigation');
 
-        menuButton.addEventListener('click', () => {
-            sidebar.style.transform = 'translateX(0)';
-        });
+        function toggleSidebar() {
+            sidebar.classList.toggle('translate-x-0');
+            sidebar.classList.toggle('-translate-x-full');
+        }
 
         document.addEventListener('click', (event) => {
             if (!sidebar.contains(event.target) && !menuButton.contains(event.target)) {

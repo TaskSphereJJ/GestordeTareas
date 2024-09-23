@@ -101,7 +101,7 @@ namespace GestordeTareas.UI.Controllers
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
-            return View("Details",user);
+            return View("Details", user);
         }
 
         // GET: UsuarioController/Create
