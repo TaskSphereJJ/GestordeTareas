@@ -1,24 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
+  darkMode: 'class', // Habilita el modo oscuro con la clase 'dark'
+  content: [
+    './Views/**/*.cshtml', // Vistas Razor
+    './wwwroot/**/*.html',  // Archivos HTML
+    './wwwroot/**/*.js',    // Archivos JS
+  ],
   theme: {
     extend: {
       colors: {
-        darkPurple: '#1F232A',
-        lightPurple: '#fef9ff',
-        lightText: '#280133',
-        darkText: "#deacff",
-        hoverBG: '#e070ff',
-        borderColor:'#6E41FA',
-        darkMenu: "#060214",
-        lightMenu: "#fef9ff"
+        lightPurple: '#fffff',
+        darkPurple: '#1f242a',
+        lightText: '#333',
+        darkText: '#f3f3f3',
+        borderColor: '#6b7280',
       },
-    },
-  },
-  variants: {
-    extend: {
-      textColor: ['dark'],
-      backgroundColor: ['dark'],
     },
   },
   plugins: [],

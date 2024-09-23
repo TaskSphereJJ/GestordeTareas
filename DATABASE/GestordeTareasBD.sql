@@ -33,8 +33,6 @@ CREATE TABLE EstadoTarea(
 );
 
 GO
-
--- Tabla Usuarios
 CREATE TABLE Usuario (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Nombre VARCHAR(50) NOT NULL,
@@ -43,11 +41,14 @@ CREATE TABLE Usuario (
     Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
     Telefono VARCHAR(9) NOT NULL,
     FechaNacimiento DATE NOT NULL,
-	[Status] INT NOT NULL,
+	[Status] TINYINT NOT NULL,
 	FechaRegistro DATETIME NOT NULL,
     IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id),
 
 );
+
+--ALTER TABLE Usuario
+--ALTER COLUMN [Status] TINYINT NOT NULL;
 
 GO
 -- Creación del proyecto
