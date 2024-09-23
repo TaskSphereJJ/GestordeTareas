@@ -26,10 +26,9 @@
 
     @if (User.IsInRole("Administrador"))
     {
-        <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center">
+        <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate(@ViewBag.ProyectoId)">
             <i class="fas fa-plus-circle mr-2"></i> Nueva Tarea
         </a>
-
     }
 </div>
 
