@@ -22,6 +22,7 @@ namespace GestordeTareas.DAL
         public DbSet<Proyecto> Proyecto { get; set; }
         public DbSet<ElegirTarea> ElegirTarea { get; set; }
         public DbSet<TareaFinalizada> TareaFinalizada { get; set; }
+        public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,5 +35,28 @@ namespace GestordeTareas.DAL
         }
 
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProyectoUsuario>()
+                .HasKey(pu => pu.Id);
+
+            modelBuilder.Entity<ProyectoUsuario>()
+                .Property(pu => pu.IdProyecto)
+                .HasColumnName("IdProyecto");
+
+            modelBuilder.Entity<ProyectoUsuario>()
+                .Property(pu => pu.IdUsuario)
+                .HasColumnName("IdUsuario");
+
+            modelBuilder.Entity<ProyectoUsuario>()
+                .HasOne(pu => pu.Usuario)
+                .WithMany(u => u.ProyectoUsuario) // Cambia si tienes una colección en Usuario
+                .HasForeignKey(pu => pu.IdUsuario);
+
+            modelBuilder.Entity<ProyectoUsuario>()
+                .HasOne(pu => pu.Proyecto)
+                .WithMany(p => p.ProyectoUsuario)  // Cambia si tienes una colección en Proyecto
+                .HasForeignKey(pu => pu.IdProyecto);
+        }
     }
 }

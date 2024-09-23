@@ -7,6 +7,8 @@
 
 }
 
+@await Html.PartialAsync("_AlertMessages")
+
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Prioridades</h1>
 <p>
     <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center"  onclick="cargarVistaCreate()">
@@ -155,19 +157,48 @@
 
 <script>
 
+    function handleResponse(response, isError = false) {
+        // Cerrar el modal y luego mostrar el mensaje
+        $('#editModal, #createModal, #deleteModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
+
+        setTimeout(() => {
+            if (isError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al procesar la solicitud.',
+                    confirmButtonText: 'OK',
+                    showConfirmButton: true,
+                    timer: null
+                });
+            } else {
+                Swal.fire({
+                    icon: response.success ? 'success' : 'error',
+                    title: response.success ? 'Éxito' : 'Error',
+                    text: response.message,
+                    timer: response.success ? 2000 : null,
+                    showConfirmButton: false
+                }).then(() => {
+                    if (response.success) {
+                        window.location.reload(); // Solo recarga la página si es un mensaje de éxito
+                    }
+                });
+            }
+        }, 300);
+    }
+
     function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
         var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
         $.ajax({ //Solicitud AJAX
             url: '/Prioridad/Create', // URL de la acción Create en el controlador Prioridad
             type: 'POST',  // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
-            success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                // Manejar la respuesta del servidor si es necesario
-                window.location.reload(); // Recarga la página después de enviar el formulario
-                $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
-                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }
@@ -178,12 +209,12 @@
             url: '/Prioridad/Edit', // URL de la acción Edit en el controlador Prioridad
             type: 'POST', // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
-            success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                // Recargar la página después de enviar el formulario
-                window.location.reload(); // Recarga la página después de enviar el formulario
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA
-                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }
@@ -193,11 +224,12 @@
             url: '/Prioridad/Delete', // URL de la acción POST para eliminar la Prioridad
             type: 'POST', // Método POST para enviar la solicitud
             data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la Prioridad)
-            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
-                window.location.reload(); // Recargar la página después de eliminar la Prioridad
+            success: function (response) {
+                handleResponse(response); // Maneja la respuesta de la solicitud
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
-                alert('Error al eliminar la Prioridad: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }

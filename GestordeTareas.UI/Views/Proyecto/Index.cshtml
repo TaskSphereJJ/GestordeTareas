@@ -5,9 +5,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
-
+   
 }
+
+@await Html.PartialAsync("_AlertMessages")
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyectos</h1>
 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
@@ -45,20 +46,32 @@
             <p class="text-gray-600 dark:text-gray-400 mb-4 infor"><span class="text-purple-600  dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre</p>
             <p class="text-gray-600 dark:text-gray-400 mb-4 infor"><span class="text-purple-600  dark:text-purple-400 font-bold">Fecha de finalizacion:</span> @item.FechaFinalizacion.ToShortDateString()</p>
             <div class="flex justify-end space-x-1 items-center">
-                <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
-                    Ingresar 
-                    <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                        <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
-                    </svg>
-                </a>
-
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
+                <!-- El botón "Ingresar" lo ven tanto Colaboradores como Administradores -->
+                @if (User.Identity.IsAuthenticated)
                 {
+                    <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
+                        Ingresar
+                        <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
+                            <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                }
+
+                <!-- Si el usuario es Colaborador, también verá el botón de "+" -->
+                @if (User.IsInRole("Colaborador"))
+                {
+                    <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded">
+                        <i class="fas fa-plus text-lg"></i>
+                    </a>
+                }
+                <!-- Si el usuario es Administrador, verá botones adicionales (detalles, editar, borrar) -->
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded">
+                        <i class="fas fa-plus text-lg"></i>
+                    </a>
                     <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaEdit(@item.Id)">
                         <i class="fas fa-edit text-lg"></i>
-                    </a>
-                    <a href="#" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDetails(@item.Id)">
-                        <i class="fas fa-eye text-lg"></i>
                     </a>
                     <a href="#" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDelete(@item.Id)">
                         <i class="fas fa-trash-alt text-lg"></i>
@@ -70,8 +83,7 @@
 </div>
 
 
-
-<!-- Modales -->
+<!-- Modal de creacion -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -125,30 +137,6 @@
     </div>
 </div>
 
-<!-- Modal de detalles -->
-<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-purple-700 text-white">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles del Proyecto</h5>
-                <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="detailsModalContent">
-                    <!-- Contenido de la vista de detalles se cargará aquí -->
-                </div>
-            </div>
-            <div class="modal-footer flex justify-center">
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cerrar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!-- Modal de eliminación -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -175,7 +163,36 @@
 
 
 <script>
-    
+
+    function handleResponse(response, isError = false) {
+        // Cerrar el modal y luego mostrar el mensaje
+        $('#editModal, #createModal, #deleteModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
+
+        setTimeout(() => {
+            if (isError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al procesar la solicitud.',
+                    confirmButtonText: 'OK',
+                    showConfirmButton: true,
+                    timer: null
+                });
+            } else {
+                Swal.fire({
+                    icon: response.success ? 'success' : 'error',
+                    title: response.success ? 'Éxito' : 'Error',
+                    text: response.message,
+                    timer: response.success ? 2000 : null,
+                    showConfirmButton: false
+                }).then(() => {
+                    if (response.success) {
+                        window.location.reload(); // Solo recarga la página si es un mensaje de éxito
+                    }
+                });
+            }
+        }, 300);
+    }
 
     function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
         var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
@@ -183,13 +200,12 @@
             url: '/Proyecto/Create', // URL de la acción Create en el controlador Proyecto
             type: 'POST',  // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
-            success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                // Manejar la respuesta del servidor si es necesario
-                window.location.reload(); // Recarga la página después de enviar el formulario
-                $('#createModal').modal('hide'); // Oculta el modal con ID "createModal" después de enviar el formulario
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
-                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }
@@ -200,12 +216,12 @@
             url: '/Proyecto/Edit', // URL de la acción Edit en el controlador Proyecto
             type: 'POST', // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
-            success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                // Recargar la página después de enviar el formulario
-                window.location.reload(); // Recarga la página después de enviar el formulario
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA
-                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }
@@ -215,16 +231,15 @@
             url: '/Proyecto/Delete', // URL de la acción POST para eliminar el proyecto
             type: 'POST', // Método POST para enviar la solicitud
             data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del Proyecto)
-            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
-                window.location.reload(); // Recargar la página después de eliminar el Proyecto
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
-                alert('Error al eliminar el proyecto: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }
-
-
 
     function cargarVistaCreate() { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista create
@@ -248,17 +263,6 @@
         });
     }
 
-    function cargarVistaDetails(id) { // Funcion para cargar la vista en un modal
-        $.ajax({ //solicitud AJAX para obtener la vista details
-            url: "/Proyecto/DetailsPartial/" + id, // URL de la vista que se va a cargar
-            type: "GET", // Solicitud para obtener la vista
-            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
-                $("#detailsModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "detailsModalContent"
-                $("#detailsModal").modal("show"); // Muestra el modal con ID "detailsModal" después de cargar la vista
-            }
-        });
-    }
-
     function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista delete
             url: "/Proyecto/Delete/" + id, // URL de la vista que se va a cargar
@@ -272,6 +276,5 @@
             }
         });
     }
-
 
 </script>

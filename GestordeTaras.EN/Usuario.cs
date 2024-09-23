@@ -60,6 +60,7 @@ namespace GestordeTaras.EN
         public string ConfirmPassword_Aux { get; set; } = string.Empty; // propiedad auxiliar
 
         public Cargo Cargo { get; set; } // propiedad de navegación
+        public virtual ICollection<ProyectoUsuario> ProyectoUsuario { get; set; }
     }
     public enum User_Status
     {

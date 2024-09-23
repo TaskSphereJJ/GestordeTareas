@@ -2,7 +2,7 @@
 CREATE DATABASE GestordeTareasBD
 go
 --usar la bd
-USE GestorTareasBD
+USE GestordeTareasBD
 go
 ----------TABLAS
 -- Cargo: Para saber si es administrador o colaborador
@@ -49,7 +49,6 @@ CREATE TABLE Usuario (
 
 );
 
-select * from usuario;
 GO
 -- Creación del proyecto
 CREATE TABLE Proyecto (
@@ -61,6 +60,7 @@ CREATE TABLE Proyecto (
 );
 
 GO
+
 
 -- Tarea creada por el administrador
 CREATE TABLE Tarea (
@@ -105,7 +105,15 @@ CREATE TABLE ImagenesPrueba (
 
 GO
 
-<<<<<<< HEAD
+CREATE TABLE ProyectoUsuario(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
+	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
+	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE()
+)
+delete from ProyectoUsuario
+Select * from ProyectoUsuario
+insert into ProyectoUsuario (IdUsuario,IdProyecto) values (30,20)
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Supervisor');
 
@@ -163,6 +171,3 @@ VALUES
   ('ruta/imagen1.jpg', 1),
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
-
-=======
->>>>>>> 8ce03b7f573a4decd8853c95a47d499887380b05

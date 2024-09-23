@@ -1,40 +1,21 @@
 ﻿@model GestordeTaras.EN.Usuario
 
+<div class="profile">
+    <h1>Mi Perfil</h1>
 
+    <div class="profile-info">
+        <p><strong>Nombre:</strong> @Html.DisplayFor(model => model.Nombre)</p>
+        <p><strong>Apellido:</strong> @Html.DisplayFor(model => model.Apellido)</p>
+        <p><strong>Teléfono:</strong> @Html.DisplayFor(model => model.Telefono)</p>
+        <p><strong>Fecha de Nacimiento:</strong> @Html.DisplayFor(model => model.FechaNacimiento)</p>
+        <p><strong>Cargo:</strong> @Html.DisplayFor(model => model.Cargo)</p>
+        <p><strong>Nombre de Usuario:</strong> @Html.DisplayFor(model => model.NombreUsuario)</p>
+        <p><strong>Fecha de Registro:</strong> @Html.DisplayFor(model => model.FechaRegistro)</p>
+    </div>
 
-<h1>Mi Perfil</h1>
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-@*             <th>Contraseña</th>
- *@            <th>Teléfono</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Cargo</th>
-            <th>Nombre de Usuario</th>
-        
-            <th>Fecha de Registro</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Html.DisplayFor(model => model.Nombre)</td>
-            <td>@Html.DisplayFor(model => model.Apellido)</td>
-@*             <td>@Html.DisplayFor(model => model.Pass)</td>
- *@            <td>@Html.DisplayFor(model => model.Telefono)</td>
-            <td>@Html.DisplayFor(model => model.FechaNacimiento)</td>
-            <td>@Html.DisplayFor(model => model.Cargo)</td>
-            <td>@Html.DisplayFor(model => model.NombreUsuario)</td>
-            <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
-            <td>
-                @Html.ActionLink("Modificar", "Edit", new { id = Model.Id }, new { @class = "btn btn-outline-info" })
-                @Html.ActionLink("Detalles", "Details", new { id = Model.Id }, new { @class = "btn btn-outline-secondary" })
-                @Html.ActionLink("Eliminar", "Delete", new { id = Model.Id }, new { @class = "btn btn-outline-danger" })
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <div class="profile-actions">
+        @Html.ActionLink("Modificar", "Edit", new { id = Model.Id }, new { @class = "btn btn-outline-info" })
+        @Html.ActionLink("Detalles", "Details", new { id = Model.Id }, new { @class = "btn btn-outline-secondary" })
+        @Html.ActionLink("Eliminar", "Delete", new { id = Model.Id }, new { @class = "btn btn-outline-danger" })
+    </div>
+</div>

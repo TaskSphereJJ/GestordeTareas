@@ -12,7 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DfXdz2htPHrenZ9h4z1U1TzXPOOjk4gfaLI9f/+nJF1cPmUz2c4zlr4I9aMIel0t" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-rfwlPRxWExv5sf0pd4l71r5Id3vYkQIm0IaOH1VlqzLX8ASwbS7qHwXy1Fm5zH4JAr6Drl7HDe5Kr1yzE+yyCg==" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/GestordeTareas.UI.styles.css" asp-append-version="true" />
 </head>
@@ -79,15 +80,26 @@
                         <div id="userMenuOptions"
                              class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
                              style="display: none;">
-                            <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
-                                <li>
-                                    <a href="#"
-                                       class="block px-4 py-2 relative transition-colors duration-300 dark:hover:bg-opacity-25 dark:hover:bg-gray-800 dark:hover:text-white hover:bg-opacity-25 hover:bg-gray-200 dark:text-white dark:hover:text-white  hover:text-white transition-opacity duration-300 text-white ">
-                                        <span class="absolute inset-0 bg-transparent transition-opacity duration-300"></span>
-                                        Dashboard
+                                <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
+                                    <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
+                                       asp-area="" asp-controller="Usuario" asp-action="Logout">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
+                                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
+                                        </svg>
+
+                                        <span class="mx-2 text-sm font-medium">Cerrar Sesion </span>
                                     </a>
-                                </li>
-                            </ul>
+
+                                    <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
+                                       asp-area="" asp-controller="Usuario" asp-action="Perfil">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
+                                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
+                                        </svg>
+
+                                        <span class="mx-2 text-sm font-medium">Perfil</span>
+                                    </a>
+
+                                </ul>
                         </div>
                     </div>
                 </div>
@@ -130,6 +142,8 @@
                         </svg>
                         <span class="mx-2 text-sm font-medium">Inicio</span>
                     </a>
+
+                    <!--perfil-->
                     <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
                        asp-area="" asp-controller="Usuario" asp-action="Perfil">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
@@ -138,6 +152,7 @@
 
                         <span class="mx-2 text-sm font-medium">Perfil</span>
                     </a>
+
                    @*  Validadcion para User    ---INICIO---- *@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
@@ -172,6 +187,19 @@
                             </svg>
 
                             <span class="mx-2 text-sm font-medium">Cargo</span>
+                        </a>
+
+                        @* EstadoTarea *@
+                        <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100 no-underline"
+                           asp-area="" asp-controller="EstadoTarea" asp-action="Index">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                            </svg>
+                            <span class="mx-2 text-sm font-medium">Estado Tarea</span>
                         </a>
 
                         @* usuario *@
@@ -225,7 +253,14 @@
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Colaborador"))
                     {
+                        <a class="flex  no-underline no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
+                           asp-area="" asp-controller="ProyectoUsuario" asp-action="MisProyectos">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-gear w-5 h-5" viewBox="0 0 16 16">
+                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
+                            </svg>
 
+                            <span class="mx-2 text-sm font-medium">Mis Proyectos</span>
+                        </a>
 
                         <a class="flex items-center  no-underline px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
                            asp-area="" asp-controller="Tarea" asp-action="Index">

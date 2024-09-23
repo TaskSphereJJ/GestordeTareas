@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GestordeTareas.BL;
 using GestordeTaras.EN;
@@ -34,6 +34,7 @@ namespace GestordeTareas.UI.Controllers
             // Se crean SelectList para cada entidad con las propiedades Id como valor y Nombre como texto visible
             ViewBag.Cargos = new SelectList(cargos, "Id", "Nombre");
         }
+
 
         // GET: UsuarioController
         public async Task<ActionResult> Index(Usuario user = null)
@@ -108,9 +109,10 @@ namespace GestordeTareas.UI.Controllers
         public async Task<IActionResult> Create()
         {
             await LoadDropDownListsAsync();
-            return PartialView(); 
+            return View();
         }
 
+        // POST: UsuarioController/Create
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -144,12 +146,13 @@ namespace GestordeTareas.UI.Controllers
 
             catch (Exception ex)
             {
-                // Manejar errores y recargar la vista del modal con los errores
                 ViewBag.Error = ex.Message;
-                ViewBag.Cargos = await cargoBL.GetAllAsync();
+                await LoadDropDownListsAsync();
                 return View(usuario);
             }
         }
+
+
 
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
@@ -169,7 +172,6 @@ namespace GestordeTareas.UI.Controllers
             // Devolver la vista parcial "Edit" con el usuario
             return PartialView("Edit", usuario);
         }
-
 
         // POST: UsuarioController/Edit/5
         [HttpPost]
@@ -198,7 +200,6 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Delete", usuario);
         }
 
-
         // POST: UsuarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -206,21 +207,20 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                int result = await _usuarioBL.DeleteAsync(usuario); // Llama al método Delete que acepta un int id
+                int result = await _usuarioBL.Delete(usuario);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+                var userDb = await _usuarioBL.GetByIdAsync(usuario);
                 if (userDb == null)
                     userDb = new Usuario();
                 if (userDb.Id > 0)
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                return View(userDb); // Usa la vista Delete para mostrar detalles del usuario en caso de error
+                return View(userDb);
             }
         }
-
 
         // acción que muestra el formulario de inicio de sesión
         [AllowAnonymous]
