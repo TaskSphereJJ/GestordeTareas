@@ -1,141 +1,144 @@
 ﻿@model GestordeTaras.EN.Usuario
 
-<form asp-action="Edit" asp-controller="Usuario" method="post">
-    <input type="hidden" name="Id" value="@Model.Id" />
-
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-2xl leading-6 font-bold text-gray-500 dark:text-white">Perfil</h3>
-                <div class="mt-2 max-w-xl text-lg text-gray-500 dark:text-gray-400">
-                    <p>Información personal del usuario.</p>
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-2xl leading-6 font-bold text-gray-500 dark:text-white">Perfil</h3>
+            <div class="mt-2 max-w-xl text-lg text-gray-500 dark:text-gray-400">
+                <p>Información personal del usuario.</p>
+            </div>
+        </div>
+        <div class="px-4 py-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Foto de perfil -->
+            <div class="col-span-1 flex flex-col items-center">
+                <div class="relative">
+                    <img src="~/img/FOOTOO.png" alt="User Avatar" class="h-80 w-80 object-cover rounded-full shadow-md">
+                    <button
+                        class="absolute bottom-2 right-2 bg-purple-500 text-white p-3 rounded-full hover:bg-purple-700">
+                        <i class="fas fa-camera"></i>
+                    </button>
                 </div>
             </div>
 
-            <div class="px-4 py-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Foto de perfil -->
-                <div class="col-span-1 flex flex-col items-center">
-                    <div class="relative">
-                        <img src="~/img/FOOTOO.png" alt="User Avatar"
-                            class="h-80 w-80 object-cover rounded-full shadow-md">
-                        <button
-                            class="absolute bottom-2 right-2 bg-purple-500 text-white p-3 rounded-full hover:bg-purple-700">
-                            <i class="fas fa-camera"></i>
+            <!-- Información del perfil -->
+            <div class="col-span-1">
+                <!-- Modo de visualización -->
+                <div id="view-mode" class="space-y-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-user text-purple-500 mr-2"></i>
+                        <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Nombre:</label>
+                        <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Nombre</p>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-user-tag text-purple-500 mr-2"></i>
+                        <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Apellido:</label>
+                        <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Apellido</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <i class="fas fa-envelope text-purple-500 mr-2"></i>
+                        <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Email:</label>
+                        <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.NombreUsuario</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <i class="fas fa-phone-alt text-purple-500 mr-2"></i>
+                        <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Teléfono:</label>
+                        <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Telefono</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <i class="fas fa-birthday-cake text-purple-500 mr-2"></i>
+                        <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Fecha de
+                            Nacimiento:</label>
+                        <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">
+                            @Model.FechaNacimiento.ToString("yyyy-MM-dd")</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase text-purple-500 mr-2"></i>
+                        <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Cargo:</label>
+                        <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Cargo?.Nombre ??
+                            "No Asignado"</p>
+                    </div>
+                </div>
+
+                <!-- Modo de edición -->
+                <div id="edit-mode" class="hidden space-y-6">
+                    <div class="flex flex-col">
+                        <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Nombre:</label>
+                        <input type="text" value="@Model.Nombre"
+                            class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Apellido:</label>
+                        <input type="text" value="@Model.Apellido"
+                            class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Email:</label>
+                        <input type="email" value="@Model.NombreUsuario"
+                            class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Teléfono:</label>
+                        <input type="text" value="@Model.Telefono"
+                            class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Fecha de
+                            Nacimiento:</label>
+                        <input type="date" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")"
+                            class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
+                    </div>
+
+                    <div class="mt-6 flex space-x-4">
+                        <button id="save-changes"
+                            class="px-6 py-3 bg-purple-500 text-white text-lg font-medium rounded-md shadow hover:bg-purple-700">
+                            Guardar
+                        </button>
+                        <button type="button" id="cancel-edit"
+                            class="px-6 py-3 bg-gray-300 text-gray-800 text-lg font-medium rounded-md shadow hover:bg-gray-400">
+                            Cancelar
                         </button>
                     </div>
                 </div>
 
-                <!-- Información del perfil -->
-                <div class="col-span-1">
-                    <!-- Modo de visualización -->
-                    <div id="view-mode" class="space-y-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-user text-purple-500 mr-2"></i>
-                            <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Nombre:</label>
-                            <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Nombre</p>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-user-tag text-purple-500 mr-2"></i>
-                            <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Apellido:</label>
-                            <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Apellido</p>
-                        </div>
-
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope text-purple-500 mr-2"></i>
-                            <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Email:</label>
-                            <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.NombreUsuario
-                            </p>
-                        </div>
-
-                        <div class="flex items-center">
-                            <i class="fas fa-phone-alt text-purple-500 mr-2"></i>
-                            <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Teléfono:</label>
-                            <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Telefono</p>
-                        </div>
-
-                        <div class="flex items-center">
-                            <i class="fas fa-birthday-cake text-purple-500 mr-2"></i>
-                            <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Fecha de
-                                Nacimiento:</label>
-                            <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">
-                                @Model.FechaNacimiento.ToString("yyyy-MM-dd")</p>
-                        </div>
-
-                        <div class="flex items-center">
-                            <i class="fas fa-briefcase text-purple-500 mr-2"></i>
-                            <label class="block text-lg font-medium text-gray-800 dark:text-gray-300">Cargo:</label>
-                            <p class="text-xl font-semibold text-gray-500 dark:text-gray-100 ml-2">@Model.Cargo?.Nombre
-                                ?? "No Asignado"</p>
-                        </div>
-                    </div>
-
-                    <!-- Modo de edición -->
-                    <div id="edit-mode" class="hidden space-y-6">
-                        <!-- Aquí los inputs para editar el perfil -->
-                        <div class="flex flex-col">
-                            <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Nombre:</label>
-                            <input type="text" name="Nombre" value="@Model.Nombre"
-                                class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
-                        </div>
-                        <div class="flex flex-col">
-                            <label
-                                class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Apellido:</label>
-                            <input type="text" name="Apellido" value="@Model.Apellido"
-                                class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
-                        </div>
-                        <div class="flex flex-col">
-                            <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Email:</label>
-                            <input type="email" name="NombreUsuario" value="@Model.NombreUsuario"
-                                class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
-                        </div>
-                        <div class="flex flex-col">
-                            <label
-                                class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Teléfono:</label>
-                            <input type="text" name="Telefono" value="@Model.Telefono"
-                                class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
-                        </div>
-                        <div class="flex flex-col">
-                            <label class="block text-lg font-semibold text-gray-800 dark:text-gray-300">Fecha de
-                                Nacimiento:</label>
-                            <input type="date" name="FechaNacimiento"
-                                value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")"
-                                class="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-xl">
-                        </div>
-
-                        <div class="mt-6 flex space-x-4">
-                            <button type="submit"
-                                class="px-6 py-3 bg-purple-500 text-white text-lg font-medium rounded-md shadow hover:bg-purple-700">
-                                Guardar
-                            </button>
-                            <button type="button" id="cancel-edit"
-                                class="px-6 py-3 bg-gray-300 text-gray-800 text-lg font-medium rounded-md shadow hover:bg-gray-400">
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Botón para activar modo de edición -->
-                    <div id="edit-button" class="mt-6">
-                        <button type="button" id="edit-profile"
-                            class="px-6 py-3 bg-purple-500 text-white text-lg font-medium rounded-md shadow hover:bg-purple-700">
-                            Editar Perfil
-                        </button>
-                    </div>
+                <!-- Botón para activar modo de edición -->
+                <div id="edit-button" class="mt-6">
+                    <button id="edit-profile"
+                        class="px-6 py-3 bg-purple-500 text-white text-lg font-medium rounded-md shadow hover:bg-purple-700">
+                        Editar Perfil
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</form>
+</div>
 
-<!-- SweetAlert para mostrar mensaje de éxito -->
-@if (TempData["SuccessMessage"] != null)
-{
-    <script>
+<script>
+    // JavaScript para alternar entre el modo de visualización y edición
+    document.getElementById('edit-profile').addEventListener('click', function () {
+        document.getElementById('view-mode').classList.add('hidden');
+        document.getElementById('edit-mode').classList.remove('hidden');
+        document.getElementById('edit-button').classList.add('hidden');
+    });
+
+    document.getElementById('cancel-edit').addEventListener('click', function () {
+        document.getElementById('view-mode').classList.remove('hidden');
+        document.getElementById('edit-mode').classList.add('hidden');
+        document.getElementById('edit-button').classList.remove('hidden');
+    });
+
+    document.getElementById('save-changes').addEventListener('click', function () {
         Swal.fire({
             icon: 'success',
             title: '¡Éxito!',
-            text: '@TempData["SuccessMessage"]',
+            text: 'Tu perfil se actualizó correctamente',
             confirmButtonColor: '#6c63ff'
+        }).then(() => {
+            // Redirigir o refrescar la página
+            window.location.reload();
         });
-    </script>
-}
+    });
+</script>
