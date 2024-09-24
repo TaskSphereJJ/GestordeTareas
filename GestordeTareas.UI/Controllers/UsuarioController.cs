@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GestordeTareas.UI.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador, Colaborador")]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class UsuarioController : Controller
     {
         UsuarioBL _usuarioBL = new UsuarioBL();
@@ -37,6 +37,7 @@ namespace GestordeTareas.UI.Controllers
 
 
         // GET: UsuarioController
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Index(Usuario user = null)
         {
             //List<Usuarios> Lista = await _usuarioBL.GetAllAsync();
@@ -55,6 +56,7 @@ namespace GestordeTareas.UI.Controllers
             return View(Lista);
         }
 
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Perfil()
         {
             try
@@ -153,7 +155,6 @@ namespace GestordeTareas.UI.Controllers
         }
 
 
-
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
@@ -178,10 +179,36 @@ namespace GestordeTareas.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Usuario usuario)
         {
+            if (id != usuario.Id)
+            {
+                return NotFound();
+            }
+
             try
             {
-                int result = await _usuarioBL.Update(usuario);
-                return RedirectToAction(nameof(Index));
+                var existingUser = await _usuarioBL.GetByIdAsync(usuario);
+
+                if (User.IsInRole("Administrador"))
+                {
+                    // Si es administrador, permite editar todos los campos
+                    await _usuarioBL.Update(usuario);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    // Si no es administrador, actualiza solo campos específicos
+                    
+                    existingUser.Nombre = usuario.Nombre;
+                    existingUser.Apellido = usuario.Apellido;
+                    existingUser.Pass = usuario.Pass; // O mantener el password anterior si no se quiere cambiar
+                    existingUser.Telefono = usuario.Telefono;
+                    existingUser.FechaNacimiento = usuario.FechaNacimiento;
+                    existingUser.NombreUsuario = usuario.NombreUsuario;
+
+                    // Status y Cargo no se deben cambiar para colaboradores
+                    await _usuarioBL.Update(existingUser);
+                    return RedirectToAction("Perfil", new { id = existingUser.Id });
+                }               
             }
             catch (Exception ex)
             {
@@ -207,7 +234,27 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                // Obtener el usuario que se va a eliminar
+                var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+
+                if (userDb == null)
+                {
+                    return NotFound(); // Retornar 404 si el usuario no se encuentra
+                }
+
+                // Obtener el ID del usuario que está actualmente logueado
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 int result = await _usuarioBL.Delete(usuario);
+
+                // Verificar si el usuario que está borrando es el mismo que está logueado
+                if (usuario.Id.ToString() == currentUserId)
+                {
+                    // Si el colaborador está eliminando su propia cuenta, cerrar sesión
+                    await HttpContext.SignOutAsync(); // Cerrar sesión del usuario
+                    return RedirectToAction("Login", "Usuario"); // Redirigir al login
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

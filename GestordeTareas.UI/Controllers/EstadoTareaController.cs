@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace GestordeTareas.UI.Controllers
 {
 
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "Administrador", AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class EstadoTareaController : Controller
 
     {
