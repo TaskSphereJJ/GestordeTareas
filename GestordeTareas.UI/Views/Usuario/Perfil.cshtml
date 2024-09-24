@@ -1,6 +1,8 @@
 ﻿@model GestordeTaras.EN.Usuario
 
-<h1>Perfil de Usuario</h1>
+<h1>Mi Perfil</h1>
+
+@await Html.PartialAsync("_AlertMessages")
 
 <!-- Botón para activar el modo de edición -->
 <button id="editProfileBtn" class="btn btn-outline-primary" onclick="toggleEditMode()">Editar Perfil</button>
@@ -119,5 +121,6 @@
             editButton.style.display = 'inline-block';
         }
     }
+
 </script>
 

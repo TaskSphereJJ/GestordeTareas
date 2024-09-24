@@ -21,6 +21,12 @@
     </div>
 
     <div class="mb-4">
+        <label for="nombreUsuario" class="block text-gray-700 text-sm font-bold mb-2">Correo electrónico</label>
+        <input asp-for="NombreUsuario" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="nombreUsuario" type="text" placeholder="Nombre de Usuario" />
+        <span asp-validation-for="NombreUsuario" class="text-red-500 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
         <label for="telefono" class="block text-gray-700 text-sm font-bold mb-2">Teléfono</label>
         <input asp-for="Telefono" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="telefono" type="text" placeholder="Teléfono" />
         <span asp-validation-for="Telefono" class="text-red-500 text-xs italic"></span>
@@ -28,7 +34,7 @@
 
     <div class="mb-4">
         <label for="fechaNacimiento" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Nacimiento</label>
-        <input asp-for="FechaNacimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="fechaNacimiento" type="date" />
+        <input asp-for="FechaNacimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="fechaNacimiento" type="date" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")"/>
         <span asp-validation-for="FechaNacimiento" class="text-red-500 text-xs italic"></span>
     </div>
 
@@ -41,33 +47,11 @@
     </div>
 
     <div class="mb-4">
-        <label for="nombreUsuario" class="block text-gray-700 text-sm font-bold mb-2">Nombre de Usuario</label>
-        <input asp-for="NombreUsuario" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="nombreUsuario" type="text" placeholder="Nombre de Usuario" />
-        <span asp-validation-for="NombreUsuario" class="text-red-500 text-xs italic"></span>
-    </div>
-
-    <div class="mb-4">
         <label asp-for="Status" class="block text-gray-700 text-sm font-bold mb-2">Estado</label>
         <select asp-for="Status" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500">
             <option value="1">ACTIVO</option>
             <option value="2">INACTIVO</option>
         </select>
         <span asp-validation-for="Status" class="text-purple-700 text-xs italic"></span>
-    </div>
-
-    <div class="mb-4">
-        <label for="fechaRegistro" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Registro</label>
-        <input asp-for="FechaRegistro" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="fechaRegistro" type="text" placeholder="Fecha de Registro" />
-        <span asp-validation-for="FechaRegistro" class="text-red-500 text-xs italic"></span>
-    </div>
-    @if (User.IsInRole("Colaborador"))
-    {
-        <div class="flex items-center justify-between mt-6">
-            <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
-                Guardar Cambios
-            </button>
-            <a href="@Url.Action("Perfil")" class="text-purple-700 hover:text-purple-500">Cancelar</a>
-        </div>
-    }
-    
+    </div>    
 </form>

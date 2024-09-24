@@ -174,47 +174,55 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Edit", usuario);
         }
 
-        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Usuario usuario)
         {
             if (id != usuario.Id)
             {
-                return NotFound();
+                return Json(new { success = false, message = "El usuario no fue encontrado." });
             }
 
             try
             {
                 var existingUser = await _usuarioBL.GetByIdAsync(usuario);
+                if (existingUser == null)
+                {
+                    return Json(new { success = false, message = "El usuario no fue encontrado." });
+                }
 
+                // Actualiza los campos comunes para todos los usuarios
+                existingUser.Nombre = usuario.Nombre;
+                existingUser.Apellido = usuario.Apellido;
+                existingUser.Telefono = usuario.Telefono;
+                existingUser.FechaNacimiento = usuario.FechaNacimiento;
+                existingUser.NombreUsuario = usuario.NombreUsuario;
+
+                // Solo actualiza la contraseña si se ha proporcionado
+                if (!string.IsNullOrEmpty(usuario.Pass))
+                {
+                    existingUser.Pass = usuario.Pass; // Actualiza la contraseña
+                }
+
+                // Permitir que el administrador cambie los campos adicionales solo si es su propio perfil
                 if (User.IsInRole("Administrador"))
                 {
-                    // Si es administrador, permite editar todos los campos
-                    await _usuarioBL.Update(usuario);
-                    return RedirectToAction(nameof(Index));
+                    // Si está editando su propio perfil, puede cambiar más campos
+                    if (existingUser.Id == usuario.Id)
+                    {
+                        existingUser.Cargo = usuario.Cargo; // Permitir cambio de cargo
+                                                            // Aquí puedes añadir otras propiedades que quieras permitir editar
+                    }
                 }
-                else
-                {
-                    // Si no es administrador, actualiza solo campos específicos
-                    
-                    existingUser.Nombre = usuario.Nombre;
-                    existingUser.Apellido = usuario.Apellido;
-                    existingUser.Pass = usuario.Pass; // O mantener el password anterior si no se quiere cambiar
-                    existingUser.Telefono = usuario.Telefono;
-                    existingUser.FechaNacimiento = usuario.FechaNacimiento;
-                    existingUser.NombreUsuario = usuario.NombreUsuario;
 
-                    // Status y Cargo no se deben cambiar para colaboradores
-                    await _usuarioBL.Update(existingUser);
-                    return RedirectToAction("Perfil", new { id = existingUser.Id });
-                }               
+                // Actualiza el usuario en la base de datos
+                await _usuarioBL.Update(existingUser);
+                return Json(new { success = true, message = "Perfil actualizado correctamente." });
+
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                await LoadDropDownListsAsync();
-                return View(usuario);
+                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
             }
         }
 
