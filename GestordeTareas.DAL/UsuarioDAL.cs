@@ -112,7 +112,7 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())
             {
                 // Busca el usuario por su ID y asigna el resultado a la variable usuarioDB.
-                usuarioDB = await bdContexto.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                usuarioDB = await bdContexto.Usuario.Include(u => u.Cargo).FirstOrDefaultAsync(u => u.Id == usuario.Id);
             }
             // Retorna el usuario encontrado.
             return usuarioDB;
@@ -172,11 +172,12 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
-                select = QuerySelect(select, usuarios);
+                select = QuerySelect(select, usuarios).Include(u => u.Cargo); // Asegúrate de incluir el Cargo aquí
                 users = await select.ToListAsync();
             }
             return users;
         }
+
 
         public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
         {

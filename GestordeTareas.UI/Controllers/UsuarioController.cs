@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GestordeTareas.UI.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "Administrador, Colaborador")]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class UsuarioController : Controller
     {
         UsuarioBL _usuarioBL = new UsuarioBL();
@@ -37,6 +37,7 @@ namespace GestordeTareas.UI.Controllers
 
 
         // GET: UsuarioController
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Index(Usuario user = null)
         {
             //List<Usuarios> Lista = await _usuarioBL.GetAllAsync();
@@ -55,6 +56,7 @@ namespace GestordeTareas.UI.Controllers
             return View(Lista);
         }
 
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Perfil()
         {
             try
@@ -153,7 +155,6 @@ namespace GestordeTareas.UI.Controllers
         }
 
 
-
         // GET: UsuarioController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
@@ -173,21 +174,55 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Edit", usuario);
         }
 
-        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Usuario usuario)
         {
+            if (id != usuario.Id)
+            {
+                return Json(new { success = false, message = "El usuario no fue encontrado." });
+            }
+
             try
             {
-                int result = await _usuarioBL.Update(usuario);
-                return RedirectToAction(nameof(Index));
+                var existingUser = await _usuarioBL.GetByIdAsync(usuario);
+                if (existingUser == null)
+                {
+                    return Json(new { success = false, message = "El usuario no fue encontrado." });
+                }
+
+                // Actualiza los campos comunes para todos los usuarios
+                existingUser.Nombre = usuario.Nombre;
+                existingUser.Apellido = usuario.Apellido;
+                existingUser.Telefono = usuario.Telefono;
+                existingUser.FechaNacimiento = usuario.FechaNacimiento;
+                existingUser.NombreUsuario = usuario.NombreUsuario;
+
+                // Solo actualiza la contraseña si se ha proporcionado
+                if (!string.IsNullOrEmpty(usuario.Pass))
+                {
+                    existingUser.Pass = usuario.Pass; // Actualiza la contraseña
+                }
+
+                // Permitir que el administrador cambie los campos adicionales solo si es su propio perfil
+                if (User.IsInRole("Administrador"))
+                {
+                    // Si está editando su propio perfil, puede cambiar más campos
+                    if (existingUser.Id == usuario.Id)
+                    {
+                        existingUser.Cargo = usuario.Cargo; // Permitir cambio de cargo
+                                                            // Aquí puedes añadir otras propiedades que quieras permitir editar
+                    }
+                }
+
+                // Actualiza el usuario en la base de datos
+                await _usuarioBL.Update(existingUser);
+                return Json(new { success = true, message = "Perfil actualizado correctamente." });
+
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                await LoadDropDownListsAsync();
-                return View(usuario);
+                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
             }
         }
 
@@ -207,7 +242,27 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                // Obtener el usuario que se va a eliminar
+                var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+
+                if (userDb == null)
+                {
+                    return NotFound(); // Retornar 404 si el usuario no se encuentra
+                }
+
+                // Obtener el ID del usuario que está actualmente logueado
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 int result = await _usuarioBL.Delete(usuario);
+
+                // Verificar si el usuario que está borrando es el mismo que está logueado
+                if (usuario.Id.ToString() == currentUserId)
+                {
+                    // Si el colaborador está eliminando su propia cuenta, cerrar sesión
+                    await HttpContext.SignOutAsync(); // Cerrar sesión del usuario
+                    return RedirectToAction("Login", "Usuario"); // Redirigir al login
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
