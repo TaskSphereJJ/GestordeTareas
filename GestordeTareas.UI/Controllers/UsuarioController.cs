@@ -56,7 +56,7 @@ namespace GestordeTareas.UI.Controllers
             return View(Lista);
         }
 
-        [Authorize(Roles = "Administrador, Colaborador")]
+        [Authorize]
         public async Task<ActionResult> Perfil()
         {
             try
@@ -174,17 +174,33 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Edit", usuario);
         }
 
+        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Edit(int id, Usuario usuario)
         {
-            if (id != usuario.Id)
-            {
-                return Json(new { success = false, message = "El usuario no fue encontrado." });
-            }
-
             try
             {
+                int result = await _usuarioBL.Update(usuario);
+                return Json(new { success = true, message = "Usuario actualizado correctamente." });
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditOwn(Usuario usuario)
+        {
+            try
+            {
+                await LoadDropDownListsAsync();
+
                 var existingUser = await _usuarioBL.GetByIdAsync(usuario);
                 if (existingUser == null)
                 {
@@ -210,8 +226,9 @@ namespace GestordeTareas.UI.Controllers
                     // Si está editando su propio perfil, puede cambiar más campos
                     if (existingUser.Id == usuario.Id)
                     {
-                        existingUser.Cargo = usuario.Cargo; // Permitir cambio de cargo
-                                                            // Aquí puedes añadir otras propiedades que quieras permitir editar
+                        existingUser.Cargo = usuario.Cargo;
+                        existingUser.Status = usuario.Status;// Permitir cambio de cargo
+                                                             // Aquí puedes añadir otras propiedades que quieras permitir editar
                     }
                 }
 
@@ -235,45 +252,63 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Delete", usuario);
         }
 
+
         // POST: UsuarioController/Delete/5
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, Usuario usuario)
         {
             try
             {
-                // Obtener el usuario que se va a eliminar
-                var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-
-                if (userDb == null)
-                {
-                    return NotFound(); // Retornar 404 si el usuario no se encuentra
-                }
-
-                // Obtener el ID del usuario que está actualmente logueado
-                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
                 int result = await _usuarioBL.Delete(usuario);
-
-                // Verificar si el usuario que está borrando es el mismo que está logueado
-                if (usuario.Id.ToString() == currentUserId)
-                {
-                    // Si el colaborador está eliminando su propia cuenta, cerrar sesión
-                    await HttpContext.SignOutAsync(); // Cerrar sesión del usuario
-                    return RedirectToAction("Login", "Usuario"); // Redirigir al login
-                }
-
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Usuario eliminado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                var userDb = await _usuarioBL.GetByIdAsync(usuario);
-                if (userDb == null)
-                    userDb = new Usuario();
-                if (userDb.Id > 0)
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                return View(userDb);
+                return Json(new { success = false, message = $"Error al eliminar el usuario: {ex.Message}" });
+            }
+        }
+
+        // Método para eliminar la cuenta del usuario que está logueado
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteOwn()
+        {
+            // Obtener el ID del usuario que está actualmente logueado
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int usuarioId;
+
+            // Intentar convertir el ID de usuario a un entero
+            if (!int.TryParse(currentUserId, out usuarioId))
+            {
+                ViewBag.Error = "ID de usuario no válido.";
+                return View("Perfil"); // Manejo de error si la conversión falla
+            }
+
+            // Obtener el usuario correspondiente al ID
+            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = usuarioId });
+
+            // Verificar que el usuario exista
+            if (usuario == null)
+            {
+                // Manejar el caso donde el usuario no se encuentra
+                ViewBag.Error = "El usuario no existe.";
+                return View("Perfil"); // O redirigir a otra vista
+            }
+
+            try
+            {
+                // Eliminar el usuario
+                int result = await _usuarioBL.Delete(usuario);
+                return RedirectToAction("Login", "Usuario"); // Redirigir a logout o a una página de confirmación
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones
+                ViewBag.Error = ex.Message;
+                return View("Perfil"); // O redirigir a la vista del perfil
             }
         }
 
