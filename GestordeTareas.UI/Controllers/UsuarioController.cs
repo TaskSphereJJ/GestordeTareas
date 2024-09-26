@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -104,7 +106,7 @@ namespace GestordeTareas.UI.Controllers
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
-            return View("Details",user);
+            return View("Details", user);
         }
 
         // GET: UsuarioController/Create
@@ -132,7 +134,7 @@ namespace GestordeTareas.UI.Controllers
                     if (ModelState.IsValid)
                     {
                         int createresult = await _usuarioBL.Create(usuario);
-                        TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
+                        TempData["SuccessMessage"] = "Usuario creado correctamente.";
                         return RedirectToAction(nameof(Index));
                     }
                 }
@@ -204,7 +206,7 @@ namespace GestordeTareas.UI.Controllers
                 if (existingUser == null)
                 {
                     TempData["ErrorMessage"] = "El usuario no fue encontrado.";
-                    return RedirectToAction("Perfil"); 
+                    return RedirectToAction("Perfil");
                 }
 
                 // Si el usuario proporciona una nueva contraseña, verifica la contraseña actual
@@ -213,10 +215,10 @@ namespace GestordeTareas.UI.Controllers
 
                     // Verifica si la contraseña actual coincide con la almacenada
                     if (UsuarioDAL.HashMD5(currentPassword) != existingUser.Pass)
-                     {
+                    {
                         TempData["ErrorMessage"] = "La contraseña actual es incorrecta.";
-                        return RedirectToAction("Perfil"); 
-                     }
+                        return RedirectToAction("Perfil");
+                    }
 
                     // Verificar que la nueva contraseña y la confirmación coincidan
                     if (usuario.Pass != usuario.ConfirmarPass)
@@ -225,7 +227,7 @@ namespace GestordeTareas.UI.Controllers
                         return RedirectToAction("Perfil");
                     }
 
-                    existingUser.Pass = UsuarioDAL.HashMD5(usuario.Pass); 
+                    existingUser.Pass = UsuarioDAL.HashMD5(usuario.Pass);
                 }
 
                 // Actualiza los campos comunes para todos los usuarios
@@ -252,7 +254,7 @@ namespace GestordeTareas.UI.Controllers
             {
                 TempData["ErrorMessage"] = $"Error al actualizar el perfil: {ex.Message}";
                 return RedirectToAction("Perfil");
-            }         
+            }
         }
 
 
@@ -284,46 +286,57 @@ namespace GestordeTareas.UI.Controllers
             }
         }
 
-        // Método para eliminar la cuenta del usuario que está logueado
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteOwn()
         {
-            // Obtener el ID del usuario que está actualmente logueado
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int usuarioId;
 
-            // Intentar convertir el ID de usuario a un entero
-            if (!int.TryParse(currentUserId, out usuarioId))
+            // Verifica si el usuario está autenticado
+            if (!User.Identity.IsAuthenticated)
             {
-                ViewBag.Error = "ID de usuario no válido.";
-                return View("Perfil"); // Manejo de error si la conversión falla
+                TempData["ErrorMessage"] = "Usuario no autenticado.";
+                return RedirectToAction("Login", "Usuario");
             }
 
-            // Obtener el usuario correspondiente al ID
-            var usuario = await _usuarioBL.GetByIdAsync(new Usuario { Id = usuarioId });
+             var nombreUsuario = User.Identity.Name;
+             Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
+
+            // Se verifica si userId es null o vacío
+            if (string.IsNullOrEmpty(nombreUsuario))
+            {
+                TempData["ErrorMessage"] = "No se pudo encontrar el usuario.";
+                return RedirectToAction("Perfil");
+            }
+
+            // Crear el objeto usuario con el ID
+            var usuario = new Usuario { NombreUsuario = nombreUsuario };
+
+            // Obtener el usuario de la base de datos
+            var usuarioDB = await _usuarioBL.GetByNombreUsuarioAsync(usuario);
 
             // Verificar que el usuario exista
-            if (usuario == null)
+            if (usuarioDB == null)
             {
-                // Manejar el caso donde el usuario no se encuentra
-                ViewBag.Error = "El usuario no existe.";
-                return View("Perfil"); // O redirigir a otra vista
+                TempData["ErrorMessage"] = "El usuario no existe";
+                return RedirectToAction("Perfil");
             }
 
-            try
+            // Eliminar el usuario
+            int result = await _usuarioBL.Delete(usuarioDB);
+
+            // Verificar si la eliminación fue exitosa
+            if (result > 0)
             {
-                // Eliminar el usuario
-                int result = await _usuarioBL.Delete(usuario);
-                return RedirectToAction("Login", "Usuario"); // Redirigir a logout o a una página de confirmación
+                TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
+                return RedirectToAction("Login", "Usuario");
             }
-            catch (Exception ex)
+            else
             {
-                // Manejar excepciones
-                ViewBag.Error = ex.Message;
-                return View("Perfil"); // O redirigir a la vista del perfil
+                TempData["ErrorMessage"] = "No se pudo eliminar la cuenta.";
+                return RedirectToAction("Perfil");
             }
         }
+
 
         // acción que muestra el formulario de inicio de sesión
         [AllowAnonymous]
@@ -348,10 +361,11 @@ namespace GestordeTareas.UI.Controllers
                 {
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {
-                new Claim(ClaimTypes.Name, userDb.NombreUsuario),
-                new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-                new Claim("Nombre", userDb.Nombre),
-                new Claim("Apellido", userDb.Apellido)
+                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
+                    new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
+                    new Claim("Nombre", userDb.Nombre),
+                    new Claim("Apellido", userDb.Apellido),
+                    new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
             };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));

@@ -139,6 +139,20 @@ namespace GestordeTareas.DAL
             return usuarioDB;
         }
 
+        // Método para obtener un usuario por su nombre de usuario de forma asincrónica.
+        public static async Task<Usuario> GetByNombreUsuarioAsync(Usuario usuario)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Busca el usuario por su nombre de usuario.
+                var usuarioDB = await dbContext.Usuario
+                    .Include(u => u.Cargo) // Incluir información de Cargo si es necesario
+                    .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario);
+                return usuarioDB;
+            }
+        }
+
+
         // Método para obtener todos los usuarios de la base de datos de forma asincrónica.
         public static async Task<List<Usuario>> GetAllAsync()
         {
