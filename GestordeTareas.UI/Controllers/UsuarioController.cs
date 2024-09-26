@@ -61,6 +61,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                await LoadDropDownListsAsync();
                 // Obtener el nombre de usuario
                 string nombreUsuario = User.Identity.Name;
 
@@ -195,16 +196,36 @@ namespace GestordeTareas.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditOwn(Usuario usuario)
+        public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword)
         {
             try
             {
-                await LoadDropDownListsAsync();
-
                 var existingUser = await _usuarioBL.GetByIdAsync(usuario);
                 if (existingUser == null)
                 {
-                    return Json(new { success = false, message = "El usuario no fue encontrado." });
+                    TempData["ErrorMessage"] = "El usuario no fue encontrado.";
+                    return RedirectToAction("Perfil"); 
+                }
+
+                // Si el usuario proporciona una nueva contraseña, verifica la contraseña actual
+                if (!string.IsNullOrEmpty(usuario.Pass))
+                {
+
+                    // Verifica si la contraseña actual coincide con la almacenada
+                    if (UsuarioDAL.HashMD5(currentPassword) != existingUser.Pass)
+                     {
+                        TempData["ErrorMessage"] = "La contraseña actual es incorrecta.";
+                        return RedirectToAction("Perfil"); 
+                     }
+
+                    // Verificar que la nueva contraseña y la confirmación coincidan
+                    if (usuario.Pass != usuario.ConfirmarPass)
+                    {
+                        TempData["ErrorMessage"] = "La nueva contraseña y la confirmación no coinciden.";
+                        return RedirectToAction("Perfil");
+                    }
+
+                    existingUser.Pass = UsuarioDAL.HashMD5(usuario.Pass); 
                 }
 
                 // Actualiza los campos comunes para todos los usuarios
@@ -214,34 +235,26 @@ namespace GestordeTareas.UI.Controllers
                 existingUser.FechaNacimiento = usuario.FechaNacimiento;
                 existingUser.NombreUsuario = usuario.NombreUsuario;
 
-                // Solo actualiza la contraseña si se ha proporcionado
-                if (!string.IsNullOrEmpty(usuario.Pass))
-                {
-                    existingUser.Pass = usuario.Pass; // Actualiza la contraseña
-                }
-
                 // Permitir que el administrador cambie los campos adicionales solo si es su propio perfil
-                if (User.IsInRole("Administrador"))
+                if (User.IsInRole("Administrador") && existingUser.Id == usuario.Id)
                 {
-                    // Si está editando su propio perfil, puede cambiar más campos
-                    if (existingUser.Id == usuario.Id)
-                    {
-                        existingUser.Cargo = usuario.Cargo;
-                        existingUser.Status = usuario.Status;// Permitir cambio de cargo
-                                                             // Aquí puedes añadir otras propiedades que quieras permitir editar
-                    }
+                    existingUser.Cargo = usuario.Cargo;
+                    existingUser.Status = usuario.Status;
                 }
 
                 // Actualiza el usuario en la base de datos
                 await _usuarioBL.Update(existingUser);
-                return Json(new { success = true, message = "Perfil actualizado correctamente." });
-
+                TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
+                return RedirectToAction("Perfil");
             }
+
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
-            }
+                TempData["ErrorMessage"] = $"Error al actualizar el perfil: {ex.Message}";
+                return RedirectToAction("Perfil");
+            }         
         }
+
 
         // GET: UsuarioController/Delete/5
         public async Task<ActionResult> Delete(int id)
@@ -372,36 +385,6 @@ namespace GestordeTareas.UI.Controllers
 
             return RedirectToAction("Login", "Usuario");
 
-        }
-
-        //acción que muestra el formulario para cambiar contraseña
-        public async Task<IActionResult> ChangePassword()
-        {
-            var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
-            var actualUser = users.FirstOrDefault();
-            ViewBag.Error = "";
-            return View(actualUser);
-        }
-
-        //acción que recibe los datos de la nueva contraseña
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(Usuario user, string oldPassword)
-        {
-            try
-            {
-                int result = await _usuarioBL.ChangePasswordAsync(user, oldPassword);
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return RedirectToAction("Login", "Usuario");
-
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = ex.Message;
-                var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
-                var actualUser = users.FirstOrDefault();
-                return View(actualUser);
-            }
         }
     }
 

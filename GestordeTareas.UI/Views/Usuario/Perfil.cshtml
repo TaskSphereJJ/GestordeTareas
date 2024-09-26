@@ -15,10 +15,12 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Correo electrónico</th>
-                <th>Contraseña</th>
+                <th>Contraseña Actual</th>
+                <th>Nueva Contraseña</th>
+                <th>Confirmar Nueva Contraseña</th>
                 <th>Teléfono</th>
-                <th>Cargo</th> <!-- Campo visible pero no editable -->
-                <th>Fecha de Nacimiento</th> 
+                <th>Cargo</th>
+                <th>Fecha de Nacimiento</th>
                 <th>Status</th>
                 <th>Fecha de Registro</th>
                 <th></th>
@@ -39,8 +41,16 @@
                     <span asp-validation-for="NombreUsuario" class="text-danger"></span>
                 </td>
                 <td>
+                    <input type="password" name="currentPassword" class="form-control" />
+                    <span class="text-danger" id="currentPasswordError"></span>
+                </td>
+                <td>
                     <input type="password" asp-for="Pass" class="form-control" />
                     <span asp-validation-for="Pass" class="text-danger"></span>
+                </td>
+                <td>
+                    <input type="password" name="ConfirmarPass" class="form-control" />
+                    <span class="text-danger" id="confirmPasswordError"></span>
                 </td>
                 <td>
                     <input type="text" asp-for="Telefono" class="form-control" />
@@ -49,7 +59,9 @@
                 @if (User.IsInRole("Administrador"))
                 {
                     <td>
-                        <input type="text" asp-for="Cargo.Nombre" class="form-control" /> <!-- Editable para Administradores -->
+                    <select asp-for="IdCargo" class="form-control" asp-items="ViewBag.Cargos">
+                        <option value="">Seleccionar</option>
+                    </select>
                     </td>
                 }
                 else
@@ -76,7 +88,7 @@
 
                 <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
                 <td>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-danger" onclick="toggleEditMode()">Cancelar</button>
                 </td>
             </tr>
