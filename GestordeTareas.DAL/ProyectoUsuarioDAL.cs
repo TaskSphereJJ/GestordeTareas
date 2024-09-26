@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuNamespace;
 
 namespace GestordeTareas.DAL
 {
@@ -89,5 +90,6 @@ namespace GestordeTareas.DAL
 
             return result; // Retornar el número de registros afectados
         }
+
     }
 }

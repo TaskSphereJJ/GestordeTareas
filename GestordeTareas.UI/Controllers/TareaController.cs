@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TuNamespace;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -21,6 +22,7 @@ namespace GestordeTareas.UI.Controllers
         private readonly ProyectoBL _proyectoBL;
         private readonly UsuarioBL _usuarioBL;
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
+        private readonly ElegirTareaBL _elegirTareaBL;
 
         public TareaController()
         {
@@ -31,6 +33,7 @@ namespace GestordeTareas.UI.Controllers
             _proyectoBL = new ProyectoBL();
             _usuarioBL = new UsuarioBL();
             _proyectoUsuarioBL = new ProyectoUsuarioBL();
+            _elegirTareaBL = new ElegirTareaBL();
         }
 
         // GET: TareaController
@@ -243,6 +246,46 @@ namespace GestordeTareas.UI.Controllers
             // Verificar si el usuario está unido al proyecto
             var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
             return usuariosUnidos.Any(u => u.Id == idUsuario); // Devuelve true si está unido, false si no
+        }
+
+        // POST: TareaController/ElegirTarea
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ElegirTarea(int idTarea)
+        {
+            try
+            {
+                // Obtén el ID del usuario actual
+                var usuario = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+                var idUsuario = usuario.FirstOrDefault()?.Id;
+
+                // Verificar si el usuario existe
+                if (idUsuario == null)
+                {
+                    return Json(new { success = false, message = "Usuario no encontrado." });
+                }
+
+                // Obtener la tarea por ID
+                Tarea tarea = await _tareaBL.GetById(new Tarea { Id = idTarea });
+
+                // Verificar si la tarea existe
+                if (tarea == null)
+                {
+                    return Json(new { success = false, message = "Tarea no encontrada." });
+                }
+
+                // Asignar la tarea al usuario
+                var resultado = await _elegirTareaBL.ElegirTareaAsync(idTarea, idUsuario.Value, tarea.IdProyecto);
+
+                return Json(new { success = resultado, message = resultado ? "Tarea elegida correctamente." : "Error al elegir la tarea." });
+            }
+            catch (Exception ex)
+            {
+                // Aquí podrías registrar el error usando un logger
+                // _logger.LogError(ex, "Error al elegir la tarea con ID: {IdTarea}", idTarea);
+
+                return Json(new { success = false, message = "Ocurrió un error inesperado." });
+            }
         }
 
     }

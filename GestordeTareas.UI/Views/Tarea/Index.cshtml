@@ -63,6 +63,7 @@
                         </th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach (var item in Model)
                     {
@@ -86,7 +87,8 @@
                                         <i class="fas fa-trash-alt text-lg"></i>
                                     </a>
                                 }
-                                else if (User.IsInRole("Colaborador"))
+                                else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
+
                                 {
                                     <button class="btn btn-primary btn-sm flex items-center p-2" onclick="elegirTarea(@item.Id)">
                                         Elegir
@@ -97,6 +99,8 @@
                         </tr>
                     }
                 </tbody>
+
+
             </table>
         </div>
     </div>
@@ -543,5 +547,31 @@ else
             }
         });
     }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+<script type="text/javascript">
+    function elegirTarea(idTarea) {
+        console.log("ID de tarea: ", idTarea); // Verificar el ID
 
+        $.ajax({
+            url: '@Url.Action("ElegirTarea", "Tarea")', // Asegúrate de que esta URL sea correcta
+            type: 'POST',
+            data: {
+                idTarea: idTarea // Pasar el ID de la tarea
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message); // Mensaje de éxito
+                } else {
+                    alert('Error: ' + response.message); // Mensaje de error
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText); // Muestra el texto de la respuesta del servidor
+                alert('Ha ocurrido un error: ' + error);
+            }
+        });
+    }
 </script>
+
+
+

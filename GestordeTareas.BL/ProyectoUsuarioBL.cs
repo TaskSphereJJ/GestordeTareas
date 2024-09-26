@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuNamespace;
 
 namespace GestordeTareas.BL
 {
@@ -38,5 +39,7 @@ namespace GestordeTareas.BL
             // Llamar al método de ProyectoDAL para eliminar la relación
             return await ProyectoUsuarioDAL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
         }
+
+
     }
 }
