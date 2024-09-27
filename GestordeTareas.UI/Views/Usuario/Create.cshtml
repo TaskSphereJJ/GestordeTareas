@@ -30,7 +30,7 @@
                                 <span asp-validation-for="Nombre" class="text-danger"></span>
 
                                 <label for="NombreUsuario" class="block text-gray-700 text-sm font-medium mt-4">Correo electrónico</label>
-                                <input asp-for="NombreUsuario" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre de usuario" />
+                                <input asp-for="NombreUsuario" type="email" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre de usuario" />
                                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
 
                                 <label for="Pass" class="block text-gray-700 text-sm font-medium mt-4">Contraseña</label>
@@ -78,7 +78,7 @@
                             </span>
                         </button>
                         <div class="flex justify-center mt-4">
-                            <a asp-action="Index" class="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-500 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <a asp-action="Index" class="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-500 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 no-underline">
                                 <i class="fas fa-arrow-left mr-2"></i>
                                 Regresar
                             </a>

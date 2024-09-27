@@ -42,23 +42,7 @@ namespace GestordeTareas.DAL
                     .ToListAsync();
             }
         }
-
-        // Método para obtener proyectos disponibles para un usuario
-        public static async Task<List<Proyecto>> ObtenerProyectosDisponiblesAsync(int idUsuario)
-        {
-            using (var dbContext = new ContextoBD())
-            {
-                var proyectosUnidos = await dbContext.ProyectoUsuario
-                    .Where(pu => pu.IdUsuario == idUsuario)
-                    .Select(pu => pu.IdProyecto)
-                    .ToListAsync();
-
-                return await dbContext.Proyecto
-                    .Where(p => !proyectosUnidos.Contains(p.Id))
-                    .ToListAsync();
-            }
-        }
-
+           
         public static async Task<List<Usuario>> ObtenerUsuariosUnidosAsync(int idProyecto)
         {
             using (var context = new ContextoBD())

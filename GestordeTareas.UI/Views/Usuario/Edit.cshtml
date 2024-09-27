@@ -1,9 +1,10 @@
 ﻿@model GestordeTaras.EN.Usuario
+
 @{
     ViewData["Title"] = "Edit";
 }
 
-<form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
+<<form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
     <input type="hidden" asp-for="Id" />
     <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
 
@@ -19,18 +20,17 @@
         <span asp-validation-for="Apellido" class="text-red-500 text-xs italic"></span>
     </div>
 
+    <div class="mb-4">
+        <label for="nombreUsuario" class="block text-gray-700 text-sm font-bold mb-2">correo electrónico</label>
+        <input asp-for="NombreUsuario" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="nombreUsuario" type="text" placeholder="Nombre de Usuario" />
+        <span asp-validation-for="NombreUsuario" class="text-red-500 text-xs italic"></span>
+    </div>
 
 
     <div class="mb-4">
         <label for="telefono" class="block text-gray-700 text-sm font-bold mb-2">Teléfono</label>
         <input asp-for="Telefono" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="telefono" type="text" placeholder="Teléfono" />
         <span asp-validation-for="Telefono" class="text-red-500 text-xs italic"></span>
-    </div>
-
-    <div class="mb-4">
-        <label for="fechaNacimiento" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Nacimiento</label>
-        <input asp-for="FechaNacimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="fechaNacimiento" type="date" />
-        <span asp-validation-for="FechaNacimiento" class="text-red-500 text-xs italic"></span>
     </div>
 
     <div class="mb-4">
@@ -42,9 +42,9 @@
     </div>
 
     <div class="mb-4">
-        <label for="nombreUsuario" class="block text-gray-700 text-sm font-bold mb-2">Nombre de Usuario</label>
-        <input asp-for="NombreUsuario" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="nombreUsuario" type="text" placeholder="Nombre de Usuario" />
-        <span asp-validation-for="NombreUsuario" class="text-red-500 text-xs italic"></span>
+        <label for="fechaNacimiento" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Nacimiento</label>
+        <input asp-for="FechaNacimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="fechaNacimiento" type="date" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="FechaNacimiento" class="text-red-500 text-xs italic"></span>
     </div>
 
     <div class="mb-4">
@@ -61,6 +61,4 @@
         <input asp-for="FechaRegistro" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="fechaRegistro" type="text" placeholder="Fecha de Registro" />
         <span asp-validation-for="FechaRegistro" class="text-red-500 text-xs italic"></span>
     </div>
-
-
 </form>

@@ -35,6 +35,7 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: TareaController
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Index(int proyectoId)
         {
             if (!await VerificarAcceso(proyectoId))
@@ -83,6 +84,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: TareaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Create(Tarea tarea, int idProyecto)
         {
             if (!User.IsInRole("Administrador"))
@@ -137,6 +139,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: TareaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Edit(int id, Tarea tarea)
         {
             if (!User.IsInRole("Administrador"))
@@ -166,6 +169,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: TareaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int id, Tarea tarea)
         {
             if (!User.IsInRole("Administrador"))

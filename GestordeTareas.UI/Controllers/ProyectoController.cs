@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace GestordeTareas.UI.Controllers
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class ProyectoController : Controller
     {
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
@@ -22,6 +25,7 @@ namespace GestordeTareas.UI.Controllers
         }
 
         // GET: ProyectoController
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Index()
         {
             List<Proyecto> Lista = await _proyectoBL.GetAllAsync();
@@ -58,6 +62,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: ProyectoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Create(Proyecto proyecto)
         {
             try
@@ -91,6 +96,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: ProyectoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Edit(int id, Proyecto proyecto)
         {
             try
@@ -116,6 +122,7 @@ namespace GestordeTareas.UI.Controllers
         // POST: ProyectoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int id, Proyecto proyecto)
         {
             try

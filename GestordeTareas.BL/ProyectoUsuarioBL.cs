@@ -23,12 +23,6 @@ namespace GestordeTareas.BL
             return await ProyectoUsuarioDAL.ObtenerProyectosPorUsuarioAsync(idUsuario);
         }
 
-        public static async Task<List<Proyecto>> ObtenerProyectosDisponiblesAsync(int idUsuario)
-        {
-            // Llama al método en la capa DAL
-            return await ProyectoUsuarioDAL.ObtenerProyectosDisponiblesAsync(idUsuario);
-        }
-
         public async Task<List<Usuario>> ObtenerUsuariosUnidosAsync(int idProyecto)
         {
             return await ProyectoUsuarioDAL.ObtenerUsuariosUnidosAsync(idProyecto);

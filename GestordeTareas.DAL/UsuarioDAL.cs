@@ -25,6 +25,20 @@ namespace GestordeTareas.DAL
             }
         }
 
+        public static string HashMD5(string password)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var result = md5.ComputeHash(Encoding.ASCII.GetBytes(password));
+                var encryptedStr = "";
+                for (int i = 0; i < result.Length; i++)
+                {
+                    encryptedStr += result[i].ToString("x2").ToLower();
+                }
+                return encryptedStr;
+            }
+        }
+
         private static async Task<bool> ExistsLogin(Usuario user, ContextoBD context)
         {
             bool result = false;
@@ -72,9 +86,16 @@ namespace GestordeTareas.DAL
                     userDb.Apellido = usuario.Apellido;
                     userDb.Status = usuario.Status;
                     userDb.Telefono = usuario.Telefono;
+                    userDb.Pass = usuario.Pass;
                     userDb.FechaNacimiento = usuario.FechaNacimiento;
                     userDb.FechaRegistro = usuario.FechaRegistro;
                     userDb.NombreUsuario = usuario.NombreUsuario;
+                    // Solo actualiza la contraseña si se ha proporcionado una nueva
+                    if (!string.IsNullOrEmpty(usuario.Pass))
+                    {
+                        EncryptMD5(usuario); // Encripta la nueva contraseña
+                        userDb.Pass = usuario.Pass; // Asigna la contraseña encriptada
+                    }
                     dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
                 }
@@ -112,11 +133,25 @@ namespace GestordeTareas.DAL
             using (var bdContexto = new ContextoBD())
             {
                 // Busca el usuario por su ID y asigna el resultado a la variable usuarioDB.
-                usuarioDB = await bdContexto.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+                usuarioDB = await bdContexto.Usuario.Include(u => u.Cargo).FirstOrDefaultAsync(u => u.Id == usuario.Id);
             }
             // Retorna el usuario encontrado.
             return usuarioDB;
         }
+
+        // Método para obtener un usuario por su nombre de usuario de forma asincrónica.
+        public static async Task<Usuario> GetByNombreUsuarioAsync(Usuario usuario)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Busca el usuario por su nombre de usuario.
+                var usuarioDB = await dbContext.Usuario
+                    .Include(u => u.Cargo) // Incluir información de Cargo si es necesario
+                    .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario);
+                return usuarioDB;
+            }
+        }
+
 
         // Método para obtener todos los usuarios de la base de datos de forma asincrónica.
         public static async Task<List<Usuario>> GetAllAsync()
@@ -172,11 +207,12 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
-                select = QuerySelect(select, usuarios);
+                select = QuerySelect(select, usuarios).Include(u => u.Cargo); // Asegúrate de incluir el Cargo aquí
                 users = await select.ToListAsync();
             }
             return users;
         }
+
 
         public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
         {
@@ -200,27 +236,6 @@ namespace GestordeTareas.DAL
                 u.Pass == usuarios.Pass && u.Status == (byte)User_Status.ACTIVO);
             }
             return userDb!;
-        }
-
-        public static async Task<int> ChangePasswordAsync(Usuario user, string oldPassword)
-        {
-            int result = 0;
-            var userOldPass = new Usuario { Pass = oldPassword };
-            EncryptMD5(userOldPass);
-            using (var dbContext = new ContextoBD())
-            {
-                var userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.Id == user.Id);
-                if (userOldPass.Pass == userDb.Pass)
-                {
-                    EncryptMD5(user);
-                    userDb.Pass = user.Pass;
-                    dbContext.Usuario.Update(userDb);
-                    result = await dbContext.SaveChangesAsync();
-                }
-                else
-                    throw new Exception("La contraseña actual es inválida");
-            }
-            return result;
         }
     }
 }

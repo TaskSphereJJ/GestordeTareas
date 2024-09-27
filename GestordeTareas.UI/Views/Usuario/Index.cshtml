@@ -43,21 +43,20 @@
                     @Html.DisplayNameFor(model => model.First().Apellido)
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.First().Telefono)
+                    @Html.DisplayNameFor(model => model.First().NombreUsuario)
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.First().FechaNacimiento)
+                    @Html.DisplayNameFor(model => model.First().Telefono)
                 </th>
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Cargo)
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    @Html.DisplayNameFor(model => model.First().NombreUsuario)
+                    @Html.DisplayNameFor(model => model.First().FechaNacimiento)
                 </th>
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Status)
                 </th>
-
                 <th scope="col" class="px-6 py-3 text-center">
                     Acciones
                 </th>
@@ -70,17 +69,16 @@
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Apellido)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Telefono)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaNacimiento)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Cargo.Nombre)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Telefono)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Cargo.Nombre)</td>
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaNacimiento)</td>
                     <td class="px-6 py-4">
                         @{
                             var statusName = Enum.GetName(typeof(GestordeTaras.EN.User_Status), item.Status);
                         }
                         @statusName
                     </td>
-
                     <td class="px-6 py-4 flex justify-center items-center space-x-2">
                         <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaEdit(@item.Id)">
                             <i class="fas fa-edit text-lg"></i>
@@ -126,12 +124,12 @@
 </div>
 
 
-<!-- Modal de detalles User -->
+<!-- Modal de detalles -->
 <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles del Usuario</h5>
+                <h5 class="modal-title" id="detailsModalLabel">Detalles de el Usuario</h5>
                 <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -175,18 +173,48 @@
 
 <script>
 
+    function handleResponse(response, isError = false) {
+        // Cerrar el modal y luego mostrar el mensaje
+        $('#editModal, #createModal, #deleteModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
+
+        setTimeout(() => {
+            if (isError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al procesar la solicitud.',
+                    confirmButtonText: 'OK',
+                    showConfirmButton: true,
+                    timer: null
+                });
+            } else {
+                Swal.fire({
+                    icon: response.success ? 'success' : 'error',
+                    title: response.success ? 'Éxito' : 'Error',
+                    text: response.message,
+                    timer: response.success ? 2000 : null,
+                    showConfirmButton: false
+                }).then(() => {
+                    if (response.success) {
+                        window.location.reload(); // Solo recarga la página si es un mensaje de éxito
+                    }
+                });
+            }
+        }, 300);
+    }
+
     function submiteditForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario con el ID proporcionado
         $.ajax({ //Solicitud AJAX
             url: '/Usuario/Edit', // URL de la acción Edit en el controlador user
             type: 'POST', // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
-            success: function (response) { // Función a ejecutar si la solicitud es exitosa
-                // Recargar la página después de enviar el formulario
-                window.location.reload(); // Recarga la página después de enviar el formulario
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJA
-                console.error(xhr.responseText); // Muestra el mensaje de error en la consola del navegador
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }
@@ -196,11 +224,12 @@
             url: '/Usuario/Delete', // URL de la acción POST para eliminar la Usuario
             type: 'POST', // Método POST para enviar la solicitud
             data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de  Usuario)
-            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
-                window.location.reload(); // Recargar la página después de eliminar el Usuario
+            success: function (response) {
+                handleResponse(response);
             },
-            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
-                alert('Error al eliminar el Usuario: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
             }
         });
     }

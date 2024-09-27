@@ -103,23 +103,5 @@ namespace GestordeTareas.UI.Controllers
             return View("MisProyectos",proyectos);
         }
 
-
-        // Método para obtener proyectos disponibles
-        public async Task<IActionResult> ProyectosDisponibles()
-        {
-            // Obtener el ID del usuario actual
-            var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
-            var actualUser = users.FirstOrDefault();
-
-            if (actualUser == null)
-            {
-                return NotFound(); // Manejar el caso en que no se encuentra el usuario autenticado
-            }
-
-            int idUsuario = actualUser.Id; // Obtener el ID del usuario actual
-
-            List<Proyecto> proyectosDisponibles = await ProyectoUsuarioBL.ObtenerProyectosDisponiblesAsync(idUsuario);
-            return View(proyectosDisponibles);
-        }
     }
 }

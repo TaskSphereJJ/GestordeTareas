@@ -32,6 +32,12 @@ namespace GestordeTareas.BL
             return await UsuarioDAL.GetByIdAsync(usuario);
         }
 
+        // Método para obtener un usuario por su nombre de usuario
+        public async Task<Usuario> GetByNombreUsuarioAsync(Usuario usuario)
+        {
+            return await UsuarioDAL.GetByNombreUsuarioAsync(usuario);
+        }
+
         public async Task<List<Usuario>> GetAllAsync()
         {
             return await UsuarioDAL.GetAllAsync();
@@ -50,11 +56,6 @@ namespace GestordeTareas.BL
         public async Task<Usuario> LoginAsync(Usuario usuarios)
         {
             return await UsuarioDAL.LoginAsync(usuarios);
-        }
-
-        public async Task<int> ChangePasswordAsync(Usuario usuario, string oldPassword)
-        {
-            return await UsuarioDAL.ChangePasswordAsync(usuario, oldPassword);
         }
 
     }
