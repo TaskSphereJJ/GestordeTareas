@@ -1,14 +1,12 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
 using GestordeTareas.DAL;
-using Humanizer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TuNamespace;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -262,7 +260,8 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si el usuario existe
                 if (idUsuario == null)
                 {
-                    return Json(new { success = false, message = "Usuario no encontrado." });
+                    TempData["Error"] = "Usuario no encontrado.";
+                    return RedirectToAction("Index");
                 }
 
                 // Obtener la tarea por ID
@@ -271,22 +270,40 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si la tarea existe
                 if (tarea == null)
                 {
-                    return Json(new { success = false, message = "Tarea no encontrada." });
+                    TempData["Error"] = "Tarea no encontrada.";
+                    return RedirectToAction("Index");
+                }
+
+                // Verificar si la tarea está en estado "Pendiente"
+                if (tarea.EstadoTarea.Nombre != "Pendiente")
+                {
+                    TempData["Error"] = "La tarea no está en Disponible";
+                    return RedirectToAction("Index");
                 }
 
                 // Asignar la tarea al usuario
                 var resultado = await _elegirTareaBL.ElegirTareaAsync(idTarea, idUsuario.Value, tarea.IdProyecto);
 
-                return Json(new { success = resultado, message = resultado ? "Tarea elegida correctamente." : "Error al elegir la tarea." });
+                if (resultado)
+                {
+                    // Actualizar estado de la tarea a "En Proceso"
+                    const int ID_ESTADO_EN_PROCESO = 2;
+                    await _tareaBL.ActualizarEstadoTareaAsync(idTarea, ID_ESTADO_EN_PROCESO);
+                    TempData["Success"] = "Tarea elegida correctamente .";
+                }
+                else
+                {
+                    TempData["Error"] = "No se pudo elegir la tarea.";
+                }
             }
             catch (Exception ex)
             {
-                // Aquí podrías registrar el error usando un logger
-                // _logger.LogError(ex, "Error al elegir la tarea con ID: {IdTarea}", idTarea);
-
-                return Json(new { success = false, message = "Ocurrió un error inesperado." });
+                TempData["Error"] = "Ocurrió un error inesperado.";
             }
+
+            return RedirectToAction("Index");
         }
+
 
     }
 }

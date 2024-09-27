@@ -90,9 +90,15 @@
                                 else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
 
                                 {
-                                    <button class="btn btn-primary btn-sm flex items-center p-2" onclick="elegirTarea(@item.Id)">
-                                        Elegir
-                                    </button>
+
+                                    <!-- Formulario para elegir la tarea -->
+                                    <form asp-action="Elegirtarea" method="post" class="inline-block">
+                                        <input type="hidden" name="IdTarea" value="@item.Id" />
+                                        <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            Elegir
+                                        </button>
+                                    </form>
 
                                 }
                             </td>
@@ -547,31 +553,30 @@ else
             }
         });
     }
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
-<script type="text/javascript">
-    function elegirTarea(idTarea) {
-        console.log("ID de tarea: ", idTarea); // Verificar el ID
 
-        $.ajax({
-            url: '@Url.Action("ElegirTarea", "Tarea")', // Asegúrate de que esta URL sea correcta
-            type: 'POST',
-            data: {
-                idTarea: idTarea // Pasar el ID de la tarea
-            },
-            success: function (response) {
-                if (response.success) {
-                    alert(response.message); // Mensaje de éxito
-                } else {
-                    alert('Error: ' + response.message); // Mensaje de error
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText); // Muestra el texto de la respuesta del servidor
-                alert('Ha ocurrido un error: ' + error);
+@* 
+    function elegirTarea(id, idProyecto) {
+    $.ajax({
+        url: '/ElegirTarea/Elegir',
+        type: 'POST',
+        data: { idTarea: id, idProyecto: idProyecto },
+        success: function (result) {
+            if (result.success) {
+                alert(result.message);
+                // Oculta el botón que se usó para elegir la tarea
+                $(`button[data-id="${id}"][data-proyecto="${idProyecto}"]`).hide();
+            } else {
+                alert(result.message);
             }
-        });
-    }
-</script>
+        },
+        error: function () {
+            alert('Ocurrió un error al procesar la solicitud.');
+        }
+    }); *@
+}
 
+
+</script>
+   
 
 
