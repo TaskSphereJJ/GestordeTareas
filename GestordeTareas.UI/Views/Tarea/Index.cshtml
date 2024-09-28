@@ -86,11 +86,16 @@
                                         <i class="fas fa-trash-alt text-lg"></i>
                                     </a>
                                 }
-                                else if (User.IsInRole("Colaborador"))
+                                else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
                                 {
-                                    <button class="btn btn-primary btn-sm flex items-center p-2" onclick="elegirTarea(@item.Id)">
-                                        Elegir
-                                    </button>
+                                    <!-- Formulario para elegir la tarea -->
+                                    <form asp-action="Elegirtarea" method="post" class="inline-block">
+                                        <input type="hidden" name="IdTarea" value="@item.Id" />
+                                        <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            Elegir
+                                        </button>
+                                    </form>
 
                                 }
                             </td>

@@ -21,6 +21,7 @@ namespace GestordeTareas.UI.Controllers
         private readonly ProyectoBL _proyectoBL;
         private readonly UsuarioBL _usuarioBL;
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
+        private readonly ElegirTareaBL _elegirTareaBL;
 
         public TareaController()
         {
@@ -31,6 +32,7 @@ namespace GestordeTareas.UI.Controllers
             _proyectoBL = new ProyectoBL();
             _usuarioBL = new UsuarioBL();
             _proyectoUsuarioBL = new ProyectoUsuarioBL();
+            _elegirTareaBL = new ElegirTareaBL();
         }
 
         // GET: TareaController
@@ -247,6 +249,64 @@ namespace GestordeTareas.UI.Controllers
             // Verificar si el usuario está unido al proyecto
             var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
             return usuariosUnidos.Any(u => u.Id == idUsuario); // Devuelve true si está unido, false si no
+        }
+
+        // POST: TareaController/ElegirTarea
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ElegirTarea(int idTarea)
+        {
+            try
+            {
+                // Obtén el ID del usuario actual
+                var usuario = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+                var idUsuario = usuario.FirstOrDefault()?.Id;
+
+                // Verificar si el usuario existe
+                if (idUsuario == null)
+                {
+                    TempData["Error"] = "Usuario no encontrado.";
+                    return RedirectToAction("Index");
+                }
+
+                // Obtener la tarea por ID
+                Tarea tarea = await _tareaBL.GetById(new Tarea { Id = idTarea });
+
+                // Verificar si la tarea existe
+                if (tarea == null)
+                {
+                    TempData["Error"] = "Tarea no encontrada.";
+                    return RedirectToAction("Index");
+                }
+
+                // Verificar si la tarea está en estado "Pendiente"
+                if (tarea.EstadoTarea.Nombre != "Pendiente")
+                {
+                    TempData["Error"] = "La tarea no está en Disponible";
+                    return RedirectToAction("Index");
+                }
+
+                // Asignar la tarea al usuario
+                var resultado = await _elegirTareaBL.ElegirTareaAsync(idTarea, idUsuario.Value, tarea.IdProyecto);
+
+                if (resultado)
+                {
+                    // Actualizar estado de la tarea a "En Proceso"
+                    const int ID_ESTADO_EN_PROCESO = 2;
+                    await _tareaBL.ActualizarEstadoTareaAsync(idTarea, ID_ESTADO_EN_PROCESO);
+                    TempData["Success"] = "Tarea elegida correctamente .";
+                }
+                else
+                {
+                    TempData["Error"] = "No se pudo elegir la tarea.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrió un error inesperado.";
+            }
+
+            return RedirectToAction("Index");
         }
 
     }

@@ -361,7 +361,7 @@ namespace GestordeTareas.UI.Controllers
                 {
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {
-                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
+                    new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
                     new Claim("Nombre", userDb.Nombre),
                     new Claim("Apellido", userDb.Apellido),
