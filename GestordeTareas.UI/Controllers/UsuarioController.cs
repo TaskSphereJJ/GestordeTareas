@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -56,11 +58,12 @@ namespace GestordeTareas.UI.Controllers
             return View(Lista);
         }
 
-        [Authorize(Roles = "Administrador, Colaborador")]
+        [Authorize]
         public async Task<ActionResult> Perfil()
         {
             try
             {
+                await LoadDropDownListsAsync();
                 // Obtener el nombre de usuario
                 string nombreUsuario = User.Identity.Name;
 
@@ -131,7 +134,7 @@ namespace GestordeTareas.UI.Controllers
                     if (ModelState.IsValid)
                     {
                         int createresult = await _usuarioBL.Create(usuario);
-                        TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
+                        TempData["SuccessMessage"] = "Usuario creado correctamente.";
                         return RedirectToAction(nameof(Index));
                     }
                 }
@@ -174,21 +177,57 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Edit", usuario);
         }
 
+        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Edit(int id, Usuario usuario)
         {
-            if (id != usuario.Id)
+            try
             {
-                return Json(new { success = false, message = "El usuario no fue encontrado." });
+                int result = await _usuarioBL.Update(usuario);
+                return Json(new { success = true, message = "Usuario actualizado correctamente." });
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
             }
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword)
+        {
             try
             {
                 var existingUser = await _usuarioBL.GetByIdAsync(usuario);
                 if (existingUser == null)
                 {
-                    return Json(new { success = false, message = "El usuario no fue encontrado." });
+                    TempData["ErrorMessage"] = "El usuario no fue encontrado.";
+                    return RedirectToAction("Perfil");
+                }
+
+                // Si el usuario proporciona una nueva contraseña, verifica la contraseña actual
+                if (!string.IsNullOrEmpty(usuario.Pass))
+                {
+
+                    // Verifica si la contraseña actual coincide con la almacenada
+                    if (UsuarioDAL.HashMD5(currentPassword) != existingUser.Pass)
+                    {
+                        TempData["ErrorMessage"] = "La contraseña actual es incorrecta.";
+                        return RedirectToAction("Perfil");
+                    }
+
+                    // Verificar que la nueva contraseña y la confirmación coincidan
+                    if (usuario.Pass != usuario.ConfirmarPass)
+                    {
+                        TempData["ErrorMessage"] = "La nueva contraseña y la confirmación no coinciden.";
+                        return RedirectToAction("Perfil");
+                    }
+
+                    existingUser.Pass = UsuarioDAL.HashMD5(usuario.Pass);
                 }
 
                 // Actualiza los campos comunes para todos los usuarios
@@ -198,33 +237,26 @@ namespace GestordeTareas.UI.Controllers
                 existingUser.FechaNacimiento = usuario.FechaNacimiento;
                 existingUser.NombreUsuario = usuario.NombreUsuario;
 
-                // Solo actualiza la contraseña si se ha proporcionado
-                if (!string.IsNullOrEmpty(usuario.Pass))
-                {
-                    existingUser.Pass = usuario.Pass; // Actualiza la contraseña
-                }
-
                 // Permitir que el administrador cambie los campos adicionales solo si es su propio perfil
-                if (User.IsInRole("Administrador"))
+                if (User.IsInRole("Administrador") && existingUser.Id == usuario.Id)
                 {
-                    // Si está editando su propio perfil, puede cambiar más campos
-                    if (existingUser.Id == usuario.Id)
-                    {
-                        existingUser.Cargo = usuario.Cargo; // Permitir cambio de cargo
-                                                            // Aquí puedes añadir otras propiedades que quieras permitir editar
-                    }
+                    existingUser.Cargo = usuario.Cargo;
+                    existingUser.Status = usuario.Status;
                 }
 
                 // Actualiza el usuario en la base de datos
                 await _usuarioBL.Update(existingUser);
-                return Json(new { success = true, message = "Perfil actualizado correctamente." });
-
+                TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
+                return RedirectToAction("Perfil");
             }
+
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
+                TempData["ErrorMessage"] = $"Error al actualizar el perfil: {ex.Message}";
+                return RedirectToAction("Perfil");
             }
         }
+
 
         // GET: UsuarioController/Delete/5
         public async Task<ActionResult> Delete(int id)
@@ -235,47 +267,76 @@ namespace GestordeTareas.UI.Controllers
             return PartialView("Delete", usuario);
         }
 
+
         // POST: UsuarioController/Delete/5
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, Usuario usuario)
         {
             try
             {
-                // Obtener el usuario que se va a eliminar
-                var userDb = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
-
-                if (userDb == null)
-                {
-                    return NotFound(); // Retornar 404 si el usuario no se encuentra
-                }
-
-                // Obtener el ID del usuario que está actualmente logueado
-                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
                 int result = await _usuarioBL.Delete(usuario);
-
-                // Verificar si el usuario que está borrando es el mismo que está logueado
-                if (usuario.Id.ToString() == currentUserId)
-                {
-                    // Si el colaborador está eliminando su propia cuenta, cerrar sesión
-                    await HttpContext.SignOutAsync(); // Cerrar sesión del usuario
-                    return RedirectToAction("Login", "Usuario"); // Redirigir al login
-                }
-
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Usuario eliminado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                var userDb = await _usuarioBL.GetByIdAsync(usuario);
-                if (userDb == null)
-                    userDb = new Usuario();
-                if (userDb.Id > 0)
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                return View(userDb);
+                return Json(new { success = false, message = $"Error al eliminar el usuario: {ex.Message}" });
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteOwn()
+        {
+
+            // Verifica si el usuario está autenticado
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["ErrorMessage"] = "Usuario no autenticado.";
+                return RedirectToAction("Login", "Usuario");
+            }
+
+             var nombreUsuario = User.Identity.Name;
+             Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
+
+            // Se verifica si userId es null o vacío
+            if (string.IsNullOrEmpty(nombreUsuario))
+            {
+                TempData["ErrorMessage"] = "No se pudo encontrar el usuario.";
+                return RedirectToAction("Perfil");
+            }
+
+            // Crear el objeto usuario con el ID
+            var usuario = new Usuario { NombreUsuario = nombreUsuario };
+
+            // Obtener el usuario de la base de datos
+            var usuarioDB = await _usuarioBL.GetByNombreUsuarioAsync(usuario);
+
+            // Verificar que el usuario exista
+            if (usuarioDB == null)
+            {
+                TempData["ErrorMessage"] = "El usuario no existe";
+                return RedirectToAction("Perfil");
+            }
+
+            // Eliminar el usuario
+            int result = await _usuarioBL.Delete(usuarioDB);
+
+            // Verificar si la eliminación fue exitosa
+            if (result > 0)
+            {
+                TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
+                return RedirectToAction("Login", "Usuario");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se pudo eliminar la cuenta.";
+                return RedirectToAction("Perfil");
+            }
+        }
+
 
         // acción que muestra el formulario de inicio de sesión
         [AllowAnonymous]
@@ -300,10 +361,11 @@ namespace GestordeTareas.UI.Controllers
                 {
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {
-                new Claim(ClaimTypes.Name, userDb.NombreUsuario),
-                new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-                new Claim("Nombre", userDb.Nombre),
-                new Claim("Apellido", userDb.Apellido)
+                    new Claim(ClaimTypes.Name, userDb.NombreUsuario),
+                    new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
+                    new Claim("Nombre", userDb.Nombre),
+                    new Claim("Apellido", userDb.Apellido),
+                    new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
             };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
@@ -337,36 +399,6 @@ namespace GestordeTareas.UI.Controllers
 
             return RedirectToAction("Login", "Usuario");
 
-        }
-
-        //acción que muestra el formulario para cambiar contraseña
-        public async Task<IActionResult> ChangePassword()
-        {
-            var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
-            var actualUser = users.FirstOrDefault();
-            ViewBag.Error = "";
-            return View(actualUser);
-        }
-
-        //acción que recibe los datos de la nueva contraseña
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(Usuario user, string oldPassword)
-        {
-            try
-            {
-                int result = await _usuarioBL.ChangePasswordAsync(user, oldPassword);
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return RedirectToAction("Login", "Usuario");
-
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = ex.Message;
-                var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
-                var actualUser = users.FirstOrDefault();
-                return View(actualUser);
-            }
         }
     }
 

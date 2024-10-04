@@ -1,113 +1,146 @@
 ﻿@model GestordeTaras.EN.Usuario
 
-<h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Mi Perfil</h1>
+<div class="flex items-center justify-center min-h-screen">
+    <div class="max-w-3xl w-full p-8 bg-white rounded-lg ">
+        <!-- Contenedor de Imagen de Perfil Fijo -->
+        <div class="flex items-center justify-center space-x-8">
+            <!-- Imagen de perfil (Espacio reservado) -->
+            <div
+                class="w-64 h-64 rounded-full overflow-hidden shadow-md border-4 border-gray-200 flex items-center justify-center">
+                <img src="~/img/FOOTOO.png" alt="Profile Picture Placeholder" class="w-full h-full object-cover">
+            </div>
+            <!-- Contenedor para la Información y Formulario -->
+            <div class="flex-grow">
+                <!-- Vista del perfil -->
+                <div id="profileDisplay" class="space-y-6">
+                    <!-- Información del perfil (Vista) -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-user mr-2 text-gray-500"></i> Nombre:
+                        </h3>
+                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.Nombre) @Html.DisplayFor(model
+                            => model.Apellido)</p>
+                    </div>
 
-@await Html.PartialAsync("_AlertMessages")
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-envelope mr-2 text-gray-500"></i> Correo Electrónico:
+                        </h3>
+                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.NombreUsuario)</p>
+                    </div>
 
-<!-- Botón para activar el modo de edición -->
-<button id="editProfileBtn" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-700 transition-all" onclick="toggleEditMode()">Editar Perfil</button>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-phone mr-2 text-gray-500"></i> Teléfono:
+                        </h3>
+                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.Telefono)</p>
+                    </div>
 
-<!-- Formulario de edición (oculto inicialmente) -->
-<form id="profileForm" class="w-full mt-6" method="post" asp-action="Edit" style="display: none;">
-    <input type="hidden" asp-for="Id" />
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="flex flex-col">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Nombre</label>
-            <input type="text" asp-for="Nombre" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" />
-            <span asp-validation-for="Nombre" class="text-red-500 text-sm"></span>
-        </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-briefcase mr-2 text-gray-500"></i> Cargo:
+                        </h3>
+                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.Cargo.Nombre)</p>
+                    </div>
 
-        <div class="flex flex-col">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Apellido</label>
-            <input type="text" asp-for="Apellido" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" />
-            <span asp-validation-for="Apellido" class="text-red-500 text-sm"></span>
-        </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-birthday-cake mr-2 text-gray-500"></i> Fecha de Nacimiento:
+                        </h3>
+                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.FechaNacimiento)</p>
+                    </div>
 
-        <div class="flex flex-col">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Correo Electrónico</label>
-            <input type="text" asp-for="NombreUsuario" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" />
-            <span asp-validation-for="NombreUsuario" class="text-red-500 text-sm"></span>
-        </div>
+                    <!-- Botón para editar perfil -->
+                    <div class="flex justify-center">
+                        <button id="editProfileBtn"
+                            class="bg-indigo-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-600 shadow-md"
+                            onclick="toggleEditMode()">
+                            <i class="fas fa-edit mr-2"></i> Editar Perfil
+                        </button>
+                    </div>
+                </div>
 
-        <div class="flex flex-col">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Contraseña</label>
-            <input type="password" asp-for="Pass" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" />
-            <span asp-validation-for="Pass" class="text-red-500 text-sm"></span>
-        </div>
+                <!-- Formulario de edición del perfil (Oculto inicialmente) -->
+                <form id="profileForm" class="space-y-6" method="post" asp-action="EditOwn"
+                    enctype="multipart/form-data" style="display: none;">
+                    <input type="hidden" asp-for="Id" />
 
-        <div class="flex flex-col">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Teléfono</label>
-            <input type="text" asp-for="Telefono" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" />
-            <span asp-validation-for="Telefono" class="text-red-500 text-sm"></span>
-        </div>
+                    <div>
+                        <label for="Nombre" class="block text-xl font-medium text-gray-800 flex items-center">
+                            <i class="fas fa-user mr-2 text-gray-500"></i> Nombre
+                        </label>
+                        <input type="text" asp-for="Nombre"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
+                        <span asp-validation-for="Nombre" class="text-red-500"></span>
+                    </div>
 
-        <div class="flex flex-col">
-            @if (User.IsInRole("Administrador"))
-            {
-                <label class="font-semibold text-gray-700 dark:text-gray-300">Cargo</label>
-                <input type="text" asp-for="Cargo.Nombre" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" />
-            }
-            else
-            {
-                <label class="font-semibold text-gray-700 dark:text-gray-300">Cargo</label>
-                <p class="mt-1 px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.Cargo.Nombre)</p>
-            }
-        </div>
+                    <div>
+                        <label for="Apellido" class="block text-xl font-medium text-gray-800 flex items-center">
+                            <i class="fas fa-user mr-2 text-gray-500"></i> Apellido
+                        </label>
+                        <input type="text" asp-for="Apellido"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
+                        <span asp-validation-for="Apellido" class="text-red-500"></span>
+                    </div>
 
-        <div class="flex flex-col">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Fecha de Nacimiento</label>
-            <input type="date" asp-for="FechaNacimiento" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 bg-gray-50 dark:bg-gray-700 dark:text-white" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" />
-            <span asp-validation-for="FechaNacimiento" class="text-red-500 text-sm"></span>
-        </div>
-    </div>
+                    <div>
+                        <label for="NombreUsuario" class="block text-xl font-medium text-gray-800 flex items-center">
+                            <i class="fas fa-envelope mr-2 text-gray-500"></i> Correo Electrónico
+                        </label>
+                        <input type="text" asp-for="NombreUsuario"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
+                        <span asp-validation-for="NombreUsuario" class="text-red-500"></span>
+                    </div>
 
-    <div class="flex justify-end space-x-4 mt-6">
-        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">Guardar Cambios</button>
-        <button type="button" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700" onclick="toggleEditMode()">Cancelar</button>
-    </div>
-</form>
+                    <div>
+                        <label for="Telefono" class="block text-xl font-medium text-gray-800 flex items-center">
+                            <i class="fas fa-phone mr-2 text-gray-500"></i> Teléfono
+                        </label>
+                        <input type="text" asp-for="Telefono"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
+                        <span asp-validation-for="Telefono" class="text-red-500"></span>
+                    </div>
 
-<!-- Vista de perfil sin edición -->
-<div id="profileDisplay" class="w-full mt-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Nombre</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.Nombre)</p>
-        </div>
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Apellido</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.Apellido)</p>
-        </div>
+                    <div>
+                        <label for="Cargo" class="block text-xl font-medium text-gray-800 flex items-center">
+                            <i class="fas fa-briefcase mr-2 text-gray-500"></i> Cargo
+                        </label>
+                        <select asp-for="IdCargo"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg"
+                            asp-items="ViewBag.Cargos">
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
 
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Correo Electrónico</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.NombreUsuario)</p>
-        </div>
+                    <div>
+                        <label for="FechaNacimiento" class="block text-xl font-medium text-gray-800 flex items-center">
+                            <i class="fas fa-birthday-cake mr-2 text-gray-500"></i> Fecha de Nacimiento
+                        </label>
+                        <input type="date" asp-for="FechaNacimiento"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
+                        <span asp-validation-for="FechaNacimiento" class="text-red-500"></span>
+                    </div>
 
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Teléfono</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.Telefono)</p>
-        </div>
-
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Cargo</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.Cargo.Nombre)</p>
-        </div>
-
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Fecha de Nacimiento</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.FechaNacimiento)</p>
-        </div>
-
-        <div>
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Fecha de Registro</label>
-            <p class="px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">@Html.DisplayFor(model => model.FechaRegistro)</p>
+                    <!-- Botones de acción -->
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <button type="submit"
+                            class="bg-indigo-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-600 shadow-md">
+                            <i class="fas fa-save mr-2"></i> Guardar
+                        </button>
+                        <button type="button"
+                            class="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 shadow-md"
+                            onclick="toggleEditMode()">
+                            <i class="fas fa-times mr-2"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Función para alternar el modo de edición
     function toggleEditMode() {
         const profileForm = document.getElementById('profileForm');
         const profileDisplay = document.getElementById('profileDisplay');

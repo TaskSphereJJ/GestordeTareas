@@ -133,7 +133,8 @@ VALUES
   ('lester', 'serrano', 'lesterserrano', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
   --La contraseña de este usuario es 12345
 
-
+update Usuario set Pass = '827ccb0eea8a706c4c34a16891f84e7b' where id = 5 
+select*from Usuario
 -- Insertar datos en la tabla Proyecto
 INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
 VALUES 

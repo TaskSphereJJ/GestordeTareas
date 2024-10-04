@@ -26,6 +26,8 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Contraseña")]
         public string Pass { get; set; } = string.Empty;
+        [NotMapped] // Esto es importante para que no se mapee en la base de datos
+        public string ConfirmarPass { get; set; }
 
         [MaxLength(20, ErrorMessage = "Maximo 20 caracteres")]
         public string Telefono { get; set; } = string.Empty;

@@ -86,11 +86,16 @@
                                         <i class="fas fa-trash-alt text-lg"></i>
                                     </a>
                                 }
-                                else if (User.IsInRole("Colaborador"))
+                                else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
                                 {
-                                    <button class="btn btn-primary btn-sm flex items-center p-2" onclick="elegirTarea(@item.Id)">
-                                        Elegir
-                                    </button>
+                                    <!-- Formulario para elegir la tarea -->
+                                    <form asp-action="Elegirtarea" method="post" class="inline-block">
+                                        <input type="hidden" name="IdTarea" value="@item.Id" />
+                                        <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            Elegir
+                                        </button>
+                                    </form>
 
                                 }
                             </td>
@@ -118,76 +123,120 @@ else
 
 <div id="tarjetas" class="hidden">
     <!-- Contenido de la vista de tarjetas -->
-    <div class="container mx-auto">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3 w-1/3 text-center">Pendiente</th>
-                    <th scope="col" class="px-6 py-3 w-1/3 text-center">En Proceso</th>
-                    <th scope="col" class="px-6 py-3 w-1/3 text-center">Finalizada</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Fila de tarjetas -->
-                <tr>
-                    <td class="p-2 px-0 py-4 droppable" data-state="4">
-                        <!-- Área de destino para tareas Pendientes -->
-                        <div class="flex flex-col items-center">
-                            <div class="flex flex-wrap gap-4 justify-center w-full">
-                                @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "Pendiente"))
-                                {
-                                    <div class="bg-gray-100 rounded-lg p-4 shadow-md text-left draggable-card w-56" draggable="true" data-id="@item.Id">
-                                        <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
-                                        <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
-                                        <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
-                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
-                                        <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
-                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
-                                    </div>
-                                }
-                            </div>
+   <div class="container mx-auto mt-8">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-base text-gray-700 dark:text-gray-300 uppercase bg-gray-100 dark:bg-gray-800">
+            <tr>
+                <th scope="col" class="px-6 py-3 w-1/3 text-center">Pendiente</th>
+                <th scope="col" class="px-6 py-3 w-1/3 text-center">En Proceso</th>
+                <th scope="col" class="px-6 py-3 w-1/3 text-center">Finalizada</th>
+            </tr>
+        </thead>
+        <tbody class="bg-gray-50 dark:bg-gray-900">
+            <tr >
+                <!-- Pendientes -->
+                <td class="p-4   droppable bg-gray-50 dark:bg-gray-900" data-state="4">
+                    <div class="flex flex-col items-center">
+                        <div class="grid grid-cols-1 gap-6 w-full">
+                            @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "Pendiente"))
+                            {
+                                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md text-left draggable-card border-l-8 hover:shadow-lg transition-shadow duration-300 ease-in-out" draggable="true" data-id="@item.Id" style="border-color: @(item.Prioridad.Nombre == "Alta" ? "red" : item.Prioridad.Nombre == "Media" ? "orange" : "green")">
+                                    <h2 class="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-100 flex items-center">
+                                        <i class="fas fa-tasks text-blue-500 mr-2"></i> @item.Nombre
+                                    </h2>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mb-2">
+                                        <i class="fas fa-layer-group mr-2 text-green-500"></i> <strong>Categoría:</strong> @item.Categoria.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center">
+                                        <i class="fas fa-exclamation-circle mr-2 @(item.Prioridad.Nombre == "Alta" ? "text-red-500" : item.Prioridad.Nombre == "Media" ? "text-orange-500" : "text-green-500")"></i>
+                                        <strong>Prioridad:</strong> @item.Prioridad.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mt-2">
+                                        <i class="fas fa-tachometer-alt mr-2 text-purple-500"></i> <strong>Estado:</strong> @item.EstadoTarea.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mt-1">
+                                        <i class="fas fa-calendar-alt mr-2 text-gray-400 dark:text-gray-500"></i> <strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()
+                                    </p>
+                                    <button class="mt-3 px-3 py-2 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 flex items-center transition-colors">
+                                        <i class="fas fa-eye mr-2"></i> Ver más
+                                    </button>
+                                </div>
+                            }
                         </div>
-                    </td>
-                    <td class="p-2 px-0 py-4 droppable" data-state="2">
-                        <!-- Área de destino para tareas En Proceso -->
-                        <div class="flex flex-col items-center">
-                            <div class="flex flex-wrap gap-4 justify-center w-full">
-                                @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "En Proceso"))
-                                {
-                                    <div class="bg-gray-100 rounded-lg p-4 shadow-md text-left draggable-card w-56" draggable="true" data-id="@item.Id">
-                                        <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
-                                        <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
-                                        <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
-                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
-                                        <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
-                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
-                                    </div>
-                                }
-                            </div>
+                    </div>
+                </td>
+
+                <!-- En Proceso -->
+                <td class="p-4  droppable bg-gray-50 dark:bg-gray-900" data-state="2">
+                    <div class="flex flex-col items-center">
+                        <div class="grid grid-cols-1 gap-6 w-full mb-2">
+                            @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "En Proceso"))
+                            {
+                                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md text-left draggable-card border-l-8 hover:shadow-lg transition-shadow duration-300 ease-in-out" draggable="true" data-id="@item.Id" style="border-color: @(item.Prioridad.Nombre == "Alta" ? "red" : item.Prioridad.Nombre == "Media" ? "orange" : "green")">
+                                    <h2 class="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-100 flex items-center">
+                                        <i class="fas fa-spinner text-yellow-500 mr-2"></i> @item.Nombre
+                                    </h2>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mb-2">
+                                        <i class="fas fa-layer-group mr-2 text-green-500"></i> <strong>Categoría:</strong> @item.Categoria.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center">
+                                        <i class="fas fa-exclamation-circle mr-2 @(item.Prioridad.Nombre == "Alta" ? "text-red-500" : item.Prioridad.Nombre == "Media" ? "text-orange-500" : "text-green-500")"></i>
+                                        <strong>Prioridad:</strong> @item.Prioridad.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mt-2">
+                                        <i class="fas fa-tachometer-alt mr-2 text-purple-500"></i> <strong>Estado:</strong> @item.EstadoTarea.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mt-1">
+                                        <i class="fas fa-calendar-alt mr-2 text-gray-400 dark:text-gray-500"></i> <strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()
+                                    </p>
+                                    <button class="mt-3 px-3 py-2 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 flex items-center transition-colors">
+                                        <i class="fas fa-eye mr-2"></i> Ver más
+                                    </button>
+                                </div>
+                            }
                         </div>
-                    </td>
-                    <td class="p-2 px-0 py-4 droppable" data-state="3">
-                        <!-- Área de destino para tareas Finalizadas -->
-                        <div class="flex flex-col items-center">
-                            <div class="flex flex-wrap gap-4 justify-center w-full">
-                                @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "Finalizada"))
-                                {
-                                    <div class="bg-gray-100 rounded-lg p-4 shadow-md text-left draggable-card w-56" draggable="true" data-id="@item.Id">
-                                        <h2 id="nombre-@item.Id" class="text-lg font-semibold mb-1">@item.Nombre</h2>
-                                        <p class="text-xs"><strong>Categoría:</strong> @item.Categoria.Nombre</p>
-                                        <p class="text-xs"><strong>Prioridad:</strong> @item.Prioridad.Nombre</p>
-                                        <p class="text-xs mt-1 estado"><strong>Estado:</strong> @item.EstadoTarea.Nombre</p>
-                                        <p class="text-xs mt-1"><strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()</p>
-                                        <button class="mt-2 px-3 py-1 text-xs bg-purple-700 text-white rounded hover:bg-purple-600" onclick="cargarVistaDetails(@item.Id)">Ver más</button>
-                                    </div>
-                                }
-                            </div>
+                    </div>
+                </td>
+
+                <!-- Finalizadas -->
+                <td class="p-4  droppable bg-gray-50 dark:bg-gray-900" data-state="3">
+                    <div class="flex flex-col items-center">
+                        <div class="grid grid-cols-1 gap-6 w-full">
+                            @foreach (var item in Model.Where(t => t.EstadoTarea.Nombre == "Finalizada"))
+                            {
+                                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md text-left draggable-card border-l-8 hover:shadow-lg transition-shadow duration-300 ease-in-out" draggable="true" data-id="@item.Id" style="border-color: @(item.Prioridad.Nombre == "Alta" ? "red" : item.Prioridad.Nombre == "Media" ? "orange" : "green")">
+                                    <h2 class="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-100 flex items-center">
+                                        <i class="fas fa-check-circle text-blue-500 mr-2"></i> @item.Nombre
+                                    </h2>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mb-2">
+                                        <i class="fas fa-layer-group mr-2 text-green-500"></i> <strong>Categoría:</strong> @item.Categoria.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center">
+                                        <i class="fas fa-exclamation-circle mr-2 @(item.Prioridad.Nombre == "Alta" ? "text-red-500" : item.Prioridad.Nombre == "Media" ? "text-orange-500" : "text-green-500")"></i>
+                                        <strong>Prioridad:</strong> @item.Prioridad.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mt-2">
+                                        <i class="fas fa-tachometer-alt mr-2 text-purple-500"></i> <strong>Estado:</strong> @item.EstadoTarea.Nombre
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 flex items-center mt-1">
+                                        <i class="fas fa-calendar-alt mr-2 text-gray-400 dark:text-gray-500"></i> <strong>Fecha de Vencimiento:</strong> @item.FechaVencimiento.ToShortDateString()
+                                    </p>
+                                    <button class="mt-3 px-3 py-2 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 flex items-center transition-colors">
+                                        <i class="fas fa-eye mr-2"></i> Ver más
+                                    </button>
+                                </div>
+                            }
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</div>
+}
 </div>
 
 
