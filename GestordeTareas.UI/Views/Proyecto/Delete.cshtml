@@ -20,7 +20,7 @@
             <dd class="col-span-1">@Html.DisplayFor(model => model.FechaFinalizacion)</dd>
         </dl>
         <form asp-action="Delete" id="deleteForm" method="post">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" id="deleteProjectId" asp-for="Id" />
         </form>
     </div>
 </div>

@@ -19,8 +19,8 @@
 </head>
 <body class="dark:bg-darkPurple dark:text-darkText light:bg-lightPurple light:text-lightText">
     @{
-        var nombre = User.Claims.FirstOrDefault(c => c.Type == "Nombre")?.Value;
-        var apellido = User.Claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
+        var nombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
+        var apellido = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Surname)?.Value;
     }
     @* header o barra de arriba *@
    @if(Context.Request.Path.Value != "/Usuario/login"){ 
@@ -57,12 +57,15 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                 <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>                
-            
-            @* <!-- Sección de perfil --> *@
+                    <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">
+                        @($"{nombre} {apellido}")
+                    </span>
+
+
+                    @* <!-- Sección de perfil --> *@
                 <div class="flex items-center justify-end gap-4">
                     <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
-                        <img src="~/img/FOOTOO.png" alt="" class="aspect-square">
+                            <img src="https://cdn-icons-png.freepik.com/256/3609/3609718.png" alt="" class="aspect-square">
                     </div>
                     <div class="relative inline-block">
                         <button id="userMenuButton"

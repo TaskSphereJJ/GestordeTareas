@@ -40,10 +40,7 @@
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <thead class=" text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.Id)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 text-center">
                             @Html.DisplayNameFor(model => model.Nombre)
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -67,7 +64,6 @@
                     @foreach (var item in Model)
                     {
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Id)</td>
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
                             <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
@@ -135,7 +131,7 @@ else
             <tbody>
                 <!-- Fila de tarjetas -->
                 <tr>
-                    <td class="p-2 px-0 py-4 droppable" data-state="4">
+                    <td class="p-2 px-0 py-4 droppable" data-state="1">
                         <!-- Área de destino para tareas Pendientes -->
                         <div class="flex flex-col items-center">
                             <div class="flex flex-wrap gap-4 justify-center w-full">
