@@ -109,11 +109,14 @@ CREATE TABLE ProyectoUsuario(
 	Id INT PRIMARY KEY IDENTITY (1,1),
 	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
-	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE()
+	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
+	Encargado BIT NULL
 )
 
-Select * from Usuario
+Select * from ProyectoUsuario
 
+update ProyectoUsuario
+set Encargado = 1 where id=12
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
 

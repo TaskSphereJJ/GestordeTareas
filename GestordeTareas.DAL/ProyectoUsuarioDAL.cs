@@ -73,5 +73,15 @@ namespace GestordeTareas.DAL
 
             return result; // Retornar el número de registros afectados
         }
+
+        // Método para verificar si un usuario es el encargado de un proyecto
+        public static async Task<bool> IsUsuarioEncargadoAsync(int idProyecto, int idUsuario)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                return await dbContext.ProyectoUsuario
+                    .AnyAsync(pu => pu.IdProyecto == idProyecto && pu.IdUsuario == idUsuario && pu.Encargado);
+            }
+        }
     }
 }
