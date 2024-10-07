@@ -50,101 +50,101 @@
 @if (Model != null && Model.Any())
 {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        @foreach (var item in Model)
+        @foreach (var proyecto in Model)
         {
-            <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90">
+            <!-- Hacemos la tarjeta clicable -->
+            <a href="@Url.Action("Index", "Tarea", new { proyectoId = proyecto.Id })"
+                class="relative block proyecto rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+
+                <!-- Botón principal flotante con menú de tres puntos (solo para Administradores) -->
                 <div class="absolute top-0 right-0 mt-1 mr-1">
-                    <!-- Botón principal flotante -->
                     <div class="relative">
                         @if (User.IsInRole("Administrador"))
                         {
-                            <button class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center"
-                                id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
-                                <i class="fas fa-ellipsis-v text-gray-600 text-2xl"></i> <!-- Icono de tres puntos verticales -->
+                            <button class="rounded-full bg-gray-200 dark:bg-gray-600 w-10 h-10 flex items-center justify-center"
+                                id="menuButton-@proyecto.Id" onclick="toggleMenu(@proyecto.Id)">
+                                <i class="fas fa-ellipsis-v text-gray-600 dark:text-gray-300 text-xl"></i>
                             </button>
                         }
                         <!-- Menú desplegable -->
-                        <div id="menu-@item.Id"
-                            class="absolute right-0 mt-2 w-40 bg-white rounded-xl py-3 flex flex-col gap-2 shadow-lg hidden z-10">
+                        <div id="menu-@proyecto.Id"
+                            class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg py-2 flex flex-col gap-2 shadow-lg hidden z-10">
                             <ul class="space-y-2 px-3">
-                                @* Solo los administradores ven el botón "+" *@
-                                @if (User.IsInRole("Administrador"))
-                                {
-                                    <li class="flex items-center gap-2 justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
-                                        onclick="window.location='@Url.Action("Details", "Proyecto", new { id = item.Id })'">
-                                        <i class="fas fa-plus"></i>
-                                        <p class="font-semibold text-center flex-grow">Detalles</p>
-                                    </li>
-                                    <li class="flex items-center justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
-                                        onclick="cargarVistaEdit(@item.Id)">
-                                        <i class="fas fa-edit"></i>
-                                        <p class="font-semibold text-center flex-grow">Editar</p>
-                                    </li>
-                                    <li class="flex items-center justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-red-700 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
-                                        onclick="mostrarTarjetaEliminar(@item.Id); return false;">
-                                        <i class="fas fa-trash-alt"></i>
-                                        <p class="font-semibold text-center flex-grow">Eliminar</p>
-                                    </li>
-
-                                }
+                                <!-- Opción de Detalles -->
+                                <li class="flex items-center gap-2 text-gray-600 dark:text-gray-200 cursor-pointer transition-all duration-300 ease-out p-2 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
+                                    onclick="window.location='@Url.Action("Details", "Proyecto", new { id = proyecto.Id })'">
+                                    <i class="fas fa-plus"></i>
+                                    <p class="font-semibold">Detalles</p>
+                                </li>
+                                <!-- Opción de Editar -->
+                                <li class="flex items-center gap-2 text-gray-600 dark:text-gray-200 cursor-pointer transition-all duration-300 ease-out p-2 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
+                                    onclick="cargarVistaEdit(@proyecto.Id)">
+                                    <i class="fas fa-edit"></i>
+                                    <p class="font-semibold">Editar</p>
+                                </li>
+                                <!-- Opción de Eliminar -->
+                                <li class="flex items-center gap-2 text-gray-600 dark:text-gray-200 cursor-pointer transition-all duration-300 ease-out p-2 rounded-md hover:bg-red-700 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
+                                    onclick="mostrarTarjetaEliminar(@proyecto.Id); return false;">
+                                    <i class="fas fa-trash-alt"></i>
+                                    <p class="font-semibold">Eliminar</p>
+                                </li>
                             </ul>
                         </div>
-
                     </div>
                 </div>
 
-                <h2 class="text-lg font-semibold text-black mb-4 break-words text-center">@item.Titulo</h2>
+                <!-- Título del proyecto -->
+                <h2 class="text-lg font-semibold text-black dark:text-gray-100 mb-4 break-words text-center">@proyecto.Titulo
+                </h2>
 
-                <!-- Ajusté el margen inferior de la descripción para que esté más cerca del administrador -->
+                <!-- Descripción -->
                 <p class="text-black dark:text-gray-400 mb-2 text-base">
                     <span class="text-purple-600 dark:text-purple-400 font-bold">Descripción:</span>
-                    @{
-                        if (item.Descripcion.Length > 200)
-                        {
-                            <text>@item.Descripcion.Substring(0, 200)...</text>
-                        }
-                        else
-                        {
-                            <text>@item.Descripcion</text>
-                        }
+                    @if (proyecto.Descripcion.Length > 200)
+                    {
+                        <text>@proyecto.Descripcion.Substring(0, 200)...</text>
+                    }
+                    else
+                    {
+                        <text>@proyecto.Descripcion</text>
                     }
                 </p>
 
-                <!-- Reduje el margen entre la descripción y el administrador -->
+                <!-- Administrador -->
                 <p class="text-black dark:text-gray-400 mb-2 text-base">
-                    <span class="text-purple-600 dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre
+                    <span class="text-purple-600 dark:text-purple-400 font-bold">Administrador:</span> @proyecto.Usuario.Nombre
                 </p>
+
+                <!-- Fecha de finalización -->
                 <p class="text-black dark:text-gray-400 mb-4 text-base">
                     <span class="text-purple-600 dark:text-purple-400 font-bold">Fecha de finalización:</span>
-                    @item.FechaFinalizacion.ToShortDateString()
+                    @proyecto.FechaFinalizacion.ToShortDateString()
                 </p>
 
-                <div class="flex justify-end space-x-1 items-center">
-                    <!-- El botón "Ingresar" lo ven tanto Colaboradores como Administradores -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
-                            Ingresar
-                            <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                                <path clip-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
-                                    fill-rule="evenodd"></path>
-                            </svg>
-                        </a>
-                    }
-
-                    <!-- Si el usuario es Colaborador, también verá el botón de "+" -->
-                    @if (User.IsInRole("Colaborador"))
-                    {
-                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
-                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded">
-                            <i class="fas fa-plus text-lg"></i>
-                        </a>
-                    }
+                <!-- Barra de progreso -->
+                @{
+                    var totalTareas = proyecto.Tareas.Count();
+                    var tareasFinalizadas = proyecto.Tareas.Where(t => t.EstadoTarea.Nombre == "Finalizada").Count();
+                    var porcentajeProgreso = totalTareas > 0 ? (tareasFinalizadas * 100) / totalTareas : 0;
+                }
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-2">
+                    <div class="bg-blue-500 h-2.5 rounded-full" style="width:@porcentajeProgreso%;"></div>
                 </div>
-            </div>
+                <p class="text-right text-sm font-semibold text-gray-500 dark:text-gray-400">@porcentajeProgreso% completado</p>
+
+                <!-- Botón "+" para colaboradores -->
+                @if (User.IsInRole("Colaborador"))
+                {
+                    <a href="@Url.Action("Details", "Proyecto", new { id = proyecto.Id })"
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded">
+                        <i class="fas fa-plus text-lg"></i>
+                    </a>
+                }
+
+            </a>
         }
     </div>
+
 }
 else
 {
