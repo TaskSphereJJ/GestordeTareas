@@ -237,10 +237,8 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 EncryptMD5(usuarios);
-                userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => 
-                u.NombreUsuario == usuarios.NombreUsuario &&
-                u.Pass == usuarios.Pass && 
-                u.Status == (byte)User_Status.ACTIVO);
+                userDb = await dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuarios.NombreUsuario &&
+                u.Pass == usuarios.Pass && u.Status == (byte)User_Status.ACTIVO);
             }
             return userDb!;
         }

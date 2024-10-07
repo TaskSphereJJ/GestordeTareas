@@ -32,5 +32,18 @@ namespace GestordeTareas.BL
             // Llamar al método de ProyectoDAL para eliminar la relación
             return await ProyectoUsuarioDAL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
         }
+
+        // Método para asignar un usuario como encargado de un proyecto
+        public static async Task<bool> AsignarEncargadoAsync(int idProyecto, int idUsuarioNuevoEncargado)
+        {
+            // Llama al método en la capa DAL
+            return await ProyectoUsuarioDAL.AsignarEncargadoAsync(idProyecto, idUsuarioNuevoEncargado);
+        }
+
+        // Método para verificar si un usuario es el encargado de un proyecto
+        public async Task<bool> IsUsuarioEncargadoAsync(int idProyecto, int idUsuario)
+        {
+            return await ProyectoUsuarioDAL.IsUsuarioEncargadoAsync(idProyecto, idUsuario);
+        }
     }
 }

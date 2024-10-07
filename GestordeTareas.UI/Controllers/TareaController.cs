@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -48,6 +49,13 @@ namespace GestordeTareas.UI.Controllers
             // Aquí cargas las tareas asociadas al proyecto con el ID proporcionado
             var tareas = await _tareaBL.GetTareasByProyectoIdAsync(proyectoId);
             ViewBag.ProyectoId = proyectoId;
+
+            // Obtener el ID del usuario actual
+            int idUsuarioActual = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Verificar si el usuario es encargado
+            bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(proyectoId, idUsuarioActual);
+            ViewBag.EsEncargado = esEncargado;
+
             return View(tareas);
         }
 
@@ -85,13 +93,21 @@ namespace GestordeTareas.UI.Controllers
         // POST: TareaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Create(Tarea tarea, int idProyecto)
         {
+            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); // Método que obtiene el ID del usuario actual
+
             if (!User.IsInRole("Administrador"))
             {
-                TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
-                return View(tarea);
+                // Verificar si el usuario es el encargado del proyecto
+                bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(tarea.IdProyecto, idUsuario);
+
+                if (!esEncargado)
+                {
+                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                    return Json(new { success = false, message = "No tienes permisos para realizar cambios." });
+                }
             }
             try
             {
@@ -102,6 +118,7 @@ namespace GestordeTareas.UI.Controllers
                 tarea.IdEstadoTarea = estadoPendienteId;
 
                 int result = await _tareaBL.CreateAsync(tarea);
+                TempData["SuccessMessage"] = "Tarea creada correctamente.";
                 return Json(new { success = true, message = "Tarea creada correctamente.", id = idProyecto });
 
             }
@@ -110,7 +127,6 @@ namespace GestordeTareas.UI.Controllers
                 return Json(new { success = false, message = "Error al crear la tarea: " + ex.Message });
             }
         }
-
 
         //MÉTODO PARA CARGAR LISTAS DESPLEGABLES SELECCIONABLES 
         private async Task LoadDropDownListsAsync()
@@ -140,22 +156,32 @@ namespace GestordeTareas.UI.Controllers
         // POST: TareaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Edit(int id, Tarea tarea)
         {
+            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); 
+
             if (!User.IsInRole("Administrador"))
-            {
-                TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
-                return View(tarea);
+            {      
+                // Verificar si el usuario es el encargado del proyecto
+                bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(tarea.IdProyecto, idUsuario);
+
+                if (!esEncargado)
+                {
+                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                    return Json(new { success = false, message = "No tienes permisos para realizar cambios." });
+                }
             }
+
             try
             {
                 int result = await _tareaBL.UpdateAsync(tarea);
-                return Json(new { success = true, message = "Tarea editada correctamente.", id = tarea.IdProyecto });
+                TempData["SuccessMessage"] = "Tarea modificada correctamente.";
+                return Json(new { success = true, message = "Tarea modificada correctamente.", id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error al editar la tarea: {ex.Message}" });
+                return Json(new { success = false, message = $"Error al modificadar la tarea: {ex.Message}" });
             }
         }
 
@@ -170,17 +196,33 @@ namespace GestordeTareas.UI.Controllers
         // POST: TareaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Delete(int id, Tarea tarea)
         {
+            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // Obtener la tarea por ID
+            var tareaObtenida = await _tareaBL.GetById(new Tarea { Id = id });
+            if (tareaObtenida == null)
+            {
+                return NotFound("Tarea no encontrada.");
+            }
+
             if (!User.IsInRole("Administrador"))
             {
-                TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
-                return View(tarea);
+                // Verificar si el usuario es el encargado del proyecto
+                bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(tareaObtenida.IdProyecto, idUsuario);
+
+                if (!esEncargado)
+                {
+                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                    return Json(new { success = false, message = "No tienes permisos para realizar cambios." });
+                }
             }
             try
             {
-                await _tareaBL.DeleteAsync(tarea);
+                await _tareaBL.DeleteAsync(tareaObtenida);
+                TempData["SuccessMessage"] = "Tarea eliminada correctamente.";
                 return Json(new { success = true, message = "Tarea eliminada correctamente.", id = tarea.IdProyecto });
             }
             catch (Exception ex)
@@ -201,7 +243,11 @@ namespace GestordeTareas.UI.Controllers
                     if (tareaBD != null)
                     {
                         var estadoValido = await bdContexto.EstadoTarea.FindAsync(model.IdEstadoTarea);
-                        if (estadoValido == null) return BadRequest("Estado no válido.");
+                        if (estadoValido == null)
+                        {
+                            return BadRequest("Estado no válido.");
+                        }
+                            
 
                         tareaBD.IdEstadoTarea = model.IdEstadoTarea;
                         bdContexto.Update(tareaBD);

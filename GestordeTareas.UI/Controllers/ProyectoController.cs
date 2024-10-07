@@ -76,12 +76,14 @@ namespace GestordeTareas.UI.Controllers
                 proyecto.IdUsuario = actualUser.Id;
 
                 int result = await _proyectoBL.CreateAsync(proyecto);
+                TempData["SuccessMessage"] = "Proyecto creado correctamente.";
                 return Json(new { success = true, message = "Proyecto creado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return Json(new { success = false, message = $"Error al crear el proyecto: {ex.Message}" });
+                TempData["ErrorMessage"] = "Hubo un problema al crear el proyecto.";
+                return Json(new { success = false, message = "Hubo un problema al crear el proyecto: " + ex.Message });
             }
         }
 
@@ -102,12 +104,14 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _proyectoBL.UpdateAsync(proyecto);
-                return Json(new { success = true, message = "Proyecto editado correctamente." });
+                TempData["SuccessMessage"] = "Proyecto actualizado correctamente.";
+                return Json(new { success = true, message = "Proyecto actualizado correctamente." });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return Json(new { success = false, message = $"Error al editar el proyecto: {ex.Message}" });
+                TempData["ErrorMessage"] = "Hubo un problema al actualizar el proyecto.";
+                return Json(new { success = false, message = "Hubo un problema al actualizar el proyecto: " + ex.Message });
             }
         }
 
@@ -128,13 +132,43 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _proyectoBL.DeleteAsync(proyecto);
-                return Json(new { success = true, message = "Proyecto eliminado correctamente." });
+                TempData["SuccessMessage"] = "Proyecto eliminado correctamente.";
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return Json(new { success = false, message = $"Error al eliminar el proyecto: {ex.Message}" });
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar el proyecto.";
+                return RedirectToAction(nameof(Index));
             }
         }
+
+        // Método para asignar un usuario como encargado de un proyecto
+        [HttpPost]
+        [Authorize(Roles = "Administrador")] // Solo un administrador puede asignar encargados
+        public async Task<ActionResult> AsignarEncargado(int idProyecto, int idUsuario)
+        {
+            try
+            {
+                bool resultado = await ProyectoUsuarioBL.AsignarEncargadoAsync(idProyecto, idUsuario);
+
+                if (resultado)
+                {
+                    TempData["SuccessMessage"] = "Usuario asignado como encargado correctamente.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ya existe un encargado para este proyecto.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Hubo un problema al asignar el encargado: " + ex.Message;
+            }
+
+            // Redirigir a la vista de detalles del proyecto
+            return RedirectToAction("Details", new { id = idProyecto });
+        }
+
     }
 }

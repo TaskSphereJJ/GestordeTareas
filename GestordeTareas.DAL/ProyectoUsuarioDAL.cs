@@ -73,5 +73,46 @@ namespace GestordeTareas.DAL
 
             return result; // Retornar el número de registros afectados
         }
+
+        // Método para asignar un usuario como encargado de un proyecto
+        public static async Task<bool> AsignarEncargadoAsync(int idProyecto, int idUsuarioNuevoEncargado)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Verificar si ya existe un encargado para este proyecto
+                var encargadoExistente = await dbContext.ProyectoUsuario
+                    .FirstOrDefaultAsync(pu => pu.IdProyecto == idProyecto && pu.Encargado);
+
+                // Si ya existe un encargado, no se puede asignar otro
+                if (encargadoExistente != null)
+                {
+                    return false; // Ya existe un encargado para este proyecto
+                }
+
+                // Buscar el registro para el nuevo encargado
+                var nuevoEncargado = await dbContext.ProyectoUsuario
+                    .FirstOrDefaultAsync(pu => pu.IdProyecto == idProyecto && pu.IdUsuario == idUsuarioNuevoEncargado);
+
+                if (nuevoEncargado != null)
+                {
+                    // Asignar como encargado
+                    nuevoEncargado.Encargado = true;
+                    await dbContext.SaveChangesAsync(); // Guardar los cambios
+                    return true; // Asignación exitosa
+                }
+
+                return false; // No se encontró el usuario para asignar como encargado
+            }
+        }
+
+        // Método para verificar si un usuario es el encargado de un proyecto
+        public static async Task<bool> IsUsuarioEncargadoAsync(int idProyecto, int idUsuario)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                return await dbContext.ProyectoUsuario
+                    .AnyAsync(pu => pu.IdProyecto == idProyecto && pu.IdUsuario == idUsuario && pu.Encargado);
+            }
+        }
     }
 }

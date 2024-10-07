@@ -22,12 +22,16 @@
                             => model.Apellido)</p>
                     </div>
 
+<<<<<<< HEAD
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 flex items-center">
                             <i class="fas fa-envelope mr-2 text-gray-500"></i> Correo Electrónico:
                         </h3>
                         <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.NombreUsuario)</p>
                     </div>
+=======
+@await Html.PartialAsync("_Alerts")
+>>>>>>> 9b5a4bc8c68e946a50ac5bed55d45569c3ad9881
 
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 flex items-center">
@@ -121,6 +125,7 @@
                         <span asp-validation-for="FechaNacimiento" class="text-red-500"></span>
                     </div>
 
+<<<<<<< HEAD
                     <!-- Botones de acción -->
                     <div class="flex justify-center space-x-4 mt-6">
                         <button type="submit"
@@ -137,6 +142,67 @@
             </div>
         </div>
     </div>
+=======
+<div id="profileDisplay">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo electrónico</th>
+                <th>Teléfono</th>
+                <th>Cargo</th>
+                <th>Fecha de Nacimiento</th>              
+                <th>Fecha de Registro</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Html.DisplayFor(model => model.Nombre)</td>
+                <td>@Html.DisplayFor(model => model.Apellido)</td>
+                <td>@Html.DisplayFor(model => model.NombreUsuario)</td>
+                <td>@Html.DisplayFor(model => model.Telefono)</td>
+                <td>@Html.DisplayFor(model => model.Cargo.Nombre)</td>
+                <td>@Html.DisplayFor(model => model.FechaNacimiento)</td> 
+                <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
+                <td>
+                    <button class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-200"
+                            onclick="document.getElementById('confirmDeleteCard').classList.remove('hidden');">
+                        Eliminar Cuenta
+                    </button>
+                </td>
+
+                <!-- Tarjeta de Confirmación -->
+                <div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+                    <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
+                        <div class="p-6 mt-6">
+                            <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
+                                <img src="https://cdn-icons-png.freepik.com/256/3712/3712167.png" alt="Eliminar" class="h-12 w-12 text-red-600" />
+                            </div>
+                            <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
+                            <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 flex justify-between">
+                            <button type="button"
+                                    class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
+                                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
+                                Cancelar
+                            </button>
+                            <form method="post" asp-action="DeleteOwn">
+                                <button type="submit"
+                                        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+        </tbody>
+    </table>
+>>>>>>> 9b5a4bc8c68e946a50ac5bed55d45569c3ad9881
 </div>
 
 <script>

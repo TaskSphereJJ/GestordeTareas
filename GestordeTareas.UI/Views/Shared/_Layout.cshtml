@@ -24,8 +24,8 @@
 
 <body class="light:bg-lightPurple light:text-lightText dark:bg-darkPurple dark:text-darkText">
     @{
-        var nombre = User.Claims.FirstOrDefault(c => c.Type == "Nombre")?.Value;
-        var apellido = User.Claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
+        var nombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
+        var apellido = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Surname)?.Value;
     }
 
     @* Header (barra de navegación) *@
