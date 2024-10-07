@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TuNamespace;
 
 namespace GestordeTareas.BL
 {
@@ -34,6 +33,23 @@ namespace GestordeTareas.BL
             return await ProyectoUsuarioDAL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
         }
 
+        // Método para asignar un usuario como encargado de un proyecto
+        public static async Task<bool> AsignarEncargadoAsync(int idProyecto, int idUsuarioNuevoEncargado)
+        {
+            // Llama al método en la capa DAL
+            return await ProyectoUsuarioDAL.AsignarEncargadoAsync(idProyecto, idUsuarioNuevoEncargado);
+        }
 
+        // Método para verificar si un usuario es el encargado de un proyecto
+        public async Task<bool> IsUsuarioEncargadoAsync(int idProyecto, int idUsuario)
+        {
+            return await ProyectoUsuarioDAL.IsUsuarioEncargadoAsync(idProyecto, idUsuario);
+        }
+
+        // Método para obtener el encargado de un proyecto
+        public async Task<Usuario> ObtenerEncargadoPorProyectoAsync(int idProyecto)
+        {
+            return await ProyectoUsuarioDAL.ObtenerEncargadoPorProyectoAsync(idProyecto);
+        }
     }
 }

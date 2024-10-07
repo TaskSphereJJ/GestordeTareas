@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GestordeTareas.BL;
 using GestordeTaras.EN;
@@ -130,17 +130,12 @@ namespace GestordeTareas.UI.Controllers
 
                 if (User.IsInRole("Administrador"))
                 {
-                    // Si es administrador, puedes permitir que el rol sea seleccionado
-                    if (ModelState.IsValid)
-                    {
-                        int createresult = await _usuarioBL.Create(usuario);
-                        TempData["SuccessMessage"] = "Usuario creado correctamente.";
-                        return RedirectToAction(nameof(Index));
-                    }
+                    int createresult = await _usuarioBL.Create(usuario);
+                    TempData["SuccessMessage"] = "Usuario creado correctamente.";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 // Si no es administrador, asigna un rol predeterminado
-                // Obtén el ID del cargo predeterminado para colaboradores
                 var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
                 usuario.IdCargo = cargoColaboradorId;
 
@@ -186,12 +181,13 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _usuarioBL.Update(usuario);
+                TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
                 return Json(new { success = true, message = "Usuario actualizado correctamente." });
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                return Json(new { success = false, message = $"Error al actualizar el perfil: {ex.Message}" });
+                TempData["ErrorMessage"] = "Hubo un problema al actualizar el usuario.";
+                return Json(new { success = false, message = "Hubo un problema al actualizar el usuario: " + ex.Message });
             }
 
         }
@@ -230,7 +226,7 @@ namespace GestordeTareas.UI.Controllers
                     existingUser.Pass = UsuarioDAL.HashMD5(usuario.Pass);
                 }
 
-                // Actualiza los campos comunes para todos los usuarios
+                // Actualizar los campos comunes para todos los usuarios
                 existingUser.Nombre = usuario.Nombre;
                 existingUser.Apellido = usuario.Apellido;
                 existingUser.Telefono = usuario.Telefono;
@@ -243,6 +239,17 @@ namespace GestordeTareas.UI.Controllers
                     existingUser.Cargo = usuario.Cargo;
                     existingUser.Status = usuario.Status;
                 }
+
+                // Actualiza los claims del usuario en el contexto actual
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.GivenName));
+                claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Surname));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre)); // Usar Nombre como GivenName
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido)); // Usar Apellido como Surname
+
+                var principal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
 
                 // Actualiza el usuario en la base de datos
                 await _usuarioBL.Update(existingUser);
@@ -277,12 +284,14 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _usuarioBL.Delete(usuario);
-                return Json(new { success = true, message = "Usuario eliminado correctamente." });
+                TempData["SuccessMessage"] = "Usuario eliminado correctamente.";
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return Json(new { success = false, message = $"Error al eliminar el usuario: {ex.Message}" });
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -298,8 +307,8 @@ namespace GestordeTareas.UI.Controllers
                 return RedirectToAction("Login", "Usuario");
             }
 
-             var nombreUsuario = User.Identity.Name;
-             Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
+            var nombreUsuario = User.Identity.Name;
+            Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
 
             // Se verifica si userId es null o vacío
             if (string.IsNullOrEmpty(nombreUsuario))
@@ -361,10 +370,10 @@ namespace GestordeTareas.UI.Controllers
                 {
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {
-                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
+                    new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-                    new Claim("Nombre", userDb.Nombre),
-                    new Claim("Apellido", userDb.Apellido),
+                    new Claim(ClaimTypes.GivenName, userDb.Nombre),
+                    new Claim(ClaimTypes.Surname, userDb.Apellido),
                     new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
             };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
