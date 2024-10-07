@@ -51,7 +51,23 @@
             <dd class="col-sm-8">@Model.Descripcion</dd>
 
             <dt class="col-sm-4 font-bold">Administrador:</dt>
-            <dd class="col-sm-8">@Model.Usuario.Nombre</dd>
+            <dd class="col-sm-8">@Model.Usuario.Nombre @Model.Usuario.Apellido</dd>
+
+            <dt class="col-sm-4 font-bold">Encargado:</dt>
+            <dd class="col-sm-8">
+                @if (ViewBag.Encargado != null)
+                {
+                    @ViewBag.Encargado.Nombre @Html.Raw("&nbsp;")
+
+                    @ViewBag.Encargado.Apellido
+                }
+                else
+                {
+                    <span>No hay encargado asignado.</span>
+                }
+            </dd>
+
+
 
             <dt class="col-sm-4 font-bold">Fecha de Finalización:</dt>
             <dd class="col-sm-8">@Model.FechaFinalizacion.ToShortDateString()</dd>

@@ -46,9 +46,13 @@ namespace GestordeTareas.UI.Controllers
 
             // Obtener la lista de usuarios unidos al proyecto
             var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(id);
-
             // Pasar la lista de usuarios unidos a la vista
             ViewBag.UsuariosUnidos = usuariosUnidos;
+
+            // Obtener el encargado del proyecto
+            var encargado = await _proyectoUsuarioBL.ObtenerEncargadoPorProyectoAsync(id);
+            // Pasar el encargado a la vista
+            ViewBag.Encargado = encargado;
 
             return View(proyecto);
         }
