@@ -41,7 +41,7 @@
                                 {
                                     <label for="IdCargo" class="block text-gray-700 text-sm font-medium mt-4">Cargo</label>
                                     <select asp-for="IdCargo" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white">
-                                        <option value="">Seleccionar Cargo</option>
+                                        <option value="">Seleccionar</option>
                                         @foreach (var item in ViewBag.Cargos)
                                         {
                                             <option value="@item.Value">@item.Text</option>
@@ -62,7 +62,7 @@
                                 <span asp-validation-for="Apellido" class="text-danger"></span>
 
                                 <label for="Telefono" class="block text-gray-700 text-sm font-medium mt-4">Teléfono</label>
-                                <input asp-for="Telefono" maxlength="12" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Teléfono" />
+                                <input asp-for="Telefono" type="tel" maxlength="8" class="w-full px-4 py-2 mt-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Teléfono" />
                                 <span asp-validation-for="Telefono" class="text-danger"></span>
 
                                 <label for="FechaNacimiento" class="block text-gray-700 text-sm font-medium mt-4">Fecha de nacimiento</label>

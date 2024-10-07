@@ -91,10 +91,15 @@ namespace GestordeTareas.DAL
                     userDb.FechaRegistro = usuario.FechaRegistro;
                     userDb.NombreUsuario = usuario.NombreUsuario;
                     // Solo actualiza la contraseña si se ha proporcionado una nueva
-                    if (!string.IsNullOrEmpty(usuario.Pass))
+                    if (!string.IsNullOrEmpty(usuario.Pass) && usuario.Pass != userDb.Pass)
                     {
                         EncryptMD5(usuario); // Encripta la nueva contraseña
                         userDb.Pass = usuario.Pass; // Asigna la contraseña encriptada
+                    }
+                    else
+                    {
+                        // Si no se proporciona una nueva contraseña, mantén la existente
+                        userDb.Pass = userDb.Pass; // No cambies la contraseña
                     }
                     dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();

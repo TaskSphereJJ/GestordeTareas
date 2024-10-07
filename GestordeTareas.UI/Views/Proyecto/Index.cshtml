@@ -6,15 +6,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">   
 }
+<div id="alertContainer" class="fixed bottom-4 right-4 z-50">
+@if (TempData["SuccessMessage"] != null)
+{
+    <div role="alert"
+         class="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 dark:border-green-700 text-green-900 dark:text-green-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-green-200 dark:hover:bg-green-800 transform hover:scale-105">
+        <svg stroke="currentColor"
+             viewBox="0 0 24 24"
+             fill="none"
+             class="h-6 w-6 flex-shrink-0 mr-3 text-green-600"
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"></path>
+        </svg>
+        <p class="text-sm font-semibold">@TempData["SuccessMessage"]</p>
+    </div>
+}
+</div>
 
-@await Html.PartialAsync("_AlertMessages")
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '@TempData["ErrorMessage"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+
+
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyectos</h1>
 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
 {
     <p>
         <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
-            <i class="fas fa-plus-circle mr-2"></i> Nuevo Proyecto
+            <i class="fas fa-plus-circle mr-2"></i> Nuevo
         </a>
     </p>
 }
@@ -24,62 +55,89 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     @foreach (var item in Model)
     {
-        <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90">
-            <div class="absolute top-0 right-0 mt-1 mr-1">
-                <div class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center">
-                    <i class="fas fa-tools text-gray-600 text-2xl"></i>
+            <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90">
+                <div class="absolute top-0 right-0 mt-1 mr-1">
+                    <!-- Botón principal flotante -->
+                    <div class="relative">
+                        @if (User.IsInRole("Administrador"))
+                        {
+                        <button class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
+                            <i class="fas fa-ellipsis-v text-gray-600 text-2xl"></i> <!-- Icono de tres puntos verticales -->
+                        </button>
+                        }
+                        <!-- Menú desplegable -->
+                        <div id="menu-@item.Id" class="absolute right-0 mt-2 w-40 bg-white rounded-xl py-3 flex flex-col gap-2 shadow-lg hidden z-10">
+                            <ul class="space-y-2 px-3">
+                                @* Solo los administradores ven el botón "+" *@
+                                @if (User.IsInRole("Administrador"))
+                                {
+                                    <li class="flex items-center gap-2 justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95" onclick="window.location='@Url.Action("Details", "Proyecto", new { id = item.Id })'">
+                                        <i class="fas fa-plus"></i>
+                                        <p class="font-semibold text-center flex-grow">Detalles</p>
+                                    </li>
+                                    <li class="flex items-center justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95" onclick="cargarVistaEdit(@item.Id)">
+                                        <i class="fas fa-edit"></i>
+                                        <p class="font-semibold text-center flex-grow">Editar</p>
+                                    </li>
+                                    <li class="flex items-center justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-red-700 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
+                                        onclick="mostrarTarjetaEliminar(@item.Id); return false;">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <p class="font-semibold text-center flex-grow">Eliminar</p>
+                                    </li>
+
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <h2 class="text-lg font-semibold text-black mb-4 break-words text-center">@item.Titulo</h2>
+
+                <!-- Ajusté el margen inferior de la descripción para que esté más cerca del administrador -->
+                <p class="text-black dark:text-gray-400 mb-2 text-base">
+                    <span class="text-purple-600 dark:text-purple-400 font-bold">Descripción:</span>
+                    @{
+                        if (item.Descripcion.Length > 200)
+                        {
+                            <text>@item.Descripcion.Substring(0, 200)...</text>
+                        }
+                        else
+                        {
+                            <text>@item.Descripcion</text>
+                        }
+                    }
+                </p>
+
+                <!-- Reduje el margen entre la descripción y el administrador -->
+                <p class="text-black dark:text-gray-400 mb-2 text-base">
+                    <span class="text-purple-600 dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre
+                </p>
+                <p class="text-black dark:text-gray-400 mb-4 text-base">
+                    <span class="text-purple-600 dark:text-purple-400 font-bold">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
+                </p>
+
+                <div class="flex justify-end space-x-1 items-center">
+                    <!-- El botón "Ingresar" lo ven tanto Colaboradores como Administradores -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
+                            Ingresar
+                            <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
+                                <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
+                            </svg>
+                        </a>
+                    }
+
+                    <!-- Si el usuario es Colaborador, también verá el botón de "+" -->
+                    @if (User.IsInRole("Colaborador"))
+                    {
+                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded">
+                            <i class="fas fa-plus text-lg"></i>
+                        </a>
+                    }
                 </div>
             </div>
-            <h2 class="text-lg font-semibold dark:text-white mb-2 break-words">@item.Titulo</h2>
-            <p class="text-gray-600 infor dark:text-gray-400 mb-4">
-                <span class="text-purple-600 dark:text-purple-400 font-bold">Descripcion:</span>
-                @{
-                    if (item.Descripcion.Length > 200)
-                    {
-                        <text>@item.Descripcion.Substring(0, 200)...</text>
-                    }
-                    else
-                    {
-                        <text>@item.Descripcion</text>
-                    }
-                }
-            </p>
-            <p class="text-gray-600 dark:text-gray-400 mb-4 infor"><span class="text-purple-600  dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre</p>
-            <p class="text-gray-600 dark:text-gray-400 mb-4 infor"><span class="text-purple-600  dark:text-purple-400 font-bold">Fecha de finalizacion:</span> @item.FechaFinalizacion.ToShortDateString()</p>
-            <div class="flex justify-end space-x-1 items-center">
-                <!-- El botón "Ingresar" lo ven tanto Colaboradores como Administradores -->
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
-                        Ingresar
-                        <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                            <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
-                        </svg>
-                    </a>
-                }
-
-                <!-- Si el usuario es Colaborador, también verá el botón de "+" -->
-                @if (User.IsInRole("Colaborador"))
-                {
-                    <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded">
-                        <i class="fas fa-plus text-lg"></i>
-                    </a>
-                }
-                <!-- Si el usuario es Administrador, verá botones adicionales (detalles, editar, borrar) -->
-                @if (User.IsInRole("Administrador"))
-                {
-                    <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded">
-                        <i class="fas fa-plus text-lg"></i>
-                    </a>
-                    <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaEdit(@item.Id)">
-                        <i class="fas fa-edit text-lg"></i>
-                    </a>
-                    <a href="#" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDelete(@item.Id)">
-                        <i class="fas fa-trash-alt text-lg"></i>
-                    </a>
-                }
-            </div>
-        </div>
     }
 </div>
 }
@@ -91,7 +149,6 @@ else
         <p class="mt-2 text-gray-500">Crea un nuevo proyecto para comenzar a trabajar.</p>
     </div>
 }
-
 
 <!-- Modal de creacion -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -147,22 +204,29 @@ else
     </div>
 </div>
 
-<!-- Modal de eliminación -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-red-600 text-white">
-                <h5 class="modal-title" id="deleteModalLabel">Eliminar Proyecto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+<!-- Tarjeta de eliminacion -->
+<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+    <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
+        <div class="p-6 mt-6">
+            <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
+                <img src="https://cdn-icons-png.freepik.com/256/3712/3712167.png" alt="Eliminar" class="h-12 w-12 text-red-600" />
+            </div>
+            <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
+            <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="bg-gray-50 p-4 flex justify-between">
+            <button type="button"
+                    class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
+                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
+                Cancelar
+            </button>
+            <form id="deleteForm" method="post" asp-action="Delete">
+                <input type="hidden" name="Id" id="deleteProjectId" />
+                <button type="submit"
+                        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
+                    Eliminar
                 </button>
-            </div>
-            <div class="modal-body" id="deleteModalContent">
-                <!-- Contenido de la vista de eliminación se cargará aquí -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="eliminarProyecto()">Eliminar</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -174,34 +238,49 @@ else
 
 <script>
 
+    function toggleMenu(id) {
+        var menu = document.getElementById('menu-' + id);
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+        } else {
+            menu.classList.add('hidden');
+        }
+    }
+
+    // Cierra el menú si se hace clic fuera de él
+    window.addEventListener('click', function (e) {
+        // Obtén todos los menús desplegables
+        var allMenus = document.querySelectorAll('[id^="menu-"]');
+
+        // Verifica si el clic no ocurrió dentro del botón o del menú
+        allMenus.forEach(function (menu) {
+            if (!menu.contains(e.target) && !document.getElementById('menuButton-' + menu.id.split('-')[1]).contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    });
+
     function handleResponse(response, isError = false) {
         // Cerrar el modal y luego mostrar el mensaje
-        $('#editModal, #createModal, #deleteModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
+        $('#editModal, #createModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
 
-        setTimeout(() => {
-            if (isError) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Hubo un problema al procesar la solicitud.',
-                    confirmButtonText: 'OK',
-                    showConfirmButton: true,
-                    timer: null
-                });
+        if (isError) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al procesar la solicitud.',
+                confirmButtonText: 'OK',
+                showConfirmButton: true,
+                timer: null
+            });
+        } else {
+            if (response.success) {
+                window.location.reload();
+                TempData["SuccessMessage"] = response.message;
             } else {
-                Swal.fire({
-                    icon: response.success ? 'success' : 'error',
-                    title: response.success ? 'Éxito' : 'Error',
-                    text: response.message,
-                    timer: response.success ? 2000 : null,
-                    showConfirmButton: false
-                }).then(() => {
-                    if (response.success) {
-                        window.location.reload(); // Solo recarga la página si es un mensaje de éxito
-                    }
-                });
+                TempData["ErrorMessage"] = response.message;
             }
-        }, 300);
+        }
     }
 
     function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
@@ -236,21 +315,6 @@ else
         });
     }
 
-    function eliminarProyecto() { // Función para eliminar un proyecto mediante una solicitud AJAX
-        $.ajax({ // Enviar una solicitud AJAX para eliminar el proyecto
-            url: '/Proyecto/Delete', // URL de la acción POST para eliminar el proyecto
-            type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del Proyecto)
-            success: function (response) {
-                handleResponse(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-                handleResponse(null, true); // Maneja el error general
-            }
-        });
-    }
-
     function cargarVistaCreate() { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista create
             url: "/Proyecto/Create", // URL de la vista que se va a cargar
@@ -273,18 +337,29 @@ else
         });
     }
 
-    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
-        $.ajax({ //solicitud AJAX para obtener la vista delete
-            url: "/Proyecto/Delete/" + id, // URL de la vista que se va a cargar
-            type: "GET", // Solicitud para obtener la vista
-            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
-                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
-                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
-            },
-            error: function () { // Función a ejecutar si la solicitud AJAX falla
-                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
-            }
-        });
+    function mostrarTarjetaEliminar(proyectoId) {
+        // Establecer el ID del proyecto en el campo oculto
+        document.getElementById('deleteProjectId').value = proyectoId;
+        // Mostrar la tarjeta de confirmación
+        document.getElementById('confirmDeleteCard').classList.remove('hidden');
     }
 
+    // Función para ocultar la tarjeta (ya está en el botón "Cancelar")
+    function ocultarTarjetaEliminar() {
+        document.getElementById('confirmDeleteCard').classList.add('hidden');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertContainer = document.getElementById('alertContainer');
+        if (alertContainer) {
+            // Mostrar la alerta durante 5 segundos
+            setTimeout(() => {
+                // Desvanecer la alerta
+                alertContainer.style.transition = 'opacity 0.5s ease';
+                alertContainer.style.opacity = '0';
+                // Esperar a que se desvanezca antes de eliminar
+                setTimeout(() => alertContainer.remove(), 500);
+            }, 4000); // Esperar 4 segundos
+        }
+    });
 </script>

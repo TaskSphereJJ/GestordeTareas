@@ -159,10 +159,10 @@ namespace GestordeTareas.UI.Controllers
         [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Edit(int id, Tarea tarea)
         {
-            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); 
 
             if (!User.IsInRole("Administrador"))
-            {
+            {      
                 // Verificar si el usuario es el encargado del proyecto
                 bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(tarea.IdProyecto, idUsuario);
 
@@ -247,7 +247,7 @@ namespace GestordeTareas.UI.Controllers
                         {
                             return BadRequest("Estado no válido.");
                         }
-
+                            
 
                         tareaBD.IdEstadoTarea = model.IdEstadoTarea;
                         bdContexto.Update(tareaBD);

@@ -43,7 +43,7 @@ CREATE TABLE Usuario (
     Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
     Telefono VARCHAR(9) NOT NULL,
     FechaNacimiento DATE NOT NULL,
-	[Status] INT NOT NULL,
+	[Status] TINYINT NOT NULL,
 	FechaRegistro DATETIME NOT NULL,
     IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id),
 
@@ -109,13 +109,16 @@ CREATE TABLE ProyectoUsuario(
 	Id INT PRIMARY KEY IDENTITY (1,1),
 	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
-	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE()
+	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
+	Encargado BIT NULL
 )
-delete from ProyectoUsuario
+
 Select * from ProyectoUsuario
-insert into ProyectoUsuario (IdUsuario,IdProyecto) values (30,20)
+
+update ProyectoUsuario
+set Encargado = 1 where id=12
 -- Insertar datos en la tabla Cargo
-INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Supervisor');
+INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
 
 -- Insertar datos en la tabla Categoria
 INSERT INTO Categoria (Nombre) VALUES ('Informes'), ('Desarrollo'), ('Gestión');
@@ -125,15 +128,14 @@ INSERT INTO Prioridad (Nombre) VALUES ('Baja'), ('Media'), ('Alta');
 
 -- Insertar datos en la tabla EstadoTarea
 INSERT INTO EstadoTarea (Nombre) VALUES ('Pendiente'), ('En Proceso'), ('Finalizada');
+select * from EstadoTarea
 
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
 VALUES 
-  ('lester', 'serrano', 'lesterserrano', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
+  ('lester', 'serrano', 'lesterserrano66@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
   --La contraseña de este usuario es 12345
 
-update Usuario set Pass = '827ccb0eea8a706c4c34a16891f84e7b' where id = 5 
-select*from Usuario
 -- Insertar datos en la tabla Proyecto
 INSERT INTO Proyecto (Titulo, Descripcion, FechaFinalizacion, IdUsuario)
 VALUES 

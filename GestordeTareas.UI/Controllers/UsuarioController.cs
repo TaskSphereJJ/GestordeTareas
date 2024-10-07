@@ -128,12 +128,21 @@ namespace GestordeTareas.UI.Controllers
 
                 usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
 
+<<<<<<< HEAD
                 if (User.IsInRole("Administrador"))
                 {
                     int createresult = await _usuarioBL.Create(usuario);
                     TempData["SuccessMessage"] = "Usuario creado correctamente.";
                     return RedirectToAction(nameof(Index));
                 }
+=======
+                  if (User.IsInRole("Administrador"))
+                  {
+                      int createresult = await _usuarioBL.Create(usuario);
+                      TempData["SuccessMessage"] = "Usuario creado correctamente.";
+                      return RedirectToAction(nameof(Index));
+                  }
+>>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
 
                 // Si no es administrador, asigna un rol predeterminado
                 var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
@@ -372,7 +381,11 @@ namespace GestordeTareas.UI.Controllers
                     var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
+<<<<<<< HEAD
                     new Claim(ClaimTypes.GivenName, userDb.Nombre),
+=======
+                    new Claim(ClaimTypes.GivenName, userDb.Nombre),   
+>>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
                     new Claim(ClaimTypes.Surname, userDb.Apellido),
                     new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
             };
