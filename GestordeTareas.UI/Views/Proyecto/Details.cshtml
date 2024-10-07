@@ -19,7 +19,7 @@
     </script>
 }
 
-<div id="alertContainer">
+<div id="alertContainer" class="fixed bottom-4 right-4 z-50">
     @if (TempData["ErrorMessage"] != null)
     {
     <div role="alert"
@@ -50,7 +50,7 @@
             <dt class="col-sm-4 font-bold">Descripción:</dt>
             <dd class="col-sm-8">@Model.Descripcion</dd>
 
-            <dt class="col-sm-4 font-bold">Encargado:</dt>
+            <dt class="col-sm-4 font-bold">Administrador:</dt>
             <dd class="col-sm-8">@Model.Usuario.Nombre</dd>
 
             <dt class="col-sm-4 font-bold">Fecha de Finalización:</dt>
@@ -93,6 +93,28 @@
         </a>
     </div>
 
+    @if (User.IsInRole("Administrador"))
+    {
+    <h3 class="text-lg font-semibold mt-6 text-center">Asignar encargado del proyecto</h3>
+    <form method="post" asp-action="AsignarEncargado" asp-controller="Proyecto" class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+        <input type="hidden" name="idProyecto" value="@Model.Id" />
+
+        <div class="mb-4">
+            <label for="idUsuario" class="block text-sm font-semibold mb-2">Seleccionar Usuario:</label>
+            <select name="idUsuario" id="idUsuario" class="border border-gray-300 rounded-lg p-2 w-full">
+                <option value="">-- Selecciona un usuario --</option>
+                @foreach (var usuario in ViewBag.UsuariosUnidos)
+                {
+                    <option value="@usuario.Id">@usuario.Nombre</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
+            Asignar Encargado
+        </button>
+    </form>
+    }
 </div>
 
 <script>

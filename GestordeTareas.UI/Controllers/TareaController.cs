@@ -128,7 +128,6 @@ namespace GestordeTareas.UI.Controllers
             }
         }
 
-
         //MÉTODO PARA CARGAR LISTAS DESPLEGABLES SELECCIONABLES 
         private async Task LoadDropDownListsAsync()
         {
@@ -246,27 +245,24 @@ namespace GestordeTareas.UI.Controllers
                         var estadoValido = await bdContexto.EstadoTarea.FindAsync(model.IdEstadoTarea);
                         if (estadoValido == null)
                         {
-                            TempData["ErrorMessage"] = "Estado no válido.";
-                            return Json(new { success = false, message = "Estado no válido." });
-                        }                          
+                            return BadRequest("Estado no válido.");
+                        }
+                            
 
                         tareaBD.IdEstadoTarea = model.IdEstadoTarea;
                         bdContexto.Update(tareaBD);
                         await bdContexto.SaveChangesAsync();
-                        TempData["SuccessMessage"] = "Tarea actualizada correctamente.";
-                        return Json(new { success = true, message = "Tarea actualizada correctamente.", nombreEstado = estadoValido.Nombre });
+                        return Ok(new { nombreEstado = estadoValido.Nombre });
                     }
                     else
                     {
-                        TempData["ErrorMessage"] = "Tarea no encontrada.";
-                        return Json(new { success = false, message = "Tarea no encontrada." });
+                        return NotFound("Tarea no encontrada.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error al actualizar la tarea: {ex.Message}";
-                return Json(new { success = false, message = $"Error al actualizar la tarea: {ex.Message}" });
+                return StatusCode(500, $"Error al actualizar la tarea: {ex.Message}");
             }
         }
 

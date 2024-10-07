@@ -142,5 +142,33 @@ namespace GestordeTareas.UI.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        // Método para asignar un usuario como encargado de un proyecto
+        [HttpPost]
+        [Authorize(Roles = "Administrador")] // Solo un administrador puede asignar encargados
+        public async Task<ActionResult> AsignarEncargado(int idProyecto, int idUsuario)
+        {
+            try
+            {
+                bool resultado = await ProyectoUsuarioBL.AsignarEncargadoAsync(idProyecto, idUsuario);
+
+                if (resultado)
+                {
+                    TempData["SuccessMessage"] = "Usuario asignado como encargado correctamente.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ya existe un encargado para este proyecto.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Hubo un problema al asignar el encargado: " + ex.Message;
+            }
+
+            // Redirigir a la vista de detalles del proyecto
+            return RedirectToAction("Details", new { id = idProyecto });
+        }
+
     }
 }
