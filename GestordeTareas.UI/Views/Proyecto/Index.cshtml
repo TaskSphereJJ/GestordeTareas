@@ -21,76 +21,77 @@
         </a>
     </p>
 }
-
 @if (Model != null && Model.Any())
 {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach (var item in Model)
         {
-            <div class="relative proyecto rounded-md shadow-md p-6 opacity-90">
-                <div class="absolute top-0 right-0 mt-1 mr-1">
-                    <div class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center">
-                        <i class="fas fa-tools text-gray-600 text-2xl"></i>
+            <div
+                class="relative block bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                @* <!-- Contenedor del icono de usuario y el menú de tres puntos (kebab menu) --> *@
+                <div class="flex justify-between items-center">
+                    <!-- Icono de usuario -->
+                    <div class="bg-gray-100 dark:bg-gray-700 p-2 rounded-full shadow-md">
+                        <i class="fas fa-user text-gray-500 dark:text-gray-300 text-2xl"></i>
+                    </div>
+
+                    @* <!-- Menú de tres puntos (Kebab menu) --> *@
+                    <div class="relative">
+
+                        <button id="menuButton-@item.Id"
+                            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-ellipsis-v text-xl"></i>
+                        </button>
+                        < !-- Menú desplegable con efecto blur -->
+                            <div id="menuDropdown-@item.Id"
+                                class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg backdrop-blur-md bg-opacity-60 dark:bg-opacity-40">
+                                <a href="@Url.Action("Edit", "Tarea", new { id = item.Id })"
+                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-md">
+                                    Editar</a>
+                                <a href="@Url.Action("Details", "Tarea", new { id = item.Id })"
+                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-md">
+                                    Ver más</a>
+                                <a href="@Url.Action("Delete", "Tarea", new { id = item.Id })"
+                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-md">
+                                    Eliminar</a>
+                            </div>
                     </div>
                 </div>
-                <h2 class="text-lg font-semibold dark:text-white mb-2 break-words">@item.Titulo</h2>
-                <p class="text-gray-600 infor dark:text-gray-400 mb-4">
-                    <span class="text-purple-600 dark:text-purple-400 font-bold">Descripcion:</span>
-                    @{
-                        if (item.Descripcion.Length > 200)
-                        {
-                            <text>@item.Descripcion.Substring(0, 200)...</text>
-                        }
-                        else
-                        {
-                            <text>@item.Descripcion</text>
-                        }
+
+                @* <!-- Título de la tarea --> *@
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">@item.Titulo</h2>
+
+                @* <!-- Descripción --> *@
+                <p class="text-gray-600 dark:text-gray-400 mb-2">
+                    <span class="font-bold text-purple-600 dark:text-purple-400">Descripción: </span>
+                    @if (item.Descripcion.Length > 100)
+                    {
+                        <text>@item.Descripcion.Substring(0, 100)...</text>
+                    }
+                    else
+                    {
+                        <text>@item.Descripcion</text>
                     }
                 </p>
-                <p class="text-gray-600 dark:text-gray-400 mb-4 infor"><span
-                        class="text-purple-600  dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre</p>
-                <p class="text-gray-600 dark:text-gray-400 mb-4 infor"><span
-                        class="text-purple-600  dark:text-purple-400 font-bold">Fecha de finalizacion:</span>
-                    @item.FechaFinalizacion.ToShortDateString()</p>
-                <div class="flex justify-end space-x-1 items-center">
-                    <!-- El botón "Ingresar" lo ven tanto Colaboradores como Administradores -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
-                            Ingresar
-                            <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                                <path clip-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
-                                    fill-rule="evenodd"></path>
-                            </svg>
-                        </a>
-                    }
 
-                    <!-- Si el usuario es Colaborador, también verá el botón de "+" -->
-                    @if (User.IsInRole("Colaborador"))
-                    {
-                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
-                            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded">
-                            <i class="fas fa-plus text-lg"></i>
-                        </a>
-                    }
-                    <!-- Si el usuario es Administrador, verá botones adicionales (detalles, editar, borrar) -->
-                    @if (User.IsInRole("Administrador"))
-                    {
-                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
-                            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded">
-                            <i class="fas fa-plus text-lg"></i>
-                        </a>
-                        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded"
-                            onclick="cargarVistaEdit(@item.Id)">
-                            <i class="fas fa-edit text-lg"></i>
-                        </a>
-                        <a href="#" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded"
-                            onclick="cargarVistaDelete(@item.Id)">
-                            <i class="fas fa-trash-alt text-lg"></i>
-                        </a>
-                    }
+                <!-- Fecha de Finalización -->
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    <span class="font-bold text-purple-600 dark:text-purple-400">Fecha de Finalización: </span>
+                    @item.FechaFinalizacion.ToShortDateString()
+                </p>
+
+                <!-- Barra de progreso -->
+                @{
+                    var totalTareas = item.Tareas.Count();
+                    var tareasFinalizadas = item.Tareas.Where(t => t.EstadoTarea.Nombre == "Finalizada").Count();
+                    var porcentajeProgreso = totalTareas > 0 ? (tareasFinalizadas * 100) / totalTareas : 0;
+                }
+
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-2">
+                    <div class="bg-blue-500 h-2.5 rounded-full" style="width:@porcentajeProgreso%;"></div>
                 </div>
+                <p class="text-right text-sm font-semibold text-gray-500 dark:text-gray-400">@porcentajeProgreso% completado</p>
             </div>
         }
     </div>
@@ -103,6 +104,7 @@ else
         <p class="mt-2 text-gray-500">Crea un nuevo proyecto para comenzar a trabajar.</p>
     </div>
 }
+
 
 
 <!-- Modal de creacion -->
@@ -197,6 +199,20 @@ else
 
 
 <script>
+    document.querySelectorAll('[id^="menuButton-"]').forEach(button => {
+        const itemId = button.id.split('-')[1];
+        const dropdown = document.getElementById(`menuDropdown-${itemId}`);
+
+        button.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!button.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
 
     function handleResponse(response, isError = false) {
         // Cerrar el modal y luego mostrar el mensaje
