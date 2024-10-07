@@ -45,5 +45,11 @@ namespace GestordeTareas.BL
         {
             return await ProyectoUsuarioDAL.IsUsuarioEncargadoAsync(idProyecto, idUsuario);
         }
+
+        // Método para obtener el encargado de un proyecto
+        public async Task<Usuario> ObtenerEncargadoPorProyectoAsync(int idProyecto)
+        {
+            return await ProyectoUsuarioDAL.ObtenerEncargadoPorProyectoAsync(idProyecto);
+        }
     }
 }

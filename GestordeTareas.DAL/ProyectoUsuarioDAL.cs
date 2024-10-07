@@ -114,5 +114,20 @@ namespace GestordeTareas.DAL
                     .AnyAsync(pu => pu.IdProyecto == idProyecto && pu.IdUsuario == idUsuario && pu.Encargado);
             }
         }
+
+        public static async Task<Usuario> ObtenerEncargadoPorProyectoAsync(int idProyecto)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Buscar el encargado del proyecto
+                var encargado = await dbContext.ProyectoUsuario
+                    .Where(pu => pu.IdProyecto == idProyecto && pu.Encargado)
+                    .Select(pu => pu.Usuario) // Asegúrate de tener la relación configurada
+                    .FirstOrDefaultAsync();
+
+                return encargado; // Retorna el usuario encargado o null si no existe
+            }
+        }
+
     }
 }
