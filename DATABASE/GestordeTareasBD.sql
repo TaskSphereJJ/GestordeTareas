@@ -55,12 +55,15 @@ CREATE TABLE Proyecto (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Titulo VARCHAR(50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
+	CodigoAcceso NVARCHAR(50) NOT NULL,
 	FechaFinalizacion DATE NOT NULL,
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 );
 
-GO
+ALTER TABLE Proyecto
+ADD CodigoAcceso NVARCHAR(50) NOT NULL DEFAULT '12345';
 
+GO
 
 -- Tarea creada por el administrador
 CREATE TABLE Tarea (

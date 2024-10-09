@@ -78,13 +78,20 @@
     {
         <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg mb-6">
             <h4 class="text-lg font-semibold">¿Quieres unirte a este Proyecto?</h4>
+            <p>Ingresa el código de acceso para unirte a este proyecto.</p>
             <form asp-action="UnirUsuarioAProyecto" asp-controller="ProyectoUsuario" method="post" class="mt-4">
                 <input type="hidden" name="idProyecto" value="@Model.Id" />
+
+                <!-- Campo para el código de acceso -->
+                <div class="mb-4">
+                    <input type="text" name="CodigoAcceso" placeholder="Ingresa el código de acceso" class="form-control" required />
+                </div>
+
                 <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Unirme</button>
             </form>
-
         </div>
     }
+
 
     <h3 class="text-lg font-semibold mt-6 text-center">Usuarios Unidos</h3>
     <div class="bg-white shadow-md rounded-lg p-4">

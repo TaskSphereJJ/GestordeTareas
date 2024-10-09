@@ -21,6 +21,7 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Descripcion")]
         public string Descripcion { get; set; } = string.Empty;
+        public string CodigoAcceso { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
 

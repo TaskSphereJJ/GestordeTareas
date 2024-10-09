@@ -15,15 +15,18 @@ namespace GestordeTareas.UI.Controllers
     {
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
         private readonly UsuarioBL _usuarioBL;
+        private readonly ProyectoBL _proyectoBL;
 
         public ProyectoUsuarioController()
         {
             _proyectoUsuarioBL = new ProyectoUsuarioBL();
             _usuarioBL = new UsuarioBL();
+            _proyectoBL = new ProyectoBL();
         }
+       
         // Método para unir un usuario a un proyecto
         [HttpPost]
-        public async Task<IActionResult> UnirUsuarioAProyecto(int idProyecto)
+        public async Task<IActionResult> UnirUsuarioAProyecto(int idProyecto, string codigoAcceso)
         {
             var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
             var actualUser = users.FirstOrDefault();
@@ -35,6 +38,21 @@ namespace GestordeTareas.UI.Controllers
 
             int idUsuario = actualUser.Id;
 
+            // Obtener el proyecto
+            var proyecto = await _proyectoBL.GetById(new Proyecto { Id = idProyecto });
+            
+            if (proyecto == null)
+            {
+                return NotFound(); // Proyecto no encontrado
+            }
+
+            // Verificar si el código de acceso es correcto
+            if (proyecto.CodigoAcceso != codigoAcceso)
+            {
+                TempData["ErrorMessage"] = "El código de acceso es incorrecto.";
+                return RedirectToAction("Details", "Proyecto", new { id = idProyecto });
+            }
+
             // Verificar si el usuario ya está unido al proyecto
             var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
             if (usuariosUnidos.Any(u => u.Id == idUsuario))
@@ -43,7 +61,7 @@ namespace GestordeTareas.UI.Controllers
                 return RedirectToAction("Details", "Proyecto", new { id = idProyecto }); // Volver a la vista de detalles del proyecto
             }
 
-            var result = await ProyectoUsuarioBL.UnirUsuarioAProyectoAsync(idProyecto, idUsuario);
+            var result = await _proyectoUsuarioBL.UnirUsuarioAProyectoAsync(idProyecto, idUsuario);
             if (result > 0)
             {
                 TempData["SuccessMessage"] = "Te has unido al proyecto exitosamente.";
@@ -70,7 +88,7 @@ namespace GestordeTareas.UI.Controllers
             int idUsuario = actualUser.Id;
 
             // Llamar al método para eliminar el usuario del proyecto
-            var result = await ProyectoUsuarioBL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
+            var result = await _proyectoUsuarioBL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
 
             if (result > 0)
             {
@@ -99,9 +117,8 @@ namespace GestordeTareas.UI.Controllers
 
             int idUsuario = actualUser.Id; // Obtener el ID del usuario actual
 
-            List<Proyecto> proyectos = await ProyectoUsuarioBL.ObtenerProyectosPorUsuarioAsync(idUsuario);
+            List<Proyecto> proyectos = await _proyectoUsuarioBL.ObtenerProyectosPorUsuarioAsync(idUsuario);
             return View("MisProyectos",proyectos);
         }
-
     }
 }

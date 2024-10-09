@@ -36,6 +36,7 @@ namespace GestordeTareas.DAL
                     existingProyecto.Descripcion = proyecto.Descripcion;
                     existingProyecto.IdUsuario = proyecto.IdUsuario;
                     existingProyecto.FechaFinalizacion = proyecto.FechaFinalizacion;
+                    existingProyecto.CodigoAcceso = proyecto.CodigoAcceso;
 
                     dbContext.Update(existingProyecto);
                     result = await dbContext.SaveChangesAsync();

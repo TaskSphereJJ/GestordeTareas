@@ -154,7 +154,7 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                bool resultado = await ProyectoUsuarioBL.AsignarEncargadoAsync(idProyecto, idUsuario);
+                bool resultado = await _proyectoUsuarioBL.AsignarEncargadoAsync(idProyecto, idUsuario);
 
                 if (resultado)
                 {

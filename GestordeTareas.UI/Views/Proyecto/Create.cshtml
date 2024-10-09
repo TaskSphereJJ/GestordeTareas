@@ -19,6 +19,12 @@
     </div>
 
     <div class="mb-4">
+        <label asp-for="CodigoAcceso" class="block text-gray-700 text-sm font-bold mb-2">Código de acceso</label>
+        <input asp-for="CodigoAcceso" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Código de acceso" />
+        <span asp-validation-for="CodigoAcceso" class="text-purple-700 text-xs italic"></span>
+    </div>
+
+    <div class="mb-4">
         <label asp-for="FechaFinalizacion" class="block text-gray-700 text-sm font-bold mb-2">FechaVencimiento</label>
         <input asp-for="FechaFinalizacion" type="date"  class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Finalización" />
         <span asp-validation-for="FechaFinalizacion" class="text-purple-700 text-xs italic"></span>
