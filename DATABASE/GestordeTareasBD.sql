@@ -38,7 +38,7 @@ CREATE TABLE Usuario (
     Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
 	NombreUsuario VARCHAR(50) NOT NULL,
-    Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
+    Pass VARCHAR(MAX)  NULL, -- Encriptar la contraseña
     Telefono VARCHAR(9) NOT NULL,
     FechaNacimiento DATE NOT NULL,
 	[Status] TINYINT NOT NULL,
