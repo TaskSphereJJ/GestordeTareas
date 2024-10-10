@@ -242,5 +242,51 @@ namespace GestordeTareas.DAL
             }
             return userDb!;
         }
+
+        //metodos para autenticar usuarios por medio de google 
+
+        //CREAR USUARIO DE GOOGLE
+        /// <summary>
+        /// Crea un nuevo usuario de Google de manera asíncrona.
+        /// </summary>
+        /// <param name="usuario">El objeto Usuario que contiene la información del usuario a crear.</param>
+        /// <returns>Un <see cref="Task{TResult}"/> que representa el resultado de la operación. El resultado es un entero que indica el número de filas afectadas.</returns>
+        // / / /// <exception cref="Exception">Se lanza una excepción si ya existe un usuario con el mismo ProviderKey y Provider.</exception>
+        public static async Task<int> CreateGoogleUserAsync(Usuario usuario)
+        {
+            int result = 0;
+            using (var dbContext = new ContextoBD())
+            {
+                // Verificar si ya existe un usuario con el mismo ProviderKey y Provider
+                var existingUser = await dbContext.Usuario
+                    .FirstOrDefaultAsync(u => u.ProviderKey == usuario.ProviderKey && u.Provider == usuario.Provider);
+
+                if (existingUser == null)
+                {
+                    // Si no existe, creamos el nuevo usuario
+                    usuario.FechaRegistro = DateTime.Now;
+                    dbContext.Usuario.Add(usuario);
+                    result = await dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("El usuario ya existe con el proveedor externo.");
+                }
+            }
+            return result;
+        }
+
+        //LOGIN PARA USUARIOS DE GOOGLE, que funciona con su providerKey y provider y no su contraseña
+        public static async Task<Usuario?> LoginGoogleUserAsync(string providerKey, string provider)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Buscar el usuario basado en su ProviderKey y Provider
+                var userDb = await dbContext.Usuario
+                    .FirstOrDefaultAsync(u => u.ProviderKey == providerKey && u.Provider == provider && u.Status == (byte)User_Status.ACTIVO);
+                return userDb;
+            }
+        }
+
     }
 }

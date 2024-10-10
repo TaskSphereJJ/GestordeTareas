@@ -1,3 +1,4 @@
+using dotenv.net;
 using Microsoft.AspNetCore.Authentication.Google;
 using GestordeTareas.UI.Data;
 using Microsoft.AspNetCore.Identity;
@@ -5,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Cargar variables de entorno desde .env.local
+var envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env.local");
+DotEnv.Load(new DotEnvOptions(envFilePaths: new[] { envFilePath }));
 
 // Obtén la cadena de conexión de la base de datos desde appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("GestordeTareasUIContextConnection")
@@ -20,8 +25,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<GestordeTareasUIContext>();
 
 // Configuración de servicios de autenticación y autorización
-var configuration = builder.Configuration;
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -36,13 +39,18 @@ builder.Services.AddAuthentication(options =>
 })
 .AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
-    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+    // Cargar las variables de entorno para Google OAuth
+    googleOptions.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
+                            ?? throw new InvalidOperationException("Google Client ID not found in environment variables.");
+    googleOptions.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET")
+                                ?? throw new InvalidOperationException("Google Client Secret not found in environment variables.");
     googleOptions.CallbackPath = "/signin-google"; // Debe coincidir con la configuración en la consola de Google.
 });
 
 // Agregar los controladores con vistas
 builder.Services.AddControllersWithViews();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 

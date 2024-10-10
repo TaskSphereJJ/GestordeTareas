@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -128,12 +129,12 @@ namespace GestordeTareas.UI.Controllers
 
                 usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
 
-                  if (User.IsInRole("Administrador"))
-                  {
-                      int createresult = await _usuarioBL.Create(usuario);
-                      TempData["SuccessMessage"] = "Usuario creado correctamente.";
-                      return RedirectToAction(nameof(Index));
-                  }
+                if (User.IsInRole("Administrador"))
+                {
+                    int createresult = await _usuarioBL.Create(usuario);
+                    TempData["SuccessMessage"] = "Usuario creado correctamente.";
+                    return RedirectToAction(nameof(Index));
+                }
 
                 // Si no es administrador, asigna un rol predeterminado
                 var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
@@ -307,8 +308,8 @@ namespace GestordeTareas.UI.Controllers
                 return RedirectToAction("Login", "Usuario");
             }
 
-             var nombreUsuario = User.Identity.Name;
-             Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
+            var nombreUsuario = User.Identity.Name;
+            Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
 
             // Se verifica si userId es null o vacío
             if (string.IsNullOrEmpty(nombreUsuario))
@@ -372,7 +373,7 @@ namespace GestordeTareas.UI.Controllers
                     var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-                    new Claim(ClaimTypes.GivenName, userDb.Nombre),   
+                    new Claim(ClaimTypes.GivenName, userDb.Nombre),
                     new Claim(ClaimTypes.Surname, userDb.Apellido),
                     new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
             };
@@ -409,6 +410,125 @@ namespace GestordeTareas.UI.Controllers
             return RedirectToAction("Login", "Usuario");
 
         }
-    }
 
+        // Método para iniciar sesión con Google
+        [AllowAnonymous]
+        public IActionResult GoogleLogin(string returnUrl = null)
+        {
+            try
+            {
+                Console.WriteLine("Iniciando sesión con Google...");
+                var redirectUrl = Url.Action("GoogleResponse", "Usuario", new { ReturnUrl = returnUrl });
+                var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+                return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al iniciar el proceso de autenticación con Google: {ex.Message}");
+                return RedirectToAction("Login");
+            }
+        }
+
+        // Método que maneja la respuesta de Google después de autenticarse
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleResponse(string returnUrl = null)
+        {
+            try
+            {
+                Console.WriteLine("Procesando la respuesta de Google...");
+
+                var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                if (!authenticateResult.Succeeded)
+                {
+                    var errorDetails = authenticateResult.Failure?.Message;
+                    Console.WriteLine($"Error en la autenticación con Google: {errorDetails}");
+                    ViewBag.Error = "Error en la autenticación con Google.";
+                    return RedirectToAction("Login");
+                }
+
+                // Extract user info from Google response
+                var email = authenticateResult.Principal.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
+                var googleId = authenticateResult.Principal.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var nombre = authenticateResult.Principal.FindFirst(c => c.Type == "given_name")?.Value;
+                var apellido = authenticateResult.Principal.FindFirst(c => c.Type == "family_name")?.Value;
+
+                if (email == null || googleId == null)
+                {
+                    Console.WriteLine("No se obtuvieron los datos necesarios de Google.");
+                    ViewBag.Error = "No se pudieron obtener los datos del usuario de Google.";
+                    return RedirectToAction("Login");
+                }
+
+                // Verificar si el usuario ya existe en la base de datos
+                var user = await _usuarioBL.LoginGoogleUserAsync(googleId, "Google");
+                if (user == null)
+                {
+                    Console.WriteLine("Usuario no encontrado. Creando uno nuevo...");
+
+                    // Crear un nuevo usuario si no existe
+                    var nuevoUsuario = new Usuario
+                    {
+                        NombreUsuario = email,
+                        Nombre = nombre,
+                        Apellido = apellido,
+                        Provider = "Google",
+                        ProviderKey = googleId,
+                        Status = (byte)User_Status.ACTIVO,
+                        FechaRegistro = DateTime.Now,
+                        IdCargo = 2 // Asignar el ID de "Colaborador" por defecto
+                    };
+
+                    // Registrar el usuario en la base de datos
+                    await _usuarioBL.RegisterGoogleUserAsync(nuevoUsuario);
+                    Console.WriteLine("Usuario creado correctamente.");
+
+                    // Después de registrar al usuario, se autentica directamente
+                    user = nuevoUsuario;
+                }
+                else
+                {
+                    Console.WriteLine($"Usuario encontrado: {user.NombreUsuario}");
+                }
+
+                // Recuperar el nombre del cargo desde la base de datos
+                var cargo = await _cargoBL.GetById(new Cargo { Id = user.IdCargo });
+                if (cargo == null)
+                {
+                    throw new Exception("No se pudo encontrar el cargo del usuario.");
+                }
+
+                // Crear los claims para autenticar al usuario
+                var claims = new[]
+                {
+                new Claim(ClaimTypes.Name, user.NombreUsuario),
+                new Claim(ClaimTypes.GivenName, user.Nombre),
+                new Claim(ClaimTypes.Surname, user.Apellido),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, cargo.Nombre) // Asignar el rol basado en el cargo del usuario
+            };
+
+                // Crear la identidad del usuario y autenticarse
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                Console.WriteLine($"Usuario {user.NombreUsuario} autenticado correctamente.");
+
+                // Redirigir al usuario según su URL de retorno o a la página principal
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    Console.WriteLine($"Redirigiendo al usuario a la URL: {returnUrl}");
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones general
+                Console.WriteLine($"Error procesando la respuesta de Google: {ex.Message}");
+                ViewBag.Error = "Ocurrió un error al procesar la autenticación con Google.";
+                return RedirectToAction("Login");
+            }
+        }
+    }
 }

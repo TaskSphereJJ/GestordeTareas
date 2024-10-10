@@ -58,5 +58,33 @@ namespace GestordeTareas.BL
             return await UsuarioDAL.LoginAsync(usuarios);
         }
 
+        // Metoro para registrar un usuario autenticado con Google
+        public async Task<int> RegisterGoogleUserAsync(Usuario usuario)
+        {
+            // Validación básica de los datos del usuario proporcionados por Google
+            if (string.IsNullOrEmpty(usuario.NombreUsuario))
+                throw new ArgumentException("El nombre de usuario es requerido");
+
+            if (string.IsNullOrEmpty(usuario.Provider) || string.IsNullOrEmpty(usuario.ProviderKey))
+                throw new ArgumentException("La autenticación del proveedor es inválida");
+
+            // Delegamos la creación del usuario a la capa DAL
+            return await GestordeTareas.DAL.UsuarioDAL.CreateGoogleUserAsync(usuario);
+        }
+        public async Task<Usuario?> LoginGoogleUserAsync(string providerKey, string provider)
+        {
+            // Validamos que los valores requeridos no estén vacíos
+            if (string.IsNullOrEmpty(providerKey))
+                throw new ArgumentException("El identificador del proveedor es requerido");
+
+            if (string.IsNullOrEmpty(provider))
+                throw new ArgumentException("El proveedor es requerido");
+
+            // llamo al método de la DAL para obtener el usuario
+            return await GestordeTareas.DAL.UsuarioDAL.LoginGoogleUserAsync(providerKey, provider);
+        }
+
+
+
     }
 }
