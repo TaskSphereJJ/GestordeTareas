@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis;
 
 
 namespace GestordeTareas.UI.Controllers
@@ -54,6 +55,13 @@ namespace GestordeTareas.UI.Controllers
             // Pasar el encargado a la vista
             ViewBag.Encargado = encargado;
 
+            // Obtener el ID del usuario actual
+            int idUsuarioActual = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            // Verificar si el usuario es encargado
+            bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(id, idUsuarioActual);
+            ViewBag.EsEncargado = esEncargado;
+
             return View(proyecto);
         }
 
@@ -72,12 +80,22 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 // Obtener el IdUsuario del usuario autenticado
-                //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var users = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
                 var actualUser = users.FirstOrDefault();
 
                 // Asignar el IdUsuario al proyecto
                 proyecto.IdUsuario = actualUser.Id;
+
+                // Generar un código de acceso único
+                string codigoAcceso;
+                do
+                {
+                    codigoAcceso = _proyectoBL.GenerarCodigoAcceso();
+                }
+                while (await _proyectoBL.ExisteCodigoAccesoAsync(codigoAcceso)); // Verificar que el código no exista
+
+                // Asignar el código generado al proyecto
+                proyecto.CodigoAcceso = codigoAcceso;
 
                 int result = await _proyectoBL.CreateAsync(proyecto);
                 TempData["SuccessMessage"] = "Proyecto creado correctamente.";

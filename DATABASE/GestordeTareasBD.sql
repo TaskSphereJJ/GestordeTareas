@@ -62,7 +62,10 @@ CREATE TABLE Proyecto (
 
 ALTER TABLE Proyecto
 ADD CodigoAcceso NVARCHAR(50) NOT NULL DEFAULT '12345';
+ALTER TABLE Proyecto
+ADD CONSTRAINT UQ_CodigoAcceso UNIQUE (CodigoAcceso);
 
+select * from Proyecto
 GO
 
 -- Tarea creada por el administrador
@@ -116,7 +119,7 @@ CREATE TABLE ProyectoUsuario(
 	Encargado BIT NULL
 )
 
-Select * from ProyectoUsuario
+Select * from Proyecto
 
 update ProyectoUsuario
 set Encargado = 1 where id=12

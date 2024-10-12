@@ -219,12 +219,25 @@ namespace GestordeTareas.DAL
         }
 
 
-        public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
+        public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user, string query, string filter)
         {
             var users = new List<Usuario>();
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
+                // Lógica para filtrar según el parámetro
+                if (!string.IsNullOrEmpty(query))
+                {
+                    if (filter == "Apellido")
+                    {
+                        select = select.Where(u => u.Apellido.Contains(query));
+                    }
+                    else if (filter == "NombreUsuario")
+                    {
+                        select = select.Where(u => u.NombreUsuario.Contains(query));
+                    }
+                }
+
                 select = QuerySelect(select, user).Include(u => u.Cargo).AsQueryable();
                 users = await select.ToListAsync();
             }

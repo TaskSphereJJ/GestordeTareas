@@ -31,5 +31,15 @@ namespace GestordeTareas.BL
         {
             return await ProyectoDAL.GetAllAsync();
         }
+
+        public string GenerarCodigoAcceso()
+        {
+            return ProyectoDAL.GenerarCodigoAcceso(); 
+        }
+
+        public async Task<bool> ExisteCodigoAccesoAsync(string codigoAcceso)
+        {
+            return await ProyectoDAL.ExisteCodigoAccesoAsync(codigoAcceso); 
+        }
     }
 }

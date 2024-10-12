@@ -22,136 +22,185 @@
 <div id="alertContainer" class="fixed bottom-4 right-4 z-50">
     @if (TempData["ErrorMessage"] != null)
     {
-    <div role="alert"
-         class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-700 text-red-900 dark:text-red-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-red-200 dark:hover:bg-red-800 transform hover:scale-105">
-        <svg stroke="currentColor"
-             viewBox="0 0 24 24"
-             fill="none"
-             class="h-6 w-6 flex-shrink-0 mr-3 text-red-600"
-             xmlns="http://www.w3.org/2000/svg">
-            <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  stroke-width="2"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"></path>
-        </svg>
-        <p class="text-sm font-semibold">@TempData["ErrorMessage"]</p>
-    </div>
+        <div role="alert"
+             class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-700 text-red-900 dark:text-red-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-red-200 dark:hover:bg-red-800 transform hover:scale-105">
+            <svg stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 class="h-6 w-6 flex-shrink-0 mr-3 text-red-600"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      stroke-width="2"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"></path>
+            </svg>
+            <p class="text-sm font-semibold">@TempData["ErrorMessage"]</p>
+        </div>
     }
 </div>
 
 <div class="container mx-auto mt-6">
-    <h3 class="text-2xl font-semibold mb-4 text-center">Detalles del Proyecto</h3>
 
-    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-        <dl class="row">
-            <dt class="col-sm-4 font-bold">Título:</dt>
-            <dd class="col-sm-8">@Model.Titulo</dd>
+    <!-- Menú de Navegación -->
+    <nav class="flex justify-end mb-4">
+        <button class="tab-button text-blue-500 border-b-2 border-blue-500 mx-2" data-tab="info">Información</button>
+        <button class="tab-button text-gray-500 mx-2" data-tab="personas">Personas</button>
+        @if (User.IsInRole("Administrador"))
+        {
+            <button class="tab-button text-gray-500 mx-2" data-tab="asignar">Asignar Encargado</button>
+        }
+    </nav>
 
-            <dt class="col-sm-4 font-bold">Descripción:</dt>
-            <dd class="col-sm-8">@Model.Descripcion</dd>
+    <!-- Sección de Información -->
+    <div class="tab-content" id="info">
+        <h3 class="text-2xl font-semibold mb-4 text-center">Detalles del Proyecto</h3>
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <dl class="row">
+                <dt class="col-sm-4 font-bold">Título:</dt>
+                <dd class="col-sm-8">@Model.Titulo</dd>
 
-            <dt class="col-sm-4 font-bold">Administrador:</dt>
-            <dd class="col-sm-8">@Model.Usuario.Nombre @Model.Usuario.Apellido</dd>
+                <dt class="col-sm-4 font-bold">Descripción:</dt>
+                <dd class="col-sm-8">@Model.Descripcion</dd>
 
-            <dt class="col-sm-4 font-bold">Encargado:</dt>
-            <dd class="col-sm-8">
-                @if (ViewBag.Encargado != null)
-                {
-                    @ViewBag.Encargado.Nombre @Html.Raw("&nbsp;")
+                <dt class="col-sm-4 font-bold">Administrador:</dt>
+                <dd class="col-sm-8">@Model.Usuario.Nombre @Model.Usuario.Apellido</dd>
 
-                    @ViewBag.Encargado.Apellido
-                }
-                else
-                {
-                    <span>No hay encargado asignado.</span>
-                }
-            </dd>
+                <dt class="col-sm-4 font-bold">Encargado:</dt>
+                <dd class="col-sm-8">
+                    @if (ViewBag.Encargado != null)
+                    {
+                        @ViewBag.Encargado.Nombre @Html.Raw("&nbsp;") @ViewBag.Encargado.Apellido
+                    }
+                    else
+                    {
+                        <span>No hay encargado asignado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4 font-bold">Código de acceso:</dt>
+                <dd class="col-sm-8">
+                    @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
+                    {
+                        <span class="border-b-2 border-gray-700">@Model.CodigoAcceso</span>
+                    }
+                    else
+                    {
+                        <span class="text-gray-400">Solo visible para el administrador o encargado</span>
+                    }
+                </dd>
 
 
+                <dt class="col-sm-4 font-bold">Fecha de Finalización:</dt>
+                <dd class="col-sm-8">@Model.FechaFinalizacion.ToShortDateString()</dd>
+            </dl>
+        </div>
 
-            <dt class="col-sm-4 font-bold">Fecha de Finalización:</dt>
-            <dd class="col-sm-8">@Model.FechaFinalizacion.ToShortDateString()</dd>
-        </dl>
+        <!-- Sección para unirse al proyecto -->
+        @if (User.IsInRole("Colaborador"))
+        {
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-lg mb-4">
+                <h4 class="text-md font-semibold">¿Quieres unirte a este Proyecto?</h4>
+                <p class="text-sm">Ingresa el código de acceso para unirte a este proyecto.</p>
+                <form asp-action="UnirUsuarioAProyecto" asp-controller="ProyectoUsuario" method="post" class="mt-2">
+                    <input type="hidden" name="idProyecto" value="@Model.Id" />
+
+                    <!-- Campo para el código de acceso -->
+                    <div class="mb-2">
+                        <input type="text" name="CodigoAcceso" placeholder="Código de acceso" class="form-control" required />
+                    </div>
+
+                    <button type="submit" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition">Unirme</button>
+                </form>
+            </div>
+        }
     </div>
 
-    @if (User.IsInRole("Colaborador"))
+    <!-- Sección de Personas -->
+    <div class="tab-content hidden" id="personas">
+        <h3 class="text-2xl font-semibold mb-4 text-center">Usuarios Unidos</h3>
+        <div class="bg-white shadow-md rounded-lg p-4">
+            @if (ViewBag.UsuariosUnidos != null && ((List<Usuario>)ViewBag.UsuariosUnidos).Any())
+            {
+                <ul class="list-disc ml-5 mt-2">
+                    @foreach (var usuario in (List<Usuario>)ViewBag.UsuariosUnidos)
+                    {
+                        <li>@usuario.Nombre @usuario.Apellido</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="mt-2 text-center">No hay usuarios unidos a este proyecto.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Sección para Asignar Encargado -->
+    @if (User.IsInRole("Administrador"))
     {
-        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg mb-6">
-            <h4 class="text-lg font-semibold">¿Quieres unirte a este Proyecto?</h4>
-            <p>Ingresa el código de acceso para unirte a este proyecto.</p>
-            <form asp-action="UnirUsuarioAProyecto" asp-controller="ProyectoUsuario" method="post" class="mt-4">
+        <div class="tab-content hidden" id="asignar">
+            <h3 class="text-lg font-semibold mt-6 text-center">Asignar encargado del proyecto</h3>
+            <form method="post" asp-action="AsignarEncargado" asp-controller="Proyecto" class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
                 <input type="hidden" name="idProyecto" value="@Model.Id" />
 
-                <!-- Campo para el código de acceso -->
                 <div class="mb-4">
-                    <input type="text" name="CodigoAcceso" placeholder="Ingresa el código de acceso" class="form-control" required />
+                    <label for="idUsuario" class="block text-sm font-semibold mb-2">Seleccionar Usuario:</label>
+                    <select name="idUsuario" id="idUsuario" class="border border-gray-300 rounded-lg p-2 w-full">
+                        <option value="">-- Selecciona un usuario --</option>
+                        @foreach (var usuario in ViewBag.UsuariosUnidos)
+                        {
+                            <option value="@usuario.Id">@usuario.Nombre</option>
+                        }
+                    </select>
                 </div>
 
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Unirme</button>
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
+                    Asignar Encargado
+                </button>
             </form>
         </div>
     }
-
-
-    <h3 class="text-lg font-semibold mt-6 text-center">Usuarios Unidos</h3>
-    <div class="bg-white shadow-md rounded-lg p-4">
-        @if (ViewBag.UsuariosUnidos != null && ((List<Usuario>)ViewBag.UsuariosUnidos).Any())
-        {
-            <ul class="list-disc ml-5 mt-2">
-                @foreach (var usuario in (List<Usuario>)ViewBag.UsuariosUnidos)
-                {
-                    <li>@usuario.Nombre @usuario.Apellido</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p class="mt-2 text-center">No hay usuarios unidos a este proyecto.</p>
-        }
-    </div>
 
     <div class="text-center mt-6">
         <a href="@Url.Action("Index", "Proyecto")" class="mt-2 inline-block bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
             Regresar
         </a>
     </div>
-
-    @if (User.IsInRole("Administrador"))
-    {
-    <h3 class="text-lg font-semibold mt-6 text-center">Asignar encargado del proyecto</h3>
-    <form method="post" asp-action="AsignarEncargado" asp-controller="Proyecto" class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-        <input type="hidden" name="idProyecto" value="@Model.Id" />
-
-        <div class="mb-4">
-            <label for="idUsuario" class="block text-sm font-semibold mb-2">Seleccionar Usuario:</label>
-            <select name="idUsuario" id="idUsuario" class="border border-gray-300 rounded-lg p-2 w-full">
-                <option value="">-- Selecciona un usuario --</option>
-                @foreach (var usuario in ViewBag.UsuariosUnidos)
-                {
-                    <option value="@usuario.Id">@usuario.Nombre</option>
-                }
-            </select>
-        </div>
-
-        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
-            Asignar Encargado
-        </button>
-    </form>
-    }
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const alertContainer = document.getElementById('alertContainer');
-        if (alertContainer) {
-            // Mostrar la alerta durante 5 segundos
-            setTimeout(() => {
-                // Desvanecer la alerta
-                alertContainer.style.transition = 'opacity 0.5s ease';
-                alertContainer.style.opacity = '0';
-                // Esperar a que se desvanezca antes de eliminar
-                setTimeout(() => alertContainer.remove(), 500);
-            }, 4000); // Esperar 4 segundos
-        }
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const selectedTab = tab.getAttribute('data-tab');
+
+                // Resaltar la pestaña seleccionada
+                tabs.forEach(t => t.classList.remove('text-blue-500', 'border-blue-500'));
+                tab.classList.add('text-blue-500', 'border-blue-500');
+
+                // Mostrar el contenido de la pestaña seleccionada
+                tabContents.forEach(content => {
+                    if (content.id === selectedTab) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Simula el clic en la primera pestaña para mostrarla al cargar
+        tabs[0].click();
     });
+
+    const alertContainer = document.getElementById('alertContainer');
+    if (alertContainer) {
+        // Eliminar el mensaje después de 5 segundos
+        setTimeout(() => {
+            alertContainer.remove();
+        }, 5000);
+    }
 </script>

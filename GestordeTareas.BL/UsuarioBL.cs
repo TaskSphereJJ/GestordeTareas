@@ -48,9 +48,9 @@ namespace GestordeTareas.BL
             return await UsuarioDAL.SearchAsync(usuarios);
         }
 
-        public async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
+        public async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user, string query, string filter)
         {
-            return await UsuarioDAL.SearchIncludeRoleAsync(user);
+            return await UsuarioDAL.SearchIncludeRoleAsync(user, query, filter);
         }
 
         public async Task<Usuario> LoginAsync(Usuario usuarios)

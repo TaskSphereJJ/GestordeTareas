@@ -89,6 +89,26 @@ namespace GestordeTareas.DAL
             }
         }
 
+        //Método para generar un codigo de acceso para proyectos
+        public static string GenerarCodigoAcceso()
+        {
+            const string caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var codigo = new char[8]; // Longitud del código
+            for (int i = 0; i < codigo.Length; i++)
+            {
+                codigo[i] = caracteres[random.Next(caracteres.Length)];
+            }
+            return new string(codigo);
+        }
 
+        // Método para verificar si el código de acceso ya existe en la base de datos
+        public static async Task<bool> ExisteCodigoAccesoAsync(string codigoAcceso)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                return await dbContext.Proyecto.AnyAsync(p => p.CodigoAcceso == codigoAcceso);
+            }
+        }
     }
 }

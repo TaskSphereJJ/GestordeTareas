@@ -40,18 +40,15 @@ namespace GestordeTareas.UI.Controllers
 
         // GET: UsuarioController
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult> Index(Usuario user = null)
+        public async Task<ActionResult> Index(string query = "", string filter = "NombreUsuario", int top = 10)
         {
-            //List<Usuarios> Lista = await _usuarioBL.GetAllAsync();
-            //return View(Lista);
-            if (user == null)
-                user = new Usuario();
-            if (user.Top_Aux == 0)
-                user.Top_Aux = 10; // setear la cantidad de registros a mostrar predeterminadamente
-            else if (user.Top_Aux == -1)
-                user.Top_Aux = 0;
+            var user = new Usuario();
+            // Número de registros a mostrar
+            if (top <= 0)
+                top = 10; // valor predeterminado
+            user.Top_Aux = top;
 
-            List<Usuario> Lista = await _usuarioBL.SearchIncludeRoleAsync(user);
+            List<Usuario> Lista = await _usuarioBL.SearchIncludeRoleAsync(user, query, filter);
             Lista = Lista.OrderBy(u => u.Id).ToList();
             ViewBag.Top = user.Top_Aux;
             ViewBag.Roles = await cargoBL.GetAllAsync();
