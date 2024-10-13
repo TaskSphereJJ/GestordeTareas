@@ -8,7 +8,7 @@ node_modules/
 # Ignorar carpetas específicas del proyecto
 /GestordeTareas.UI/wwwroot/images/
 /GestordeTareas.UI/wwwroot/images/profiles/
-/.vs/
+/DATABASE/.vs/
 
 # Ignorar archivos de usuario de Visual Studio
 *.csproj.user
