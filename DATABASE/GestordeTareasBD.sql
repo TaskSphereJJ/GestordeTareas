@@ -37,7 +37,7 @@ GO
 -- Tabla Usuarios
 CREATE TABLE Usuario (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    FotoPerfil NVARCHAR(MAX) NULL,
+    FotoPerfil NVARCHAR(MAX) NOT NULL,
 	Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
 	NombreUsuario VARCHAR(50) NOT NULL,
@@ -50,10 +50,14 @@ CREATE TABLE Usuario (
 
 );
 
+
 ALTER TABLE Usuario
-ADD FotoPerfil NVARCHAR(MAX) NULL;
+ADD FotoPerfil NVARCHAR(MAX) NOT NULL;
+
 
 GO
+
+
 -- Creación del proyecto
 CREATE TABLE Proyecto (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
@@ -64,13 +68,16 @@ CREATE TABLE Proyecto (
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 );
 
+
+
 ALTER TABLE Proyecto
 ADD CodigoAcceso NVARCHAR(50) NOT NULL DEFAULT '12345';
 ALTER TABLE Proyecto
 ADD CONSTRAINT UQ_CodigoAcceso UNIQUE (CodigoAcceso);
 
-select * from Proyecto
+
 GO
+
 
 -- Tarea creada por el administrador
 CREATE TABLE Tarea (
@@ -121,12 +128,10 @@ CREATE TABLE ProyectoUsuario(
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
 	Encargado BIT NULL
-)
+);
 
-Select * from Usuario
 
-update ProyectoUsuario
-set Encargado = 1 where id=12
+
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
 

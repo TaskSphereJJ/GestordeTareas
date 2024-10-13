@@ -62,6 +62,12 @@ namespace GestordeTareas.DAL
                 {
                     usuario.FechaRegistro = DateTime.Now;
                     EncryptMD5(usuario);
+
+                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        usuario.FotoPerfil = usuario.FotoPerfil;
+                    }
+
                     dbContext.Usuario.Add(usuario);
                     result = await dbContext.SaveChangesAsync();
                 }

@@ -118,14 +118,20 @@ namespace GestordeTareas.UI.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Usuario usuario)
+        public async Task<ActionResult> Create(Usuario usuario, IFormFile fotoPerfil)
         {
             try
             {
 
                 usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
 
-                  if (User.IsInRole("Administrador"))
+                // Manejar la foto de perfil usando el nuevo método
+                if (fotoPerfil != null && fotoPerfil.Length > 0)
+                {
+                    usuario.FotoPerfil = await SaveProfileImage(fotoPerfil);
+                }
+
+                if (User.IsInRole("Administrador"))
                   {
                       int createresult = await _usuarioBL.Create(usuario);
                       TempData["SuccessMessage"] = "Usuario creado correctamente.";
@@ -230,35 +236,10 @@ namespace GestordeTareas.UI.Controllers
                 existingUser.FechaNacimiento = usuario.FechaNacimiento;
                 existingUser.NombreUsuario = usuario.NombreUsuario;
 
-                // Manejar la foto de perfil
+                // Manejar la foto de perfil usando el nuevo método
                 if (fotoPerfil != null && fotoPerfil.Length > 0)
                 {
-                    // Validar el tamaño del archivo
-                    if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
-                    {
-                        TempData["ErrorMessage"] = "El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.";
-                        return RedirectToAction("Perfil");
-                    }
-
-                    // Ruta donde se guardará la imagen
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
-                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Crear la carpeta si no existe
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    // Guardar la imagen en el servidor
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await fotoPerfil.CopyToAsync(fileStream);
-                    }
-
-                    // Asignar la ruta de la imagen al modelo
-                    existingUser.FotoPerfil = "/images/profiles/" + uniqueFileName;
+                    existingUser.FotoPerfil = await SaveProfileImage(fotoPerfil);
                 }
 
 
@@ -446,6 +427,39 @@ namespace GestordeTareas.UI.Controllers
 
         }
 
+        //MÉTODO PRIVADO PARA SUBIR FOTO DE PERFIL
+        private async Task<string> SaveProfileImage(IFormFile fotoPerfil)
+        {
+            if (fotoPerfil == null || fotoPerfil.Length == 0)
+            {
+                return null; // Retorna null si no hay foto
+            }
+
+            // Validar el tamaño del archivo
+            if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
+            {
+                throw new InvalidOperationException("El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.");
+            }
+
+            // Ruta donde se guardará la imagen
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Crear la carpeta si no existe
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            // Guardar la imagen en el servidor
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await fotoPerfil.CopyToAsync(fileStream);
+            }
+
+            return "/images/profiles/" + uniqueFileName; // Retorna la ruta relativa
+        }
 
     }
 
