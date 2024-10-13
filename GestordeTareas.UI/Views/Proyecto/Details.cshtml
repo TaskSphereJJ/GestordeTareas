@@ -124,7 +124,12 @@
                 <ul class="list-disc ml-5 mt-2">
                     @foreach (var usuario in (List<Usuario>)ViewBag.UsuariosUnidos)
                     {
-                        <li>@usuario.Nombre @usuario.Apellido</li>
+                        <li class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full overflow-hidden mr-2">
+                                <img src="@Url.Content(usuario.FotoPerfil ?? "/img/default-avatar.png")" alt="Foto de perfil de @usuario.Nombre" class="w-full h-full object-cover">
+                            </div>
+                            <span>@usuario.Nombre @usuario.Apellido</span>
+                        </li>
                     }
                 </ul>
             }

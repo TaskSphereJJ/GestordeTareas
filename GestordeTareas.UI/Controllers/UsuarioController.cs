@@ -195,6 +195,8 @@ namespace GestordeTareas.UI.Controllers
 
         }
 
+
+        //MÉTODO PARA PODER EDITAR LA INFORMACION PARA EL USUARIO LOGUEADO EN SU PERFIL
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword, IFormFile fotoPerfil)

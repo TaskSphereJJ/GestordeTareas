@@ -31,7 +31,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Usuario")]
-        [Display(Name = "Admin")]
+        [Display(Name = "Administrador")]
         public int IdUsuario { get; set; }
 
         public Usuario Usuario { get; set; }
