@@ -90,6 +90,11 @@ namespace GestordeTareas.DAL
                     userDb.FechaNacimiento = usuario.FechaNacimiento;
                     userDb.FechaRegistro = usuario.FechaRegistro;
                     userDb.NombreUsuario = usuario.NombreUsuario;
+                    // Actualiza la foto de perfil solo si no es nula
+                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        userDb.FotoPerfil = usuario.FotoPerfil;
+                    }
                     // Solo actualiza la contraseña si se ha proporcionado una nueva
                     if (!string.IsNullOrEmpty(usuario.Pass) && usuario.Pass != userDb.Pass)
                     {

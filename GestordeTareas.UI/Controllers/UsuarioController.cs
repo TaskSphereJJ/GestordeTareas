@@ -191,7 +191,7 @@ namespace GestordeTareas.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword)
+        public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword, IFormFile fotoPerfil)
         {
             try
             {
@@ -230,6 +230,38 @@ namespace GestordeTareas.UI.Controllers
                 existingUser.FechaNacimiento = usuario.FechaNacimiento;
                 existingUser.NombreUsuario = usuario.NombreUsuario;
 
+                // Manejar la foto de perfil
+                if (fotoPerfil != null && fotoPerfil.Length > 0)
+                {
+                    // Validar el tamaño del archivo
+                    if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
+                    {
+                        TempData["ErrorMessage"] = "El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.";
+                        return RedirectToAction("Perfil");
+                    }
+
+                    // Ruta donde se guardará la imagen
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Crear la carpeta si no existe
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Guardar la imagen en el servidor
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await fotoPerfil.CopyToAsync(fileStream);
+                    }
+
+                    // Asignar la ruta de la imagen al modelo
+                    existingUser.FotoPerfil = "/images/profiles/" + uniqueFileName;
+                }
+
+
                 // Permitir que el administrador cambie los campos adicionales solo si es su propio perfil
                 if (User.IsInRole("Administrador") && existingUser.Id == usuario.Id)
                 {
@@ -241,8 +273,11 @@ namespace GestordeTareas.UI.Controllers
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.GivenName));
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Surname));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre)); // Usar Nombre como GivenName
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido)); // Usar Apellido como Surname
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre)); 
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido));
+                claimsIdentity.RemoveClaim(claimsIdentity.FindFirst("FotoPerfil")); // Eliminar el claim viejo si existe
+                claimsIdentity.AddClaim(new Claim("FotoPerfil", existingUser.FotoPerfil)); // Agregar el nuevo claim de foto de perfil
+
 
                 var principal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
@@ -365,13 +400,17 @@ namespace GestordeTareas.UI.Controllers
                 var userDb = await _usuarioBL.LoginAsync(user);
                 if (userDb != null && userDb.Id > 0 && userDb.NombreUsuario == user.NombreUsuario)
                 {
+                    // Verifica si la propiedad FotoPerfil tiene un valor
+                    var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
+
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
                     new Claim(ClaimTypes.GivenName, userDb.Nombre),   
                     new Claim(ClaimTypes.Surname, userDb.Apellido),
-                    new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
+                    new Claim("FotoPerfil", fotoPerfil)
             };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
@@ -406,6 +445,8 @@ namespace GestordeTareas.UI.Controllers
             return RedirectToAction("Login", "Usuario");
 
         }
+
+
     }
 
 }

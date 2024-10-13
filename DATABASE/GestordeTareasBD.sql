@@ -37,7 +37,8 @@ GO
 -- Tabla Usuarios
 CREATE TABLE Usuario (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    Nombre VARCHAR(50) NOT NULL,
+    FotoPerfil NVARCHAR(MAX) NULL,
+	Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
 	NombreUsuario VARCHAR(50) NOT NULL,
     Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
@@ -48,6 +49,9 @@ CREATE TABLE Usuario (
     IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id),
 
 );
+
+ALTER TABLE Usuario
+ADD FotoPerfil NVARCHAR(MAX) NULL;
 
 GO
 -- Creación del proyecto
@@ -119,7 +123,7 @@ CREATE TABLE ProyectoUsuario(
 	Encargado BIT NULL
 )
 
-Select * from Proyecto
+Select * from Usuario
 
 update ProyectoUsuario
 set Encargado = 1 where id=12
