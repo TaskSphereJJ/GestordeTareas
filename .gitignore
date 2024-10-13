@@ -1,4 +1,16 @@
+# Ignorar carpetas de compilación
+bin/
+obj/
+
+# Ignorar la carpeta de node_modules
+node_modules/
+
+# Ignorar carpetas específicas del proyecto
 /GestordeTareas.UI/wwwroot/images/
 /GestordeTareas.UI/wwwroot/images/profiles/
-.vs/
+/.vs/
+
+# Ignorar archivos de usuario de Visual Studio
+*.csproj.user
+
 
