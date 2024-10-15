@@ -7,11 +7,12 @@
 <!-- Botón para activar el modo de edición -->
 <button id="editProfileBtn" class="btn btn-outline-primary" onclick="toggleEditMode()">Editar Perfil</button>
 
-<form id="profileForm" class="table" method="post" asp-action="EditOwn" style="display: none;">
+<form id="profileForm" class="table" method="post" asp-action="EditOwn" enctype="multipart/form-data" style="display: none;">
     <input type="hidden" asp-for="Id" />
     <table class="table">
         <thead>
             <tr>
+                <th>Foto de Perfil</th> <!-- Nueva columna para la foto de perfil -->
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Correo electrónico</th>
@@ -23,11 +24,23 @@
                 <th>Fecha de Nacimiento</th>
                 <th>Status</th>
                 <th>Fecha de Registro</th>
+
                 <th></th>
             </tr>
         </thead>
         <tbody>
             <tr>
+                <td>
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden mb-2">
+                            <img id="previewImage" src="@Url.Content(Model.FotoPerfil)" alt="Foto de perfil" class="w-full h-full object-cover" />
+                        </div>
+                        <label for="fotoPerfil" class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                            Cambiar foto
+                        </label>
+                        <input type="file" id="fotoPerfil" name="FotoPerfil" accept="image/*" class="hidden" onchange="previewFile()" />
+                    </div>
+                </td>
                 <td>
                     <input type="text" asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
@@ -87,6 +100,7 @@
                 }
 
                 <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
+
                 <td>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-danger" onclick="toggleEditMode()">Cancelar</button>
@@ -100,6 +114,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Foto de Perfil</th> <!-- Nueva columna para la foto de perfil -->
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Correo electrónico</th>
@@ -112,6 +127,11 @@
         </thead>
         <tbody>
             <tr>
+                <td>
+                    <div class="w-24 h-24 rounded-full overflow-hidden mx-auto">
+                        <img src="@Url.Content(Model.FotoPerfil)" alt="Foto de perfil" class="w-full h-full object-cover" />
+                    </div>
+                </td>
                 <td>@Html.DisplayFor(model => model.Nombre)</td>
                 <td>@Html.DisplayFor(model => model.Apellido)</td>
                 <td>@Html.DisplayFor(model => model.NombreUsuario)</td>
@@ -174,4 +194,19 @@
         }
     }
 
+    function previewFile() {
+        var preview = document.getElementById('previewImage');
+        var file = document.getElementById('fotoPerfil').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "@Url.Content(Model.FotoPerfil)";
+        }
+    }
 </script>

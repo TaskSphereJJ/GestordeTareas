@@ -62,6 +62,12 @@ namespace GestordeTareas.DAL
                 {
                     usuario.FechaRegistro = DateTime.Now;
                     EncryptMD5(usuario);
+
+                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        usuario.FotoPerfil = usuario.FotoPerfil;
+                    }
+
                     dbContext.Usuario.Add(usuario);
                     result = await dbContext.SaveChangesAsync();
                 }
@@ -90,6 +96,11 @@ namespace GestordeTareas.DAL
                     userDb.FechaNacimiento = usuario.FechaNacimiento;
                     userDb.FechaRegistro = usuario.FechaRegistro;
                     userDb.NombreUsuario = usuario.NombreUsuario;
+                    // Actualiza la foto de perfil solo si no es nula
+                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        userDb.FotoPerfil = usuario.FotoPerfil;
+                    }
                     // Solo actualiza la contraseña si se ha proporcionado una nueva
                     if (!string.IsNullOrEmpty(usuario.Pass) && usuario.Pass != userDb.Pass)
                     {
@@ -219,12 +230,25 @@ namespace GestordeTareas.DAL
         }
 
 
-        public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user)
+        public static async Task<List<Usuario>> SearchIncludeRoleAsync(Usuario user, string query, string filter)
         {
             var users = new List<Usuario>();
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
+                // Lógica para filtrar según el parámetro
+                if (!string.IsNullOrEmpty(query))
+                {
+                    if (filter == "Apellido")
+                    {
+                        select = select.Where(u => u.Apellido.Contains(query));
+                    }
+                    else if (filter == "NombreUsuario")
+                    {
+                        select = select.Where(u => u.NombreUsuario.Contains(query));
+                    }
+                }
+
                 select = QuerySelect(select, user).Include(u => u.Cargo).AsQueryable();
                 users = await select.ToListAsync();
             }

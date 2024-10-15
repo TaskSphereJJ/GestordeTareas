@@ -10,13 +10,13 @@ namespace GestordeTareas.BL
 {
     public class ProyectoUsuarioBL
     {
-        public static async Task<int> UnirUsuarioAProyectoAsync(int idProyecto, int idUsuario)
+        public async Task<int> UnirUsuarioAProyectoAsync(int idProyecto, int idUsuario)
         {
             // Llama al método en la capa DAL
             return await ProyectoUsuarioDAL.UnirUsuarioAProyectoAsync(idProyecto, idUsuario);
         }
 
-        public static async Task<List<Proyecto>> ObtenerProyectosPorUsuarioAsync(int idUsuario)
+        public async Task<List<Proyecto>> ObtenerProyectosPorUsuarioAsync(int idUsuario)
         {
             // Llama al método en la capa DAL
             return await ProyectoUsuarioDAL.ObtenerProyectosPorUsuarioAsync(idUsuario);
@@ -27,14 +27,14 @@ namespace GestordeTareas.BL
             return await ProyectoUsuarioDAL.ObtenerUsuariosUnidosAsync(idProyecto);
         }
 
-        public static async Task<int> EliminarUsuarioDeProyectoAsync(int idProyecto, int idUsuario)
+        public async Task<int> EliminarUsuarioDeProyectoAsync(int idProyecto, int idUsuario)
         {
             // Llamar al método de ProyectoDAL para eliminar la relación
             return await ProyectoUsuarioDAL.EliminarUsuarioDeProyectoAsync(idProyecto, idUsuario);
         }
 
         // Método para asignar un usuario como encargado de un proyecto
-        public static async Task<bool> AsignarEncargadoAsync(int idProyecto, int idUsuarioNuevoEncargado)
+        public async Task<bool> AsignarEncargadoAsync(int idProyecto, int idUsuarioNuevoEncargado)
         {
             // Llama al método en la capa DAL
             return await ProyectoUsuarioDAL.AsignarEncargadoAsync(idProyecto, idUsuarioNuevoEncargado);

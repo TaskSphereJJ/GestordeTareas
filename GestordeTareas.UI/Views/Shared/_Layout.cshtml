@@ -71,9 +71,16 @@
 
                     @* <!-- Sección de perfil --> *@
                 <div class="flex items-center justify-end gap-4">
-                    <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
-                            <img src="https://cdn-icons-png.freepik.com/256/3609/3609718.png" alt="" class="aspect-square">
-                    </div>
+                        <div class="flex items-center justify-end gap-4">
+                            <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full w-12 h-12 shadow-md border-2 bg-purple-100 border-borderColor">
+                                <img src="@(!string.IsNullOrEmpty(User.Claims.FirstOrDefault(c => c.Type == "FotoPerfil")?.Value)
+                                ? User.Claims.FirstOrDefault(c => c.Type == "FotoPerfil")?.Value
+                                : Url.Content("~/img/usuario.png"))"
+                                     alt="Foto de perfil"
+                                     class="w-full h-full object-cover">
+                            </div>
+                        </div>
+
                     <div class="relative inline-block">
                         <button id="userMenuButton"
                                 class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"

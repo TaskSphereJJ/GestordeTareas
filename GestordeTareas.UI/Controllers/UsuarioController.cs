@@ -40,18 +40,15 @@ namespace GestordeTareas.UI.Controllers
 
         // GET: UsuarioController
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult> Index(Usuario user = null)
+        public async Task<ActionResult> Index(string query = "", string filter = "NombreUsuario", int top = 10)
         {
-            //List<Usuarios> Lista = await _usuarioBL.GetAllAsync();
-            //return View(Lista);
-            if (user == null)
-                user = new Usuario();
-            if (user.Top_Aux == 0)
-                user.Top_Aux = 10; // setear la cantidad de registros a mostrar predeterminadamente
-            else if (user.Top_Aux == -1)
-                user.Top_Aux = 0;
+            var user = new Usuario();
+            // Número de registros a mostrar
+            if (top <= 0)
+                top = 10; // valor predeterminado
+            user.Top_Aux = top;
 
-            List<Usuario> Lista = await _usuarioBL.SearchIncludeRoleAsync(user);
+            List<Usuario> Lista = await _usuarioBL.SearchIncludeRoleAsync(user, query, filter);
             Lista = Lista.OrderBy(u => u.Id).ToList();
             ViewBag.Top = user.Top_Aux;
             ViewBag.Roles = await cargoBL.GetAllAsync();
@@ -121,28 +118,25 @@ namespace GestordeTareas.UI.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Usuario usuario)
+        public async Task<ActionResult> Create(Usuario usuario, IFormFile fotoPerfil)
         {
             try
             {
 
                 usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
 
-<<<<<<< HEAD
+                // Manejar la foto de perfil usando el nuevo método
+                if (fotoPerfil != null && fotoPerfil.Length > 0)
+                {
+                    usuario.FotoPerfil = await SaveProfileImage(fotoPerfil);
+                }
+
                 if (User.IsInRole("Administrador"))
                 {
                     int createresult = await _usuarioBL.Create(usuario);
                     TempData["SuccessMessage"] = "Usuario creado correctamente.";
                     return RedirectToAction(nameof(Index));
                 }
-=======
-                  if (User.IsInRole("Administrador"))
-                  {
-                      int createresult = await _usuarioBL.Create(usuario);
-                      TempData["SuccessMessage"] = "Usuario creado correctamente.";
-                      return RedirectToAction(nameof(Index));
-                  }
->>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
 
                 // Si no es administrador, asigna un rol predeterminado
                 var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
@@ -201,9 +195,11 @@ namespace GestordeTareas.UI.Controllers
 
         }
 
+
+        //MÉTODO PARA PODER EDITAR LA INFORMACION PARA EL USUARIO LOGUEADO EN SU PERFIL
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword)
+        public async Task<ActionResult> EditOwn(Usuario usuario, string currentPassword, IFormFile fotoPerfil)
         {
             try
             {
@@ -242,6 +238,13 @@ namespace GestordeTareas.UI.Controllers
                 existingUser.FechaNacimiento = usuario.FechaNacimiento;
                 existingUser.NombreUsuario = usuario.NombreUsuario;
 
+                // Manejar la foto de perfil usando el nuevo método
+                if (fotoPerfil != null && fotoPerfil.Length > 0)
+                {
+                    existingUser.FotoPerfil = await SaveProfileImage(fotoPerfil);
+                }
+
+
                 // Permitir que el administrador cambie los campos adicionales solo si es su propio perfil
                 if (User.IsInRole("Administrador") && existingUser.Id == usuario.Id)
                 {
@@ -253,8 +256,11 @@ namespace GestordeTareas.UI.Controllers
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.GivenName));
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Surname));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre)); // Usar Nombre como GivenName
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido)); // Usar Apellido como Surname
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido));
+                claimsIdentity.RemoveClaim(claimsIdentity.FindFirst("FotoPerfil")); // Eliminar el claim viejo si existe
+                claimsIdentity.AddClaim(new Claim("FotoPerfil", existingUser.FotoPerfil)); // Agregar el nuevo claim de foto de perfil
+
 
                 var principal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
@@ -377,17 +383,17 @@ namespace GestordeTareas.UI.Controllers
                 var userDb = await _usuarioBL.LoginAsync(user);
                 if (userDb != null && userDb.Id > 0 && userDb.NombreUsuario == user.NombreUsuario)
                 {
+                    // Verifica si la propiedad FotoPerfil tiene un valor
+                    var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
+
                     userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
                     var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-<<<<<<< HEAD
                     new Claim(ClaimTypes.GivenName, userDb.Nombre),
-=======
-                    new Claim(ClaimTypes.GivenName, userDb.Nombre),   
->>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
                     new Claim(ClaimTypes.Surname, userDb.Apellido),
-                    new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
+                    new Claim("FotoPerfil", fotoPerfil)
             };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
@@ -422,6 +428,41 @@ namespace GestordeTareas.UI.Controllers
             return RedirectToAction("Login", "Usuario");
 
         }
+
+        //MÉTODO PRIVADO PARA SUBIR FOTO DE PERFIL
+        private async Task<string> SaveProfileImage(IFormFile fotoPerfil)
+        {
+            if (fotoPerfil == null || fotoPerfil.Length == 0)
+            {
+                return null; // Retorna null si no hay foto
+            }
+
+            // Validar el tamaño del archivo
+            if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
+            {
+                throw new InvalidOperationException("El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.");
+            }
+
+            // Ruta donde se guardará la imagen
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Crear la carpeta si no existe
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            // Guardar la imagen en el servidor
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await fotoPerfil.CopyToAsync(fileStream);
+            }
+
+            return "/images/profiles/" + uniqueFileName; // Retorna la ruta relativa
+        }
+
     }
 
 }
