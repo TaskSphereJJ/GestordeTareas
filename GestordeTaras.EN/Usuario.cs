@@ -9,6 +9,7 @@ namespace GestordeTaras.EN
 
         [Key]
         public int Id { get; set; }
+        public string FotoPerfil { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MaxLength(50, ErrorMessage = "Maximo 50 caracteres")]

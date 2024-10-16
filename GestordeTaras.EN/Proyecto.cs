@@ -21,6 +21,7 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Descripcion")]
         public string Descripcion { get; set; } = string.Empty;
+        public string CodigoAcceso { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
 
@@ -30,7 +31,7 @@ namespace GestordeTaras.EN
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [ForeignKey("Usuario")]
-        [Display(Name = "Admin")]
+        [Display(Name = "Administrador")]
         public int IdUsuario { get; set; }
 
         public Usuario Usuario { get; set; }

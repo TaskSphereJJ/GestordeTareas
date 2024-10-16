@@ -35,7 +35,8 @@ CREATE TABLE EstadoTarea(
 GO
 CREATE TABLE Usuario (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    Nombre VARCHAR(50) NOT NULL,
+    FotoPerfil NVARCHAR(MAX) NOT NULL,
+	Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
 	NombreUsuario VARCHAR(50) NOT NULL,
     Pass VARCHAR(MAX)  NULL, -- Encriptar la contraseña
@@ -47,18 +48,31 @@ CREATE TABLE Usuario (
 
 );
 
---ALTER TABLE Usuario
---ALTER COLUMN [Status] TINYINT NOT NULL;
+
+ALTER TABLE Usuario
+ADD FotoPerfil NVARCHAR(MAX)  NULL;
+
 
 GO
+
+
 -- Creación del proyecto
 CREATE TABLE Proyecto (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Titulo VARCHAR(50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
+	CodigoAcceso NVARCHAR(50) NOT NULL,
 	FechaFinalizacion DATE NOT NULL,
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 );
+
+
+
+ALTER TABLE Proyecto
+ADD CodigoAcceso NVARCHAR(50) NOT NULL DEFAULT '12345';
+ALTER TABLE Proyecto
+ADD CONSTRAINT UQ_CodigoAcceso UNIQUE (CodigoAcceso);
+
 
 GO
 
@@ -112,12 +126,10 @@ CREATE TABLE ProyectoUsuario(
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
 	Encargado BIT NULL
-)
+);
 
-Select * from ProyectoUsuario
 
-update ProyectoUsuario
-set Encargado = 1 where id=12
+
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
 

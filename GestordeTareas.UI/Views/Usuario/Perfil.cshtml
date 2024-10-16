@@ -1,197 +1,179 @@
 ﻿@model GestordeTaras.EN.Usuario
 
-<div class="flex items-center justify-center min-h-screen">
-    <div class="max-w-3xl w-full p-8 bg-white rounded-lg ">
-        <!-- Contenedor de Imagen de Perfil Fijo -->
-        <div class="flex items-center justify-center space-x-8">
-            <!-- Imagen de perfil (Espacio reservado) -->
-            <div
-                class="w-64 h-64 rounded-full overflow-hidden shadow-md border-4 border-gray-200 flex items-center justify-center">
-                <img src="~/img/FOOTOO.png" alt="Profile Picture Placeholder" class="w-full h-full object-cover">
-            </div>
-            <!-- Contenedor para la Información y Formulario -->
-            <div class="flex-grow">
-                <!-- Vista del perfil -->
-                <div id="profileDisplay" class="space-y-6">
-                    <!-- Información del perfil (Vista) -->
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-user mr-2 text-gray-500"></i> Nombre:
-                        </h3>
-                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.Nombre) @Html.DisplayFor(model
-                            => model.Apellido)</p>
-                    </div>
+<h1>Mi Perfil</h1>
 
-<<<<<<< HEAD
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-envelope mr-2 text-gray-500"></i> Correo Electrónico:
-                        </h3>
-                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.NombreUsuario)</p>
-                    </div>
-=======
 @await Html.PartialAsync("_Alerts")
->>>>>>> 9b5a4bc8c68e946a50ac5bed55d45569c3ad9881
 
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-phone mr-2 text-gray-500"></i> Teléfono:
-                        </h3>
-                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.Telefono)</p>
-                    </div>
+<!-- Botón para activar el modo de edición -->
+<button id="editProfileBtn" class="btn btn-outline-primary" onclick="toggleEditMode()">Editar Perfil</button>
 
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-briefcase mr-2 text-gray-500"></i> Cargo:
-                        </h3>
-                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.Cargo.Nombre)</p>
-                    </div>
+<form id="profileForm" class="table" method="post" asp-action="EditOwn" enctype="multipart/form-data"
+    style="display: none;">
+    <input type="hidden" asp-for="Id" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Foto de Perfil</th> <!-- Nueva columna para la foto de perfil -->
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo electrónico</th>
+                <th>Contraseña Actual</th>
+                <th>Nueva Contraseña</th>
+                <th>Confirmar Nueva Contraseña</th>
+                <th>Teléfono</th>
+                <th>Cargo</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Status</th>
+                <th>Fecha de Registro</th>
 
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-birthday-cake mr-2 text-gray-500"></i> Fecha de Nacimiento:
-                        </h3>
-                        <p class="text-lg text-gray-600">@Html.DisplayFor(model => model.FechaNacimiento)</p>
-                    </div>
-
-                    <!-- Botón para editar perfil -->
-                    <div class="flex justify-center">
-                        <button id="editProfileBtn"
-                            class="bg-indigo-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-600 shadow-md"
-                            onclick="toggleEditMode()">
-                            <i class="fas fa-edit mr-2"></i> Editar Perfil
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Formulario de edición del perfil (Oculto inicialmente) -->
-                <form id="profileForm" class="space-y-6" method="post" asp-action="EditOwn"
-                    enctype="multipart/form-data" style="display: none;">
-                    <input type="hidden" asp-for="Id" />
-
-                    <div>
-                        <label for="Nombre" class="block text-xl font-medium text-gray-800 flex items-center">
-                            <i class="fas fa-user mr-2 text-gray-500"></i> Nombre
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden mb-2">
+                            <img id="previewImage" src="@Url.Content(Model.FotoPerfil)" alt="Foto de perfil"
+                                class="w-full h-full object-cover" />
+                        </div>
+                        <label for="fotoPerfil"
+                            class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                            Cambiar foto
                         </label>
-                        <input type="text" asp-for="Nombre"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
-                        <span asp-validation-for="Nombre" class="text-red-500"></span>
+                        <input type="file" id="fotoPerfil" name="FotoPerfil" accept="image/*" class="hidden"
+                            onchange="previewFile()" />
                     </div>
-
-                    <div>
-                        <label for="Apellido" class="block text-xl font-medium text-gray-800 flex items-center">
-                            <i class="fas fa-user mr-2 text-gray-500"></i> Apellido
-                        </label>
-                        <input type="text" asp-for="Apellido"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
-                        <span asp-validation-for="Apellido" class="text-red-500"></span>
-                    </div>
-
-                    <div>
-                        <label for="NombreUsuario" class="block text-xl font-medium text-gray-800 flex items-center">
-                            <i class="fas fa-envelope mr-2 text-gray-500"></i> Correo Electrónico
-                        </label>
-                        <input type="text" asp-for="NombreUsuario"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
-                        <span asp-validation-for="NombreUsuario" class="text-red-500"></span>
-                    </div>
-
-                    <div>
-                        <label for="Telefono" class="block text-xl font-medium text-gray-800 flex items-center">
-                            <i class="fas fa-phone mr-2 text-gray-500"></i> Teléfono
-                        </label>
-                        <input type="text" asp-for="Telefono"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
-                        <span asp-validation-for="Telefono" class="text-red-500"></span>
-                    </div>
-
-                    <div>
-                        <label for="Cargo" class="block text-xl font-medium text-gray-800 flex items-center">
-                            <i class="fas fa-briefcase mr-2 text-gray-500"></i> Cargo
-                        </label>
-                        <select asp-for="IdCargo"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg"
-                            asp-items="ViewBag.Cargos">
+                </td>
+                <td>
+                    <input type="text" asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </td>
+                <td>
+                    <input type="text" asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </td>
+                <td>
+                    <input type="text" asp-for="NombreUsuario" class="form-control" />
+                    <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                </td>
+                <td>
+                    <input type="password" name="currentPassword" class="form-control" />
+                    <span class="text-danger" id="currentPasswordError"></span>
+                </td>
+                <td>
+                    <input type="password" asp-for="Pass" class="form-control" />
+                    <span asp-validation-for="Pass" class="text-danger"></span>
+                </td>
+                <td>
+                    <input type="password" name="ConfirmarPass" class="form-control" />
+                    <span class="text-danger" id="confirmPasswordError"></span>
+                </td>
+                <td>
+                    <input type="text" asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </td>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <td>
+                        <select asp-for="IdCargo" class="form-control" asp-items="ViewBag.Cargos">
                             <option value="">Seleccionar</option>
                         </select>
-                    </div>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(model => model.Cargo.Nombre) <!-- Solo lectura para Colaboradores -->
+                    </td>
+                }
+                <td>
+                    <input type="date" asp-for="FechaNacimiento" class="form-control"
+                        value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                </td>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <td>
+                        <select asp-for="Status">
+                            <option value="1">ACTIVO</option>
+                            <option value="2">INACTIVO</option>
+                        </select>
+                        <span asp-validation-for="Status"></span>
+                    </td>
+                }
 
-                    <div>
-                        <label for="FechaNacimiento" class="block text-xl font-medium text-gray-800 flex items-center">
-                            <i class="fas fa-birthday-cake mr-2 text-gray-500"></i> Fecha de Nacimiento
-                        </label>
-                        <input type="date" asp-for="FechaNacimiento"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg">
-                        <span asp-validation-for="FechaNacimiento" class="text-red-500"></span>
-                    </div>
+                <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
 
-<<<<<<< HEAD
-                    <!-- Botones de acción -->
-                    <div class="flex justify-center space-x-4 mt-6">
-                        <button type="submit"
-                            class="bg-indigo-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-600 shadow-md">
-                            <i class="fas fa-save mr-2"></i> Guardar
-                        </button>
-                        <button type="button"
-                            class="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600 shadow-md"
-                            onclick="toggleEditMode()">
-                            <i class="fas fa-times mr-2"></i> Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-=======
+                <td>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-danger" onclick="toggleEditMode()">Cancelar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
 <div id="profileDisplay">
     <table class="table">
         <thead>
             <tr>
+                <th>Foto de Perfil</th> <!-- Nueva columna para la foto de perfil -->
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Correo electrónico</th>
                 <th>Teléfono</th>
                 <th>Cargo</th>
-                <th>Fecha de Nacimiento</th>              
+                <th>Fecha de Nacimiento</th>
                 <th>Fecha de Registro</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             <tr>
+                <td>
+                    <div class="w-24 h-24 rounded-full overflow-hidden mx-auto">
+                        <img src="@Url.Content(Model.FotoPerfil)" alt="Foto de perfil"
+                            class="w-full h-full object-cover" />
+                    </div>
+                </td>
                 <td>@Html.DisplayFor(model => model.Nombre)</td>
                 <td>@Html.DisplayFor(model => model.Apellido)</td>
                 <td>@Html.DisplayFor(model => model.NombreUsuario)</td>
                 <td>@Html.DisplayFor(model => model.Telefono)</td>
                 <td>@Html.DisplayFor(model => model.Cargo.Nombre)</td>
-                <td>@Html.DisplayFor(model => model.FechaNacimiento)</td> 
+                <td>@Html.DisplayFor(model => model.FechaNacimiento)</td>
                 <td>@Html.DisplayFor(model => model.FechaRegistro)</td>
                 <td>
-                    <button class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-200"
-                            onclick="document.getElementById('confirmDeleteCard').classList.remove('hidden');">
+                    <button
+                        class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-200"
+                        onclick="document.getElementById('confirmDeleteCard').classList.remove('hidden');">
                         Eliminar Cuenta
                     </button>
                 </td>
 
                 <!-- Tarjeta de Confirmación -->
-                <div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+                <div id="confirmDeleteCard"
+                    class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
                     <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
                         <div class="p-6 mt-6">
                             <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
-                                <img src="https://cdn-icons-png.freepik.com/256/3712/3712167.png" alt="Eliminar" class="h-12 w-12 text-red-600" />
+                                <img src="https://cdn-icons-png.freepik.com/256/3712/3712167.png" alt="Eliminar"
+                                    class="h-12 w-12 text-red-600" />
                             </div>
                             <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-                            <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+                            <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar tu
+                                cuenta? Esta acción no se puede deshacer.</p>
                         </div>
                         <div class="bg-gray-50 p-4 flex justify-between">
                             <button type="button"
-                                    class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
-                                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
+                                class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
+                                onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
                                 Cancelar
                             </button>
                             <form method="post" asp-action="DeleteOwn">
                                 <button type="submit"
-                                        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
+                                    class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
                                     Eliminar
                                 </button>
                             </form>
@@ -202,11 +184,9 @@
             </tr>
         </tbody>
     </table>
->>>>>>> 9b5a4bc8c68e946a50ac5bed55d45569c3ad9881
 </div>
 
 <script>
-    // Función para alternar el modo de edición
     function toggleEditMode() {
         const profileForm = document.getElementById('profileForm');
         const profileDisplay = document.getElementById('profileDisplay');
@@ -220,6 +200,22 @@
             profileForm.style.display = 'none';
             profileDisplay.style.display = 'block';
             editButton.style.display = 'inline-block';
+        }
+    }
+
+    function previewFile() {
+        var preview = document.getElementById('previewImage');
+        var file = document.getElementById('fotoPerfil').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "@Url.Content(Model.FotoPerfil)";
         }
     }
 </script>
