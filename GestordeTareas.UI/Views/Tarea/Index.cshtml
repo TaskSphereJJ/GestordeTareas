@@ -97,7 +97,6 @@
                         </th>
                     </tr>
                 </thead>
-
                 <tbody>
                     @foreach (var item in Model)
                     {
@@ -121,13 +120,7 @@
                                     </a>
                                 }
                                 else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
-<<<<<<< HEAD
-
                                 {
-
-=======
-                                {
->>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
                                     <!-- Formulario para elegir la tarea -->
                                     <form asp-action="Elegirtarea" method="post" class="inline-block">
                                         <input type="hidden" name="IdTarea" value="@item.Id" />
@@ -142,8 +135,6 @@
                         </tr>
                     }
                 </tbody>
-
-
             </table>
         </div>
     </div>
@@ -576,29 +567,6 @@ else
         });
     }
 
-<<<<<<< HEAD
-@* 
-    function elegirTarea(id, idProyecto) {
-    $.ajax({
-        url: '/ElegirTarea/Elegir',
-        type: 'POST',
-        data: { idTarea: id, idProyecto: idProyecto },
-        success: function (result) {
-            if (result.success) {
-                alert(result.message);
-                // Oculta el botón que se usó para elegir la tarea
-                $(`button[data-id="${id}"][data-proyecto="${idProyecto}"]`).hide();
-            } else {
-                alert(result.message);
-            }
-        },
-        error: function () {
-            alert('Ocurrió un error al procesar la solicitud.');
-        }
-    }); *@
-}
-
-=======
     document.addEventListener("DOMContentLoaded", function () {
         const alertContainer = document.getElementById('alertContainer');
         if (alertContainer) {
@@ -612,9 +580,5 @@ else
             }, 4000); // Esperar 4 segundos
         }
     });
->>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
 
 </script>
-   
-
-

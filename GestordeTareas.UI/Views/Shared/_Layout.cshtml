@@ -57,20 +57,15 @@
 
 
 
-<<<<<<< HEAD
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">@($"{nombre} {apellido}")</span>
-=======
-            @if (User.Identity.IsAuthenticated)
-            {
                     <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">
                         @($"{nombre} {apellido}")
                     </span>
 
 
                     @* <!-- Sección de perfil --> *@
-                <div class="flex items-center justify-end gap-4">
+                    <div class="flex items-center justify-end gap-4">
                         <div class="flex items-center justify-end gap-4">
                             <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full w-12 h-12 shadow-md border-2 bg-purple-100 border-borderColor">
                                 <img src="@(!string.IsNullOrEmpty(User.Claims.FirstOrDefault(c => c.Type == "FotoPerfil")?.Value)
@@ -81,23 +76,6 @@
                             </div>
                         </div>
 
-                    <div class="relative inline-block">
-                        <button id="userMenuButton"
-                                class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
-                                aria-label="User Menu">
-                            <span>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                     class="stroke-inherit stroke-purple-800">
-                                    <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
-                                </svg>
->>>>>>> 0b8613c613c66038f09fc3c06eeeff4a97d707c2
-
-                    @* <!-- Sección de perfil --> *@
-                    <div class="flex items-center justify-end gap-4">
-                        <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full size-8 b shadow-md border-2 w-12 bg-purple-100 border-2 border-borderColor">
-                            <img src="~/img/FOOTOO.png" alt="" class="aspect-square">
-                        </div>
                         <div class="relative inline-block">
                             <button id="userMenuButton"
                                     class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
