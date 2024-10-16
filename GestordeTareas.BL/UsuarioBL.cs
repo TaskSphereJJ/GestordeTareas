@@ -1,6 +1,4 @@
-﻿
-
-using GestordeTaras.EN;
+﻿using GestordeTaras.EN;
 using GestordeTareas.DAL;
 using System;
 using System.Collections.Generic;
