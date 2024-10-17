@@ -51,5 +51,12 @@ namespace GestordeTareas.BL
         {
             return await ProyectoUsuarioDAL.ObtenerEncargadoPorProyectoAsync(idProyecto);
         }
+
+        // Método para verificar si un usuario está relacionado con un proyecto
+        public async Task<bool> IsUsuarioRelacionadoConProyectoAsync(int idUsuario, int idProyecto)
+        {
+            return await ProyectoUsuarioDAL.IsUsuarioRelacionadoConProyectoAsync(idUsuario, idProyecto);
+        }
+
     }
 }

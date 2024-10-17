@@ -1,0 +1,47 @@
+﻿ @model IEnumerable<GestordeTaras.EN.Tarea>
+
+@{
+    ViewData["Title"] = "Mis Tareas Elegidas";
+}
+
+<h2>Mis Tareas Elegidas</h2>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var tarea in Model)
+    {
+        <div>
+            <h4>Tarea @tarea.Nombre</h4>
+            <dl class="row">
+                <dt class="col-sm-3"><strong>Id:</strong></dt>
+                <dd class="col-sm-9">@tarea.Id</dd>
+
+                <dt class="col-sm-3"><strong>Descripción:</strong></dt>
+                <dd class="col-sm-9">@tarea.Descripcion</dd>
+
+                <dt class="col-sm-3"><strong>Fecha Creación:</strong></dt>
+                <dd class="col-sm-9">@tarea.FechaCreacion.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-3"><strong>Fecha Vencimiento:</strong></dt>
+                <dd class="col-sm-9">@tarea.FechaVencimiento.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-3"><strong>Categoría:</strong></dt>
+                <dd class="col-sm-9">@tarea.Categoria.Nombre</dd>
+
+                <dt class="col-sm-3"><strong>Prioridad:</strong></dt>
+                <dd class="col-sm-9">@tarea.Prioridad.Nombre</dd>
+
+                <dt class="col-sm-3"><strong>Estado de Tarea:</strong></dt>
+                <dd class="col-sm-9">@tarea.EstadoTarea.Nombre</dd>
+
+                <dt class="col-sm-3"><strong>Proyecto:</strong></dt>
+                <dd class="col-sm-9">@tarea.Proyecto.Titulo</dd>
+            </dl>
+            <hr />
+        </div>
+    }
+}
+else
+{
+    <p>No hay tareas elegidas.</p>
+}

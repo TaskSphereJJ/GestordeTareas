@@ -41,5 +41,26 @@ namespace GestordeTareas.DAL
                 return await dbContexto.ElegirTarea.AnyAsync(et => et.IdTarea == idTarea && et.IdUsuario == idUsuario);
             }
         }
+        public static async Task<List<Tarea>> ObtenerTareasElegidasPorUsuarioAsync(int idUsuario, int idProyecto)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                var tareas = await dbContext.ElegirTarea
+                    .Include(et => et.Tarea)
+                        .ThenInclude(t => t.Categoria)
+                    .Include(et => et.Tarea)
+                        .ThenInclude(t => t.Prioridad)
+                    .Include(et => et.Tarea)
+                        .ThenInclude(t => t.EstadoTarea)
+                    .Include(et => et.Tarea)
+                        .ThenInclude(t => t.Proyecto)
+                    .Where(et => et.IdUsuario == idUsuario && et.IdProyecto == idProyecto)
+                    .Select(et => et.Tarea)
+                    .ToListAsync();
+
+                return tareas;
+            }
+        }
+
     }
 }

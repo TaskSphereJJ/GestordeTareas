@@ -38,5 +38,12 @@ namespace GestordeTareas.BL
             // Llamar al método DAL para realizar la asignación de la tarea
             return await ElegirTareaDAL.ElegirTareaAsyncDAL(elegirTarea);
         }
+
+        public async Task<List<Tarea>> ObtenerTareasElegidasPorUsuarioAsync(int idUsuario, int idProyecto)
+        {
+            // Llamamos a la capa de datos (DAL) para obtener las tareas elegidas por el usuario
+            return await ElegirTareaDAL.ObtenerTareasElegidasPorUsuarioAsync(idUsuario, idProyecto);
+        }
+
     }
 }
