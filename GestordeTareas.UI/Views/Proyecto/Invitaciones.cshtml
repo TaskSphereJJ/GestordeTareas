@@ -1,0 +1,100 @@
+﻿@model List<GestordeTaras.EN.InvitacionProyecto>
+
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">Invitaciones</h2>
+
+    <!-- Mensajes de éxito, error e información -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+            <p>@TempData["SuccessMessage"]</p>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+            <p>@TempData["ErrorMessage"]</p>
+        </div>
+    }
+
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
+            <p>@TempData["InfoMessage"]</p>
+        </div>
+    }
+
+    <!-- Filtrar invitaciones -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">Filtrar Invitaciones</h3>
+        
+        <form method="get" asp-action="FiltrarInvitaciones" class="flex items-center space-x-4">
+            <input type="hidden" name="id" value="@ViewBag.IdProyecto" />
+            <label for="estado" class="text-gray-600">Estado:</label>
+            <select id="estado" name="estado" class="form-select rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Aceptada">Aceptada</option>
+                <option value="Rechazada">Rechazada</option>
+            </select>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Filtrar
+            </button>
+        </form>
+
+    </div>
+
+    <!-- Lista de invitaciones -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">Invitaciones Filtradas</h3>
+        @if (Model != null && Model.Any())
+        {
+            <ul class="divide-y divide-gray-200">
+                @foreach (var invitacion in Model)
+                {
+                    <li class="py-4 flex justify-between items-center">
+                        <span class="text-gray-800">@invitacion.CorreoElectronico</span>
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold
+                            @(invitacion.Estado == "Pendiente" ? "bg-yellow-100 text-yellow-800" :
+                              invitacion.Estado == "Aceptada" ? "bg-green-100 text-green-800" :
+                              "bg-red-100 text-red-800")">
+                            @invitacion.Estado
+                        </span>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-gray-600">No hay invitaciones disponibles.</p>
+        }
+    </div>
+
+    <!-- Limpiar invitaciones rechazadas -->
+    <form asp-action="LimpiarInvitacionesRechazadas" method="post" class="mb-6">
+        <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
+        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            Limpiar Invitaciones Rechazadas
+        </button>
+    </form>
+
+    <!-- Enviar nueva invitación -->
+    @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
+    {
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Nueva Invitación</h3>
+            <form asp-action="EnviarInvitacion" method="post">
+                <div class="mb-4">
+                    <label for="correoElectronico" class="block text-gray-700 text-sm font-bold mb-2">
+                        Correo Electrónico del Usuario:
+                    </label>
+                    <input type="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="correoElectronico" name="correoElectronico" required />
+                </div>
+                <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    Enviar Invitación
+                </button>
+            </form>
+        </div>
+    }
+</div>

@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.Google;
 using GestordeTareas.UI.Data;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +13,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<EmailService>();
 
 // configurar la autenticaci�n
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).

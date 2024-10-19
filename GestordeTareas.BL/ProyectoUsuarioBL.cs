@@ -51,5 +51,6 @@ namespace GestordeTareas.BL
         {
             return await ProyectoUsuarioDAL.ObtenerEncargadoPorProyectoAsync(idProyecto);
         }
+
     }
 }

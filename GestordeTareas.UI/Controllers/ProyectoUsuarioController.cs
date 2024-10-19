@@ -120,5 +120,6 @@ namespace GestordeTareas.UI.Controllers
             List<Proyecto> proyectos = await _proyectoUsuarioBL.ObtenerProyectosPorUsuarioAsync(idUsuario);
             return View("MisProyectos",proyectos);
         }
+       
     }
 }

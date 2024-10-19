@@ -128,5 +128,6 @@ namespace GestordeTareas.DAL
                 return encargado; // Retorna el usuario encargado o null si no existe
             }
         }
+
     }
 }

@@ -70,7 +70,6 @@ namespace GestordeTareas.UI.Controllers
                 var actualUser = users.FirstOrDefault();
 
                 //ESTO ES PARA OBTENER EL NOMBRE Y APELLIDO Y PONERLO EN EL LAYOUT 
-                // Obtener el nombre y apellido del usuario
                 string nombre = actualUser.Nombre;
                 string apellido = actualUser.Apellido;
 
@@ -183,10 +182,23 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                // Obtener el usuario existente de la base de datos
+                var existingUser = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+                if (existingUser == null)
+                {
+                    TempData["ErrorMessage"] = "El usuario no fue encontrado.";
+                    return Json(new { success = false, message = "Usuario no encontrado." });
+                }
+
+                // Mantener la contraseña existente
+                usuario.Pass = existingUser.Pass;
+
+                // Llamar al método de actualización
                 int result = await _usuarioBL.Update(usuario);
                 TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
                 return Json(new { success = true, message = "Usuario actualizado correctamente." });
             }
+
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Hubo un problema al actualizar el usuario.";
@@ -397,6 +409,25 @@ namespace GestordeTareas.UI.Controllers
             };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                    // Verificar si hay un token y una decisión almacenados en TempData
+                    if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
+                    {
+                        string token = TempData["Token"].ToString();
+                        string decision = TempData["Decision"].ToString();
+
+                        // Limpiar TempData después de redirigir
+                        TempData.Remove("Token");
+                        TempData.Remove("Decision");
+
+                        return RedirectToAction("AceptarInvitacion", "Proyecto", new { token = token, decision = decision });
+                    }
+
+                    // Si no hay token, redirigir al returnUrl o a la vista predeterminada
+                    if (!string.IsNullOrWhiteSpace(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
                 }
                 else
                 {

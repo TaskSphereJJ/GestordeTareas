@@ -41,5 +41,11 @@ namespace GestordeTareas.BL
         {
             return await ProyectoDAL.ExisteCodigoAccesoAsync(codigoAcceso); 
         }
+
+        //MÉTODO QUE LLAMA AL DE PODER BUSCAR PROYECTO POR TITULO
+        public async Task<List<Proyecto>> BuscarPorTituloOAdministradorAsync(string query)
+        {
+            return await ProyectoDAL.BuscarPorTituloOAdministradorAsync(query);
+        }
     }
 }

@@ -7,37 +7,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: '@TempData["SuccessMessage"]',
-            confirmButtonText: 'OK'
-        });
-    </script>
-}
 
-<div id="alertContainer" class="fixed bottom-4 right-4 z-50">
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div role="alert"
-             class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-700 text-red-900 dark:text-red-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-red-200 dark:hover:bg-red-800 transform hover:scale-105">
-            <svg stroke="currentColor"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 class="h-6 w-6 flex-shrink-0 mr-3 text-red-600"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      stroke-width="2"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"></path>
-            </svg>
-            <p class="text-sm font-semibold">@TempData["ErrorMessage"]</p>
-        </div>
-    }
-</div>
+@await Html.PartialAsync("_Alerts")
 
 <div class="container mx-auto mt-6">
 
@@ -48,6 +19,10 @@
         @if (User.IsInRole("Administrador"))
         {
             <button class="tab-button text-gray-500 mx-2" data-tab="asignar">Asignar Encargado</button>
+        }
+        @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
+        {
+            <button class="tab-button text-gray-500 mx-2" data-tab="invitar">Invitar Usuario</button>
         }
     </nav>
 
@@ -140,7 +115,7 @@
         </div>
     </div>
 
-    <!-- Sección para Asignar Encargado -->
+     <!-- Sección para Asignar Encargado -->
     @if (User.IsInRole("Administrador"))
     {
         <div class="tab-content hidden" id="asignar">
@@ -164,7 +139,8 @@
                 </button>
             </form>
         </div>
-    }
+    } 
+
 
     <div class="text-center mt-6">
         <a href="@Url.Action("Index", "Proyecto")" class="mt-2 inline-block bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">

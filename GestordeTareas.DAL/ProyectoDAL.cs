@@ -15,7 +15,6 @@ namespace GestordeTareas.DAL
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
-                ////proyecto.IdUsuario = idUsuario; // Asignar el IdUsuario al proyecto
                 dbContext.Proyecto.Add(proyecto);
                 result = await dbContext.SaveChangesAsync();
             }
@@ -64,15 +63,12 @@ namespace GestordeTareas.DAL
         {
             using (var bdContexto = new ContextoBD())
             {
-                // Buscar el proyecto por su ID y cargar la propiedad de navegación Usuario si es necesario
                 var projectBD = await bdContexto.Proyecto
                     .Include(p => p.Usuario)
                     .FirstOrDefaultAsync(p => p.Id == proyecto.Id);
 
-                // Manejar el caso cuando no se encuentra ningún proyecto
                 if (projectBD == null)
                 {
-                    // Puedes lanzar una excepción, retornar null u otro valor según tu lógica de negocio
                     throw new Exception("El proyecto no existe en la base de datos.");
                 }
 
@@ -89,7 +85,7 @@ namespace GestordeTareas.DAL
             }
         }
 
-        //Método para generar un codigo de acceso para proyectos
+        //MÉTODO PARA GENERAR UN CODIGO DE ACCESO PARA PROYECTOS
         public static string GenerarCodigoAcceso()
         {
             const string caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -102,7 +98,7 @@ namespace GestordeTareas.DAL
             return new string(codigo);
         }
 
-        // Método para verificar si el código de acceso ya existe en la base de datos
+        // MÉTODO PARA VERIFICAR SI EL CÓDIGO DE ACCESO YA EXISTE EN LA BASE DE DATOS
         public static async Task<bool> ExisteCodigoAccesoAsync(string codigoAcceso)
         {
             using (var dbContext = new ContextoBD())
@@ -110,5 +106,21 @@ namespace GestordeTareas.DAL
                 return await dbContext.Proyecto.AnyAsync(p => p.CodigoAcceso == codigoAcceso);
             }
         }
+
+        // MÉTODO PARA BUSCAR PROYECTO POR TÍTULO O NOMBRE DEL ADMINISTRADOR
+        public static async Task<List<Proyecto>> BuscarPorTituloOAdministradorAsync(string query)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                var proyectos = await dbContext.Proyecto
+                    .Include(p => p.Usuario) // Se incluye la relación con el Usuario
+                    .Where(p => p.Titulo.Contains(query) || p.Usuario.Nombre.Contains(query)) 
+                    .ToListAsync();
+
+                return proyectos;
+            }
+        }
+
+
     }
 }
