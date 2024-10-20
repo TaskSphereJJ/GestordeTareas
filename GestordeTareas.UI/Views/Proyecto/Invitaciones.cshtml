@@ -21,7 +21,7 @@
     @if (User.IsInRole("Administrador"))
     {
         <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button text-gray-500 mx-2 no-underline" data-tab="asignar">
-            asignar Encargado
+            Asignar Encargado
         </a>
     }
     @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
@@ -33,11 +33,11 @@
 </nav>
 
 
-<div class="container mx-auto p-4 max-w-4xl">
-    <h2 class="text-3xl font-bold mb-6 text-gray-800">Invitaciones</h2>
+<div class="container text-center mx-auto p-4 max-w-4xl">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">INVITACIONES</h2>
 
     <!-- Enviar nueva invitación -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8 max-w-4xl mx-auto">
         <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Invitación</h3>
         <form asp-action="EnviarInvitacion" method="post" class="flex items-end gap-4">
             <div class="flex-grow">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Lista de invitaciones y filtro -->
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
         <div class="flex flex-row items-center justify-between mb-4">
             <h3 class="text-xl font-semibold text-gray-700">Invitaciones Enviadas</h3>
             <form method="get" asp-action="FiltrarInvitaciones" class="flex items-center space-x-4">
