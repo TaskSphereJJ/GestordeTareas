@@ -254,7 +254,7 @@ namespace GestordeTareas.UI.Controllers
 
 
                         TempData["SuccessMessage"] = "Invitación enviada correctamente.";
-                        return RedirectToAction("Details", new { id = invitacion.IdProyecto });
+                        return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });
                     }
 
                     TempData["ErrorMessage"] = "Hubo un problema al enviar la invitación.";
@@ -266,7 +266,7 @@ namespace GestordeTareas.UI.Controllers
             }
 
             TempData["ErrorMessage"] = "Los datos de la invitación son inválidos.";
-            return RedirectToAction("Details", new { id = invitacion.IdProyecto });
+            return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });
         }
 
 
