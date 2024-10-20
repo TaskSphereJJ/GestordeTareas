@@ -13,5 +13,5 @@ node_modules/
 
 # Ignorar archivos de usuario de Visual Studio
 *.csproj.user
-
+appsettings.json
 
