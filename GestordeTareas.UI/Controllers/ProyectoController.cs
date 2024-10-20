@@ -368,23 +368,23 @@ namespace GestordeTareas.UI.Controllers
         //MÉTODO PARA LIMPIAR O ELIMINAR LAS INVITACIONES RECHAZADAS O EXPIRADAS
         [HttpPost]
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> LimpiarInvitacionesRechazadas(int idProyecto)
+        public async Task<IActionResult> EliminarInvitacion(int id, int idProyecto)
         {
             try
             {
-                int eliminadas = await _invitacionProyectoBL.LimpiarInvitacionesRechazadasAsync(idProyecto);
-                if (eliminadas > 0)
+                bool eliminado = await _invitacionProyectoBL.LimpiarInvitacionPorIdAsync(id);
+                if (eliminado)
                 {
-                    TempData["SuccessMessage"] = $"{eliminadas} invitaciones rechazadas han sido eliminadas.";
+                    TempData["SuccessMessage"] = " La invitación ha sido eliminada.";
                 }
                 else
                 {
-                    TempData["InfoMessage"] = "No hay invitaciones rechazadas para eliminar.";
+                    TempData["InfoMessage"] = "No se encontró la invitación o no se puede eliminar.";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error al limpiar invitaciones rechazadas: " + ex.Message;
+                TempData["ErrorMessage"] = "Error al eliminar la invitación: " + ex.Message;
             }
 
             return RedirectToAction("Details", new { id = idProyecto });
@@ -426,9 +426,18 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                // Obtener las invitaciones filtradas por estado
-                var invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorEstadoAsync(id, new List<string> { estado });
+                IEnumerable<InvitacionProyecto> invitaciones;
 
+                if (estado == "Todos")
+                {
+                    // Obtener todas las invitaciones sin filtrar
+                    invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorProyectoAsync(id);
+                }
+                else
+                {
+                    // Obtener las invitaciones filtradas por estado
+                    invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorEstadoAsync(id, new List<string> { estado });
+                }
                 // Verificar si se encontraron invitaciones
                 if (invitaciones == null || !invitaciones.Any())
                 {

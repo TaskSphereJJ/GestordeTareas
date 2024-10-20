@@ -83,13 +83,11 @@ namespace GestordeTareas.BL
         }
 
 
-
-        // MÉTODO PARA LIMPIAR LAS INVITACIONES EXPIRADAS
-        public async Task<int> LimpiarInvitacionesRechazadasAsync(int idProyecto)
+        // MÉTODO PARA ELIMINAR UNA INVITACIÓN RECHAZADA POR SU ID
+        public async Task<bool> LimpiarInvitacionPorIdAsync(int id)
         {
-            return await InvitacionProyectoDAL.EliminarInvitacionesRechazadasAsync(idProyecto);
+            return await InvitacionProyectoDAL.EliminarInvitacionPorIdAsync(id);
         }
-
 
 
         // MÉTODO PARA OBTENER UNA INVITACIÓN POR TOKEN

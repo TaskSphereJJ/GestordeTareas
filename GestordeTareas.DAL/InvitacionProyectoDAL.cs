@@ -57,25 +57,23 @@ namespace GestordeTareas.DAL
         }
 
         // MÉTODO PARA ELIMINAR INVITACIONES RECHAZADAS
-        public static async Task<int> EliminarInvitacionesRechazadasAsync(int idProyecto)
+        public static async Task<bool> EliminarInvitacionPorIdAsync(int id)
         {
-            int result = 0;
             using (var dbContext = new ContextoBD())
             {
                 // SE OBTIENEN LAS INVITACIONES RECHAZADAS
-                var invitacionesAEliminar = await dbContext.InvitacionProyecto
-                .Where(i => i.Estado == "Rechazada" || i.FechaExpiracion < DateTime.UtcNow)
-                .Where(i => i.IdProyecto == idProyecto)
-                .ToListAsync();
+                var invitacion = await dbContext.InvitacionProyecto
+            .FirstOrDefaultAsync(i => i.Id == id && i.Estado == "Rechazada");
 
-                // ELIMINAR LAS INVITACIONES
-                if (invitacionesAEliminar.Any())
+                // Si se encuentra la invitación, eliminarla
+                if (invitacion != null)
                 {
-                    dbContext.InvitacionProyecto.RemoveRange(invitacionesAEliminar);
-                    result = await dbContext.SaveChangesAsync();
+                    dbContext.InvitacionProyecto.Remove(invitacion);
+                    await dbContext.SaveChangesAsync(); // Guardar cambios
+                    return true; // Retornar verdadero si se eliminó con éxito
                 }
             }
-            return result; // RETORNA EL NÚMERO DE REGISTROS AFECTADOS
+            return false; 
         }
 
 
