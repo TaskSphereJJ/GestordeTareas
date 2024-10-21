@@ -56,6 +56,8 @@ namespace GestordeTareas.UI.Controllers
             bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(proyectoId, idUsuarioActual);
             ViewBag.EsEncargado = esEncargado;
 
+
+
             return View(tareas);
         }
 
@@ -381,9 +383,9 @@ namespace GestordeTareas.UI.Controllers
             // Verificar si hay tareas elegidas
             if (tareasElegidas == null || !tareasElegidas.Any())
             {
-                return View("SinTareasElegidas"); // Una vista que muestra que no se han elegido tareas
+                // Establecer el mensaje en TempData 
+                TempData["NoHayTareas"] = "No hay tareas elegidas.";
             }
-
             // Pasar las tareas a la vista
             return View(tareasElegidas);
         }

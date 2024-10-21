@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestordeTaras.EN.Tarea>
+﻿@model IEnumerable<GestordeTaras.EN.Tarea> 
 @using Microsoft.AspNetCore.Components
 
 @{
@@ -131,6 +131,13 @@
                                     </form>
 
                                 }
+
+                                  else if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
+                                    {
+                                        @item.ElegirTarea.Usuario.Nombre
+
+                                    }
+ 
                             </td>
                         </tr>
                     }

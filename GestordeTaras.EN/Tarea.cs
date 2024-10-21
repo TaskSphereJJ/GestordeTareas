@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GestordeTaras.EN;
+using TuNamespace;
 
 namespace GestordeTaras.EN
 {
@@ -55,6 +56,8 @@ namespace GestordeTaras.EN
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
         public Proyecto Proyecto { get; set; } // Propiedad de navegación
+
+        public ElegirTarea ElegirTarea { get; set; }
     }
 
 
