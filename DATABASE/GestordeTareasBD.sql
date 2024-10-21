@@ -153,7 +153,7 @@ delete from ProyectoUsuario
 
 delete from ProyectoUsuario where id = 51
 
-update InvitacionProyecto set Estado = 'Rechazada' where id = 93
+update InvitacionProyecto set Estado = 'Rechazada' where id = 107
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
 

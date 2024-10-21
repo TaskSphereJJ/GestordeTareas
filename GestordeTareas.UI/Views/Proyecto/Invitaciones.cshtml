@@ -24,7 +24,7 @@
             Asignar Encargado
         </a>
     }
-    @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
+    @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
     {
         <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button text-blue-500 border-blue-500 mx-2 no-underline">
             Invitar Usuario
@@ -37,24 +37,27 @@
     <h2 class="text-3xl font-bold mb-6 text-gray-800">INVITACIONES</h2>
 
     <!-- Enviar nueva invitación -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8 max-w-4xl mx-auto">
-        <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Invitación</h3>
-        <form asp-action="EnviarInvitacion" method="post" class="flex items-end gap-4">
-            <div class="flex-grow">
-                <label for="correoElectronico" class="block text-sm font-medium text-gray-700 mb-1">
-                    Correo Electrónico
-                </label>
-                <input type="email" id="correoElectronico" name="correoElectronico" required
-                       class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                       placeholder="Ingrese una dirección de correo electrónico" />
-            </div>
-            <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                Enviar Invitación
-            </button>
-        </form>
-    </div>
-
+    @if (User.IsInRole("Administrador"))
+    {
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8 max-w-4xl mx-auto">
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Invitación</h3>
+            <form asp-action="EnviarInvitacion" method="post" class="flex items-end gap-4">
+                <div class="flex-grow">
+                    <label for="correoElectronico" class="block text-sm font-medium text-gray-700 mb-1">
+                        Correo Electrónico
+                    </label>
+                    <input type="email" id="correoElectronico" name="correoElectronico" required
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           placeholder="Ingrese una dirección de correo electrónico" />
+                </div>
+                <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Enviar Invitación
+                </button>
+            </form>
+        </div>
+    }
+    
     <!-- Lista de invitaciones y filtro -->
     <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
         <div class="flex flex-row items-center justify-between mb-4">
@@ -88,12 +91,12 @@
                                 @invitacion.Estado
                             </span>
                         </div>
-                        @if (invitacion.Estado == "Rechazada")
+                        @if (invitacion.Estado == "Rechazada" && User.IsInRole("Administrador"))
                         {
                             <button class="text-gray-500 hover:text-gray-700"
                                     onclick="document.getElementById('confirmDeleteCard-@invitacion.Id').classList.remove('hidden');"
                                     aria-label="Eliminar invitación">
-                                <img src="https://cdn-icons-png.freepik.com/256/2550/2550213.png?semt=ais_hybrid" alt="Eliminar" class="h-9 w-9">
+                                <img src="https://cdn-icons-png.freepik.com/256/2550/2550213.png?semt=ais_hybrid" alt="Eliminar" class="h-6 w-6">
                             </button>
 
 

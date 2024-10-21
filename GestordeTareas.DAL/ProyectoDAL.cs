@@ -80,7 +80,10 @@ namespace GestordeTareas.DAL
         {
             using (var dbContext = new ContextoBD())
             {
-                var proyectos = await dbContext.Proyecto.Include(p => p.Usuario).ToListAsync();
+                var proyectos = await dbContext.Proyecto
+                            .Include(p => p.ProyectoUsuario) // Incluir la relación con ProyectoUsuario
+                                .ThenInclude(pu => pu.Usuario) // Incluir los usuarios relacionados
+                            .ToListAsync();
                 return proyectos;
             }
         }
@@ -113,9 +116,11 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var proyectos = await dbContext.Proyecto
-                    .Include(p => p.Usuario) // Se incluye la relación con el Usuario
-                    .Where(p => p.Titulo.Contains(query) || p.Usuario.Nombre.Contains(query)) 
-                    .ToListAsync();
+            .Include(p => p.ProyectoUsuario) // Incluir la relación con ProyectoUsuario
+                .ThenInclude(pu => pu.Usuario) // Incluir los usuarios relacionados
+            .Where(p => p.Titulo.Contains(query) ||
+                        p.Usuario.Nombre.Contains(query)) // Búsqueda por título o nombre del administrador
+            .ToListAsync();
 
                 return proyectos;
             }

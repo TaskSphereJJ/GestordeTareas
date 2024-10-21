@@ -43,23 +43,22 @@
 
 @if (Model != null && Model.Any())
 {
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    @foreach (var item in Model)
-    {
-            <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @foreach (var item in Model)
+        {
+            <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90 bg-white dark:bg-gray-800">
                 <div class="absolute top-0 right-0 mt-1 mr-1">
                     <!-- Botón principal flotante -->
                     <div class="relative">
                         @if (User.IsInRole("Administrador"))
                         {
-                        <button class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
-                            <i class="fas fa-ellipsis-v text-gray-600 text-2xl"></i> <!-- Icono de tres puntos verticales -->
-                        </button>
+                            <button class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
+                                <i class="fas fa-ellipsis-v text-gray-600 text-2xl"></i> <!-- Icono de tres puntos verticales -->
+                            </button>
                         }
                         <!-- Menú desplegable -->
                         <div id="menu-@item.Id" class="absolute right-0 mt-2 w-40 bg-white rounded-xl py-3 flex flex-col gap-2 shadow-lg hidden z-10">
                             <ul class="space-y-2 px-3">
-                                @* Solo los administradores ven el botón "+" *@
                                 @if (User.IsInRole("Administrador"))
                                 {
                                     <li class="flex items-center gap-2 justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95" onclick="window.location='@Url.Action("Details", "Proyecto", new { id = item.Id })'">
@@ -75,11 +74,9 @@
                                         <i class="fas fa-trash-alt"></i>
                                         <p class="font-semibold text-center flex-grow">Eliminar</p>
                                     </li>
-
                                 }
                             </ul>
                         </div>
-
                     </div>
                 </div>
 
@@ -105,30 +102,55 @@
                 <p class="text-black dark:text-gray-400 mb-4 text-base">
                     <span class="text-purple-600 dark:text-purple-400 font-bold">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
                 </p>
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Miembros (@(item.ProyectoUsuario?.Count ?? 0)):
+                    </span>
+                    <div class="flex -space-x-2">
+                        @if (item.ProyectoUsuario != null && item.ProyectoUsuario.Any())
+                        {
+                            foreach (var proyectoUsuario in item.ProyectoUsuario.Take(3))
+                            {
+                                <div class="relative inline-block">
+                                    <img class="h-8 w-8 rounded-full border-2 border-white dark:border-gray-800"
+                                         src="@proyectoUsuario.Usuario.FotoPerfil"
+                                         alt="@proyectoUsuario.Usuario.Nombre" />
+                                </div>
+                            }
+                            @if (item.ProyectoUsuario.Count() > 3)
+                            {
+                                <div class="relative inline-block h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                    <span class="text-xs font-medium text-gray-800 dark:text-gray-200">+@(item.ProyectoUsuario.Count() - 3)</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
 
-                <div class="flex justify-end space-x-1 items-center">
-                    <!-- El botón "Ingresar" lo ven tanto Colaboradores como Administradores -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
-                            Ingresar
-                            <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                                <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
-                            </svg>
-                        </a>
-                    }
+                <div class="mt-6">
+                    <!-- Espacio para separar el contenido de los botones -->
+                    <div class="flex justify-end space-x-1 items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
+                                Ingresar
+                                <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
+                                    <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                        }
 
-                    <!-- Si el usuario es Colaborador, también verá el botón de "+" -->
-                    @if (User.IsInRole("Colaborador"))
-                    {
-                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded">
-                            <i class="fas fa-plus text-lg"></i>
-                        </a>
-                    }
+                        @if (User.IsInRole("Colaborador"))
+                        {
+                            <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded">
+                                <i class="fas fa-plus text-lg"></i>
+                            </a>
+                        }
+                    </div>
                 </div>
             </div>
-    }
-</div>
+        }
+    </div>
 }
 else
 {
@@ -138,6 +160,10 @@ else
         <p class="mt-2 text-gray-500">Crea un nuevo proyecto para comenzar a trabajar.</p>
     </div>
 }
+
+
+
+
 
 <!-- Modal de creacion -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
