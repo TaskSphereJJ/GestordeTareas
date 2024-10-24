@@ -317,7 +317,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario.";
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario. " + ex.Message;
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -410,6 +410,8 @@ namespace GestordeTareas.UI.Controllers
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
+                    TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
+
                     // Verificar si hay un token y una decisión almacenados en TempData
                     if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
                     {
@@ -428,25 +430,21 @@ namespace GestordeTareas.UI.Controllers
                     {
                         return Redirect(returnUrl);
                     }
-                }
-                else
-                {
-                    throw new Exception("Credenciales de usuario incorrectas");
-                }
 
-                if (!string.IsNullOrWhiteSpace(returnUrl))
-                {
-                    return Redirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home");
+                    // Mensaje de error si las credenciales son incorrectas
+                    TempData["ErrorMessage"] = "Credenciales de usuario incorrectas.";
+                    throw new Exception("Credenciales de usuario incorrectas");
                 }
             }
             catch (Exception ex)
             {
+                // Mensaje de error en caso de excepción
+                TempData["ErrorMessage"] = ex.Message;
                 ViewBag.Url = returnUrl;
-                ViewBag.Error = ex.Message;
                 return View(new Usuario { NombreUsuario = user.NombreUsuario });
             }
         }

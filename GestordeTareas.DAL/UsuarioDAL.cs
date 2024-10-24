@@ -125,6 +125,13 @@ namespace GestordeTareas.DAL
         public static async Task<int> Delete(Usuario usuario)
 
         {
+            // Se verifica si el usuario tiene referencias y se obtiene un mensaje si es así.
+            string mensajeReferencia = await TieneReferencias(usuario.Id);
+            if (mensajeReferencia != null)
+            {
+                throw new Exception(mensajeReferencia); // Lanza una excepción con el mensaje específico.
+            }
+
             int result = 0;
             using (var bdContext = new ContextoBD())
             {
@@ -266,5 +273,32 @@ namespace GestordeTareas.DAL
             }
             return userDb!;
         }
+
+
+        //ÉSTE METODO ES PARA VERIFICAR SI EL USUARIO TIENE REFERENCIAS EN OTRAS TABLAS:
+        public static async Task<string> TieneReferencias(int usuarioId)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Verifica si el usuario tiene referencias en la tabla InvitacionProyecto
+                bool tieneInvitaciones = await dbContext.InvitacionProyecto.AnyAsync(ip => ip.IdUsuario == usuarioId);
+                if (tieneInvitaciones)
+                {
+                    return "Este usuario tiene invitaciones pendientes en proyectos.";
+                }
+
+                // Verifica si el usuario tiene referencias en la tabla ProyectoUsuario
+                bool tieneProyectos = await dbContext.ProyectoUsuario.AnyAsync(pu => pu.IdUsuario == usuarioId);
+                if (tieneProyectos)
+                {
+                    return "Este usuario está asociado a un proyecto.";
+                }
+
+                // Si no tiene referencias
+                return null;
+            }
+        }
+
+
     }
 }

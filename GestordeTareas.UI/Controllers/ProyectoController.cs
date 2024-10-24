@@ -365,7 +365,7 @@ namespace GestordeTareas.UI.Controllers
         }
 
 
-        //MÉTODO PARA LIMPIAR O ELIMINAR LAS INVITACIONES RECHAZADAS O EXPIRADAS
+        //MÉTODO PARA LIMPIAR O ELIMINAR LAS INVITACIONES 
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> EliminarInvitacion(int id, int idProyecto)
@@ -387,7 +387,7 @@ namespace GestordeTareas.UI.Controllers
                 TempData["ErrorMessage"] = "Error al eliminar la invitación: " + ex.Message;
             }
 
-            return RedirectToAction("Details", new { id = idProyecto });
+            return RedirectToAction("Invitaciones", new { id = idProyecto });
         }
 
 

@@ -56,16 +56,16 @@ namespace GestordeTareas.DAL
             }
         }
 
-        // MÉTODO PARA ELIMINAR INVITACIONES RECHAZADAS
+        // MÉTODO PARA ELIMINAR INVITACIONES POR ID
         public static async Task<bool> EliminarInvitacionPorIdAsync(int id)
         {
             using (var dbContext = new ContextoBD())
             {
-                // SE OBTIENEN LAS INVITACIONES RECHAZADAS
+                // SE OBTIENEN LAS INVITACIONES POR SU ID
                 var invitacion = await dbContext.InvitacionProyecto
-            .FirstOrDefaultAsync(i => i.Id == id && i.Estado == "Rechazada");
+            .FirstOrDefaultAsync(i => i.Id == id);
 
-                // Si se encuentra la invitación, eliminarla
+                // Si se encuentra la invitación, se elimina
                 if (invitacion != null)
                 {
                     dbContext.InvitacionProyecto.Remove(invitacion);

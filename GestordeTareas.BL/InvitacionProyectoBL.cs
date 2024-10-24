@@ -83,7 +83,7 @@ namespace GestordeTareas.BL
         }
 
 
-        // MÉTODO PARA ELIMINAR UNA INVITACIÓN RECHAZADA POR SU ID
+        // MÉTODO PARA ELIMINAR UNA INVITACIÓN POR SU ID
         public async Task<bool> LimpiarInvitacionPorIdAsync(int id)
         {
             return await InvitacionProyectoDAL.EliminarInvitacionPorIdAsync(id);
