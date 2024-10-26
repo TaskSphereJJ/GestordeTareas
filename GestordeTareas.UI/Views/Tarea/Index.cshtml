@@ -47,7 +47,7 @@
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Tareas</h1>
 
-<div class="flex justify-between mb-4">
+ <div class="flex justify-between mb-4">
     @if (Model != null && Model.Any())
     {
         <button onclick="toggleView()" class="btn btn-primary">Cambiar Vista</button>
@@ -71,90 +71,119 @@
 
 @if (Model != null && Model.Any())
 {
-    <div id="tabla" class="tabla flex justify-center">
-        <!-- Contenido de la vista de tabla -->
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <thead class=" text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            @Html.DisplayNameFor(model => model.Nombre)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdCategoria)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdPrioridad)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdEstadoTarea)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.FechaVencimiento)
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
-                            <td class="px-6 py-4 text-center estado" data-id="@item.Id">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
-                            <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                                @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
-                                {
-                                    <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
-                                        <i class="fas fa-edit text-lg"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
-                                        <i class="fas fa-eye text-lg"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
-                                        <i class="fas fa-trash-alt text-lg"></i>
-                                    </a>
-                                }
-                                else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
-                                {
-                                    <!-- Formulario para elegir la tarea -->
-                                    <form asp-action="Elegirtarea" method="post" class="inline-block">
-                                        <input type="hidden" name="IdTarea" value="@item.Id" />
-                                        <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
-                                        <button type="submit" class="btn btn-primary btn-sm">
-                                            Elegir
+        <div class="container mx-auto">
+        <header id="header1" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Vista del Proyecto</h1>
+            <div class="grid grid-cols-4 gap-4 text-center">
+                <!-- Cambiado a grid-cols-4 -->
+                <div class="bg-purple-100 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-purple-800">@Model.Count()</p>
+                    <p class="text-purple-600">Tareas Totales</p>
+                </div>
+                <div class="bg-red-100 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-red-800">@Model.Count(t => t.EstadoTarea.Id == 1)</p>
+                    <p class="text-red-600">Tareas Pendientes</p>
+                </div>
+                <div class="bg-blue-100 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-blue-800">@Model.Count(t => t.EstadoTarea.Id == 2)</p>
+                    <p class="text-blue-600">Tareas en Progreso</p>
+                </div>
+                <div class="bg-green-100 rounded-lg p-4">
+                    <p class="text-2xl font-bold text-green-800">@Model.Count(t => t.EstadoTarea.Id == 3)</p>
+                    <p class="text-green-600">Tareas Completadas</p>
+                </div>
+            </div>
+        </header>
+
+
+            <div id="tabla" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var item in Model)
+                {
+                    <div class="bg-white rounded-lg shadow-md flex flex-col border-l-4 @(item.EstadoTarea.Nombre == "En Progreso" ? "border-l-blue-500" : "border-l-yellow-500") transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div class="p-4">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-semibold">@item.Nombre</h2>
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold @(item.Prioridad.Nombre == "Alta" ? "bg-red-100 text-red-800" : item.Prioridad.Nombre == "Media" ? "bg-yellow-100 text-yellow-800" : "bg-blue-100 text-blue-800")">
+                                    @item.Prioridad.Nombre
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4 flex-grow">
+                            <p class="text-sm text-gray-600 mb-4">@item.Categoria.Nombre</p>
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="calendar-days" class="h-4 w-4 text-indigo-500"></i>
+                                <span class="text-sm text-indigo-700">@item.FechaVencimiento.ToString("yyyy-MM-dd")</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="clock" class="h-4 w-4 text-indigo-500"></i>
+                                <span class="text-sm text-indigo-700">Estimado: N/A</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-b-lg">
+                            @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
+                            {
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        @if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
+                                        {
+                                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+                                                <span class="text-sm font-medium">@item.ElegirTarea.Usuario.Nombre.Substring(0, 1)</span>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-700">@item.ElegirTarea.Usuario.Nombre</span>
+                                        }
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="cargarVistaEdit(@item.Id)" class="text-blue-600 hover:text-blue-900">
+                                            <i class="fas fa-edit text-lg"></i>
                                         </button>
-                                    </form>
-
-                                }
-
-                                  else if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
-                                    {
-                                        @item.ElegirTarea.Usuario.Nombre
-
-                                    }
- 
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                        <button onclick="cargarVistaDetails(@item.Id)" class="text-yellow-600 hover:text-yellow-900">
+                                            <i class="fas fa-eye text-lg"></i>
+                                        </button>
+                                        <button onclick="cargarVistaDelete(@item.Id)" class="text-red-600 hover:text-red-900">
+                                            <i class="fas fa-trash-alt text-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                            else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
+                            {
+                                <form asp-action="Elegirtarea" method="post">
+                                    <input type="hidden" name="IdTarea" value="@item.Id" />
+                                    <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
+                                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white py-2 px-4 rounded-full flex items-center justify-center">
+                                        <i data-lucide="user" class="mr-2 h-4 w-4"></i>
+                                        Elegir esta tarea
+                                    </button>
+                                </form>
+                            }
+                            else if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
+                            {
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+                                        <span class="text-sm font-medium">@item.ElegirTarea.Usuario.Nombre.Substring(0, 1)</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">@item.ElegirTarea.Usuario.Nombre</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
-
 }
 else
 {
-    <div class="flex flex-col items-center justify-center mt-10">
+    <div class="min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200 p-8 flex flex-col items-center justify-center">
         <img src="~/img/notask.svg" alt="No hay tareas disponibles" class="w-36 h-36 mb-4" />
         <h1 class="text-2xl font-bold text-gray-700">No hay tareas disponibles</h1>
         <p class="mt-2 text-gray-500">Crea una nueva tarea para comenzar a trabajar.</p>
     </div>
 }
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+</script>
 
 
 <div id="message-box" class="fixed bottom-4 right-4 p-4 rounded-md text-white bg-green-500 hidden">
@@ -422,17 +451,22 @@ else
     });
 
     function toggleView() {
-        var tabla = document.getElementById('tabla');
-        var tarjetas = document.getElementById('tarjetas');
+    const header1 = document.getElementById("header1");
+    const tabla = document.getElementById("tabla");
+    const tarjetas = document.getElementById("tarjetas");
 
-        if (tabla.classList.contains('hidden')) {
-            tabla.classList.remove('hidden');
-            tarjetas.classList.add('hidden');
-        } else {
-            tabla.classList.add('hidden');
-            tarjetas.classList.remove('hidden');
-        }
+    // Alternar entre tabla y tarjetas, y mostrar/ocultar header1
+    if (tabla.classList.contains("hidden")) {
+        tabla.classList.remove("hidden");
+        tarjetas.classList.add("hidden");
+        header1.classList.remove("hidden"); // Mostrar el header en vista de tabla
+    } else {
+        tabla.classList.add("hidden");
+        tarjetas.classList.remove("hidden");
+        header1.classList.add("hidden"); // Ocultar el header en vista de tarjetas
     }
+}
+
 
     function handleResponse(response, isError = false) {
         // Cerrar el modal y luego mostrar el mensaje
