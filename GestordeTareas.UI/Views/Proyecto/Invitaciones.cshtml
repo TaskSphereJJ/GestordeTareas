@@ -37,7 +37,7 @@
     <h2 class="text-3xl font-bold mb-6 text-gray-800">INVITACIONES</h2>
 
     <!-- Enviar nueva invitación -->
-    @if (User.IsInRole("Administrador"))
+    @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
     {
         <div class="bg-white shadow-md rounded-lg p-6 mb-8 max-w-4xl mx-auto">
             <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Invitación</h3>
@@ -76,6 +76,7 @@
                 </button>
             </form>
         </div>
+
         @if (Model != null && Model.Any())
         {
             <ul class="space-y-4">
@@ -91,7 +92,7 @@
                                 @invitacion.Estado
                             </span>
                         </div>
-                        @if (User.IsInRole("Administrador"))
+                        @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
                         {
                             <button class="text-gray-500 hover:text-gray-700"
                                     onclick="document.getElementById('confirmDeleteCard-@invitacion.Id').classList.remove('hidden');"

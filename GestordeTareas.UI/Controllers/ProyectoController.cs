@@ -215,7 +215,7 @@ namespace GestordeTareas.UI.Controllers
 
         //METODO QUE PERMITE AL ADMINISTRADOR ENVIAR INVITACIONES PARA PROYECTOS
         [HttpPost]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<IActionResult> EnviarInvitacion(InvitacionProyecto invitacion)
         {
             invitacion.FechaCreacion = DateTime.Now;
@@ -367,7 +367,7 @@ namespace GestordeTareas.UI.Controllers
 
         //MÉTODO PARA LIMPIAR O ELIMINAR LAS INVITACIONES 
         [HttpPost]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<IActionResult> EliminarInvitacion(int id, int idProyecto)
         {
             try
@@ -407,6 +407,13 @@ namespace GestordeTareas.UI.Controllers
                 }
 
                 ViewBag.IdProyecto = id;
+
+                // Obtener el ID del usuario actual
+                int idUsuarioActual = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                // Verificar si el usuario es encargado
+                bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(id, idUsuarioActual);
+                ViewBag.EsEncargado = esEncargado;
                 // Retornar la vista con las invitaciones
                 return View(invitaciones);
             }
