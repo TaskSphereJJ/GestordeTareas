@@ -43,11 +43,11 @@
             <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Invitación</h3>
             <form asp-action="EnviarInvitacion" method="post" class="flex items-end gap-4">
                 <div class="flex-grow">
-                    <label for="correoElectronico" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="correoElectronico" class="block text-lg font-medium text-gray-700 mb-1 text-left">
                         Correo Electrónico
                     </label>
                     <input type="email" id="correoElectronico" name="correoElectronico" required
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           class="w-full h-10 py-2 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                            placeholder="Ingrese una dirección de correo electrónico" />
                 </div>
                 <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
@@ -57,7 +57,8 @@
             </form>
         </div>
     }
-    
+
+
     <!-- Lista de invitaciones y filtro -->
     <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
         <div class="flex flex-row items-center justify-between mb-4">

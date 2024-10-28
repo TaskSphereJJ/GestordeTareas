@@ -453,6 +453,13 @@ namespace GestordeTareas.UI.Controllers
 
                 ViewBag.IdProyecto = id;
                 ViewBag.Estado = estado;
+
+                // Obtener el ID del usuario actual
+                int idUsuarioActual = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                // Verificar si el usuario es encargado
+                bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(id, idUsuarioActual);
+                ViewBag.EsEncargado = esEncargado;
                 // Retornar la vista con las invitaciones filtradas
                 return View("Invitaciones",invitaciones);
             }
