@@ -71,32 +71,95 @@
 
 @if (Model != null && Model.Any())
 {
-        <div class="container mx-auto">
-        <header id="header1" class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-4">Vista del Proyecto</h1>
-            <div class="grid grid-cols-4 gap-4 text-center">
-                <!-- Cambiado a grid-cols-4 -->
-                <div class="bg-purple-100 rounded-lg p-4">
-                    <p class="text-2xl font-bold text-purple-800">@Model.Count()</p>
-                    <p class="text-purple-600">Tareas Totales</p>
-                </div>
-                <div class="bg-red-100 rounded-lg p-4">
-                    <p class="text-2xl font-bold text-red-800">@Model.Count(t => t.EstadoTarea.Id == 1)</p>
-                    <p class="text-red-600">Tareas Pendientes</p>
-                </div>
-                <div class="bg-blue-100 rounded-lg p-4">
-                    <p class="text-2xl font-bold text-blue-800">@Model.Count(t => t.EstadoTarea.Id == 2)</p>
-                    <p class="text-blue-600">Tareas en Progreso</p>
-                </div>
-                <div class="bg-green-100 rounded-lg p-4">
-                    <p class="text-2xl font-bold text-green-800">@Model.Count(t => t.EstadoTarea.Id == 3)</p>
-                    <p class="text-green-600">Tareas Completadas</p>
-                </div>
+    @if (User.IsInRole("Administrador"))
+    {
+        <!-- Vista en forma de lista para Administrador -->
+        <div id="tabla" class="tabla flex justify-center">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-center">@Html.DisplayNameFor(model => model.Nombre)</th>
+                            <th scope="col" class="px-6 py-3 text-center">Categoria</th>
+                            <th scope="col" class="px-6 py-3 text-center">Prioridad</th>
+                            <th scope="col" class="px-6 py-3 text-center">Estado</th>
+                            <th scope="col" class="px-6 py-3">@Html.DisplayNameFor(model => model.FechaVencimiento)</th>
+                            <th scope="col" class="px-6 py-3 text-center">elegida por</th>
+
+                            <th scope="col" class="px-6 py-3 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
+                                <td class="px-6 py-4 text-center estado" data-id="@item.Id">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
+                                
+                                <td class="px-6 py-4 text-center">
+                                    @if (item.ElegirTarea != null) // Verifica si la tarea ha sido elegida
+                                    {
+                                        <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"
+                                        alt="Foto de perfil"
+                                        class="w-8 h-8 rounded-full inline-block mr-2" />
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Nombre)
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido)
+                                    }
+                                    else
+                                    {
+                                        <span>No elegida</span>
+                                        // Mensaje o contenido alternativo si no ha sido elegida
+                                    }
+                                     </td>
+                                    
+                                    <td class="px-6 py-4 flex justify-center items-center space-x-2">
+                                    <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
+                                        <i class="fas fa-edit text-lg"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
+                                        <i class="fas fa-eye text-lg"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
+                                        <i class="fas fa-trash-alt text-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-        </header>
+        </div>
+    }
+    else
+    {
 
+        <div class="container mx-auto">
+            <header id="header1" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">Vista del Proyecto</h1>
+                <div class="grid grid-cols-4 gap-4 text-center">
+                    <div class="bg-purple-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-purple-800">@Model.Count()</p>
+                        <p class="text-purple-600">Tareas Totales</p>
+                    </div>
+                    <div class="bg-red-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-red-800">@Model.Count(t => t.EstadoTarea.Id == 1)</p>
+                        <p class="text-red-600">Tareas Pendientes</p>
+                    </div>
+                    <div class="bg-blue-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-blue-800">@Model.Count(t => t.EstadoTarea.Id == 2)</p>
+                        <p class="text-blue-600">Tareas en Progreso</p>
+                    </div>
+                    <div class="bg-green-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-green-800">@Model.Count(t => t.EstadoTarea.Id == 3)</p>
+                        <p class="text-green-600">Tareas Completadas</p>
+                    </div>
+                </div>
+            </header>
 
-            <div id="tabla" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="tabla" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach (var item in Model)
                 {
                     <div class="bg-white rounded-lg shadow-md flex flex-col border-l-4 @(item.EstadoTarea.Nombre == "En Progreso" ? "border-l-blue-500" : "border-l-yellow-500") transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -109,7 +172,11 @@
                             </div>
                         </div>
                         <div class="p-4 flex-grow">
-                            <p class="text-sm text-gray-600 mb-4">@item.Categoria.Nombre</p>
+                            <h1 class="text-sm text-gray-600 mb-4">@item.Categoria.Nombre</h1>
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="id-card" class="h-4 w-4 text-indigo-500"></i>
+                                <span class="text-sm text-indigo-700">Id : @item.Id</span>
+                            </div>
                             <div class="flex items-center gap-2 mb-2">
                                 <i data-lucide="calendar-days" class="h-4 w-4 text-indigo-500"></i>
                                 <span class="text-sm text-indigo-700">@item.FechaVencimiento.ToString("yyyy-MM-dd")</span>
@@ -119,33 +186,9 @@
                                 <span class="text-sm text-indigo-700">Estimado: N/A</span>
                             </div>
                         </div>
-                        <div class="p-4 bg-gray-50 rounded-b-lg">
-                            @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
-                            {
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        @if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
-                                        {
-                                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                                                <span class="text-sm font-medium">@item.ElegirTarea.Usuario.Nombre.Substring(0, 1)</span>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-700">@item.ElegirTarea.Usuario.Nombre</span>
-                                        }
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <button onclick="cargarVistaEdit(@item.Id)" class="text-blue-600 hover:text-blue-900">
-                                            <i class="fas fa-edit text-lg"></i>
-                                        </button>
-                                        <button onclick="cargarVistaDetails(@item.Id)" class="text-yellow-600 hover:text-yellow-900">
-                                            <i class="fas fa-eye text-lg"></i>
-                                        </button>
-                                        <button onclick="cargarVistaDelete(@item.Id)" class="text-red-600 hover:text-red-900">
-                                            <i class="fas fa-trash-alt text-lg"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                            else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
+
+                        <div class="p-4 bg-gray-50 rounded-b-lg ">
+                            @if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
                             {
                                 <form asp-action="Elegirtarea" method="post">
                                     <input type="hidden" name="IdTarea" value="@item.Id" />
@@ -159,10 +202,11 @@
                             else if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
                             {
                                 <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                                        <span class="text-sm font-medium">@item.ElegirTarea.Usuario.Nombre.Substring(0, 1)</span>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700">@item.ElegirTarea.Usuario.Nombre</span>
+                                    <span>  <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"
+                                        alt="Foto de perfil"
+                                        class="w-8 h-8 rounded-full inline-block mr-2" />
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Nombre)
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido)</span>
                                 </div>
                             }
                         </div>
@@ -170,6 +214,8 @@
                 }
             </div>
         </div>
+
+    }
 }
 else
 {

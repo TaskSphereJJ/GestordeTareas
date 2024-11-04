@@ -33,7 +33,15 @@ namespace GestordeTareas.DAL
                                            TrustServerCertificate = true;");
         }
 
-
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"Data Source=SQL9001.site4now.net; 
+        //                          Initial Catalog=db_aaef22_gestordetareas; 
+        //                          User Id=db_aaef22_gestordetareas_admin; 
+        //                          Password=gestor123456;
+        //                          Encrypt=True; 
+        //                          TrustServerCertificate=True;");
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProyectoUsuario>()
