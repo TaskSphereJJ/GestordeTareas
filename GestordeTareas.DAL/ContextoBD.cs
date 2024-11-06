@@ -23,6 +23,7 @@ namespace GestordeTareas.DAL
         public DbSet<ElegirTarea> ElegirTarea { get; set; }
         public DbSet<TareaFinalizada> TareaFinalizada { get; set; }
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
+        public DbSet<InvitacionProyecto> InvitacionProyecto { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

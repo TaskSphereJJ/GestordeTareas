@@ -7,37 +7,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: '@TempData["SuccessMessage"]',
-            confirmButtonText: 'OK'
-        });
-    </script>
-}
 
-<div id="alertContainer" class="fixed bottom-4 right-4 z-50">
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div role="alert"
-             class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-700 text-red-900 dark:text-red-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-red-200 dark:hover:bg-red-800 transform hover:scale-105">
-            <svg stroke="currentColor"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 class="h-6 w-6 flex-shrink-0 mr-3 text-red-600"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      stroke-width="2"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"></path>
-            </svg>
-            <p class="text-sm font-semibold">@TempData["ErrorMessage"]</p>
-        </div>
-    }
-</div>
+@await Html.PartialAsync("_Alerts")
 
 <div class="container mx-auto mt-6">
 
@@ -48,6 +19,13 @@
         @if (User.IsInRole("Administrador"))
         {
             <button class="tab-button text-gray-500 mx-2" data-tab="asignar">Asignar Encargado</button>
+        }
+        @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
+        {
+            <a href="@Url.Action("Invitaciones", "Proyecto", new { id = Model.Id })" class="tab-button text-gray-500 mx-2 no-underline">
+                Invitar Usuario
+            </a>
+
         }
     </nav>
 
@@ -144,25 +122,49 @@
     @if (User.IsInRole("Administrador"))
     {
         <div class="tab-content hidden" id="asignar">
-            <h3 class="text-lg font-semibold mt-6 text-center">Asignar encargado del proyecto</h3>
-            <form method="post" asp-action="AsignarEncargado" asp-controller="Proyecto" class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-                <input type="hidden" name="idProyecto" value="@Model.Id" />
+            <div class="container mx-auto p-4 max-w-2xl">
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-6 text-gray-800">Asignar encargado del proyecto</h2>
+                        <form method="post" asp-action="AsignarEncargado" asp-controller="Proyecto">
+                            <input type="hidden" name="idProyecto" value="@Model.Id" />
 
-                <div class="mb-4">
-                    <label for="idUsuario" class="block text-sm font-semibold mb-2">Seleccionar Usuario:</label>
-                    <select name="idUsuario" id="idUsuario" class="border border-gray-300 rounded-lg p-2 w-full">
-                        <option value="">-- Selecciona un usuario --</option>
-                        @foreach (var usuario in ViewBag.UsuariosUnidos)
-                        {
-                            <option value="@usuario.Id">@usuario.Nombre</option>
-                        }
-                    </select>
+                            <div class="space-y-4">
+                                @foreach (var usuario in ViewBag.UsuariosUnidos)
+                                {
+                                    <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100">
+                                        <input type="radio"
+                                               id="usuario-@usuario.Id"
+                                               name="idUsuario"
+                                               value="@usuario.Id"
+                                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                                        <label for="usuario-@usuario.Id" class="flex items-center space-x-4 cursor-pointer flex-grow">
+                                            <div class="flex-shrink-0">
+                                                <img class="h-10 w-10 rounded-full object-cover"
+                                                     src="@usuario.FotoPerfil"
+                                                     alt="@usuario.NombreUsuario">
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">@usuario.Nombre @usuario.Apellido</p>
+                                                <p class="text-sm text-gray-500">@usuario.NombreUsuario</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="mt-6 text-center">
+                                <button type="submit"
+                                        class="bg-purple-700 text-white font-bold py-2 px-4 rounded hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    Confirmar Selección
+                                </button>
+                            </div>
+
+
+                        </form>
+                    </div>
                 </div>
-
-                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
-                    Asignar Encargado
-                </button>
-            </form>
+            </div>
         </div>
     }
 

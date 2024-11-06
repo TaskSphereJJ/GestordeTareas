@@ -70,7 +70,6 @@ namespace GestordeTareas.UI.Controllers
                 var actualUser = users.FirstOrDefault();
 
                 //ESTO ES PARA OBTENER EL NOMBRE Y APELLIDO Y PONERLO EN EL LAYOUT 
-                // Obtener el nombre y apellido del usuario
                 string nombre = actualUser.Nombre;
                 string apellido = actualUser.Apellido;
 
@@ -183,10 +182,23 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                // Obtener el usuario existente de la base de datos
+                var existingUser = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
+                if (existingUser == null)
+                {
+                    TempData["ErrorMessage"] = "El usuario no fue encontrado.";
+                    return Json(new { success = false, message = "Usuario no encontrado." });
+                }
+
+                // Mantener la contraseña existente
+                usuario.Pass = existingUser.Pass;
+
+                // Llamar al método de actualización
                 int result = await _usuarioBL.Update(usuario);
                 TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
                 return Json(new { success = true, message = "Usuario actualizado correctamente." });
             }
+
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Hubo un problema al actualizar el usuario.";
@@ -305,7 +317,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario.";
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario. " + ex.Message;
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -315,48 +327,57 @@ namespace GestordeTareas.UI.Controllers
         public async Task<ActionResult> DeleteOwn()
         {
 
-            // Verifica si el usuario está autenticado
-            if (!User.Identity.IsAuthenticated)
+            try
             {
-                TempData["ErrorMessage"] = "Usuario no autenticado.";
-                return RedirectToAction("Login", "Usuario");
+                // Verifica si el usuario está autenticado
+                if (!User.Identity.IsAuthenticated)
+                {
+                    TempData["ErrorMessage"] = "Usuario no autenticado.";
+                    return RedirectToAction("Login", "Usuario");
+                }
+
+                var nombreUsuario = User.Identity.Name;
+                Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
+
+                // Se verifica si userId es null o vacío
+                if (string.IsNullOrEmpty(nombreUsuario))
+                {
+                    TempData["ErrorMessage"] = "No se pudo encontrar el usuario.";
+                    return RedirectToAction("Perfil");
+                }
+
+                // Crear el objeto usuario con el ID
+                var usuario = new Usuario { NombreUsuario = nombreUsuario };
+
+                // Obtener el usuario de la base de datos
+                var usuarioDB = await _usuarioBL.GetByNombreUsuarioAsync(usuario);
+
+                // Verificar que el usuario exista
+                if (usuarioDB == null)
+                {
+                    TempData["ErrorMessage"] = "El usuario no existe";
+                    return RedirectToAction("Perfil");
+                }
+
+                // Eliminar el usuario
+                int result = await _usuarioBL.Delete(usuarioDB);
+
+                // Verificar si la eliminación fue exitosa
+                if (result > 0)
+                {
+                    TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
+                    return RedirectToAction("Login", "Usuario");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No se pudo eliminar la cuenta.";
+                    return RedirectToAction("Perfil");
+                }
             }
-
-            var nombreUsuario = User.Identity.Name;
-            Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
-
-            // Se verifica si userId es null o vacío
-            if (string.IsNullOrEmpty(nombreUsuario))
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "No se pudo encontrar el usuario.";
-                return RedirectToAction("Perfil");
-            }
-
-            // Crear el objeto usuario con el ID
-            var usuario = new Usuario { NombreUsuario = nombreUsuario };
-
-            // Obtener el usuario de la base de datos
-            var usuarioDB = await _usuarioBL.GetByNombreUsuarioAsync(usuario);
-
-            // Verificar que el usuario exista
-            if (usuarioDB == null)
-            {
-                TempData["ErrorMessage"] = "El usuario no existe";
-                return RedirectToAction("Perfil");
-            }
-
-            // Eliminar el usuario
-            int result = await _usuarioBL.Delete(usuarioDB);
-
-            // Verificar si la eliminación fue exitosa
-            if (result > 0)
-            {
-                TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
-                return RedirectToAction("Login", "Usuario");
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "No se pudo eliminar la cuenta.";
+                ViewBag.Error = ex.Message;
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar la cuenta. " + ex.Message;
                 return RedirectToAction("Perfil");
             }
         }
@@ -380,14 +401,28 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                var userDb = await _usuarioBL.LoginAsync(user);
-                if (userDb != null && userDb.Id > 0 && userDb.NombreUsuario == user.NombreUsuario)
+                // Verificamos si el nombre de usuario existe usando GetByNombreUsuarioAsync
+                var userDb = await _usuarioBL.GetByNombreUsuarioAsync(user);
+                if (userDb == null)
                 {
-                    // Verifica si la propiedad FotoPerfil tiene un valor
-                    var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
+                    // Si el usuario no existe
+                    TempData["ErrorMessage"] = "El nombre de usuario no existe.";
+                    return View(new Usuario { NombreUsuario = user.NombreUsuario });
+                }
 
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                    var claims = new[] {
+                // Si el usuario existe, verificamos si la contraseña es correcta
+                if (userDb.Pass != UsuarioDAL.HashMD5(user.Pass))  // Usamos HashMD5 para comparar contraseñas cifradas
+                {
+                    // Si la contraseña es incorrecta
+                    TempData["ErrorMessage"] = "La contraseña es incorrecta.";
+                    return View(new Usuario { NombreUsuario = user.NombreUsuario });
+                }
+
+                // Verifica si la propiedad FotoPerfil tiene un valor
+                var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
+
+                userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
+                var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
                     new Claim(ClaimTypes.GivenName, userDb.Nombre),
@@ -395,27 +430,38 @@ namespace GestordeTareas.UI.Controllers
                     new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
                     new Claim("FotoPerfil", fotoPerfil)
             };
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-                }
-                else
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
+
+                // Verificar si hay un token y una decisión almacenados en TempData
+                if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
                 {
-                    throw new Exception("Credenciales de usuario incorrectas");
+                    string token = TempData["Token"].ToString();
+                    string decision = TempData["Decision"].ToString();
+
+                    // Limpiar TempData después de redirigir
+                    TempData.Remove("Token");
+                    TempData.Remove("Decision");
+
+                    return RedirectToAction("AceptarInvitacion", "Proyecto", new { token = token, decision = decision });
                 }
 
+                // Si no hay token, redirigir al returnUrl o a la vista predeterminada
                 if (!string.IsNullOrWhiteSpace(returnUrl))
                 {
                     return Redirect(returnUrl);
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+
+                return RedirectToAction("Index", "Home");
+
             }
             catch (Exception ex)
             {
+                // Mensaje de error en caso de excepción
+                TempData["ErrorMessage"] = ex.Message;
                 ViewBag.Url = returnUrl;
-                ViewBag.Error = ex.Message;
                 return View(new Usuario { NombreUsuario = user.NombreUsuario });
             }
         }

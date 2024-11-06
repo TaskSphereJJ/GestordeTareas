@@ -11,45 +11,63 @@ namespace GestordeTareas.DAL
 {
     public class UsuarioDAL
     {
+        //METODO QUE SE ENCARGA DE ENCRIPTAR LA CONTRASEÑA DEL USUARIO
         private static void EncryptMD5(Usuario user)
         {
+            // Crea una instancia del algoritmo MD5
             using (var md5 = MD5.Create())
             {
+                // Convierte la contraseña a un arreglo de bytes usando la codificación ASCII
                 var result = md5.ComputeHash(Encoding.ASCII.GetBytes(user.Pass));
+
+                // Convierte el arreglo de bytes resultante en una cadena hexadecimal
                 var encryptedStr = "";
                 for (int i = 0; i < result.Length; i++)
                 {
                     encryptedStr += result[i].ToString("x2").ToLower();
                 }
+                // Asigna la contraseña cifrada al objeto Usuario
                 user.Pass = encryptedStr;
             }
         }
 
+        //METODO QUE COMPARA LA CONTRASEÑA INGRESADA CON LA ALMACENADA DEL USUARIO PARA PERMITIR MODIIFCARLA
         public static string HashMD5(string password)
         {
+            // Crea una instancia del algoritmo MD5.
             using (var md5 = MD5.Create())
             {
+                // Convierte la cadena de texto (contraseña) a un arreglo de bytes usando la codificación ASCII.
                 var result = md5.ComputeHash(Encoding.ASCII.GetBytes(password));
+
+                // Convierte el arreglo de bytes resultante en una cadena hexadecimal.
                 var encryptedStr = "";
                 for (int i = 0; i < result.Length; i++)
                 {
                     encryptedStr += result[i].ToString("x2").ToLower();
                 }
+                // Devuelve la contraseña cifrada en formato de cadena hexadecimal.
                 return encryptedStr;
             }
         }
 
+
+        //METODO PARA VERIFICAR SI EL NOMBRE DE USUARIO YA EXISTE
         private static async Task<bool> ExistsLogin(Usuario user, ContextoBD context)
         {
             bool result = false;
+            // Consulta en la base de datos si ya existe un usuario con el mismo nombre de usuario pero con un ID diferente.
             var userLoginExists = await context.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == user.NombreUsuario && u.Id != user.Id);
+
+            // Si se encuentra un usuario que cumpla con las condiciones, el método devolverá 'true'.
             if (userLoginExists != null && userLoginExists.Id > 0 && userLoginExists.NombreUsuario == user.NombreUsuario)
                 result = true;
 
             return result;
         }
 
-        // Método para crear un nuevo usuario en la base de datos de forma asincrónica.
+
+        // MÉTODO PARA CREAR UN NUEVO USUARIO 
         public static async Task<int> Create(Usuario usuario)
 
         {
@@ -77,7 +95,8 @@ namespace GestordeTareas.DAL
             return result;
         }
 
-        // Método para actualizar un usuario existente en la base de datos de forma asincrónica.
+
+        // MÉTODO PARA ACTUALIZAR UN USUARIO EXISTENTE 
         public static async Task<int> Update(Usuario usuario)
         {
             int result = 0;
@@ -105,12 +124,12 @@ namespace GestordeTareas.DAL
                     if (!string.IsNullOrEmpty(usuario.Pass) && usuario.Pass != userDb.Pass)
                     {
                         EncryptMD5(usuario); // Encripta la nueva contraseña
-                        userDb.Pass = usuario.Pass; // Asigna la contraseña encriptada
+                        userDb.Pass = usuario.Pass; // Se asigna la contraseña encriptada
                     }
                     else
                     {
-                        // Si no se proporciona una nueva contraseña, mantén la existente
-                        userDb.Pass = userDb.Pass; // No cambies la contraseña
+                        // Si no se proporciona una nueva contraseña, se mantiene la existente
+                        userDb.Pass = userDb.Pass; // No se cambia la contraseña
                     }
                     dbContext.Usuario.Update(userDb);
                     result = await dbContext.SaveChangesAsync();
@@ -121,10 +140,18 @@ namespace GestordeTareas.DAL
             return result;
         }
 
-        // Método para eliminar un usuario de la base de datos de forma asincrónica.
+
+        // MÉTODO PARA ELIMINAR UN USUARIO 
         public static async Task<int> Delete(Usuario usuario)
 
         {
+            // Se verifica si el usuario tiene referencias y se obtiene un mensaje si es así.
+            string mensajeReferencia = await TieneReferencias(usuario.Id);
+            if (mensajeReferencia != null)
+            {
+                throw new Exception(mensajeReferencia); // Lanza una excepción con el mensaje específico.
+            }
+
             int result = 0;
             using (var bdContext = new ContextoBD())
             {
@@ -132,9 +159,7 @@ namespace GestordeTareas.DAL
                 var usuarioDB = await bdContext.Usuario.FirstOrDefaultAsync(u => u.Id == usuario.Id);
                 if (usuarioDB != null)
                 {
-                    // Elimina el usuario del DbSet correspondiente en el contexto.
                     bdContext.Usuario.Remove(usuarioDB);
-                    // Guarda los cambios en la base de datos.
                     result = await bdContext.SaveChangesAsync();
                 }
             }
@@ -142,7 +167,8 @@ namespace GestordeTareas.DAL
             return result;
         }
 
-        // Método para obtener un usuario por su ID de forma asincrónica.
+
+        // MÉTODO PARA OBTENER UN USUARIO POR SU ID 
         public static async Task<Usuario> GetByIdAsync(Usuario usuario)
         {
             var usuarioDB = new Usuario();
@@ -155,7 +181,8 @@ namespace GestordeTareas.DAL
             return usuarioDB;
         }
 
-        // Método para obtener un usuario por su nombre de usuario de forma asincrónica.
+
+        // MÉTODO PARA OBTENER UN USUARIO POR SU NOMBRE DE USUARIO 
         public static async Task<Usuario> GetByNombreUsuarioAsync(Usuario usuario)
         {
             using (var dbContext = new ContextoBD())
@@ -169,7 +196,7 @@ namespace GestordeTareas.DAL
         }
 
 
-        // Método para obtener todos los usuarios de la base de datos de forma asincrónica.
+        // MÉTODO PARA OBTENER TODOS LOS USUARIOS 
         public static async Task<List<Usuario>> GetAllAsync()
         {
             var usuarios = new List<Usuario>();
@@ -178,7 +205,7 @@ namespace GestordeTareas.DAL
                 // Obtiene todos los usuarios y los asigna a la variable usuarios.
                 usuarios = await bdContexto.Usuario.Include(c => c.Cargo).ToListAsync();
             }
-            // Retorna la lista de usuarios.
+            // Retorna la lista de usuarios
             return usuarios;
         }
 
@@ -223,7 +250,7 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
-                select = QuerySelect(select, usuarios).Include(u => u.Cargo); // Asegúrate de incluir el Cargo aquí
+                select = QuerySelect(select, usuarios).Include(u => u.Cargo); 
                 users = await select.ToListAsync();
             }
             return users;
@@ -266,5 +293,32 @@ namespace GestordeTareas.DAL
             }
             return userDb!;
         }
+
+
+        //ESTE METODO ES PARA VERIFICAR SI EL USUARIO TIENE REFERENCIAS EN OTRAS TABLAS
+        public static async Task<string> TieneReferencias(int usuarioId)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Verifica si el usuario tiene referencias en la tabla InvitacionProyecto
+                bool tieneInvitaciones = await dbContext.InvitacionProyecto.AnyAsync(ip => ip.IdUsuario == usuarioId);
+                if (tieneInvitaciones)
+                {
+                    return "Este usuario tiene invitaciones pendientes en proyectos.";
+                }
+
+                // Verifica si el usuario tiene referencias en la tabla ProyectoUsuario
+                bool tieneProyectos = await dbContext.ProyectoUsuario.AnyAsync(pu => pu.IdUsuario == usuarioId);
+                if (tieneProyectos)
+                {
+                    return "Este usuario está asociado a un proyecto.";
+                }
+
+                // Si no tiene referencias
+                return null;
+            }
+        }
+
+
     }
 }

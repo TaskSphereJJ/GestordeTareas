@@ -129,9 +129,31 @@ CREATE TABLE ProyectoUsuario(
 	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
 	Encargado BIT NULL
 );
+GO
 
+CREATE TABLE InvitacionProyecto (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    IdProyecto INT NOT NULL,
+    IdUsuario INT NULL,
+    CorreoElectronico NVARCHAR(255) NOT NULL,
+    Estado NVARCHAR(20) NOT NULL, -- Puedes usar ENUM si es soportado por tu base de datos
+    Token NVARCHAR(255) NOT NULL UNIQUE, -- Se agrega restricción UNIQUE para el token
+    FechaCreacion DATETIME NOT NULL,
+    FechaExpiracion DATETIME NOT NULL,
+    CONSTRAINT FK_InvitacionProyecto_Proyecto FOREIGN KEY (IdProyecto) REFERENCES Proyecto(Id),
+    CONSTRAINT FK_InvitacionProyecto_Usuario FOREIGN KEY (IdUsuario) REFERENCES Usuario(Id),
+    CONSTRAINT UQ_InvitacionProyecto_Correo_Proyecto UNIQUE (CorreoElectronico, IdProyecto) -- Se asegura que un mismo correo no pueda recibir varias invitaciones al mismo proyecto
+);
 
+select * from Usuario
+select * from InvitacionProyecto
+select * from ProyectoUsuario
+delete from InvitacionProyecto
+delete from ProyectoUsuario
 
+delete from ProyectoUsuario where id = 51
+
+update InvitacionProyecto set Estado = 'Rechazada' where id = 107
 -- Insertar datos en la tabla Cargo
 INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
 
@@ -143,7 +165,7 @@ INSERT INTO Prioridad (Nombre) VALUES ('Baja'), ('Media'), ('Alta');
 
 -- Insertar datos en la tabla EstadoTarea
 INSERT INTO EstadoTarea (Nombre) VALUES ('Pendiente'), ('En Proceso'), ('Finalizada');
-select * from EstadoTarea
+select * from Usuario
 
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
@@ -189,3 +211,5 @@ VALUES
   ('ruta/imagen1.jpg', 1),
   ('ruta/imagen2.jpg', 2),
   ('ruta/imagen3.jpg', 3);
+
+  Update Usuario set pass= '827ccb0eea8a706c4c34a16891f84e7b' where id = 2
