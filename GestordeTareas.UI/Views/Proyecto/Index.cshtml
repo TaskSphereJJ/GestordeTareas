@@ -11,146 +11,164 @@
 
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyectos</h1>
+
 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
 {
-    <p>
-        <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
-            <i class="fas fa-plus-circle mr-2"></i> Nuevo
-        </a>
-    </p>
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+        <p>
+            <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
+                <i class="fas fa-plus mr-2"></i> Nuevo
+            </a>
+        </p>
+
+        <!-- Formulario de búsqueda -->
+        <form method="get" asp-action="Index" class="flex items-center">
+            <div class="flex items-center mr-4">
+                <span class="mr-2">Buscar por:</span>
+                <select name="filter" class="border border-gray-300 rounded-md p-2 w-32">
+                    <option value="Titulo">Título</option>
+                    <option value="Administrador">Administrador</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label for="query" class="sr-only">Ingrese el término de búsqueda:</label>
+                <input type="text" name="query" class="border border-gray-300 rounded-md p-2" placeholder="Buscar..." aria-label="Ingrese el término de búsqueda" />
+                <button type="submit" class="bg-purple-500 text-white font-semibold rounded-md p-2 ml-2 hover:bg-purple-600 transition duration-200">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
 }
-
-<form method="get" asp-action="Index" class="flex justify-end items-center mb-4">
-    <div class="flex items-center mr-4">
-        <span class="mr-2">Buscar por:</span>
-        <select name="filter" class="border border-gray-300 rounded-md p-2 w-32">
-            <option value="Titulo">Título</option>
-            <option value="Administrador">Administrador</option>
-        </select>
-    </div>
-    <div class="flex items-center">
-        <label for="query" class="sr-only">Ingrese el término de búsqueda:</label>
-        <input type="text" name="query" class="border border-gray-300 rounded-md p-2" placeholder="Buscar..." aria-label="Ingrese el término de búsqueda" />
-        <button type="submit" class="bg-purple-500 text-white font-semibold rounded-md p-2 ml-2 hover:bg-purple-600 transition duration-200">
-            <i class="fas fa-search"></i>
-        </button>
-    </div>
-</form>
-
-
-
 
 
 @if (Model != null && Model.Any())
 {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @foreach (var item in Model)
         {
-            <div class="relative proyecto rounded-lg shadow-md p-6 opacity-90 bg-white dark:bg-gray-800">
+            <div class="relative rounded-lg border border-gray-300 p-6 bg-white dark:bg-gray-800 shadow-sm w-full mb-4">
+                <!-- Botón principal flotante y menú desplegable -->
                 <div class="absolute top-0 right-0 mt-1 mr-1">
-                    <!-- Botón principal flotante -->
-                    <div class="relative">
-                        @if (User.IsInRole("Administrador"))
-                        {
-                            <button class="rounded-full bg-gray-200 dark:bg-gray-600 w-14 h-14 flex items-center justify-center" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
-                                <i class="fas fa-ellipsis-v text-gray-600 text-2xl"></i> <!-- Icono de tres puntos verticales -->
-                            </button>
-                        }
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <!-- Botón principal flotante -->
+                        <button class="rounded-full bg-gray-200 w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-110 hover:rotate-180 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
+                            <i class="fas fa-ellipsis-v text-gray-800 text-xl"></i>
+                        </button>
+
                         <!-- Menú desplegable -->
-                        <div id="menu-@item.Id" class="absolute right-0 mt-2 w-40 bg-white rounded-xl py-3 flex flex-col gap-2 shadow-lg hidden z-10">
-                            <ul class="space-y-2 px-3">
-                                @if (User.IsInRole("Administrador"))
-                                {
-                                    <li class="flex items-center gap-2 justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95" onclick="window.location='@Url.Action("Details", "Proyecto", new { id = item.Id })'">
-                                        <i class="fas fa-plus"></i>
-                                        <p class="font-semibold text-center flex-grow">Detalles</p>
-                                    </li>
-                                    <li class="flex items-center justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-blue-600 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95" onclick="cargarVistaEdit(@item.Id)">
-                                        <i class="fas fa-edit"></i>
-                                        <p class="font-semibold text-center flex-grow">Editar</p>
-                                    </li>
-                                    <li class="flex items-center justify-start gap-2 text-gray-600 cursor-pointer transition-all duration-300 ease-out p-1.5 rounded-md hover:bg-red-700 hover:text-white hover:translate-x-1 hover:-translate-y-1 active:scale-95"
-                                        onclick="mostrarTarjetaEliminar(@item.Id); return false;">
-                                        <i class="fas fa-trash-alt"></i>
-                                        <p class="font-semibold text-center flex-grow">Eliminar</p>
-                                    </li>
-                                }
+                        <div id="menu-@item.Id" class="absolute right-0 mt-2 w-36 bg-white rounded-lg py-2 shadow-md hidden z-10 transition-all duration-300 ease-out transform">
+                            <ul class="space-y-1 px-3">
+
+                                <!-- Opción de Editar -->
+                                <li class="flex items-center gap-3 text-gray-700 cursor-pointer p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-blue-500 hover:text-white active:scale-95"
+                                    onclick="cargarVistaEdit(@item.Id)">
+                                    <i class="fas fa-edit text-black-500"></i>
+                                    <span class="font-medium">Editar</span>
+                                </li>
+
+                                <!-- Opción de Eliminar -->
+                                <li class="flex items-center gap-3 text-gray-700 cursor-pointer p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-red-500 hover:text-white active:scale-95"
+                                    onclick="mostrarTarjetaEliminar(@item.Id); return false;">
+                                    <i class="fas fa-trash-alt text-black-500"></i>
+                                    <span class="font-medium">Eliminar</span>
+                                </li>
                             </ul>
                         </div>
-                    </div>
+
+                    }
                 </div>
 
-                <h2 class="text-lg font-semibold text-black mb-4 break-words text-center">@item.Titulo</h2>
+                <!-- Título del proyecto -->
+                <h2 class="text-xl font-bold text-gray-900 mb-4 text-center">@item.Titulo</h2>
 
-                <p class="text-black dark:text-gray-400 mb-2 text-base">
-                    <span class="text-purple-600 dark:text-purple-400 font-bold">Descripción:</span>
-                    @{
-                        if (item.Descripcion.Length > 200)
-                        {
-                            <text>@item.Descripcion.Substring(0, 200)...</text>
-                        }
-                        else
-                        {
-                            <text>@item.Descripcion</text>
-                        }
+                <!-- Administrador -->
+                <p class="text-sm text-gray-500 mb-4 text-center">
+                    <span class="font-semibold">Administrador:</span> @item.Usuario.Nombre @item.Usuario.Apellido
+                </p>
+
+                <!-- Descripción -->
+                <p class="text-gray-700 dark:text-gray-400 mb-4 text-center">
+                    @if (item.Descripcion.Length > 100)
+                    {
+                        <text>@item.Descripcion.Substring(0, 100)...</text>
+                    }
+                    else
+                    {
+                        <text>@item.Descripcion</text>
                     }
                 </p>
 
-                <p class="text-black dark:text-gray-400 mb-2 text-base">
-                    <span class="text-purple-600 dark:text-purple-400 font-bold">Administrador:</span> @item.Usuario.Nombre
+                <!-- Fecha de Finalización -->
+                <p class="text-sm text-gray-500 mb-4 text-center">
+                    <span class="font-semibold text-gray-500 dark:text-gray-400">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
                 </p>
-                <p class="text-black dark:text-gray-400 mb-4 text-base">
-                    <span class="text-purple-600 dark:text-purple-400 font-bold">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
-                </p>
-                <div class="flex items-center space-x-2">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Miembros (@(item.ProyectoUsuario?.Count ?? 0)):
-                    </span>
+
+                <!-- Contador de Usuarios -->
+                <div class="flex items-center justify-center text-gray-500 mb-2">
+                    <i class="fas fa-users mr-2"></i>
+                    <span class="text-sm">@((item.ProyectoUsuario?.Count ?? 0)) usuarios unidos</span>
+                </div>
+
+                <!-- Imágenes de miembros -->
+                <div class="flex justify-center mb-4 min-h-[32px]">
                     <div class="flex -space-x-2">
                         @if (item.ProyectoUsuario != null && item.ProyectoUsuario.Any())
                         {
-                            foreach (var proyectoUsuario in item.ProyectoUsuario.Take(3))
+                            @foreach (var proyectoUsuario in item.ProyectoUsuario.Take(3))
                             {
-                                <div class="relative inline-block">
-                                    <img class="h-8 w-8 rounded-full border-2 border-white dark:border-gray-800"
-                                         src="@proyectoUsuario.Usuario.FotoPerfil"
-                                         alt="@proyectoUsuario.Usuario.Nombre" />
-                                </div>
+                                <img class="h-8 w-8 rounded-full border-2 border-white"
+                                     src="@proyectoUsuario.Usuario.FotoPerfil"
+                                     alt="@proyectoUsuario.Usuario.Nombre" />
                             }
                             @if (item.ProyectoUsuario.Count() > 3)
                             {
-                                <div class="relative inline-block h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                    <span class="text-xs font-medium text-gray-800 dark:text-gray-200">+@(item.ProyectoUsuario.Count() - 3)</span>
+                                <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
+                                    <span class="text-xs font-medium">+@(item.ProyectoUsuario.Count() - 3)</span>
                                 </div>
                             }
                         }
-                    </div>
-                </div>
-
-                <div class="mt-6">
-                    <!-- Espacio para separar el contenido de los botones -->
-                    <div class="flex justify-end space-x-1 items-center">
-                        @if (User.Identity.IsAuthenticated)
+                        else
                         {
-                            <a class="ingresar mr-4 no-underline" href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })">
-                                Ingresar
-                                <svg fill="currentColor" viewBox="0 0 24 24" class="flecha">
-                                    <path clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" fill-rule="evenodd"></path>
-                                </svg>
-                            </a>
-                        }
-
-                        @if (User.IsInRole("Colaborador"))
-                        {
-                            <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded">
-                                <i class="fas fa-plus text-lg"></i>
-                            </a>
+                            <!-- Espacio reservado cuando no hay usuarios -->
+                            <img class="h-8 w-8 opacity-0" src="" alt="placeholder" />
                         }
                     </div>
                 </div>
+
+
+                <!-- Botones de acción -->
+                <div class="flex justify-between mt-4">
+                    <!-- Botón de Unirse -->
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
+                           class="flex items-center justify-center px-4 py-2 border border-gray-400 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 text-sm font-medium no-underline transition-all duration-200 ease-out">
+                            <i class="fa-solid fa-sliders mr-4"></i> Detalles
+                        </a>
+
+                    }
+                    else if (User.IsInRole("Colaborador"))
+                    {
+                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
+                           class="flex items-center justify-center px-4 py-2 border border-green-400 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-green-300 dark:hover:bg-green-700 text-sm font-medium no-underline transition-all duration-200 ease-out">
+                            <i class="fas fa-user-plus mr-4"></i> Unirse
+                        </a>
+
+                    }
+
+                    <!-- Botón de Ingresar -->
+                    <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
+                       class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out">
+                        <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
+                    </a>
+                </div>
+
             </div>
         }
     </div>
+
 }
 else
 {
@@ -219,32 +237,30 @@ else
     </div>
 </div>
 
-<!-- Tarjeta de eliminacion -->
-<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-    <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
-        <div class="p-6 mt-6">
-            <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
-                <img src="https://cdn-icons-png.freepik.com/256/3712/3712167.png" alt="Eliminar" class="h-12 w-12 text-red-600" />
-            </div>
-            <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-            <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.</p>
+<!-- Tarjeta de eliminación -->
+<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60 transition-opacity duration-300">
+    <div class="w-80 rounded-xl bg-white shadow-lg transform transition-all duration-300">
+        <div class="p-4 pb-2 text-center">
+            <h2 class="mt-4 text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
+            <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.</p>
         </div>
-        <div class="bg-gray-50 p-4 flex justify-between">
+        <div class="bg-gray-100 px-4 py-3 flex justify-between rounded-b-xl">
             <button type="button"
-                    class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
+                    class="flex-1 mr-1 px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-200"
                     onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
                 Cancelar
             </button>
-            <form id="deleteForm" method="post" asp-action="Delete">
+            <form id="deleteForm" method="post" asp-action="Delete" class="flex-1">
                 <input type="hidden" name="Id" id="deleteProjectId" />
                 <button type="submit"
-                        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
+                        class="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition duration-200">
                     Eliminar
                 </button>
             </form>
         </div>
     </div>
 </div>
+
 
 <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

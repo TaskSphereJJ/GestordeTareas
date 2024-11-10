@@ -41,7 +41,7 @@ CREATE TABLE Usuario (
 	Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
 	NombreUsuario VARCHAR(50) NOT NULL,
-    Pass VARCHAR(MAX) NOT NULL, -- Encriptar la contraseña
+    Pass VARCHAR(MAX) NOT NULL, 
     Telefono VARCHAR(9) NOT NULL,
     FechaNacimiento DATE NOT NULL,
 	[Status] TINYINT NOT NULL,
@@ -49,11 +49,6 @@ CREATE TABLE Usuario (
     IdCargo INT NOT NULL FOREIGN KEY REFERENCES Cargo(Id),
 
 );
-
-
-ALTER TABLE Usuario
-ADD FotoPerfil NVARCHAR(MAX) NOT NULL;
-
 
 GO
 
@@ -66,15 +61,8 @@ CREATE TABLE Proyecto (
 	CodigoAcceso NVARCHAR(50) NOT NULL,
 	FechaFinalizacion DATE NOT NULL,
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
+	--CONSTRAINT UQ_CodigoAcceso UNIQUE (CodigoAcceso)
 );
-
-
-
-ALTER TABLE Proyecto
-ADD CodigoAcceso NVARCHAR(50) NOT NULL DEFAULT '12345';
-ALTER TABLE Proyecto
-ADD CONSTRAINT UQ_CodigoAcceso UNIQUE (CodigoAcceso);
-
 
 GO
 
@@ -92,7 +80,10 @@ CREATE TABLE Tarea (
     IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 );
 
+
 GO
+
+
 -- Cuando se asignan las tareas y le aparecen al colaborador, elegirá una
 CREATE TABLE ElegirTarea (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
@@ -102,26 +93,10 @@ CREATE TABLE ElegirTarea (
    	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
 );
 
-GO
--- Tabla de tarea finalizada
-CREATE TABLE TareaFinalizada (
-    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    FechaFinalizacion DATE NOT NULL DEFAULT GETDATE(),
-    Comentarios VARCHAR(MAX) NOT NULL,
-    IdElegirTarea INT NOT NULL FOREIGN KEY REFERENCES ElegirTarea(Id),
-);
 
 GO
 
--- Tabla de Imagenes de Pruebas
-CREATE TABLE ImagenesPrueba (
-    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    Imagen VARCHAR(MAX) NOT NULL,
-    IdTareaFinalizada INT NOT NULL FOREIGN KEY REFERENCES TareaFinalizada(Id)
-);
-
-GO
-
+--Tabla que hace la relacion de unir un usuario a un proyecto especifico
 CREATE TABLE ProyectoUsuario(
 	Id INT PRIMARY KEY IDENTITY (1,1),
 	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id),
@@ -129,15 +104,18 @@ CREATE TABLE ProyectoUsuario(
 	FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
 	Encargado BIT NULL
 );
+
 GO
 
+
+--Tabla de invitacion de usuario a proyecto especifico y dependiendo de la respuesta lo une al proyecto osea hace un ProyectoUsuario
 CREATE TABLE InvitacionProyecto (
     Id INT PRIMARY KEY IDENTITY(1,1),
     IdProyecto INT NOT NULL,
     IdUsuario INT NULL,
     CorreoElectronico NVARCHAR(255) NOT NULL,
-    Estado NVARCHAR(20) NOT NULL, -- Puedes usar ENUM si es soportado por tu base de datos
-    Token NVARCHAR(255) NOT NULL UNIQUE, -- Se agrega restricción UNIQUE para el token
+    Estado NVARCHAR(20) NOT NULL, 
+    Token NVARCHAR(255) NOT NULL UNIQUE, 
     FechaCreacion DATETIME NOT NULL,
     FechaExpiracion DATETIME NOT NULL,
     CONSTRAINT FK_InvitacionProyecto_Proyecto FOREIGN KEY (IdProyecto) REFERENCES Proyecto(Id),
@@ -145,17 +123,35 @@ CREATE TABLE InvitacionProyecto (
     CONSTRAINT UQ_InvitacionProyecto_Correo_Proyecto UNIQUE (CorreoElectronico, IdProyecto) -- Se asegura que un mismo correo no pueda recibir varias invitaciones al mismo proyecto
 );
 
-select * from Usuario
-select * from InvitacionProyecto
-select * from ProyectoUsuario
-delete from InvitacionProyecto
-delete from ProyectoUsuario
 
-delete from ProyectoUsuario where id = 51
+GO
 
-update InvitacionProyecto set Estado = 'Rechazada' where id = 107
+
+-- Tabla de tarea finalizada
+--CREATE TABLE TareaFinalizada (
+--    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+--    FechaFinalizacion DATE NOT NULL DEFAULT GETDATE(),
+--    Comentarios VARCHAR(MAX) NOT NULL,
+--    IdElegirTarea INT NOT NULL FOREIGN KEY REFERENCES ElegirTarea(Id),
+--);
+
+--GO
+
+
+---- Tabla de Imagenes de Pruebas
+--CREATE TABLE ImagenesPrueba (
+--    Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+--    Imagen VARCHAR(MAX) NOT NULL,
+--    IdTareaFinalizada INT NOT NULL FOREIGN KEY REFERENCES TareaFinalizada(Id)
+--);
+
+
+--GO
+
+--INSERT PARA LAS TABLAS CREADAS
+
 -- Insertar datos en la tabla Cargo
-INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador'), ('Encargado');
+INSERT INTO Cargo (Nombre) VALUES ('Administrador'), ('Colaborador');
 
 -- Insertar datos en la tabla Categoria
 INSERT INTO Categoria (Nombre) VALUES ('Informes'), ('Desarrollo'), ('Gestión');
@@ -165,12 +161,11 @@ INSERT INTO Prioridad (Nombre) VALUES ('Baja'), ('Media'), ('Alta');
 
 -- Insertar datos en la tabla EstadoTarea
 INSERT INTO EstadoTarea (Nombre) VALUES ('Pendiente'), ('En Proceso'), ('Finalizada');
-select * from Usuario
 
--- Insertar datos en la tabla Usuario
+-- Insertar datos en la tabla Usuario (Usuario administrador de ejemplo)
 INSERT INTO Usuario (Nombre, Apellido, NombreUsuario, Pass, Telefono, FechaNacimiento, FechaRegistro, [Status], IdCargo)
 VALUES 
-  ('lester', 'serrano', 'lesterserrano66@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
+  ('lester', 'serrano', 'lester@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '123456789', '1990-01-01', GETDATE(), 1, 1);
   --La contraseña de este usuario es 12345
 
 -- Insertar datos en la tabla Proyecto
@@ -187,29 +182,9 @@ VALUES
   ('Tarea 2', 'Descripción de la Tarea 2', GETDATE(), '2025-03-31', 2, 2, 1, 2),
   ('Tarea 3', 'Descripción de la Tarea 3', GETDATE(), '2025-06-30', 3, 3, 1, 3);
 
-  INSERT INTO Tarea (Nombre, Descripcion, FechaCreacion, FechaVencimiento, IdCategoria, IdPrioridad, IdEstadoTarea, IdProyecto)
-VALUES 
-  ('Tarea 1', 'Descripción de la Tarea 1', GETDATE(), '2024-12-31', 1, 1, 1, 1);
-
 -- Insertar datos en la tabla ElegirTarea
-INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
-VALUES 
-  (GETDATE(), 1, 1, 1),
-  (GETDATE(), 2, 1, 2),
-  (GETDATE(), 3, 1, 3);
-
--- Insertar datos en la tabla TareaFinalizada
-INSERT INTO TareaFinalizada (FechaFinalizacion, Comentarios, IdElegirTarea)
-VALUES 
-  (GETDATE(), 'Tarea finalizada correctamente', 1),
-  (GETDATE(), 'Tarea finalizada con éxito', 2),
-  (GETDATE(), 'Tarea completada', 3);
-
--- Insertar datos en la tabla ImagenesPrueba
-INSERT INTO ImagenesPrueba (Imagen, IdTareaFinalizada)
-VALUES 
-  ('ruta/imagen1.jpg', 1),
-  ('ruta/imagen2.jpg', 2),
-  ('ruta/imagen3.jpg', 3);
-
-  Update Usuario set pass= '827ccb0eea8a706c4c34a16891f84e7b' where id = 2
+--INSERT INTO ElegirTarea (FechaAsignacion, IdTarea, IdUsuario, IdProyecto)
+--VALUES 
+--  (GETDATE(), 1, 1, 1),
+--  (GETDATE(), 2, 1, 2),
+--  (GETDATE(), 3, 1, 3);

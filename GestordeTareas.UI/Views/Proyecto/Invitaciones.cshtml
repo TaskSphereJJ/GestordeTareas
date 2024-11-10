@@ -51,7 +51,7 @@
                            placeholder="Ingrese una dirección de correo electrónico" />
                 </div>
                 <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <button type="submit" class="bg-indigo-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                     Enviar Invitación
                 </button>
             </form>
@@ -65,18 +65,34 @@
             <h3 class="text-xl font-semibold text-gray-700">Invitaciones Enviadas</h3>
             <form method="get" asp-action="FiltrarInvitaciones" class="flex items-center space-x-4">
                 <input type="hidden" name="id" value="@ViewBag.IdProyecto" />
-                <select id="estado" name="estado"
-                        class="form-select rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                    <option value="Todos">Todos</option>
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Aceptada">Aceptada</option>
-                    <option value="Rechazada">Rechazada</option>
-                </select>
-                <button type="submit" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
-                    Filtrar
+
+                <!-- Botones de filtro como reemplazo del select -->
+                <button type="submit" name="estado" value="Todos"
+                        class="px-4 py-2 rounded-full font-semibold
+                @(ViewContext.HttpContext.Request.Query["estado"] == "Todos" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                    Todas
+                </button>
+
+                <button type="submit" name="estado" value="Pendiente"
+                        class="px-4 py-2 rounded-full font-semibold
+                @(ViewContext.HttpContext.Request.Query["estado"] == "Pendiente" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                    Pendiente
+                </button>
+
+                <button type="submit" name="estado" value="Aceptada"
+                        class="px-4 py-2 rounded-full font-semibold
+                @(ViewContext.HttpContext.Request.Query["estado"] == "Aceptada" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                    Aceptada
+                </button>
+
+                <button type="submit" name="estado" value="Rechazada"
+                        class="px-4 py-2 rounded-full font-semibold
+                @(ViewContext.HttpContext.Request.Query["estado"] == "Rechazada" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                    Rechazada
                 </button>
             </form>
         </div>
+
 
         @if (Model != null && Model.Any())
         {
@@ -95,26 +111,27 @@
                         </div>
                         @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
                         {
-                            <button class="text-gray-500 hover:text-gray-700"
+                            <!-- Botón de eliminar con icono moderno y transiciones mejoradas -->
+                            <button class="text-gray-500 hover:text-red-600 transition duration-200"
                                     onclick="document.getElementById('confirmDeleteCard-@invitacion.Id').classList.remove('hidden');"
                                     aria-label="Eliminar invitación">
-                                <img src="https://cdn-icons-png.freepik.com/256/2550/2550213.png?semt=ais_hybrid" alt="Eliminar" class="h-6 w-6">
+                                <img src="https://cdn-icons-png.freepik.com/256/2550/2550213.png?semt=ais_hybrid"
+                                     alt="Eliminar" class="h-6 w-6 opacity-80 hover:opacity-100 transition duration-200">
                             </button>
 
-
                             <!-- Tarjeta de Confirmación -->
-                            <div id="confirmDeleteCard-@invitacion.Id" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-                                <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
-                                    <div class="p-6 mt-6">
-                                        <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
-                                            <img src="https://cdn-icons-png.freepik.com/256/3712/3712167.png" alt="Eliminar" class="h-12 w-12 text-red-600" />
-                                        </div>
-                                        <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-                                        <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar esta invitación? Esta acción no se puede deshacer.</p>
+                            <div id="confirmDeleteCard-@invitacion.Id" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60 transition-opacity duration-300">
+                                <div class="w-80 rounded-xl bg-white shadow-lg transform transition-all duration-300">
+                                    <!-- Contenido de Confirmación -->
+                                    <div class="p-4 pb-2 text-center">
+                                        <!-- Se reduce el padding-bottom aquí -->
+                                        <h2 class="text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
+                                        <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar esta invitación? Esta acción no se puede deshacer.</p>
                                     </div>
-                                    <div class="bg-gray-50 p-4 flex justify-between">
+
+                                    <div class="bg-gray-100 px-4 py-3 flex justify-between gap-2 rounded-b-xl">
                                         <button type="button"
-                                                class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
+                                                class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-200"
                                                 onclick="document.getElementById('confirmDeleteCard-@invitacion.Id').classList.add('hidden');">
                                             Cancelar
                                         </button>
@@ -122,14 +139,17 @@
                                             <input type="hidden" name="id" value="@invitacion.Id" />
                                             <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
                                             <button type="submit"
-                                                    class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
+                                                    class="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition duration-200">
                                                 Eliminar
                                             </button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
+
+
                         }
+
                     </li>
                 }
             </ul>

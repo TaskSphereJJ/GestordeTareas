@@ -216,17 +216,19 @@ namespace GestordeTareas.UI.Controllers
                 if (!esEncargado)
                 {
                     TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
-                    return Json(new { success = false, message = "No tienes permisos para realizar cambios." });
+                    return RedirectToAction("Index");
                 }
             }
             try
             {
                 await _tareaBL.DeleteAsync(tareaObtenida);
                 TempData["SuccessMessage"] = "Tarea eliminada correctamente.";
-                return Json(new { success = true, message = "Tarea eliminada correctamente.", id = tarea.IdProyecto });
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
+                ViewBag.Error = ex.Message;
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar la tarea.";
                 return Json(new { success = false, message = $"Error al eliminar la tarea: {ex.Message}" });
             }
         }

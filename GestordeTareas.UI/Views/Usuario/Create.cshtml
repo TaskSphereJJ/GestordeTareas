@@ -26,7 +26,7 @@
                             <label for="FotoPerfil" class="block text-gray-700 text-sm font-medium mb-2">Foto de Perfil</label>
                             <div class="flex items-center space-x-4">
                                 <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden">
-                                    <img id="previewImage" src="/img/default-avatar.png" alt="Vista previa de la foto de perfil" class="w-full h-full object-cover">
+                                    <img id="previewImage" src="@Model.FotoPerfil ?? '/img/default-avatar.png'" alt="Foto de perfil" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1">
                                     <label for="FotoPerfil" class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300 inline-block">

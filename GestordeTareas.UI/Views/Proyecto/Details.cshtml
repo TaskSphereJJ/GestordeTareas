@@ -31,35 +31,43 @@
 
     <!-- Sección de Información -->
     <div class="tab-content" id="info">
-        <h3 class="text-2xl font-semibold mb-4 text-center">Detalles del Proyecto</h3>
+        
+
         <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-semibold text-gray-800">Detalles del Proyecto</h3>
+                <div class="flex items-center text-sm text-gray-600">
+                    <span class="mr-2 font-semibold">Encargado:</span>
+                    <div class="flex items-center">
+                        @if (ViewBag.Encargado != null)
+                        {
+                            <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                                <img src="@Url.Content(ViewBag.Encargado.FotoPerfil ?? "/img/default-avatar.png")" alt="Foto de perfil de @ViewBag.Encargado.Nombre" class="w-full h-full object-cover">
+                            </div>
+                            <span class="font-medium text-blue-600">@ViewBag.Encargado.Nombre @ViewBag.Encargado.Apellido</span>
+                        }
+                        else
+                        {
+                            <span class="italic text-gray-500">No hay encargado asignado</span>
+                        }
+                    </div>
+                </div>
+            </div>
             <dl class="row">
-                <dt class="col-sm-4 font-bold">Título:</dt>
-                <dd class="col-sm-8">@Model.Titulo</dd>
+                <dt class="col-sm-4 font-semibold text-gray-700">Título:</dt>
+                <dd class="col-sm-8 text-gray-800">@Model.Titulo</dd>
 
-                <dt class="col-sm-4 font-bold">Descripción:</dt>
-                <dd class="col-sm-8">@Model.Descripcion</dd>
+                <dt class="col-sm-4 font-semibold text-gray-700">Descripción:</dt>
+                <dd class="col-sm-8 text-gray-800">@Model.Descripcion</dd>
 
-                <dt class="col-sm-4 font-bold">Administrador:</dt>
-                <dd class="col-sm-8">@Model.Usuario.Nombre @Model.Usuario.Apellido</dd>
+                <dt class="col-sm-4 font-semibold text-gray-700">Administrador:</dt>
+                <dd class="col-sm-8 text-gray-800">@Model.Usuario.Nombre @Model.Usuario.Apellido</dd>
 
-                <dt class="col-sm-4 font-bold">Encargado:</dt>
-                <dd class="col-sm-8">
-                    @if (ViewBag.Encargado != null)
-                    {
-                        @ViewBag.Encargado.Nombre @Html.Raw("&nbsp;") @ViewBag.Encargado.Apellido
-                    }
-                    else
-                    {
-                        <span>No hay encargado asignado</span>
-                    }
-                </dd>
-
-                <dt class="col-sm-4 font-bold">Código de acceso:</dt>
+                <dt class="col-sm-4 font-semibold text-gray-700">Código de acceso:</dt>
                 <dd class="col-sm-8">
                     @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
                     {
-                        <span class="border-b-2 border-gray-700">@Model.CodigoAcceso</span>
+                        <span class="font-medium text-blue-600 border-b-2 border-gray-700">@Model.CodigoAcceso</span>
                     }
                     else
                     {
@@ -67,31 +75,22 @@
                     }
                 </dd>
 
-
-                <dt class="col-sm-4 font-bold">Fecha de Finalización:</dt>
-                <dd class="col-sm-8">@Model.FechaFinalizacion.ToShortDateString()</dd>
+                <dt class="col-sm-4 font-semibold text-gray-700">Fecha de Finalización:</dt>
+                <dd class="col-sm-8 text-gray-800">@Model.FechaFinalizacion.ToShortDateString()</dd>
             </dl>
         </div>
-
         <!-- Sección para unirse al proyecto -->
         @if (User.IsInRole("Colaborador"))
         {
             <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-lg mb-4">
                 <h4 class="text-md font-semibold">¿Quieres unirte a este Proyecto?</h4>
-                <p class="text-sm">Ingresa el código de acceso para unirte a este proyecto.</p>
-                <form asp-action="UnirUsuarioAProyecto" asp-controller="ProyectoUsuario" method="post" class="mt-2">
-                    <input type="hidden" name="idProyecto" value="@Model.Id" />
-
-                    <!-- Campo para el código de acceso -->
-                    <div class="mb-2">
-                        <input type="text" name="CodigoAcceso" placeholder="Código de acceso" class="form-control" required />
-                    </div>
-
-                    <button type="submit" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition">Unirme</button>
-                </form>
+                <p class="text-sm">Haz clic en el botón para ingresar el código de acceso.</p>
+                <button id="joinButton" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition">Unirme</button>
             </div>
         }
     </div>
+        
+</div>
 
     <!-- Sección de Personas -->
     <div class="tab-content hidden" id="personas">
@@ -199,7 +198,6 @@
             });
         });
 
-        // Simula el clic en la primera pestaña para mostrarla al cargar
         tabs[0].click();
     });
 
@@ -210,4 +208,29 @@
             alertContainer.remove();
         }, 5000);
     }
+
+    document.getElementById('joinButton').addEventListener('click', function () {
+        Swal.fire({
+            title: `<h3 class="text-2xl font-bold mb-2 text-gray-800 mt-4">Ingrese el código de acceso para poder unirse al proyecto</h3>`,
+            html: `
+                            <form id="joinForm" action="@Url.Action("UnirUsuarioAProyecto", "ProyectoUsuario")" method="post">
+                        <input type="hidden" name="idProyecto" value="@Model.Id" />
+                        <input type="text" name="CodigoAcceso" placeholder="Código de acceso" class="swal2-input" required />
+                    </form>
+                `,
+            showCloseButton: true,
+            showCancelButton: true, 
+            cancelButtonText: 'Cancelar', 
+            focusConfirm: false, 
+            confirmButtonText: 'Unirme', 
+
+            customClass: {
+                actions: 'd-flex justify-between' 
+            },
+            preConfirm: () => {
+                
+                document.getElementById('joinForm').submit();
+            }
+        });
+    });
 </script>

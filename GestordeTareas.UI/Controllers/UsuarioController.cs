@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
+using GestordeTareas.UI.Helpers;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -127,7 +128,7 @@ namespace GestordeTareas.UI.Controllers
                 // Manejar la foto de perfil usando el nuevo método
                 if (fotoPerfil != null && fotoPerfil.Length > 0)
                 {
-                    usuario.FotoPerfil = await SaveProfileImage(fotoPerfil);
+                    usuario.FotoPerfil = await ImageHelper.SubirArchivo(fotoPerfil.OpenReadStream(), fotoPerfil.FileName);
                 }
 
                 if (User.IsInRole("Administrador"))
@@ -253,7 +254,7 @@ namespace GestordeTareas.UI.Controllers
                 // Manejar la foto de perfil usando el nuevo método
                 if (fotoPerfil != null && fotoPerfil.Length > 0)
                 {
-                    existingUser.FotoPerfil = await SaveProfileImage(fotoPerfil);
+                    existingUser.FotoPerfil = await ImageHelper.SubirArchivo(fotoPerfil.OpenReadStream(), fotoPerfil.FileName);
                 }
 
 
@@ -475,39 +476,39 @@ namespace GestordeTareas.UI.Controllers
 
         }
 
-        //MÉTODO PRIVADO PARA SUBIR FOTO DE PERFIL
-        private async Task<string> SaveProfileImage(IFormFile fotoPerfil)
-        {
-            if (fotoPerfil == null || fotoPerfil.Length == 0)
-            {
-                return null; // Retorna null si no hay foto
-            }
+        ////MÉTODO PRIVADO PARA SUBIR FOTO DE PERFIL
+        //private async Task<string> SaveProfileImage(IFormFile fotoPerfil)
+        //{
+        //    if (fotoPerfil == null || fotoPerfil.Length == 0)
+        //    {
+        //        return null; // Retorna null si no hay foto
+        //    }
 
-            // Validar el tamaño del archivo
-            if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
-            {
-                throw new InvalidOperationException("El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.");
-            }
+        //    // Validar el tamaño del archivo
+        //    if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
+        //    {
+        //        throw new InvalidOperationException("El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.");
+        //    }
 
-            // Ruta donde se guardará la imagen
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+        //    // Ruta donde se guardará la imagen
+        //    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
+        //    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
+        //    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            // Crear la carpeta si no existe
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
+        //    // Crear la carpeta si no existe
+        //    if (!Directory.Exists(uploadsFolder))
+        //    {
+        //        Directory.CreateDirectory(uploadsFolder);
+        //    }
 
-            // Guardar la imagen en el servidor
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await fotoPerfil.CopyToAsync(fileStream);
-            }
+        //    // Guardar la imagen en el servidor
+        //    using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //    {
+        //        await fotoPerfil.CopyToAsync(fileStream);
+        //    }
 
-            return "/images/profiles/" + uniqueFileName; // Retorna la ruta relativa
-        }
+        //    return "/images/profiles/" + uniqueFileName; // Retorna la ruta relativa
+        //}
 
     }
 

@@ -115,10 +115,11 @@
                                     <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
                                         <i class="fas fa-eye text-lg"></i>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
+                                    <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="mostrarTarjetaEliminar(@item.Id); return false;">
                                         <i class="fas fa-trash-alt text-lg"></i>
                                     </a>
                                 }
+
                                 else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
                                 {
                                     <!-- Formulario para elegir la tarea -->
@@ -229,7 +230,7 @@ else
 </div>
 
 
-<!-- Modales -->
+<!-- Modal de creación -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -259,7 +260,7 @@ else
 
 <!-- Modal de edición -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
                 <h5 class="modal-title" id="editModalLabel">Editar Tarea</h5>
@@ -307,22 +308,26 @@ else
 </div>
 
 
-<!-- Modal de eliminación -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Eliminar Tarea</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+<!-- Tarjeta de eliminación -->
+<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60 transition-opacity duration-300">
+    <div class="w-80 rounded-xl bg-white shadow-lg transform transition-all duration-300">
+        <div class="p-4 pb-2 text-center">
+            <h2 class="mt-4 text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
+            <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="bg-gray-100 px-4 py-3 flex justify-between rounded-b-xl">
+            <button type="button"
+                    class="flex-1 mr-1 px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-200"
+                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
+                Cancelar
+            </button>
+            <form id="deleteForm" method="post" asp-action="Delete" class="flex-1">
+                <input type="hidden" name="Id" id="deleteTaskId" />
+                <button type="submit"
+                        class="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition duration-200">
+                    Eliminar
                 </button>
-            </div>
-            <div class="modal-body" id="deleteModalContent">
-                <!-- Contenido de la vista de eliminación se cargará aquí -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="eliminarTarea()">Eliminar</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -429,7 +434,7 @@ else
 
     function handleResponse(response, isError = false) {
         // Cerrar el modal y luego mostrar el mensaje
-        $('#editModal, #createModal, #deleteModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
+        $('#editModal, #createModal, #deleteModal').modal('hide'); 
 
         if (isError) {
             TempData["ErrorMessage"] = 'Hubo un problema al procesar la solicitud.';
@@ -475,21 +480,6 @@ else
         });
     }
 
-    function eliminarTarea() { // Función para eliminar un Tarea mediante una solicitud AJAX
-        $.ajax({ // Enviar una solicitud AJAX para eliminar el Tarea
-            url: '/Tarea/Delete', // URL de la acción POST para eliminar la Tarea
-            type: 'POST', // Método POST para enviar la solicitud
-            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la Tarea)
-            success: function (response) {
-                handleResponse(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-                handleResponse(null, true); // Maneja el error general
-            }
-        });
-    }
-
     function cargarVistaCreate(id) {
         // var proyectoId = $("#proyectoId").val(); // Obtener el ID del proyecto desde el elemento HTML
         $.ajax({
@@ -525,18 +515,16 @@ else
         });
     }
 
-    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
-        $.ajax({ //solicitud AJAX para obtener la vista delete
-            url: "/Tarea/Delete/" + id, // URL de la vista que se va a cargar
-            type: "GET", // Solicitud para obtener la vista
-            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
-                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
-                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
-            },
-            error: function () { // Función a ejecutar si la solicitud AJAX falla
-                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
-            }
-        });
+    function mostrarTarjetaEliminar(tareaId) {
+        // Establecer el ID de la tarea en el campo oculto
+        document.getElementById('deleteTaskId').value = tareaId;
+        // Mostrar la tarjeta de confirmación
+        document.getElementById('confirmDeleteCard').classList.remove('hidden');
+    }
+
+    // Función para ocultar la tarjeta (ya está en el botón "Cancelar")
+    function ocultarTarjetaEliminar() {
+        document.getElementById('confirmDeleteCard').classList.add('hidden');
     }
 
     function confirmExit(idProyecto) {

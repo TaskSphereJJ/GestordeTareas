@@ -31,6 +31,17 @@ namespace GestordeTareas.DAL
 
         }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"Data Source=SQL9001.site4now.net; 
+        //                          Initial Catalog=db_aaef22_gestordetareas; 
+        //                          User Id=db_aaef22_gestordetareas_admin; 
+        //                          Password=gestor123456;
+        //                          Encrypt=True; 
+        //                          TrustServerCertificate=True;");
+        //}
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProyectoUsuario>()
@@ -46,12 +57,12 @@ namespace GestordeTareas.DAL
 
             modelBuilder.Entity<ProyectoUsuario>()
                 .HasOne(pu => pu.Usuario)
-                .WithMany(u => u.ProyectoUsuario) // Cambia si tienes una colección en Usuario
+                .WithMany(u => u.ProyectoUsuario) 
                 .HasForeignKey(pu => pu.IdUsuario);
 
             modelBuilder.Entity<ProyectoUsuario>()
                 .HasOne(pu => pu.Proyecto)
-                .WithMany(p => p.ProyectoUsuario)  // Cambia si tienes una colección en Proyecto
+                .WithMany(p => p.ProyectoUsuario)  
                 .HasForeignKey(pu => pu.IdProyecto);
         }
     }
