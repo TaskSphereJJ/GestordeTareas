@@ -56,6 +56,8 @@ namespace GestordeTareas.UI.Controllers
             bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(proyectoId, idUsuarioActual);
             ViewBag.EsEncargado = esEncargado;
 
+
+
             return View(tareas);
         }
 
@@ -159,10 +161,10 @@ namespace GestordeTareas.UI.Controllers
         [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Edit(int id, Tarea tarea)
         {
-            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); 
+            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if (!User.IsInRole("Administrador"))
-            {      
+            {
                 // Verificar si el usuario es el encargado del proyecto
                 bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(tarea.IdProyecto, idUsuario);
 
@@ -249,7 +251,7 @@ namespace GestordeTareas.UI.Controllers
                         {
                             return BadRequest("Estado no válido.");
                         }
-                            
+
 
                         tareaBD.IdEstadoTarea = model.IdEstadoTarea;
                         bdContexto.Update(tareaBD);
@@ -356,6 +358,40 @@ namespace GestordeTareas.UI.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // GET: TareaController/TareasElegidas
+        public async Task<IActionResult> TareasElegidas(int idProyecto)
+        {
+            // Obtener el ID del usuario actual
+            var usuario = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
+            var idUsuario = usuario.FirstOrDefault()?.Id;
+
+            // Verificar que el usuario actual haya sido encontrado
+            if (idUsuario == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            // Verificar si el usuario tiene relación con el proyecto
+            var tieneAcceso = await _proyectoUsuarioBL.IsUsuarioRelacionadoConProyectoAsync(idUsuario.Value, idProyecto);
+            if (!tieneAcceso)
+            {
+                return Forbid("No tienes acceso a este proyecto.");
+            }
+
+            // Obtener las tareas que el usuario ha elegido en el proyecto
+            var tareasElegidas = await _elegirTareaBL.ObtenerTareasElegidasPorUsuarioAsync(idUsuario.Value, idProyecto);
+
+            // Verificar si hay tareas elegidas
+            if (tareasElegidas == null || !tareasElegidas.Any())
+            {
+                // Establecer el mensaje en TempData 
+                TempData["NoHayTareas"] = "No hay tareas elegidas.";
+            }
+            // Pasar las tareas a la vista
+            return View(tareasElegidas);
+        }
+
 
     }
 }

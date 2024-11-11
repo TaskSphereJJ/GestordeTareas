@@ -23,47 +23,49 @@
         var apellido = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Surname)?.Value;
     }
     @* header o barra de arriba *@
-   @if(Context.Request.Path.Value != "/Usuario/login"){ 
+    @if (Context.Request.Path.Value != "/Usuario/login")
+    {
 
-         @if (User.Identity.IsAuthenticated){
-                    <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
-        @* <!-- Icono de hamburguesa --> *@
-        <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
-            <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:text-slate-400 hover:text-blue-950 dark:text-[#FFEF00] dark:hover:text-white"
-            aria-label="Menu" id="menuButton" onclick="toggleSidebar()">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <header class="fixed top-0 left-0 right-0 shadow-md flex size-full max-w-screen-2xl items-center justify-between px-3 py-4 2xl:px-12 z-10 bg-lightPurple dark:bg-darkPurple dark:text-darkText mb-7" style="backdrop-filter: blur(16px);">
+                @* <!-- Icono de hamburguesa --> *@
+                <div class="flex flex-1 items-center justify-start gap-2 min-[3000]:gap-4 lg:gap-0">
+                    <button type="button" class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out disabled:cursor-not-allowed h-6 min-w-[24px] gap-1.5 text-xs p-0 disabled:text-slate-400 hover:text-blue-950 dark:text-[#FFEF00] dark:hover:text-white"
+                            aria-label="Menu" id="menuButton" onclick="toggleSidebar()">
                         <span>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="stroke-inherit">
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                 class="stroke-inherit">
                                 <path d="M4 6H20"></path>
                                 <path d="M4 12H20"></path>
                                 <path d="M4 18H20"></path>
                             </svg>
                         </span>
-        </button>
-        </div>
-            <!-- Botón con ícono de sol y luna para cambiar entre modo claro y oscuro -->
-            <div id="darkModeToggle" class="mr-2">
-                <span id="darkModeIcon">
-                    <!-- El ícono se actualizará dinámicamente aquí -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
-                        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
-                    </svg>
-                </span>
-            </div>
+                    </button>
+                </div>
+                <!-- Botón con ícono de sol y luna para cambiar entre modo claro y oscuro -->
+                <div id="darkModeToggle" class="mr-2">
+                    <span id="darkModeIcon">
+                        <!-- El ícono se actualizará dinámicamente aquí -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sun-fill text-yellow-500" viewBox="0 0 16 16">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                        </svg>
+                    </span>
+                </div>
 
 
 
 
-            @if (User.Identity.IsAuthenticated)
-            {
+                @if (User.Identity.IsAuthenticated)
+                {
                     <span class="text-sm font-semibold md:inline text-purple-400 dark:text-darkText font-bold mr-2">
                         @($"{nombre} {apellido}")
                     </span>
 
 
                     @* <!-- Sección de perfil --> *@
-                <div class="flex items-center justify-end gap-4">
+                    <div class="flex items-center justify-end gap-4">
                         <div class="flex items-center justify-end gap-4">
                             <div class="relative box-content flex items-center justify-center overflow-hidden rounded-full w-12 h-12 shadow-md border-2 bg-purple-100 border-borderColor">
                                 <img src="@(!string.IsNullOrEmpty(User.Claims.FirstOrDefault(c => c.Type == "FotoPerfil")?.Value)
@@ -74,22 +76,22 @@
                             </div>
                         </div>
 
-                    <div class="relative inline-block">
-                        <button id="userMenuButton"
-                                class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
-                                aria-label="User Menu">
-                            <span>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                     class="stroke-inherit stroke-purple-800">
-                                    <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
-                                </svg>
+                        <div class="relative inline-block">
+                            <button id="userMenuButton"
+                                    class="group inline-flex items-center justify-center whitespace-nowrap rounded-lg align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 text-blue-600 h-6 min-w-[24px] gap-1.5 text-xs p-0 stroke-slate-400 text-slate-400 hover:stroke-blue-950 hover:text-blue-950 hidden md:inline-flex"
+                                    aria-label="User Menu">
+                                <span>
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                         class="stroke-inherit stroke-purple-800">
+                                        <path d="M5.83325 8.33325L9.99992 12.4999L14.1666 8.33325"></path>
+                                    </svg>
 
-                            </span>
-                        </button>
-                        <div id="userMenuOptions"
-                             class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
-                             style="display: none;">
+                                </span>
+                            </button>
+                            <div id="userMenuOptions"
+                                 class="origin-top-right mt-4 absolute right-0 mt-2 w-48 rounded-md shadow-md bg-white bg-opacity-25 dark:bg-opacity-50 dark:bg-gray-700 dark:text-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 backdrop-filter backdrop-blur-lg"
+                                 style="display: none;">
                                 <ul class="py-2 text-sm dark:text-white" aria-labelledby="dropdownHoverButton">
                                     <a class="flex  no-underline items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-purple-900 hover:bg-purple-100"
                                        asp-area="" asp-controller="Usuario" asp-action="Logout">
@@ -100,33 +102,33 @@
                                         <span class="mx-2 text-sm font-medium">Cerrar Sesion </span>
                                     </a>
                                 </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
-    </header>
-         }
+            </header>
+        }
 
     }
 
-     @* SIDEBAR *@
+    @* SIDEBAR *@
     @* <!-- drawer component --> *@
     <div id="drawer-navigation" class="border-r-purple-900 dark:bg-darkPurple  menupa border-t-purple-900 border-b-purple-900 border-2 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transform -translate-x-full          transition-transform ease-in-out duration-300 flex flex-col menu"
-            tabindex="-1" aria-labelledby="drawer-navigation-label">
-            <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
-                Menu
-            </h5>
-            <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
-                    class="text-gray-400 bg-transparent hover:shadow-md hover:bg-purple-600 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 hover:border-2 hover:border-purple-700 dark:hover:text-white">
-                <svg aria-hidden="true" class="w-5 h-5 text-purple-800 hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span class="sr-only">Close menu</span>
-            </button>
+         tabindex="-1" aria-labelledby="drawer-navigation-label">
+        <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+            Menu
+        </h5>
+        <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
+                class="text-gray-400 bg-transparent hover:shadow-md hover:bg-purple-600 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 hover:border-2 hover:border-purple-700 dark:hover:text-white">
+            <svg aria-hidden="true" class="w-5 h-5 text-purple-800 hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"></path>
+            </svg>
+            <span class="sr-only">Close menu</span>
+        </button>
 
         <div class="py-4 flex-1 menu">
             <div class="flex flex-col justify-between menu">
@@ -234,10 +236,10 @@
             </div>
         </div>
     </div>
-   
+
     <div class="container mt-28">
         <main role="main" class="pb-3">
-            @RenderBody() 
+            @RenderBody()
         </main>
     </div>
 
@@ -324,8 +326,9 @@
 
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></scrip>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js">
+        </scrip>
+            <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

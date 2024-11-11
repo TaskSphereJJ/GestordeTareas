@@ -132,11 +132,11 @@ namespace GestordeTareas.UI.Controllers
                 }
 
                 if (User.IsInRole("Administrador"))
-                  {
-                      int createresult = await _usuarioBL.Create(usuario);
-                      TempData["SuccessMessage"] = "Usuario creado correctamente.";
-                      return RedirectToAction(nameof(Index));
-                  }
+                {
+                    int createresult = await _usuarioBL.Create(usuario);
+                    TempData["SuccessMessage"] = "Usuario creado correctamente.";
+                    return RedirectToAction(nameof(Index));
+                }
 
                 // Si no es administrador, asigna un rol predeterminado
                 var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
@@ -269,7 +269,7 @@ namespace GestordeTareas.UI.Controllers
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.GivenName));
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Surname));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre)); 
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre));
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido));
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst("FotoPerfil")); // Eliminar el claim viejo si existe
                 claimsIdentity.AddClaim(new Claim("FotoPerfil", existingUser.FotoPerfil)); // Agregar el nuevo claim de foto de perfil
@@ -419,43 +419,43 @@ namespace GestordeTareas.UI.Controllers
                     return View(new Usuario { NombreUsuario = user.NombreUsuario });
                 }
 
-                    // Verifica si la propiedad FotoPerfil tiene un valor
-                    var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
+                // Verifica si la propiedad FotoPerfil tiene un valor
+                var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
 
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                    var claims = new[] {
+                userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
+                var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-                    new Claim(ClaimTypes.GivenName, userDb.Nombre),   
+                    new Claim(ClaimTypes.GivenName, userDb.Nombre),
                     new Claim(ClaimTypes.Surname, userDb.Apellido),
                     new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
                     new Claim("FotoPerfil", fotoPerfil)
             };
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                    TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
+                TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
 
-                    // Verificar si hay un token y una decisión almacenados en TempData
-                    if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
-                    {
-                        string token = TempData["Token"].ToString();
-                        string decision = TempData["Decision"].ToString();
+                // Verificar si hay un token y una decisión almacenados en TempData
+                if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
+                {
+                    string token = TempData["Token"].ToString();
+                    string decision = TempData["Decision"].ToString();
 
-                        // Limpiar TempData después de redirigir
-                        TempData.Remove("Token");
-                        TempData.Remove("Decision");
+                    // Limpiar TempData después de redirigir
+                    TempData.Remove("Token");
+                    TempData.Remove("Decision");
 
-                        return RedirectToAction("AceptarInvitacion", "Proyecto", new { token = token, decision = decision });
-                    }
+                    return RedirectToAction("AceptarInvitacion", "Proyecto", new { token = token, decision = decision });
+                }
 
-                    // Si no hay token, redirigir al returnUrl o a la vista predeterminada
-                    if (!string.IsNullOrWhiteSpace(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
+                // Si no hay token, redirigir al returnUrl o a la vista predeterminada
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
-                    return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
 
             }
             catch (Exception ex)

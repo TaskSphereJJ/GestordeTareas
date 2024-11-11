@@ -93,6 +93,10 @@ namespace GestordeTareas.DAL
                     .Include(p => p.Prioridad)
                     .Include(e => e.EstadoTarea)
                     .Include(r => r.Proyecto)
+                    .Include(et => et.ElegirTarea)
+                    .ThenInclude(et => et.Usuario)
+
+
                     .ToListAsync();
 
                 return tareas;
@@ -111,6 +115,8 @@ namespace GestordeTareas.DAL
                         .Include(p => p.Prioridad)
                         .Include(e => e.EstadoTarea)
                         .Include(r => r.Proyecto)
+                        .Include(et => et.ElegirTarea)
+                    .ThenInclude(et => et.Usuario)
                         .Where(t => t.IdProyecto == proyectoId)
                         .ToListAsync();
 
@@ -140,7 +146,7 @@ namespace GestordeTareas.DAL
                     //accedo a actualizar la atera
                     tareaBD.IdEstadoTarea = idEstadoTarea;
                     bdContexto.Update(tareaBD);
-                                               //aqui se guardan los cambios
+                    //aqui se guardan los cambios
                     result = await bdContexto.SaveChangesAsync();
                 }
             }

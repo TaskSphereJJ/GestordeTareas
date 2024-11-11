@@ -27,8 +27,11 @@ namespace GestordeTareas.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data source = DESKTOP-UMST7PO; Initial Catalog = GestordeTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
-
+            optionsBuilder.UseSqlServer(@"Data Source=HERNANDEZ\SQLEXPRESS;
+                                           Initial Catalog = GestordeTareasBD;
+                                           Integrated Security = true;
+                                           Encrypt = false;
+                                           TrustServerCertificate = true;");
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -40,7 +43,6 @@ namespace GestordeTareas.DAL
         //                          Encrypt=True; 
         //                          TrustServerCertificate=True;");
         //}
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,5 +67,6 @@ namespace GestordeTareas.DAL
                 .WithMany(p => p.ProyectoUsuario)  
                 .HasForeignKey(pu => pu.IdProyecto);
         }
+
     }
 }

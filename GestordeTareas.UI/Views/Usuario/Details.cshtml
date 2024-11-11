@@ -1,10 +1,10 @@
 ﻿@model GestordeTaras.EN.Usuario
+
 @{
-    ViewData["Title"] = "Detalles de los Usuarios";
+    ViewData["Title"] = "Detalles del Usuario";
 }
 
 <div>
-    <hr />
     <dl class="row">
 
         <dt class="col-sm-3">
@@ -20,13 +20,6 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Apellido)
         </dd>
-
-        @* <dt class="col-sm-3">
-        @Html.DisplayNameFor(model => model.Pass)
-        </dt>
-        <dd class="col-sm-9">
-        @Html.DisplayFor(model => model.Pass)
-        </dd> *@
 
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Telefono)

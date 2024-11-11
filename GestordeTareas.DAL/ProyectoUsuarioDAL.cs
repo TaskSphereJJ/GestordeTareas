@@ -41,7 +41,7 @@ namespace GestordeTareas.DAL
                     .ToListAsync();
             }
         }
-           
+
         public static async Task<List<Usuario>> ObtenerUsuariosUnidosAsync(int idProyecto)
         {
             using (var context = new ContextoBD())
@@ -128,6 +128,16 @@ namespace GestordeTareas.DAL
                 return encargado; // Retorna el usuario encargado o null si no existe
             }
         }
+        public static async Task<bool> IsUsuarioRelacionadoConProyectoAsync(int idUsuario, int idProyecto)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Verificar si existe un registro en ProyectoUsuario con el idUsuario e idProyecto
+                return await dbContext.ProyectoUsuario
+                    .AnyAsync(pu => pu.IdUsuario == idUsuario && pu.IdProyecto == idProyecto);
+            }
+        }
+
 
     }
 }

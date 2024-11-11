@@ -44,7 +44,7 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
         <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>                
+            <tr>
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Id)
                 </th>
@@ -84,7 +84,7 @@
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Telefono)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Cargo.Nombre)</td>
-                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaNacimiento)</td>                   
+                    <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.FechaNacimiento)</td>
                     <td class="px-6 py-4">
                         @{
                             var statusName = Enum.GetName(typeof(GestordeTaras.EN.User_Status), item.Status);

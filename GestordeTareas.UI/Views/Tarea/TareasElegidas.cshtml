@@ -1,0 +1,73 @@
+﻿@model IEnumerable<GestordeTaras.EN.Tarea>
+
+@{
+    ViewData["Title"] = "Mis Tareas Elegidas";
+}
+
+<h2 class="text-center text-3xl font-bold text-gray-800 mb-6">Mis Tarea Elegidas</h2>
+
+<div class="absolute top-0 right-0 mt-1 mr-1">
+</div>
+
+<div class="mt-4">
+    @if (Model != null && Model.Any())
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @foreach (var tarea in Model)
+            {
+                <div class="flex flex-col bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                    <h4 class="text-lg font-semibold text-blue-700">Tarea: @tarea.Nombre</h4>
+                    <dl class="grid grid-cols-2 gap-x-4 gap-y-2 mt-2">
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Id:</dt>
+                            <dd class="ml-2">@tarea.Id</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Descripción:</dt>
+                            <dd class="ml-2">@tarea.Descripcion</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Fecha Creación:</dt>
+                            <dd class="ml-2">@tarea.FechaCreacion.ToString("dd/MM/yyyy")</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Fecha Vencimiento:</dt>
+                            <dd class="ml-2">@tarea.FechaVencimiento.ToString("dd/MM/yyyy")</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Categoría:</dt>
+                            <dd class="ml-2">@tarea.Categoria.Nombre</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Prioridad:</dt>
+                            <dd class="ml-2">@tarea.Prioridad.Nombre</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Estado de Tarea:</dt>
+                            <dd class="ml-2">@tarea.EstadoTarea.Nombre</dd>
+                        </div>
+
+                        <div class="flex">
+                            <dt class="font-semibold text-gray-700">Proyecto:</dt>
+                            <dd class="ml-2">@tarea.Proyecto.Titulo</dd>
+                        </div>
+                    </dl>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="flex flex-col items-center justify-center mt-10">
+            <img src="~/img/notask.svg" alt="No hay tareas disponibles" class="w-36 h-36 mb-4" />
+            <h1 class="text-2xl font-bold text-gray-700">No hay tareas elegidas</h1>
+            <p class="mt-2 text-gray-500">Debes elegir una tarea de este proyecto</p>
+        </div>
+    }
+</div>

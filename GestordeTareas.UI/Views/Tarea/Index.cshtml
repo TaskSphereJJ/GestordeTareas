@@ -3,8 +3,8 @@
 
 @{
     ViewData["Title"] = "Index";
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 }
 
 <div id="alertContainer" class="fixed bottom-4 right-4 z-50">
@@ -71,84 +71,167 @@
 
 @if (Model != null && Model.Any())
 {
-    <div id="tabla" class="tabla flex justify-center">
-        <!-- Contenido de la vista de tabla -->
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <thead class=" text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            @Html.DisplayNameFor(model => model.Nombre)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdCategoria)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdPrioridad)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.IdEstadoTarea)
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            @Html.DisplayNameFor(model => model.FechaVencimiento)
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
-                            <td class="px-6 py-4 text-center estado" data-id="@item.Id">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
-                            <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
-                            <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                                @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
-                                {
+    @if (User.IsInRole("Administrador"))
+    {
+        <!-- Vista en forma de lista para Administrador -->
+        <div id="tabla" class="tabla flex justify-center">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-center">@Html.DisplayNameFor(model => model.Nombre)</th>
+                            <th scope="col" class="px-6 py-3 text-center">Categoria</th>
+                            <th scope="col" class="px-6 py-3 text-center">Prioridad</th>
+                            <th scope="col" class="px-6 py-3 text-center">Estado</th>
+                            <th scope="col" class="px-6 py-3">@Html.DisplayNameFor(model => model.FechaVencimiento)</th>
+                            <th scope="col" class="px-6 py-3 text-center">elegida por</th>
+
+                            <th scope="col" class="px-6 py-3 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Categoria.Nombre)</td>
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.Prioridad.Nombre)</td>
+                                <td class="px-6 py-4 text-center estado" data-id="@item.Id">@Html.DisplayFor(modelItem => item.EstadoTarea.Nombre)</td>
+                                <td class="px-6 py-4 text-center">@Html.DisplayFor(modelItem => item.FechaVencimiento)</td>
+
+                                <td class="px-6 py-4 text-center">
+                                    @if (item.ElegirTarea != null) // Verifica si la tarea ha sido elegida
+                                    {
+                                        <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"
+                                             alt="Foto de perfil"
+                                             class="w-8 h-8 rounded-full inline-block mr-2" />
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Nombre)
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido)
+                                    }
+                                    else
+                                    {
+                                        <span>No elegida</span>
+                                        // Mensaje o contenido alternativo si no ha sido elegida
+                                    }
+                                </td>
+
+                                <td class="px-6 py-4 flex justify-center items-center space-x-2">
                                     <a href="#" class="btn btn-primary btn-sm flex items-center p-2" onclick="cargarVistaEdit(@item.Id)">
                                         <i class="fas fa-edit text-lg"></i>
                                     </a>
                                     <a href="#" class="btn btn-warning btn-sm flex items-center p-2" onclick="cargarVistaDetails(@item.Id)">
                                         <i class="fas fa-eye text-lg"></i>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="mostrarTarjetaEliminar(@item.Id); return false;">
+                                    <a href="#" class="btn btn-danger btn-sm flex items-center p-2" onclick="cargarVistaDelete(@item.Id)">
                                         <i class="fas fa-trash-alt text-lg"></i>
                                     </a>
-                                }
-
-                                else if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
-                                {
-                                    <!-- Formulario para elegir la tarea -->
-                                    <form asp-action="Elegirtarea" method="post" class="inline-block">
-                                        <input type="hidden" name="IdTarea" value="@item.Id" />
-                                        <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
-                                        <button type="submit" class="btn btn-primary btn-sm">
-                                            Elegir
-                                        </button>
-                                    </form>
-
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
 
+        <div class="container mx-auto">
+            <header id="header1" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">Vista del Proyecto</h1>
+                <div class="grid grid-cols-4 gap-4 text-center">
+                    <div class="bg-purple-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-purple-800">@Model.Count()</p>
+                        <p class="text-purple-600">Tareas Totales</p>
+                    </div>
+                    <div class="bg-red-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-red-800">@Model.Count(t => t.EstadoTarea.Id == 1)</p>
+                        <p class="text-red-600">Tareas Pendientes</p>
+                    </div>
+                    <div class="bg-blue-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-blue-800">@Model.Count(t => t.EstadoTarea.Id == 2)</p>
+                        <p class="text-blue-600">Tareas en Progreso</p>
+                    </div>
+                    <div class="bg-green-100 rounded-lg p-4">
+                        <p class="text-2xl font-bold text-green-800">@Model.Count(t => t.EstadoTarea.Id == 3)</p>
+                        <p class="text-green-600">Tareas Completadas</p>
+                    </div>
+                </div>
+            </header>
+
+            <div id="tabla" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach (var item in Model)
+                {
+                    <div class="bg-white rounded-lg shadow-md flex flex-col border-l-4 @(item.EstadoTarea.Nombre == "En Progreso" ? "border-l-blue-500" : "border-l-yellow-500") transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div class="p-4">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-semibold">@item.Nombre</h2>
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold @(item.Prioridad.Nombre == "Alta" ? "bg-red-100 text-red-800" : item.Prioridad.Nombre == "Media" ? "bg-yellow-100 text-yellow-800" : "bg-blue-100 text-blue-800")">
+                                    @item.Prioridad.Nombre
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4 flex-grow">
+                            <h1 class="text-sm text-gray-600 mb-4">@item.Categoria.Nombre</h1>
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="id-card" class="h-4 w-4 text-indigo-500"></i>
+                                <span class="text-sm text-indigo-700">Id : @item.Id</span>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="calendar-days" class="h-4 w-4 text-indigo-500"></i>
+                                <span class="text-sm text-indigo-700">@item.FechaVencimiento.ToString("yyyy-MM-dd")</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="clock" class="h-4 w-4 text-indigo-500"></i>
+                                <span class="text-sm text-indigo-700">Estimado: N/A</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-b-lg ">
+                            @if (User.IsInRole("Colaborador") && item.EstadoTarea.Nombre == "Pendiente")
+                            {
+                                <form asp-action="Elegirtarea" method="post">
+                                    <input type="hidden" name="IdTarea" value="@item.Id" />
+                                    <input type="hidden" name="IdProyecto" value="@item.IdProyecto" />
+                                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white py-2 px-4 rounded-full flex items-center justify-center">
+                                        <i data-lucide="user" class="mr-2 h-4 w-4"></i>
+                                        Elegir esta tarea
+                                    </button>
+                                </form>
+                            }
+                            else if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
+                            {
+                                <div class="flex items-center gap-2">
+                                    <span>
+                                        <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"
+                                             alt="Foto de perfil"
+                                             class="w-8 h-8 rounded-full inline-block mr-2" />
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Nombre)
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido)
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    }
 }
 else
 {
-    <div class="flex flex-col items-center justify-center mt-10">
+    <div class="min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200 p-8 flex flex-col items-center justify-center">
         <img src="~/img/notask.svg" alt="No hay tareas disponibles" class="w-36 h-36 mb-4" />
         <h1 class="text-2xl font-bold text-gray-700">No hay tareas disponibles</h1>
         <p class="mt-2 text-gray-500">Crea una nueva tarea para comenzar a trabajar.</p>
     </div>
 }
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+</script>
 
 
 <div id="message-box" class="fixed bottom-4 right-4 p-4 rounded-md text-white bg-green-500 hidden">
@@ -230,7 +313,7 @@ else
 </div>
 
 
-<!-- Modal de creación -->
+<!-- Modales -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -260,7 +343,7 @@ else
 
 <!-- Modal de edición -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
                 <h5 class="modal-title" id="editModalLabel">Editar Tarea</h5>
@@ -308,26 +391,22 @@ else
 </div>
 
 
-<!-- Tarjeta de eliminación -->
-<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60 transition-opacity duration-300">
-    <div class="w-80 rounded-xl bg-white shadow-lg transform transition-all duration-300">
-        <div class="p-4 pb-2 text-center">
-            <h2 class="mt-4 text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-            <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.</p>
-        </div>
-        <div class="bg-gray-100 px-4 py-3 flex justify-between rounded-b-xl">
-            <button type="button"
-                    class="flex-1 mr-1 px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-200"
-                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
-                Cancelar
-            </button>
-            <form id="deleteForm" method="post" asp-action="Delete" class="flex-1">
-                <input type="hidden" name="Id" id="deleteTaskId" />
-                <button type="submit"
-                        class="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition duration-200">
-                    Eliminar
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
-            </form>
+            </div>
+            <div class="modal-body" id="deleteModalContent">
+                <!-- Contenido de la vista de eliminación se cargará aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="eliminarTarea()">Eliminar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -337,7 +416,7 @@ else
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
-    <script>
+<script>
 
     document.addEventListener('DOMContentLoaded', function () {
         const draggables = document.querySelectorAll('.draggable-card');
@@ -375,11 +454,11 @@ else
                 e.preventDefault();
                 const dragging = document.querySelector('.dragging');
                 if (dragging) {
-                    const newState = container.getAttribute('data-state'); 
+                    const newState = container.getAttribute('data-state');
                     const taskId = dragging.getAttribute('data-id');
 
                     try {
-                        const response = await fetch('/Tarea/update-state', {  
+                        const response = await fetch('/Tarea/update-state', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -406,35 +485,40 @@ else
 
                             showMessage('Tarea actualizada con éxito', 'success');
                             container.appendChild(dragging);
-                            
+
                         } else {
                             showMessage('Error al actualizar la tarea', 'error');
                         }
                     } catch (error) {
                         showMessage('Error de red: ' + error.message, 'error');
                     }
-                                        
+
                 }
             });
         });
     });
 
     function toggleView() {
-        var tabla = document.getElementById('tabla');
-        var tarjetas = document.getElementById('tarjetas');
+        const header1 = document.getElementById("header1");
+        const tabla = document.getElementById("tabla");
+        const tarjetas = document.getElementById("tarjetas");
 
-        if (tabla.classList.contains('hidden')) {
-            tabla.classList.remove('hidden');
-            tarjetas.classList.add('hidden');
+        // Alternar entre tabla y tarjetas, y mostrar/ocultar header1
+        if (tabla.classList.contains("hidden")) {
+            tabla.classList.remove("hidden");
+            tarjetas.classList.add("hidden");
+            header1.classList.remove("hidden"); // Mostrar el header en vista de tabla
         } else {
-            tabla.classList.add('hidden');
-            tarjetas.classList.remove('hidden');
+            tabla.classList.add("hidden");
+            tarjetas.classList.remove("hidden");
+            header1.classList.add("hidden"); // Ocultar el header en vista de tarjetas
         }
     }
 
+
     function handleResponse(response, isError = false) {
         // Cerrar el modal y luego mostrar el mensaje
-        $('#editModal, #createModal, #deleteModal').modal('hide'); 
+        $('#editModal, #createModal, #deleteModal').modal('hide'); // Asegúrate de incluir todos los IDs de los modales
 
         if (isError) {
             TempData["ErrorMessage"] = 'Hubo un problema al procesar la solicitud.';
@@ -448,12 +532,12 @@ else
         }
     }
 
-        function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
-            var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
-            $.ajax({ //Solicitud AJAX
-                url: '/Tarea/Create', // URL de la acción Create en el controlador Tarea
-                type: 'POST',  // Método de la solicitud
-                data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+    function submitcreateForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
+        var formData = $('#' + formId).serialize();  // Recopila los datos del formulario con el ID proporcionado
+        $.ajax({ //Solicitud AJAX
+            url: '/Tarea/Create', // URL de la acción Create en el controlador Tarea
+            type: 'POST',  // Método de la solicitud
+            data: formData, // Datos a enviar al servidor (datos del formulario serializados)
             success: function (response) {
                 handleResponse(response);
             },
@@ -461,8 +545,8 @@ else
                 console.error(xhr.responseText);
                 handleResponse(null, true); // Maneja el error general
             }
-            });
-        }
+        });
+    }
 
     function submiteditForm(formId) { // Definición de la función para enviar el formulario mediante AJAX
         var formData = $('#' + formId).serialize(); // Recopila los datos del formulario con el ID proporcionado
@@ -470,6 +554,21 @@ else
             url: '/Tarea/Edit', // URL de la acción Edit en el controlador Tarea
             type: 'POST', // Método de la solicitud
             data: formData, // Datos a enviar al servidor (datos del formulario serializados)
+            success: function (response) {
+                handleResponse(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                handleResponse(null, true); // Maneja el error general
+            }
+        });
+    }
+
+    function eliminarTarea() { // Función para eliminar un Tarea mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar el Tarea
+            url: '/Tarea/Delete', // URL de la acción POST para eliminar la Tarea
+            type: 'POST', // Método POST para enviar la solicitud
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de la Tarea)
             success: function (response) {
                 handleResponse(response);
             },
@@ -515,16 +614,18 @@ else
         });
     }
 
-    function mostrarTarjetaEliminar(tareaId) {
-        // Establecer el ID de la tarea en el campo oculto
-        document.getElementById('deleteTaskId').value = tareaId;
-        // Mostrar la tarjeta de confirmación
-        document.getElementById('confirmDeleteCard').classList.remove('hidden');
-    }
-
-    // Función para ocultar la tarjeta (ya está en el botón "Cancelar")
-    function ocultarTarjetaEliminar() {
-        document.getElementById('confirmDeleteCard').classList.add('hidden');
+    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista delete
+            url: "/Tarea/Delete/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
+                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
+            },
+            error: function () { // Función a ejecutar si la solicitud AJAX falla
+                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
+            }
+        });
     }
 
     function confirmExit(idProyecto) {
