@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TuNamespace;
 
 namespace GestordeTaras.EN
 {
@@ -14,7 +12,7 @@ namespace GestordeTaras.EN
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        [Display(Name = "Fecha de finalizacion")]
+        [Display(Name = "Fecha de finalización")]
         public DateTime FechaFinalizacion { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
@@ -26,8 +24,9 @@ namespace GestordeTaras.EN
         [Display(Name = "Elegir Tarea")]
         public int IdElegirTarea { get; set; }
 
-        
+        // Relación con las imágenes de la tarea finalizada
+        public ICollection<ImagenesPrueba> Imagenes { get; set; } = new List<ImagenesPrueba>();
+        public virtual ElegirTarea ElegirTarea { get; set; }
+
     }
-
 }
-

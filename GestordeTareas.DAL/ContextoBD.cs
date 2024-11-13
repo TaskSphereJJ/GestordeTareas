@@ -25,24 +25,24 @@ namespace GestordeTareas.DAL
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
         public DbSet<InvitacionProyecto> InvitacionProyecto { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Data Source=HERNANDEZ\SQLEXPRESS;
-                                           Initial Catalog = GestordeTareasBD;
-                                           Integrated Security = true;
-                                           Encrypt = false;
-                                           TrustServerCertificate = true;");
-        }
-
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    optionsBuilder.UseSqlServer(@"Data Source=SQL9001.site4now.net; 
-        //                          Initial Catalog=db_aaef22_gestordetareas; 
-        //                          User Id=db_aaef22_gestordetareas_admin; 
-        //                          Password=gestor123456;
-        //                          Encrypt=True; 
-        //                          TrustServerCertificate=True;");
+        //    optionsBuilder.UseSqlServer(@"Data Source=HERNANDEZ\SQLEXPRESS;
+        //                                   Initial Catalog = GestordeTareasBD;
+        //                                   Integrated Security = true;
+        //                                   Encrypt = false;
+        //                                   TrustServerCertificate = true;");
         //}
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Data Source=SQL9001.site4now.net; 
+                                  Initial Catalog=db_aaef22_gestordetareas; 
+                                  User Id=db_aaef22_gestordetareas_admin; 
+                                  Password=gestor123456;
+                                  Encrypt=True; 
+                                  TrustServerCertificate=True;");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
