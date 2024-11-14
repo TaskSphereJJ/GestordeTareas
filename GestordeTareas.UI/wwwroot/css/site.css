@@ -2,7 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/*:root{
+:root{
   --Morado: #6D28D9;
 }
 
@@ -47,38 +47,38 @@ body.light {
 #drawer-navigation.light{
       background-color: #fef9ff;
     color: #280133;
-}*/
+}
 
 
 /* //estilo de la barra de desplasamiento */
- /*::selection {
-   background-color: var(--Morado);*/
+ ::selection {
+   background-color: var(--Morado);
    /* Cambia el color de fondo de la selección */
-   /*color: #fff;*/
+   color: #fff;
    /* Cambia el color del texto seleccionado */
- /*}*/
+ }
 
  /* Barra de desplazamiento horizontal */
- /*::-webkit-scrollbar {
-   height: 6px;*/
+ ::-webkit-scrollbar {
+   height: 6px;
    /* Cambiado a height para afectar la barra de desplazamiento horizontal */
-   /*width: 6px;*/
+   width: 6px;
    /* Ancho de la barra de desplazamiento vertical */
- /*}*/
+ }
 
  /* Estilo para el riel de la barra de desplazamiento */
- /*::-webkit-scrollbar-track {
-   background: #62645A;*/
+ ::-webkit-scrollbar-track {
+   background: #62645A;
    /* Color de fondo del riel */
- /*}*/
+ }
 
  /* Estilo para el pulgar de la barra de desplazamiento (la parte que se arrastra) */
- /*::-webkit-scrollbar-thumb {
-   background: var(--Morado);*//* Color del pulgar de la barra de desplazamiento */
- /*}*/
+ ::-webkit-scrollbar-thumb {
+   background: var(--Morado);/* Color del pulgar de la barra de desplazamiento */
+ }
 
  /* Estilo para el pulgar de la barra de desplazamiento al pasar el mouse sobre él */
- /*::-webkit-scrollbar-thumb:hover {
+ ::-webkit-scrollbar-thumb:hover {
    background: #2C2F39;
    cursor: pointer;
  }
@@ -164,7 +164,7 @@ body.light {
 }
 .dark .infor{
   color: #e5e5e5;
-}*/
+}
 /* MODO DARK DE LAS TABLAS
 /* Table Styles */
 table {

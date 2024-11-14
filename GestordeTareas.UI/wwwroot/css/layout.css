@@ -1,12 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900);
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-
 /* Reset CSS */
-/** {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -23,9 +18,9 @@ body {
 }
 .sidebar {
   position: relative;
-  width: 256px;*/
+  width: 256px;
   /* height: 100vh; */
-  /*display: flex;
+  display: flex;
   flex-direction: column;
   gap: 20px;
   background-color: #fff;
@@ -209,5 +204,4 @@ body {
   margin: 0 auto;
   color: #fff;
   text-align: center;
-}*/
-
+}
