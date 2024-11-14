@@ -123,8 +123,8 @@ CREATE TABLE InvitacionProyecto (
     CONSTRAINT UQ_InvitacionProyecto_Correo_Proyecto UNIQUE (CorreoElectronico, IdProyecto) -- Se asegura que un mismo correo no pueda recibir varias invitaciones al mismo proyecto
 );
 
-
 GO
+
 
 
 -- Tabla de tarea finalizada

@@ -1,4 +1,4 @@
-﻿@using GestordeTaras.EN;
+﻿﻿@using GestordeTaras.EN;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +22,7 @@
     }
 
     <!-- Sidebar: Oculto en pantallas pequeñas, visible en pantallas grandes -->
-    <div id="sidebar" class="-translate-x-full fixed left-0 top-0 z-50 h-full w-64 transform bg-lightPurple p-4 transition-transform duration-300 dark:bg-darkMenu lg:translate-x-0 lg:block">
+    <div id="sidebar" class="-translate-x-full bg-lightPurple fixed left-0 top-0 z-50 h-full w-64 transform p-4 transition-transform duration-300 dark:bg-darkMenu lg:translate-x-0 lg:block">
         <h5 class="text-base font-semibold uppercase text-gray-500 dark:text-gray-400">
             Menu
         </h5>
@@ -139,83 +139,11 @@
         {
             @if (User.Identity.IsAuthenticated)
             {
-                <header class="bg-opacity-80 z-40 fixed left-0 right-0 top-0 flex items-center justify-between bg-lightPurple px-3 py-4 shadow-md backdrop-blur-lg dark:bg-[#0d0c13] dark:bg-opacity-80 dark:text-darkText lg:left-64">
+                <header class="bg-opacity-80 z-40 bg-lightPurple fixed left-0 right-0 top-0 flex items-center justify-between px-3 py-4 shadow-md backdrop-blur-lg dark:bg-[#0d0c13] dark:bg-opacity-80 dark:text-darkText lg:left-64">
                     <!-- Icono de hamburguesa para dispositivos móviles -->
                     <div class="flex lg:hidden">
                         <button type="button" class="text-gray-600 hover:text-blue-950 dark:text-[#FFEF00]" aria-label="Menu" onclick="toggleSidebar()">
                             <i class="fas fa-bars fa-lg"></i>
                         </button>
                     </div>
-                    <div class="flex items-center">
-                        <span class="mr-2 text-sm font-bold font-semibold text-purple-400 dark:text-darkText">
-                            @($"{nombre} {apellido}")
-                        </span>
-                        <div class="relative">
-                            <button id="userMenuButton" class="text-blue-600 hover:text-blue-950 dark:text-slate-400">
-                                <i class="fas fa-user-circle fa-lg"></i>
-                            </button>
-                            <div id="userMenuOptions" class="absolute right-0 mt-2 hidden w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white text-gray-700 shadow-md dark:bg-gray-700 dark:text-white">
-                                <a href="@Url.Action("Logout", "Usuario")" class="block px-4 py-2 text-sm hover:bg-purple-100 dark:hover:bg-gray-800">
-                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesion
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Botón de cambio de tema -->
-                    <div id="darkModeToggle" class="mr-2 cursor-pointer">
-                        <span id="darkModeIcon">
-                            <i class="fas fa-sun text-yellow-500"></i>
-                        </span>
-                    </div>
-                </header>
-            }
-        }
-
-        <!-- Contenido principal debajo del header -->
-        <main role="main" class="flex-1 mt-20 bg-lightPurple p-4 dark:bg-darkPurple">
-            @RenderBody()
-        </main>
-    </div>
-
-    <!-- Scripts -->
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
-        }
-
-        // JavaScript para el cambio de tema
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', () => {
-            const isDarkMode = document.body.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDarkMode ? 'dark' : 'light');
-            const darkModeIcon = document.getElementById('darkModeIcon');
-            darkModeIcon.innerHTML = isDarkMode
-                ? '<i class="fas fa-moon text-white"></i>'
-                : '<i class="fas fa-sun text-yellow-500"></i>';
-        });
-
-        window.addEventListener('load', () => {
-            const savedMode = localStorage.getItem('darkMode');
-            if (savedMode === 'dark') {
-                document.body.classList.add('dark');
-                document.getElementById('darkModeIcon').innerHTML = '<i class="fas fa-moon text-white"></i>';
-            }
-        });
-
-        // Mostrar/ocultar el menú de usuario
-        document.getElementById('userMenuButton').addEventListener('click', function () {
-            const userMenuOptions = document.getElementById('userMenuOptions');
-            userMenuOptions.classList.toggle('hidden');
-        });
-
-        document.addEventListener('click', function (event) {
-            const userMenuButton = document.getElementById('userMenuButton');
-            const userMenuOptions = document.getElementById('userMenuOptions');
-            if (!userMenuButton.contains(event.target) && !userMenuOptions.contains(event.target)) {
-                userMenuOptions.classList.add('hidden');
-            }
-        });
-    </script>
-</body>
-</html>
+                   

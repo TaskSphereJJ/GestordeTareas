@@ -56,12 +56,12 @@ namespace GestordeTareas.DAL
 
             modelBuilder.Entity<ProyectoUsuario>()
                 .HasOne(pu => pu.Usuario)
-                .WithMany(u => u.ProyectoUsuario) 
+                .WithMany(u => u.ProyectoUsuario)
                 .HasForeignKey(pu => pu.IdUsuario);
 
             modelBuilder.Entity<ProyectoUsuario>()
                 .HasOne(pu => pu.Proyecto)
-                .WithMany(p => p.ProyectoUsuario)  
+                .WithMany(p => p.ProyectoUsuario)
                 .HasForeignKey(pu => pu.IdProyecto);
         }
     }

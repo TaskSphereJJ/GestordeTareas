@@ -1,0 +1,26 @@
+﻿@using GestordeTaras.EN
+
+@model List<Comment>
+@{
+    ViewData["Title"] = "Foro del Proyecto";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta sea válida
+}
+
+
+<h2>Foro del Proyecto</h2>
+
+@foreach (var comentario in Model)
+{
+    <div>
+        <strong>@comentario.Usuario.Nombre</strong> dijo:
+        <p>@comentario.Content</p>
+        <small>@comentario.FechaComentario</small>
+    </div>
+    <hr />
+}
+
+<form asp-action="CreateComments" method="post">
+    <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
+    <textarea name="Content" required></textarea>
+    <button type="submit">Comentar</button>
+</form>

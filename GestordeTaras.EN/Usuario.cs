@@ -28,6 +28,7 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Contraseña")]
         public string Pass { get; set; } = string.Empty;
+
         [NotMapped] // Esto es importante para que no se mapee en la base de datos
         public string ConfirmarPass { get; set; }
 
@@ -65,6 +66,8 @@ namespace GestordeTaras.EN
 
         public Cargo Cargo { get; set; } // propiedad de navegación
         public virtual ICollection<ProyectoUsuario> ProyectoUsuario { get; set; }
+
+        public ICollection<Comment> Comment { get; set; }
     }
     public enum User_Status
     {

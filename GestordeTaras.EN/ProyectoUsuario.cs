@@ -16,5 +16,6 @@ namespace GestordeTaras.EN
         public DateTime FechaAsignacion { get; set; }
         public bool Encargado { get; set; }
 
-     }
+
+    }
 }
