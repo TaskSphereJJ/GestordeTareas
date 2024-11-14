@@ -1,0 +1,221 @@
+﻿@using GestordeTaras.EN;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GestordeTareas.UI</title>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <link href="~/css/tailwind.css" rel="stylesheet" /> *@
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    @{
+        var nombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
+        var apellido = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Surname)?.Value;
+    }
+
+    <!-- Sidebar: Oculto en pantallas pequeñas, visible en pantallas grandes -->
+    <div id="sidebar" class="-translate-x-full fixed left-0 top-0 z-50 h-full w-64 transform bg-lightPurple p-4 transition-transform duration-300 dark:bg-darkMenu lg:translate-x-0 lg:block">
+        <h5 class="text-base font-semibold uppercase text-gray-500 dark:text-gray-400">
+            Menu
+        </h5>
+        <button type="button" onclick="toggleSidebar()" class="absolute right-2.5 top-2.5 lg:hidden">
+            <i class="fas fa-times fa-lg text-purple-800 hover:text-purple-600"></i>
+        </button>
+        <nav class="space-y-3 dark:bg-darkMenu">
+            <!-- INICIO -->
+            <a class="flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+               asp-area="" asp-controller="Home" asp-action="Index">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="h-5 w-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg>
+                <span class="mx-2 text-sm font-medium">Inicio</span>
+            </a>
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
+            {
+                <!-- PERFIL -->
+                <a class="flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                   asp-area="" asp-controller="Usuario" asp-action="Perfil">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="mx-2 text-sm font-medium">Perfil</span>
+                </a>
+
+                <!-- USUARIOS -->
+                <a class="no-in flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                   asp-area="" asp-controller="Usuario" asp-action="Index">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                    <span class="mx-2 text-sm font-medium">Usuarios</span>
+                </a>
+
+                <!-- PROYECTOS -->
+                <a class="no-in flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                   asp-area="" asp-controller="Proyecto" asp-action="Index">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                    </svg>
+                    <span class="mx-2 text-sm font-medium">Proyectos</span>
+                </a>
+            }
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Colaborador"))
+            {
+                <!-- PERFIL COLABORADOR -->
+                <a class="flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                   asp-area="" asp-controller="Usuario" asp-action="Perfil">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="mx-2 text-sm font-medium">Perfil</span>
+                </a>
+
+                <!-- PROYECTO -->
+                <a class="flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                   asp-area="" asp-controller="Proyecto" asp-action="Index">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                    </svg>
+                    <span class="mx-2 text-sm font-medium">Buscar proyecto</span>
+                </a>
+
+                <!-- MIS PROYECTOS -->
+                <a class="flex transform items-center rounded-lg px-3 py-2 text-gray-600 no-underline no-underline transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                   asp-area="" asp-controller="ProyectoUsuario" asp-action="MisProyectos">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                    </svg>
+                    <span class="mx-2 text-sm font-medium">Mis Proyectos</span>
+                </a>
+
+            }
+
+            <!-- SECCION DE PROYECTOS -->
+            <div>
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-semibold text-gray-800 dark:text-white">Projects</h2>
+
+                    <button class="rounded-lg border p-0.5 text-gray-500 transition-colors duration-200 hover:bg-purple-600 hover:text-white dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="h-4 w-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </button>
+                </div>
+
+                <nav class="mt-4 space-y-3">
+                    <button class="flex w-full transform items-center justify-between rounded-lg px-3 py-2 text-xs font-medium text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-purple-900 hover:bg-purple-100 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200">
+                        <div class="flex items-center gap-x-2">
+                            <span class="h-2 w-2 rounded-full bg-green-600"></span>
+                            <span>Exposicion del medio ambiente</span>
+                        </div>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="h-4 w-4 rtl:rotate-180">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                </nav>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Contenedor principal para Header y Main -->
+    <div class="flex min-h-screen flex-col lg:ml-64">
+        <!-- Header fijo con efecto de vidrio encima del contenido -->
+        @if (Context.Request.Path.Value != "/Usuario/login")
+        {
+            @if (User.Identity.IsAuthenticated)
+            {
+                <header class="bg-opacity-80 z-40 fixed left-0 right-0 top-0 flex items-center justify-between bg-lightPurple px-3 py-4 shadow-md backdrop-blur-lg dark:bg-[#0d0c13] dark:bg-opacity-80 dark:text-darkText lg:left-64">
+                    <!-- Icono de hamburguesa para dispositivos móviles -->
+                    <div class="flex lg:hidden">
+                        <button type="button" class="text-gray-600 hover:text-blue-950 dark:text-[#FFEF00]" aria-label="Menu" onclick="toggleSidebar()">
+                            <i class="fas fa-bars fa-lg"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="mr-2 text-sm font-bold font-semibold text-purple-400 dark:text-darkText">
+                            @($"{nombre} {apellido}")
+                        </span>
+                        <div class="relative">
+                            <button id="userMenuButton" class="text-blue-600 hover:text-blue-950 dark:text-slate-400">
+                                <i class="fas fa-user-circle fa-lg"></i>
+                            </button>
+                            <div id="userMenuOptions" class="absolute right-0 mt-2 hidden w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white text-gray-700 shadow-md dark:bg-gray-700 dark:text-white">
+                                <a href="@Url.Action("Logout", "Usuario")" class="block px-4 py-2 text-sm hover:bg-purple-100 dark:hover:bg-gray-800">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesion
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botón de cambio de tema -->
+                    <div id="darkModeToggle" class="mr-2 cursor-pointer">
+                        <span id="darkModeIcon">
+                            <i class="fas fa-sun text-yellow-500"></i>
+                        </span>
+                    </div>
+                </header>
+            }
+        }
+
+        <!-- Contenido principal debajo del header -->
+        <main role="main" class="flex-1 mt-20 bg-lightPurple p-4 dark:bg-darkPurple">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // JavaScript para el cambio de tema
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDarkMode ? 'dark' : 'light');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            darkModeIcon.innerHTML = isDarkMode
+                ? '<i class="fas fa-moon text-white"></i>'
+                : '<i class="fas fa-sun text-yellow-500"></i>';
+        });
+
+        window.addEventListener('load', () => {
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('darkModeIcon').innerHTML = '<i class="fas fa-moon text-white"></i>';
+            }
+        });
+
+        // Mostrar/ocultar el menú de usuario
+        document.getElementById('userMenuButton').addEventListener('click', function () {
+            const userMenuOptions = document.getElementById('userMenuOptions');
+            userMenuOptions.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function (event) {
+            const userMenuButton = document.getElementById('userMenuButton');
+            const userMenuOptions = document.getElementById('userMenuOptions');
+            if (!userMenuButton.contains(event.target) && !userMenuOptions.contains(event.target)) {
+                userMenuOptions.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+﻿@model GestordeTaras.EN.Usuario
+@{
+    ViewData["Title"] = "Detalles de los Usuarios";
+}
+
+<div>
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Apellido)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Apellido)
+        </dd>
+
+        @* <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Pass)
+        </dt>
+        <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Pass)
+        </dd> *@
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FechaNacimiento)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Cargo)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Cargo.Nombre)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.NombreUsuario)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.NombreUsuario)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-9">
+            @(Model.Status == 1 ? "ACTIVO" : "INACTIVO")
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FechaRegistro)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FechaRegistro)
+        </dd>
+    </dl>
+</div>

@@ -1,0 +1,38 @@
+﻿@model GestordeTaras.EN.Tarea
+
+@{
+    ViewData["Title"] = "Detalles de la Tarea";
+}
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3"><strong>Id:</strong></dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3"><strong>Nombre:</strong></dt>
+        <dd class="col-sm-9">@Model.Nombre</dd>
+
+        <dt class="col-sm-3"><strong>Descripcion:</strong></dt>
+        <dd class="col-sm-9">@Model.Descripcion</dd>
+
+        <dt class="col-sm-3"><strong>FechaCreacion:</strong></dt>
+        <dd class="col-sm-9">@Model.FechaCreacion.ToString("dd/MM/yyyy")</dd>
+
+        <dt class="col-sm-3"><strong>FechaVencimiento:</strong></dt>
+        <dd class="col-sm-9">@Model.FechaVencimiento.ToString("dd/MM/yyyy")</dd>
+
+        <dt class="col-sm-3"><strong>IdCategoría:</strong></dt>
+        <dd class="col-sm-9">@Model.Categoria.Nombre</dd>
+
+        <dt class="col-sm-3"><strong>IdPrioridad:</strong></dt>
+        <dd class="col-sm-9">@Model.Prioridad.Nombre</dd>
+
+        <dt class="col-sm-3"><strong>Estado de Tarea:</strong></dt>
+        <dd class="col-sm-9">@Model.EstadoTarea.Nombre</dd>
+
+        <dt class="col-sm-3"><strong>IdProyecto:</strong></dt>
+        <dd class="col-sm-9">@Model.Proyecto.Titulo</dd>
+
+        
+    </dl>
+</div>
