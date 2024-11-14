@@ -23,10 +23,11 @@ namespace GestordeTareas.DAL
         public DbSet<ElegirTarea> ElegirTarea { get; set; }
         public DbSet<TareaFinalizada> TareaFinalizada { get; set; }
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
+        public DbSet<Comment> Comment { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data source = DESKTOP-UMST7PO; Initial Catalog = GestordeTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
+            optionsBuilder.UseSqlServer(@"Data source = DESKTOP-K6HMCBE; Initial Catalog = GestorTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
 
         }
 
@@ -52,6 +53,20 @@ namespace GestordeTareas.DAL
                 .HasOne(pu => pu.Proyecto)
                 .WithMany(p => p.ProyectoUsuario)  // Cambia si tienes una colección en Proyecto
                 .HasForeignKey(pu => pu.IdProyecto);
+
+            base.OnModelCreating(modelBuilder);
+
+            // Aquí defines la relación entre Comment y Usuario
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Comment) // Asume que Usuario tiene una colección de comentarios
+                .HasForeignKey(c => c.IdUsuario );
+
         }
+
+        // DbSets para tus entidades
+        //public DbSet<Comment> Comment { get; set; }
+        //public DbSet<Usuario> Usuario { get; set; }
+
     }
 }
