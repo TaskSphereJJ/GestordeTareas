@@ -4,9 +4,14 @@
 }
 
 <div>
-    <hr />
     <dl class="row">
 
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FotoPerfil)
+        </dt>
+        <dd class="col-sm-9">
+            <img src="@Model.FotoPerfil" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover">
+        </dd>
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
@@ -20,13 +25,6 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Apellido)
         </dd>
-
-        @* <dt class="col-sm-3">
-        @Html.DisplayNameFor(model => model.Pass)
-        </dt>
-        <dd class="col-sm-9">
-        @Html.DisplayFor(model => model.Pass)
-        </dd> *@
 
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Telefono)

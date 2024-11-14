@@ -83,10 +83,14 @@
                 <!-- Título del proyecto -->
                 <h2 class="text-xl font-bold text-gray-900 mb-4 text-center">@item.Titulo</h2>
 
-                <!-- Administrador -->
-                <p class="text-sm text-gray-500 mb-4 text-center">
-                    <span class="font-semibold">Administrador:</span> @item.Usuario.Nombre @item.Usuario.Apellido
-                </p>
+                <!-- Administrador del proyecto -->
+                <div class="flex items-center justify-center mb-4">
+                    <img class="h-10 w-10 rounded-full border-2 border-gray-300 mr-3" src="@item.Usuario.FotoPerfil" alt="@item.Usuario.Nombre @item.Usuario.Apellido" />
+                    <p class="text-sm text-gray-500">
+                        <span class="font-semibold">Administrador:</span> @item.Usuario.Nombre @item.Usuario.Apellido
+                    </p>
+                </div>
+
 
                 <!-- Descripción -->
                 <p class="text-gray-700 dark:text-gray-400 mb-4 text-center">
@@ -157,7 +161,6 @@
                         </a>
 
                     }
-
                     <!-- Botón de Ingresar -->
                     <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
                        class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out">
@@ -178,8 +181,6 @@ else
         <p class="mt-2 text-gray-500">Crea un nuevo proyecto para comenzar a trabajar.</p>
     </div>
 }
-
-
 
 
 
