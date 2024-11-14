@@ -5,14 +5,14 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<div class="login_container flex-1 mx-auto my-6 flex max-w-screen-xl justify-center overflow-hidden bg-white shadow sm:rounded-lg">
-    <div class="flex-1 p-4 sm:p-6 lg:w-1/2 xl:w-5/12">
-        <div class="mt-8 flex flex-col items-center">
-            <h1 class="inicio text-lg font-extrabold underline no-underline xl:text-2xl">
+<div class="login_container flex-1 mx-auto flex max-w-screen-xl justify-center overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="flex-1 mt-0 p-4 sm:p-4 lg:w-1/2 xl:w-5/12">
+        <div class="mt-4 flex flex-col items-center">
+            <h1 class="inicio text-lg font-extrabold underline no-underline xl:text-xl">
                 CREAR UNA CUENTA
             </h1>
-            <div class="flex-1 mb-4 mt-2 w-full">
-                <div class="my-6 border-b text-center">
+            <div class="flex-1 mb-2 mt-2 w-full">
+                <div class="my-4 border-b text-center">
                     <div class="-translate-y-1/2 inline-block transform bg-white px-2 text-sm font-medium leading-none tracking-wide text-gray-600">
                         Complete los campos para crear una nueva cuenta
                     </div>
@@ -22,26 +22,26 @@
 
                     <div class="mx-auto max-w-sm">
                         <!-- Campo para la Foto de Perfil -->
-                        <div class="mt-4">
+                        <div class="mt-2">
                             <label for="FotoPerfil" class="mb-2 block text-sm font-medium text-gray-700">Foto de Perfil</label>
                             <div class="flex items-center space-x-4">
                                 <div class="h-24 w-24 overflow-hidden rounded-full bg-gray-200">
-                                @if (Model?.FotoPerfil != null)
-{
-    <img id="previewImage" src="@Model.FotoPerfil" alt="Foto de perfil" class="h-full w-full object-cover" />
-}
-else
-{
-    <div class="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200">
-        <!-- Ícono SVG de usuario -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24" stroke="none">
-            <path d="M12 12c2.28 0 4-1.72 4-4s-1.72-4-4-4-4 1.72-4 4 1.72 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z" />
-        </svg>
-    </div>
-}  
+                                    @if (Model?.FotoPerfil != null)
+                                    {
+                                        <img id="previewImage" src="@Model.FotoPerfil" alt="Foto de perfil" class="h-full w-full object-cover" />
+                                    }
+                                    else
+                                    {
+                                        <div class="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200">
+                                            <!-- Ícono SVG de usuario -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+                                                <path d="M12 12c2.28 0 4-1.72 4-4s-1.72-4-4-4-4 1.72-4 4 1.72 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z" />
+                                            </svg>
+                                        </div>
+                                    }
                                 </div>
                                 <div class="flex-1">
-                                    <label for="FotoPerfil" class="inline-block cursor-pointer rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors duration-300 hover:bg-blue-600">
+                                    <label for="FotoPerfil" class="inline-block cursor-pointer rounded-lg bg-indigo-500 px-4 py-2 text-white transition-colors duration-300 hover:bg-indigo-700">
                                         <span class="flex items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -55,15 +55,15 @@ else
                             </div>
                             <span asp-validation-for="FotoPerfil" class="text-danger mt-2 block"></span>
                         </div>
-                        <div class="grid-cols-1 grid gap-4 lg:grid-cols-2">
+                        <div class="grid-cols-1 grid gap-2 lg:grid-cols-2">
                             <!-- Columna 1 -->
                             <div>
                                 <label for="Nombre" class="mb-2 block text-sm font-medium text-gray-700">Nombre</label>
-                                <input asp-for="Nombre" class="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre" />
+                                <input asp-for="Nombre" class="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm font-medium placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre" />
                                 <span asp-validation-for="Nombre" class="text-danger"></span>
 
                                 <label for="NombreUsuario" class="mt-4 block text-sm font-medium text-gray-700">Correo electrónico</label>
-                                <input asp-for="NombreUsuario" type="email" class="mt-2 w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre de usuario" />
+                                <input asp-for="NombreUsuario" type="email" class="mt-2 w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm font-medium placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre de usuario" />
                                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
 
                                 <label for="Pass" class="mt-4 block text-sm font-medium text-gray-700">Contraseña</label>
@@ -104,14 +104,14 @@ else
                             </div>
                         </div>
 
-                        <button type="submit" class="mt-6 flex w-full items-center justify-center rounded-lg bg-indigo-500 py-2 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out hover:bg-indigo-700 focus:shadow-outline focus:outline-none">
+                        <button type="submit" class="mt-4 flex w-full items-center justify-center rounded-lg bg-indigo-500 py-2 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out hover:bg-indigo-700 focus:shadow-outline focus:outline-none">
                             <span class="ml-3">
                                 <i class="fas fa-user-plus"></i>
                                 Crear Cuenta
                             </span>
                         </button>
                         <div class="mt-4 flex justify-center">
-                            <a asp-action="Index" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-indigo-500 no-underline shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <a asp-action="Index" class="flex items-center justify-center rounded-lg border border-gray-400 px-4 py-2 text-sm font-medium text-indigo-500 no-underline transition-all duration-200 ease-out hover:bg-gray-300 dark:text-gray-300 dark:hover:bg-gray-700">
                                 <i class="fas fa-arrow-left mr-2"></i>
                                 Regresar
                             </a>
@@ -123,7 +123,7 @@ else
         </div>
     </div>
     <div class="flex-1 hidden bg-indigo-100 text-center lg:flex">
-        <div class="m-6 w-full bg-contain bg-center bg-no-repeat xl:m-8" style="background-image: url('/img/create login-amico.svg');">
+        <div class="m-4 w-full bg-contain bg-center bg-no-repeat xl:m-4" style="background-image: url('/img/create login-amico.svg');">
             @* background-size: 200px 200px; *@
         </div>
     </div>
@@ -146,4 +146,3 @@ else
         }
     }
 </script>
-

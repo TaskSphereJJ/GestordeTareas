@@ -29,6 +29,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 var app = builder.Build();
+
+
+//autenticacion con Google
+//builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+//{
+//    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+//    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+//});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

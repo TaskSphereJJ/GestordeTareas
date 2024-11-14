@@ -1,4 +1,4 @@
-﻿using GestordeTaras.EN;
+﻿﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -241,6 +241,8 @@ namespace GestordeTareas.UI.Controllers
                     {
                         // URL LOCAL DE LA APLICACION
                         string baseUrl = "https://localhost:7297";
+                        // URL DESPLEGADA DE LA APLICACION
+                        //string baseUrl = "https://appservice-webappgestordetareas.azurewebsites.net";
 
                         // ENLACES DE INVITACIÓN CON EL TOKEN Y LA DECISIÓN (ACEPTAR O RECHAZAR)
                         string enlaceAceptar = $"{baseUrl}/Proyecto/AceptarInvitacion?token={invitacion.Token}&decision=aceptar";

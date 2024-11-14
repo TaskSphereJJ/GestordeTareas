@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +9,7 @@ namespace GestordeTaras.EN
 
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Foto de perfil")]
         public string FotoPerfil { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
@@ -71,4 +72,3 @@ namespace GestordeTaras.EN
     }
 
 }
-

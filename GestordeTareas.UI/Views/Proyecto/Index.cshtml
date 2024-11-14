@@ -44,104 +44,130 @@
 
 @if (Model != null && Model.Any())
 {
-<div class="grid-cols-1 grid gap-4 md:grid-cols-2">
+    <div class="grid-cols-1 grid gap-4 md:grid-cols-2">
         @foreach (var item in Model)
         {
-            <div class="relative mb-4 w-full rounded-lg border border-gray-300 bg-gray-100 p-4 shadow-lg transition-all duration-200 hover:shadow-xl dark:border-gray-700 dark:bg-gray-900">
+            <div class="relative mb-4 w-full rounded-lg border border-gray-300 bg-white p-6 shadow-sm dark:bg-gray-800">
                 <!-- Botón principal flotante y menú desplegable -->
-                <div class="absolute right-2 top-2">
+                <div class="absolute right-0 top-0 mr-1 mt-1">
                     @if (User.IsInRole("Administrador"))
                     {
-                        <button class="flex h-8 w-8 transform items-center justify-center rounded-full bg-gray-300 shadow-lg transition-all duration-300 hover:scale-110 hover:rotate-180 focus:outline-none dark:bg-gray-700" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
-                            <i class="fas fa-ellipsis-v text-gray-800 dark:text-gray-200"></i>
+                        <!-- Botón principal flotante -->
+                        <button class="flex h-10 w-10 transform items-center justify-center rounded-full bg-gray-200 shadow-lg transition-all duration-300 hover:scale-110 hover:rotate-180 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
+                            <i class="fas fa-ellipsis-v text-xl text-gray-800"></i>
                         </button>
 
-                        <!-- Menú desplegable con fondo borroso -->
-                        <div id="menu-@item.Id" class="z-10 absolute right-0 mt-2 hidden w-36 rounded-lg bg-white bg-opacity-75 py-1 shadow-md backdrop-blur-md transition-all duration-300 ease-out dark:bg-gray-800">
-                            <ul class="space-y-1 px-2">
-                                <li class="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-gray-700 transition-all duration-200 ease-in-out hover:bg-blue-500 hover:text-white active:scale-95 dark:text-gray-300" onclick="cargarVistaEdit(@item.Id)">
-                                    <i class="fas fa-edit"></i>
-                                    <span class="text-sm font-medium">Editar</span>
+                        <!-- Menú desplegable -->
+                        <div id="menu-@item.Id" class="z-10 absolute right-0 mt-2 hidden w-36 transform rounded-lg bg-white py-2 shadow-md transition-all duration-300 ease-out">
+                            <ul class="space-y-1 px-3">
+
+                                <!-- Opción de Editar -->
+                                <li class="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-gray-700 transition-all duration-200 ease-in-out hover:bg-blue-500 hover:text-white active:scale-95"
+                                    onclick="cargarVistaEdit(@item.Id)">
+                                    <i class="fas fa-edit text-black-500"></i>
+                                    <span class="font-medium">Editar</span>
                                 </li>
-                                <li class="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-gray-700 transition-all duration-200 ease-in-out hover:bg-red-500 hover:text-white active:scale-95 dark:text-gray-300" onclick="mostrarTarjetaEliminar(@item.Id); return false;">
-                                    <i class="fas fa-trash-alt"></i>
-                                    <span class="text-sm font-medium">Eliminar</span>
+
+                                <!-- Opción de Eliminar -->
+                                <li class="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-gray-700 transition-all duration-200 ease-in-out hover:bg-red-500 hover:text-white active:scale-95"
+                                    onclick="mostrarTarjetaEliminar(@item.Id); return false;">
+                                    <i class="fas fa-trash-alt text-black-500"></i>
+                                    <span class="font-medium">Eliminar</span>
                                 </li>
                             </ul>
                         </div>
+
                     }
                 </div>
 
-                <!-- Contenido de la tarjeta alineado a la izquierda -->
-                <div class="text-left">
-                    <!-- Título del proyecto -->
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">@item.Titulo</h2>
+                <!-- Título del proyecto -->
+                <h2 class="mb-4 text-center text-xl font-bold text-gray-900">@item.Titulo</h2>
 
-                    <!-- Administrador -->
-                    <p class="mb-1 text-xs text-gray-500 dark:text-gray-400">
+                <!-- Administrador del proyecto -->
+                <div class="mb-4 flex items-center justify-center">
+                    <img class="border-2 mr-3 h-10 w-10 rounded-full border-gray-300" src="@item.Usuario.FotoPerfil" alt="@item.Usuario.Nombre @item.Usuario.Apellido" />
+                    <p class="text-sm text-gray-500">
                         <span class="font-semibold">Administrador:</span> @item.Usuario.Nombre @item.Usuario.Apellido
                     </p>
+                </div>
 
-                    <!-- Descripción -->
-                    <p class="mb-2 text-sm text-gray-700 dark:text-gray-400">
-                        @if (item.Descripcion.Length > 60)
-                        {
-                            <text>@item.Descripcion.Substring(0, 60)...</text>
-                        }
-                        else
-                        {
-                            <text>@item.Descripcion</text>
-                        }
-                    </p>
 
-                    <!-- Fecha de Finalización -->
-                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
-                        <span class="font-semibold">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
-                    </p>
+                <!-- Descripción -->
+                <p class="mb-4 text-center text-gray-700 dark:text-gray-400">
+                    @if (item.Descripcion.Length > 100)
+                    {
+                        <text>@item.Descripcion.Substring(0, 100)...</text>
+                    }
+                    else
+                    {
+                        <text>@item.Descripcion</text>
+                    }
+                </p>
 
-                    <!-- Contador de Usuarios -->
-                    <div class="mb-2 flex items-center text-gray-500 dark:text-gray-400">
-                        <i class="fas fa-users mr-1"></i>
-                        <span class="text-xs">@((item.ProyectoUsuario?.Count ?? 0)) usuarios unidos</span>
-                    </div>
+                <!-- Fecha de Finalización -->
+                <p class="mb-4 text-center text-sm text-gray-500">
+                    <span class="font-semibold text-gray-500 dark:text-gray-400">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
+                </p>
 
-                    <!-- Imágenes de miembros -->
-                    <div class="mb-2 flex items-center -space-x-1">
+                <!-- Contador de Usuarios -->
+                <div class="mb-2 flex items-center justify-center text-gray-500">
+                    <i class="fas fa-users mr-2"></i>
+                    <span class="text-sm">@((item.ProyectoUsuario?.Count ?? 0)) usuarios unidos</span>
+                </div>
+
+                <!-- Imágenes de miembros -->
+                <div class="mb-4 flex min-h-[32px] justify-center">
+                    <div class="flex -space-x-2">
                         @if (item.ProyectoUsuario != null && item.ProyectoUsuario.Any())
                         {
                             @foreach (var proyectoUsuario in item.ProyectoUsuario.Take(3))
                             {
-                                <img class="border-2 h-6 w-6 rounded-full border-white dark:border-gray-800" src="@proyectoUsuario.Usuario.FotoPerfil" alt="@proyectoUsuario.Usuario.Nombre" />
+                                <img class="border-2 h-8 w-8 rounded-full border-white"
+                                     src="@proyectoUsuario.Usuario.FotoPerfil"
+                                     alt="@proyectoUsuario.Usuario.Nombre" />
                             }
                             @if (item.ProyectoUsuario.Count() > 3)
                             {
-                                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-300 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                                    +@(item.ProyectoUsuario.Count() - 3)
+                                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+                                    <span class="text-xs font-medium">+@(item.ProyectoUsuario.Count() - 3)</span>
                                 </div>
                             }
                         }
                         else
                         {
-                            <!-- Placeholder cuando no hay usuarios -->
-                            <img class="opacity-0 h-6 w-6" src="" alt="placeholder" />
+                            <!-- Espacio reservado cuando no hay usuarios -->
+                            <img class="opacity-0 h-8 w-8" src="" alt="placeholder" />
                         }
                     </div>
-
-                    <!-- Botones de acción -->
-                    <div class="mt-3 flex space-x-2">
-                        <!-- Botón de Detalles -->
-                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
-                           class="flex items-center rounded-lg border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 transition-all duration-200 hover:bg-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
-                            <i class="fa-solid fa-sliders mr-1"></i> Detalles
-                        </a>
-
-                        <!-- Botón de Ingresar -->
-                        <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
-                           class="flex items-center rounded-lg bg-purple-800 px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:bg-purple-600">
-                            <i class="fas fa-sign-in-alt mr-1"></i> Ingresar
-                        </a>
-                    </div>
                 </div>
+
+
+                <!-- Botones de acción -->
+                <div class="mt-4 flex justify-between">
+                    <!-- Botón de Unirse -->
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
+                           class="flex items-center justify-center rounded-lg border border-gray-400 px-4 py-2 text-sm font-medium text-gray-700 no-underline transition-all duration-200 ease-out hover:bg-gray-300 dark:text-gray-300 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-sliders mr-4"></i> Detalles
+                        </a>
+
+                    }
+                    else if (User.IsInRole("Colaborador"))
+                    {
+                        <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
+                           class="flex items-center justify-center rounded-lg border border-green-400 px-4 py-2 text-sm font-medium text-gray-700 no-underline transition-all duration-200 ease-out hover:bg-green-300 dark:text-gray-300 dark:hover:bg-green-700">
+                            <i class="fas fa-user-plus mr-4"></i> Unirse
+                        </a>
+
+                    }
+                    <!-- Botón de Ingresar -->
+                    <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
+                       class="flex items-center justify-center rounded-lg bg-purple-800 px-4 py-2 text-sm font-medium text-white no-underline transition-all duration-200 ease-out hover:bg-purple-600">
+                        <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
+                    </a>
+                </div>
+
             </div>
         }
     </div>
@@ -155,8 +181,6 @@ else
         <p class="mt-2 text-gray-500">Crea un nuevo proyecto para comenzar a trabajar.</p>
     </div>
 }
-
-
 
 
 

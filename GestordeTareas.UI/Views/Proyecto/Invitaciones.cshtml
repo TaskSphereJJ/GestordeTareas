@@ -1,4 +1,5 @@
-﻿@model List<GestordeTaras.EN.InvitacionProyecto>
+﻿
+@model List<GestordeTaras.EN.InvitacionProyecto>
 
 @{
     ViewData["Title"] = "Invitaciones";
@@ -11,47 +12,47 @@
 @await Html.PartialAsync("_Alerts")
 
 <!-- Menú de Navegación -->
-<nav class="flex justify-end mb-4">
-    <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button text-gray-500 border-b-2 mx-2 no-underline" data-tab="info">
+<nav class="mb-4 flex justify-end">
+    <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button border-b-2 mx-2 text-gray-500 no-underline" data-tab="info">
         Información
     </a>
-    <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button text-gray-500 mx-2 no-underline" data-tab="personas">
+    <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button mx-2 text-gray-500 no-underline" data-tab="personas">
         Personas
     </a>
     @if (User.IsInRole("Administrador"))
     {
-        <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button text-gray-500 mx-2 no-underline" data-tab="asignar">
+        <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button mx-2 text-gray-500 no-underline" data-tab="asignar">
             Asignar Encargado
         </a>
     }
     @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
     {
-        <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button text-blue-500 border-blue-500 mx-2 no-underline">
+        <a href="@Url.Action("Details", "Proyecto", new { id = ViewBag.IdProyecto })" class="tab-button mx-2 border-blue-500 text-blue-500 no-underline">
             Invitar Usuario
         </a>
     }
 </nav>
 
 
-<div class="container text-center mx-auto p-4 max-w-4xl">
-    <h2 class="text-3xl font-bold mb-6 text-gray-800">INVITACIONES</h2>
+<div class="container mx-auto max-w-4xl p-4 text-center">
+    <h2 class="mb-6 text-3xl font-bold text-gray-800">INVITACIONES</h2>
 
     <!-- Enviar nueva invitación -->
     @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
     {
-        <div class="bg-white shadow-md rounded-lg p-6 mb-8 max-w-4xl mx-auto">
-            <h3 class="text-xl font-semibold mb-4 text-gray-700">Enviar Invitación</h3>
+        <div class="mx-auto mb-8 max-w-4xl rounded-lg bg-white p-6 shadow-md">
+            <h3 class="mb-4 text-xl font-semibold text-gray-700">Enviar Invitación</h3>
             <form asp-action="EnviarInvitacion" method="post" class="flex items-end gap-4">
                 <div class="flex-grow">
-                    <label for="correoElectronico" class="block text-lg font-medium text-gray-700 mb-1 text-left">
+                    <label for="correoElectronico" class="mb-1 block text-left text-lg font-medium text-gray-700">
                         Correo Electrónico
                     </label>
                     <input type="email" id="correoElectronico" name="correoElectronico" required
-                           class="w-full h-10 py-2 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           class="h-10 w-full rounded-md border-gray-300 px-2 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                            placeholder="Ingrese una dirección de correo electrónico" />
                 </div>
                 <input type="hidden" name="IdProyecto" value="@ViewBag.IdProyecto" />
-                <button type="submit" class="bg-indigo-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <button type="submit" class="rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
                     Enviar Invitación
                 </button>
             </form>
@@ -60,34 +61,34 @@
 
 
     <!-- Lista de invitaciones y filtro -->
-    <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
-        <div class="flex flex-row items-center justify-between mb-4">
+    <div class="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-md">
+        <div class="mb-4 flex flex-row items-center justify-between">
             <h3 class="text-xl font-semibold text-gray-700">Invitaciones Enviadas</h3>
-            <form method="get" asp-action="FiltrarInvitaciones" class="flex items-center space-x-4">
+            <form method="get" asp-action="FiltrarInvitaciones" class="flex-1 flex items-center space-x-4">
                 <input type="hidden" name="id" value="@ViewBag.IdProyecto" />
 
                 <!-- Botones de filtro como reemplazo del select -->
                 <button type="submit" name="estado" value="Todos"
-                        class="px-4 py-2 rounded-full font-semibold
-                @(ViewContext.HttpContext.Request.Query["estado"] == "Todos" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                        class="rounded-full px-4 py-2 font-semibold
+@(ViewContext.HttpContext.Request.Query["estado"] == "Todos" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
                     Todas
                 </button>
 
                 <button type="submit" name="estado" value="Pendiente"
-                        class="px-4 py-2 rounded-full font-semibold
-                @(ViewContext.HttpContext.Request.Query["estado"] == "Pendiente" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                        class="rounded-full px-4 py-2 font-semibold
+@(ViewContext.HttpContext.Request.Query["estado"] == "Pendiente" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
                     Pendiente
                 </button>
 
                 <button type="submit" name="estado" value="Aceptada"
-                        class="px-4 py-2 rounded-full font-semibold
-                @(ViewContext.HttpContext.Request.Query["estado"] == "Aceptada" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                        class="rounded-full px-4 py-2 font-semibold
+@(ViewContext.HttpContext.Request.Query["estado"] == "Aceptada" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
                     Aceptada
                 </button>
 
                 <button type="submit" name="estado" value="Rechazada"
-                        class="px-4 py-2 rounded-full font-semibold
-                @(ViewContext.HttpContext.Request.Query["estado"] == "Rechazada" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
+                        class="rounded-full px-4 py-2 font-semibold
+@(ViewContext.HttpContext.Request.Query["estado"] == "Rechazada" ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-800")">
                     Rechazada
                 </button>
             </form>
@@ -99,11 +100,11 @@
             <ul class="space-y-4">
                 @foreach (var invitacion in Model)
                 {
-                    <li class="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+                    <li class="flex items-center justify-between rounded-lg bg-gray-50 p-4">
                         <div>
                             <p class="font-medium text-gray-800">@invitacion.CorreoElectronico</p>
-                            <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold
-                    @(invitacion.Estado == "Pendiente" ? "bg-yellow-100 text-yellow-800" :
+                            <span class="inline-block rounded-full px-3 py-1 text-sm font-semibold
+@(invitacion.Estado == "Pendiente" ? "bg-yellow-100 text-yellow-800" :
                       invitacion.Estado == "Aceptada" ? "bg-green-100 text-green-800" :
                       "bg-red-100 text-red-800")">
                                 @invitacion.Estado
@@ -112,16 +113,16 @@
                         @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado == true))
                         {
                             <!-- Botón de eliminar con icono moderno y transiciones mejoradas -->
-                            <button class="text-gray-500 hover:text-red-600 transition duration-200"
+                            <button class="text-gray-500 transition duration-200 hover:text-red-600"
                                     onclick="document.getElementById('confirmDeleteCard-@invitacion.Id').classList.remove('hidden');"
                                     aria-label="Eliminar invitación">
                                 <img src="https://cdn-icons-png.freepik.com/256/2550/2550213.png?semt=ais_hybrid"
-                                     alt="Eliminar" class="h-6 w-6 opacity-80 hover:opacity-100 transition duration-200">
+                                     alt="Eliminar" class="opacity-80 h-6 w-6 transition duration-200 hover:opacity-100">
                             </button>
 
                             <!-- Tarjeta de Confirmación -->
-                            <div id="confirmDeleteCard-@invitacion.Id" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60 transition-opacity duration-300">
-                                <div class="w-80 rounded-xl bg-white shadow-lg transform transition-all duration-300">
+                            <div id="confirmDeleteCard-@invitacion.Id" class="bg-opacity-60 fixed inset-0 z-50 flex hidden items-center justify-center bg-gray-800 transition-opacity duration-300">
+                                <div class="w-80 transform rounded-xl bg-white shadow-lg transition-all duration-300">
                                     <!-- Contenido de Confirmación -->
                                     <div class="p-4 pb-2 text-center">
                                         <!-- Se reduce el padding-bottom aquí -->
@@ -129,9 +130,9 @@
                                         <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar esta invitación? Esta acción no se puede deshacer.</p>
                                     </div>
 
-                                    <div class="bg-gray-100 px-4 py-3 flex justify-between gap-2 rounded-b-xl">
+                                    <div class="flex justify-between gap-2 rounded-b-xl bg-gray-100 px-4 py-3">
                                         <button type="button"
-                                                class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-200"
+                                                class="flex-1 rounded bg-gray-200 px-4 py-2 font-medium text-gray-700 transition duration-200 hover:bg-gray-300"
                                                 onclick="document.getElementById('confirmDeleteCard-@invitacion.Id').classList.add('hidden');">
                                             Cancelar
                                         </button>
@@ -139,7 +140,7 @@
                                             <input type="hidden" name="id" value="@invitacion.Id" />
                                             <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
                                             <button type="submit"
-                                                    class="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition duration-200">
+                                                    class="flex-1 rounded bg-red-500 px-4 py-2 font-semibold text-white transition duration-200 hover:bg-red-600">
                                                 Eliminar
                                             </button>
                                         </form>
@@ -160,8 +161,8 @@
             <p class="text-gray-600">No hay invitaciones disponibles.</p>
         }
     </div>
-    <div class="text-center mt-6">
-        <a href="@Url.Action("Index", "Proyecto")" class="mt-2 inline-block bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition-colors no-underline duration-300">
+    <div class="mt-6 text-center">
+        <a href="@Url.Action("Index", "Proyecto")" class="mt-2 inline-block rounded bg-gray-500 px-4 py-2 font-bold text-white no-underline transition-colors duration-300 hover:bg-purple-700">
             Regresar
         </a>
     </div>

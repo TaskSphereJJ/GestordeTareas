@@ -25,7 +25,7 @@ public class EmailService
             From = new MailAddress(_configuration["EmailSettings:SenderEmail"], _configuration["EmailSettings:SenderDisplayName"]),
             Subject = subject,
             Body = body,
-            IsBodyHtml = true, // Si el cuerpo es HTML
+            IsBodyHtml = true,
         };
         mailMessage.To.Add(toEmail);
 

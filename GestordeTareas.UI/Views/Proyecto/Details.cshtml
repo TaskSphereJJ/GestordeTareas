@@ -67,7 +67,7 @@
                 <dd class="col-sm-8">
                     @if (User.IsInRole("Administrador") || (User.IsInRole("Colaborador") && ViewBag.EsEncargado))
                     {
-                        <span class="font-medium text-blue-600 border-b-2 border-gray-700">@Model.CodigoAcceso</span>
+                        <span class="font-medium text-blue-600 border-gray-700">@Model.CodigoAcceso</span>
                     }
                     else
                     {

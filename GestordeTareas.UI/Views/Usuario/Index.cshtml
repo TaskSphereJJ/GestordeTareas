@@ -9,31 +9,31 @@
 
 @await Html.PartialAsync("_Alerts")
 
-<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Usuarios</h1>
+<h1 class="mb-8 mt-4 text-5xl font-extrabold dark:text-white">Usuarios</h1>
 
 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
 {
-    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
         <!-- Botón Nuevo -->
         <p>
-            <a asp-action="Create" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center">
-                <i class="fas fa-plus text-lg mr-2"></i> Nuevo
+            <a asp-action="Create" class="inline-flex items-center rounded-full bg-purple-700 px-4 py-2 text-center text-lg font-medium text-white no-underline hover:no-underline hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                <i class="fas fa-plus mr-2 text-lg"></i> Nuevo
             </a>
         </p>
 
         <!-- Formulario de búsqueda -->
         <form method="get" asp-action="Index" class="d-flex align-items-center flex-wrap">
-            <div class="d-flex align-items-center mr-4 mb-2 mb-sm-0">
+            <div class="d-flex align-items-center mb-sm-0 mb-2 mr-4">
                 <span class="mr-2">Buscar por:</span>
-                <select name="filter" class="border border-gray-300 rounded-md p-2 w-auto">
+                <select name="filter" class="w-auto rounded-md border border-gray-300 p-2">
                     <option value="Apellido">Apellido</option>
                     <option value="NombreUsuario">Correo</option>
                 </select>
             </div>
-            <div class="d-flex align-items-center mb-2 mb-sm-0">
+            <div class="d-flex align-items-center mb-sm-0 mb-2">
                 <label for="query" class="sr-only">Ingrese el término de búsqueda:</label>
-                <input type="text" name="query" class="border border-gray-300 rounded-md p-2" placeholder="Buscar..." aria-label="Ingrese el término de búsqueda" />
-                <button type="submit" class="bg-purple-500 text-white font-semibold rounded-md p-2 ml-2 hover:bg-purple-600 transition duration-200">
+                <input type="text" name="query" class="rounded-md border border-gray-300 p-2" placeholder="Buscar..." aria-label="Ingrese el término de búsqueda" />
+                <button type="submit" class="ml-2 rounded-md bg-purple-500 p-2 font-semibold text-white transition duration-200 hover:bg-purple-600">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -41,12 +41,15 @@
     </div>
 }
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<div class="relative mt-4 overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-left text-sm text-gray-500 hover:bg-gray-50 rtl:text-right dark:text-gray-400 dark:hover:bg-gray-600">
+        <thead class="bg-gray-50 text-base uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>                
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Id)
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.First().FotoPerfil)
                 </th>
                 <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Nombre)
@@ -77,8 +80,11 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <tr class="border-b bg-white hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td class="px-6 py-4">
+                        <img src="@item.FotoPerfil" alt="Foto de perfil" class="h-10 w-10 rounded-full object-cover">
+                    </td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Apellido)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
@@ -91,14 +97,14 @@
                         }
                         @statusName
                     </td>
-                    <td class="px-6 py-4 flex justify-center items-center space-x-2">
-                        <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaEdit(@item.Id)">
+                    <td class="flex items-center justify-center space-x-2 px-6 py-4">
+                        <a href="#" class="rounded bg-purple-500 px-3 py-2 font-bold text-white hover:bg-purple-700" onclick="cargarVistaEdit(@item.Id)">
                             <i class="fas fa-edit text-lg"></i>
                         </a>
-                        <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDetails(@item.Id)">
+                        <a href="#" class="rounded bg-purple-500 px-3 py-2 font-bold text-white hover:bg-purple-700" onclick="cargarVistaDetails(@item.Id)">
                             <i class="fas fa-eye text-lg"></i>
                         </a>
-                        <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded"
+                        <a href="#" class="rounded bg-purple-500 px-3 py-2 font-bold text-white hover:bg-purple-700"
                            onclick="mostrarTarjetaEliminar(@item.Id); return false;">
                             <i class="fas fa-trash-alt text-lg"></i>
                         </a>
@@ -126,10 +132,10 @@
                 </div>
             </div>
             <div class="modal-footer flex justify-center">
-                <button type="button" class="btn btn-primary bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onclick="submiteditForm('editForm')">
+                <button type="button" class="btn btn-primary mb-2 me-2 rounded-lg bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 px-5 py-2.5 text-sm font-medium hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-purple-800" onclick="submiteditForm('editForm')">
                     <i class="fas fa-save"></i> Guardar
                 </button>
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary mb-2 me-2 rounded-lg bg-gray-300 px-5 py-2.5 text-base font-medium hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800" data-bs-dismiss="modal">
                     <i class="fas fa-times"></i> Cancelar
                 </button>
             </div>
@@ -153,7 +159,7 @@
                 </div>
             </div>
             <div class="modal-footer flex justify-center">
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary mb-2 me-2 rounded-lg bg-gray-300 px-5 py-2.5 text-base font-medium hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800" data-bs-dismiss="modal">
                     <i class="fas fa-times"></i> Cerrar
                 </button>
             </div>
@@ -162,25 +168,25 @@
 </div>
 
 <!-- Tarjeta de eliminacion -->
-<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-    <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
-        <div class="p-6 mt-6">
-            <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
+<div id="confirmDeleteCard" class="fixed inset-0 z-50 flex hidden items-center justify-center bg-gray-900 bg-opacity-50">
+    <div class="max-w-xs overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300">
+        <div class="mt-6 p-6">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-200">
                 <img src="https://cdn-icons-png.freepik.com/256/5055/5055247.png?semt=ais_hybrid" alt="Eliminar" class="h-12 w-12 text-red-600" />
             </div>
             <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
             <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
         </div>
-        <div class="bg-gray-50 p-4 flex justify-between">
+        <div class="flex justify-between bg-gray-50 p-4">
             <button type="button"
-                    class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
+                    class="flex-1 mr-2 rounded bg-gray-300 px-4 py-2 font-medium text-gray-800 transition duration-200 hover:bg-gray-400"
                     onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
                 Cancelar
             </button>
             <form id="deleteForm" method="post" asp-action="Delete">
                 <input type="hidden" name="Id" id="deleteUserId" /> <!-- Campo oculto para el ID del usuario -->
                 <button type="submit"
-                        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
+                        class="flex-1 rounded bg-red-600 px-4 py-2 font-semibold text-white transition duration-200 hover:bg-red-700">
                     Eliminar
                 </button>
             </form>
