@@ -128,8 +128,7 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var proyectos = await dbContext.Proyecto
-            .Include(p => p.ProyectoUsuario) // Relación con ProyectoUsuario
-                .ThenInclude(pu => pu.Usuario) // Se incluiyen los usuarios relacionados
+            .Include(p => p.Usuario) // Relación con Usuario
             .Where(p => p.Titulo.Contains(query) ||
                         p.Usuario.Nombre.Contains(query)) // Búsqueda por título o nombre del administrador
             .ToListAsync();

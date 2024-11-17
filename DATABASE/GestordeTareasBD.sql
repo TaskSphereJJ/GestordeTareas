@@ -133,7 +133,7 @@ CREATE TABLE PasswordResetCode (
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id)
 );
 
-select* from PasswordResetCode
+select* from InvitacionProyecto
 
 -- Tabla de tarea finalizada
 --CREATE TABLE TareaFinalizada (

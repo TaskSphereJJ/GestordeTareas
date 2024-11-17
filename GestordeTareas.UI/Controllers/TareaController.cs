@@ -223,7 +223,8 @@ namespace GestordeTareas.UI.Controllers
             {
                 await _tareaBL.DeleteAsync(tareaObtenida);
                 TempData["SuccessMessage"] = "Tarea eliminada correctamente.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { proyectoId = tareaObtenida.IdProyecto });
+
             }
             catch (Exception ex)
             {
@@ -313,8 +314,8 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si el usuario existe
                 if (idUsuario == null)
                 {
-                    TempData["Error"] = "Usuario no encontrado.";
-                    return RedirectToAction("Index");
+                    TempData["ErrorMessage"] = "Usuario no encontrado.";
+                    return View("Index");
                 }
 
                 // Obtener la tarea por ID
@@ -323,15 +324,15 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si la tarea existe
                 if (tarea == null)
                 {
-                    TempData["Error"] = "Tarea no encontrada.";
-                    return RedirectToAction("Index");
+                    TempData["ErrorMessage"] = "Tarea no encontrada.";
+                    return View("Index");
                 }
 
                 // Verificar si la tarea está en estado "Pendiente"
                 if (tarea.EstadoTarea.Nombre != "Pendiente")
                 {
-                    TempData["Error"] = "La tarea no está en Disponible";
-                    return RedirectToAction("Index");
+                    TempData["ErrorMessage"] = "La tarea no está en Disponible";
+                    return View("Index");
                 }
 
                 // Asignar la tarea al usuario
@@ -342,19 +343,23 @@ namespace GestordeTareas.UI.Controllers
                     // Actualizar estado de la tarea a "En Proceso"
                     const int ID_ESTADO_EN_PROCESO = 2;
                     await _tareaBL.ActualizarEstadoTareaAsync(idTarea, ID_ESTADO_EN_PROCESO);
-                    TempData["Success"] = "Tarea elegida correctamente .";
+                    TempData["SuccessMessage"] = "Tarea elegida correctamente .";
                 }
                 else
                 {
-                    TempData["Error"] = "No se pudo elegir la tarea.";
+                    TempData["ErrorMessage"] = "No se pudo elegir la tarea.";
                 }
+
+                var tareasDelProyecto = await _tareaBL.GetTareasByProyectoIdAsync(tarea.IdProyecto);
+
+                return View("Index", tareasDelProyecto);
+
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Ocurrió un error inesperado.";
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado."+ ex.Message;
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
         }
 
     }

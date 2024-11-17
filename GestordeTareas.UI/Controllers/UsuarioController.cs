@@ -151,7 +151,7 @@ namespace GestordeTareas.UI.Controllers
 
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                TempData["ErrorMessage"] = ex.Message;
                 await LoadDropDownListsAsync();
                 return View(usuario);
             }
@@ -340,7 +340,6 @@ namespace GestordeTareas.UI.Controllers
                 }
 
                 var nombreUsuario = User.Identity.Name;
-                Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
 
                 // Se verifica si userId es null o vacío
                 if (string.IsNullOrEmpty(nombreUsuario))
@@ -368,6 +367,7 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si la eliminación fue exitosa
                 if (result > 0)
                 {
+                    await HttpContext.SignOutAsync();
                     TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
                     return RedirectToAction("Login", "Usuario");
                 }
@@ -409,7 +409,7 @@ namespace GestordeTareas.UI.Controllers
                 if (userDb == null)
                 {
                     // Si el usuario no existe
-                    TempData["ErrorMessage"] = "El nombre de usuario no existe.";
+                    TempData["ErrorMessage"] = "El correo electrónico ingresado no existe.";
                     return View(new Usuario { NombreUsuario = user.NombreUsuario });
                 }
 
