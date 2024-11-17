@@ -24,6 +24,8 @@ namespace GestordeTareas.DAL
         public DbSet<TareaFinalizada> TareaFinalizada { get; set; }
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
         public DbSet<InvitacionProyecto> InvitacionProyecto { get; set; }
+        public DbSet<PasswordResetCode> PasswordResetCode { get; set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -64,6 +66,7 @@ namespace GestordeTareas.DAL
                 .HasOne(pu => pu.Proyecto)
                 .WithMany(p => p.ProyectoUsuario)  
                 .HasForeignKey(pu => pu.IdProyecto);
+
         }
     }
 }

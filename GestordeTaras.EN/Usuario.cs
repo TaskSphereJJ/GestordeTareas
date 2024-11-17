@@ -65,6 +65,8 @@ namespace GestordeTaras.EN
 
         public Cargo Cargo { get; set; } // propiedad de navegación
         public virtual ICollection<ProyectoUsuario> ProyectoUsuario { get; set; }
+
+        public ICollection<PasswordResetCode> PasswordResetCode { get; set; }
     }
     public enum User_Status
     {

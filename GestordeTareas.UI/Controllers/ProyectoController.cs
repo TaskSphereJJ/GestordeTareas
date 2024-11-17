@@ -395,6 +395,7 @@ namespace GestordeTareas.UI.Controllers
 
         // Método GET para mostrar las invitaciones de un proyecto específico
         [HttpGet]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<IActionResult> Invitaciones(int id)
         {
             try
@@ -403,10 +404,10 @@ namespace GestordeTareas.UI.Controllers
                 var invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorProyectoAsync(id);
 
                 // Verificar si se encontraron invitaciones
-                if (invitaciones == null || !invitaciones.Any())
-                {
-                    TempData["InfoMessage"] = "No hay invitaciones para mostrar.";
-                }
+                //if (invitaciones == null || !invitaciones.Any())
+                //{
+                //    TempData["InfoMessage"] = "No hay invitaciones para mostrar.";
+                //}
 
                 ViewBag.IdProyecto = id;
 
@@ -431,6 +432,7 @@ namespace GestordeTareas.UI.Controllers
 
         // Método para filtrar invitaciones por estado
         [HttpGet]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<IActionResult> FiltrarInvitaciones(int id, string estado)
         {
             try

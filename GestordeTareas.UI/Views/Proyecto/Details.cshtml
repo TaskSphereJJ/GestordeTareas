@@ -37,22 +37,25 @@
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-2xl font-semibold text-gray-800">Detalles del Proyecto</h3>
                 <div class="flex items-center text-sm text-gray-600">
-                    <span class="mr-2 font-semibold">Encargado:</span>
-                    <div class="flex items-center">
-                        @if (ViewBag.Encargado != null)
-                        {
-                            <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
-                                <img src="@Url.Content(ViewBag.Encargado.FotoPerfil ?? "/img/default-avatar.png")" alt="Foto de perfil de @ViewBag.Encargado.Nombre" class="w-full h-full object-cover">
+                    @if (ViewBag.Encargado != null)
+                    {
+                        <div class="w-10 h-10 rounded-full overflow-hidden mr-2">
+                            <img src="@Url.Content(ViewBag.Encargado.FotoPerfil ?? "/img/default-avatar.png")" alt="Foto de perfil de @ViewBag.Encargado.Nombre" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <span class="font-semibold text-gray-600">Encargado:</span>
+                            <div class="font-medium text-blue-600">
+                                @ViewBag.Encargado.Nombre @ViewBag.Encargado.Apellido
                             </div>
-                            <span class="font-medium text-blue-600">@ViewBag.Encargado.Nombre @ViewBag.Encargado.Apellido</span>
-                        }
-                        else
-                        {
-                            <span class="italic text-gray-500">No hay encargado asignado</span>
-                        }
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="italic text-gray-500">No hay encargado asignado</span>
+                    }
                 </div>
             </div>
+
             <dl class="row">
                 <dt class="col-sm-4 font-semibold text-gray-700">Título:</dt>
                 <dd class="col-sm-8 text-gray-800">@Model.Titulo</dd>
@@ -71,7 +74,7 @@
                     }
                     else
                     {
-                        <span class="text-gray-400">Solo visible para el administrador o encargado</span>
+                        <span class="text-gray-400">Solo visible para el administrador y encargado</span>
                     }
                 </dd>
 
@@ -172,7 +175,6 @@
             Regresar
         </a>
     </div>
-</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

@@ -250,7 +250,7 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
-                select = QuerySelect(select, usuarios).Include(u => u.Cargo); 
+                select = QuerySelect(select, usuarios).Include(u => u.Cargo);
                 users = await select.ToListAsync();
             }
             return users;
@@ -319,6 +319,80 @@ namespace GestordeTareas.DAL
             }
         }
 
+        // Método para generar un token de restablecimiento y asignarlo al usuario
+        public static async Task<int> GenerarCodigoRestablecimientoAsync(Usuario usuario)
+        {
+            // Generar un código de 6 dígitos aleatorio
+            Random random = new Random();
+            int codigo = random.Next(100000, 999999);
 
+            // Generar el hash MD5 del código
+            string codigoEncriptado = HashMD5(codigo.ToString());
+
+            var passwordResetCode = new PasswordResetCode
+            {
+                IdUsuario = usuario.Id,
+                Codigo = codigoEncriptado,
+                Expiration = DateTime.Now.AddMinutes(15) // Expira en 15 minutos
+            };
+
+            using (var dbContext = new ContextoBD())
+            {
+                dbContext.PasswordResetCode.Add(passwordResetCode);
+                await dbContext.SaveChangesAsync();
+            }
+            return codigo;
+        }
+
+        // Método para verificar si el token de restablecimiento es válido
+        public static async Task<bool> ValidarCodigoRestablecimientoAsync(int Idusuario, string codigo)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Generar el hash del código ingresado
+                string codigoIngresadoEncriptado = HashMD5(codigo.ToString());
+
+                var resetCode = await dbContext.PasswordResetCode
+                    .FirstOrDefaultAsync(c => c.IdUsuario == Idusuario && c.Codigo == codigoIngresadoEncriptado);
+
+                // Si el token existe y no ha expirado
+                if (resetCode != null && resetCode.Expiration >= DateTime.Now)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // Método para restablecer la contraseña del usuario
+        public static async Task<int> RestablecerContrasenaAsync(int Idusuario, string codigo, string nuevaContrasena)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                string codigoIngresadoEncriptado = HashMD5(codigo.ToString());
+
+                var resetCode = await dbContext.PasswordResetCode
+                    .FirstOrDefaultAsync(c => c.IdUsuario == Idusuario && c.Codigo == codigoIngresadoEncriptado);
+
+                if (resetCode != null && resetCode.Expiration >= DateTime.Now)
+                {
+                    var usuario = await dbContext.Usuario.FindAsync(Idusuario);
+
+                    // Encripta la nueva contraseña y actualiza
+                    usuario.Pass = HashMD5(nuevaContrasena);
+
+                    // Elimina el token después de restablecer la contraseña
+                    dbContext.PasswordResetCode.Remove(resetCode);
+
+                    dbContext.Usuario.Update(usuario);
+                    return await dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("Token inválido o expirado.");
+                }
+            }
+        }
     }
+
 }
