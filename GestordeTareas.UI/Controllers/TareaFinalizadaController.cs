@@ -1,82 +1,67 @@
-﻿//using GestordeTaras.EN;
-//using GestordeTareas.BL;
-//using GestordeTareas.UI.Helpers;  
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using System.IO;
-//using System.Threading.Tasks;
+﻿using GestordeTaras.EN;
+using GestordeTareas.BL;
+using GestordeTareas.UI.Helpers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-//namespace GestordeTareas.UI.Controllers
-//{
-//    public class TareaFinalizadaController : Controller
-//    {
-//        private readonly TareaFinalizadaBL _tareaFinalizadaBL;
-//        private readonly ImagenesPruebaBL _imagenesPruebaBL;
+namespace GestordeTareas.UI.Controllers
+{
+    public class TareaFinalizadaController : Controller
+    {
+        private readonly TareaFinalizadaBL _tareaFinalizadaBL;
 
-//        public TareaFinalizadaController()
-//        {
-//            _tareaFinalizadaBL = new TareaFinalizadaBL();
-//            _imagenesPruebaBL = new ImagenesPruebaBL();
-//        }
+        public TareaFinalizadaController(TareaFinalizadaBL tareaFinalizadaBL)
+        {
+            _tareaFinalizadaBL = tareaFinalizadaBL;
+        }
 
-//        public async Task<IActionResult> Index()
-//        {
-//            var tareasFinalizadas = await _tareaFinalizadaBL.GetAllAsync();
-//            var tareasFiltradas = tareasFinalizadas.Where(t => t.ElegirTarea.EstadoTarea.Id == 3).ToList();
-//            return View(tareasFiltradas);
-//        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ImagenTareaFinalizada(int idTarea, string comentario, List<IFormFile> formFiles)
+        {
+            try
+            {
+                if (formFiles == null || formFiles.Count == 0)
+                {
+                    ModelState.AddModelError("", "Debe proporcionar al menos una imagen.");
+                    return View();
+                }
 
-//        [HttpPost]
-//        public async Task<IActionResult> CrearTareaFinalizada(TareaFinalizada tareaFinalizada, IFormFile archivoImagen)
-//        {
-//            if (archivoImagen != null && archivoImagen.Length > 0)
-//            {
-//                // Subir la imagen a Firebase
-//                string imagenUrl = await ImageHelper.SubirArchivo(archivoImagen.OpenReadStream(), archivoImagen.FileName);
+                // Subir las imágenes a Firebase y obtener las rutas
+                var rutasImagenes = new List<string>();
+                foreach (var file in formFiles)
+                {
+                    if (file.Length > 0)
+                    {
+                        using var stream = file.OpenReadStream();
+                        string ruta = await ImageHelper.SubirArchivo(stream, file.FileName);
+                        rutasImagenes.Add(ruta);
+                    }
+                }
 
-//                if (!string.IsNullOrEmpty(imagenUrl))
-//                {
-//                    // Crear tarea finalizada
-//                    var tareaResult = await _tareaFinalizadaBL.CreateAsync(tareaFinalizada);
+                // Crear objeto de tarea finalizada
+                var tareaFinalizada = new TareaFinalizada
+                {
+                    IdTarea = idTarea,
+                    FechaFinalizacion = DateTime.Now,
+                    Comentarios = comentario,
+                    IdEstadoTarea = 3 // Estado finalizado
+                };
 
-//                    if (tareaResult > 0)
-//                    {
-//                        // Crear el objeto ImagenesPrueba y asociarlo con la tarea finalizada
-//                        ImagenesPrueba imagenesPrueba = new ImagenesPrueba
-//                        {
-//                            Imagen = imagenUrl,
-//                            IdTareaFinalizada = tareaFinalizada.Id
-//                        };
+                // Llamar a la lógica de negocio para guardar la tarea y las imágenes
+                int idTareaFinalizada = await _tareaFinalizadaBL.CrearTareaFinalizadaConImagenesAsync(tareaFinalizada, rutasImagenes);
 
-//                        // Guardar la imagen en la base de datos
-//                        var imagenResult = await _imagenesPruebaBL.CreateAsync(imagenesPrueba);
-
-//                        if (imagenResult > 0)
-//                        {
-//                            // Redirigir o devolver éxito si todo se guardó correctamente
-//                            return RedirectToAction("Index");  // O la vista que desees
-//                        }
-//                        else
-//                        {
-//                            ModelState.AddModelError("", "No se pudo guardar la imagen en la base de datos.");
-//                        }
-//                    }
-//                    else
-//                    {
-//                        ModelState.AddModelError("", "No se pudo crear la tarea finalizada.");
-//                    }
-//                }
-//                else
-//                {
-//                    ModelState.AddModelError("", "No se pudo subir la imagen a Firebase.");
-//                }
-//            }
-//            else
-//            {
-//                ModelState.AddModelError("", "Por favor, seleccione una imagen.");
-//            }
-
-//            return View(tareaFinalizada); 
-//        }
-//    }
-//}
+                TempData["Success"] = "La tarea finalizada se guardó exitosamente.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Ocurrió un error al procesar la solicitud: {ex.Message}";
+                return View();
+            }
+        }
+    }
+}

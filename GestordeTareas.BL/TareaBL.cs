@@ -46,6 +46,10 @@ namespace GestordeTareas.BL
         {
             return await TareaDAL.ActualizarEstadoTareaAsync(idTarea, idEstadoTarea);
         }
+        public async Task<List<Tarea>> GetTareasFinalizadas()
+        {
+            return await TareaDAL.GetTareasFinalizadas();
+        }
 
     }
 }

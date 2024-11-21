@@ -1,78 +1,47 @@
-﻿//using GestordeTaras.EN;
-//using GestordeTareas.DAL;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using GestordeTareas.DAL;
+using GestordeTaras.EN;
+using GestordeTareas.EN;
+using static System.Net.Mime.MediaTypeNames;
 
-//namespace GestordeTareas.BL
-//{
-//    public class ImagenesPruebaBL
-//    {
-//        // Crear una imagen de prueba
-//        public async Task<int> CreateAsync(ImagenesPrueba imagenesPruebas)
-//        {
-//            if (string.IsNullOrEmpty(imagenesPruebas.Imagen))
-//            {
-//                throw new ArgumentException("La ruta de la imagen no puede estar vacía.");
-//            }
+namespace GestordeTareas.BL
+{
+    public class ImagenesPruebaBL
+    {
+        public async Task<int> CreateAsync(ImagenesPrueba imagenesTarea)
+        {
+            return await ImagenesPruebaDAL.CreateAsync(imagenesTarea);
+        }
 
-//            return await ImagenesPruebaDAL.CreateAsync(imagenesPruebas);
-//        }
+        public async Task<int> UpdateAsync(ImagenesPrueba imagenesTarea)
+        {
+            return await ImagenesPruebaDAL.UpdateAsync(imagenesTarea);
+        }
 
-//        // Actualizar una imagen de prueba
-//        public async Task<int> UpdateAsync(ImagenesPrueba imagenesPruebas)
-//        {
-//            if (imagenesPruebas.Id <= 0)
-//            {
-//                throw new ArgumentException("El ID de la imagen debe ser mayor que cero.");
-//            }
+        public async Task<int> DeleteAsync(ImagenesPrueba imagenesTarea)
+        {
+            return await ImagenesPruebaDAL.DeleteAsync(imagenesTarea);
+        }
 
-//            if (string.IsNullOrEmpty(imagenesPruebas.Imagen))
-//            {
-//                throw new ArgumentException("La ruta de la imagen no puede estar vacía.");
-//            }
+        public async Task<ImagenesPrueba> GetByIdAsync(ImagenesPrueba imagenesTarea)
+        {
+            return await ImagenesPruebaDAL.GetByIdAsync(imagenesTarea);
+        }
 
-//            return await ImagenesPruebaDAL.UpdateAsync(imagenesPruebas);
-//        }
+        public async Task<List<ImagenesPrueba>> GetAllAsync()
+        {
+            return await ImagenesPruebaDAL.GetAllAsync();
+        }
 
-//        // Eliminar una imagen de prueba
-//        public async Task<int> DeleteAsync(ImagenesPrueba imagenesPruebas)
-//        {
-//            if (imagenesPruebas.Id <= 0)
-//            {
-//                throw new ArgumentException("El ID de la imagen debe ser mayor que cero.");
-//            }
+        public async Task<List<ImagenesPrueba>> SearchAsync(ImagenesPrueba imagenesTarea)
+        {
+            return await ImagenesPruebaDAL.SearchAsync(imagenesTarea);
+        }
 
-//            return await ImagenesPruebaDAL.DeleteAsync(imagenesPruebas);
-//        }
+        public async Task<List<ImagenesPrueba>> SearchIncludeAdAsync(ImagenesPrueba imagenesTarea)
+        {
+            return await ImagenesPruebaDAL.SearchIncludeAdAsync(imagenesTarea);
+        }
+    }
 
-//        public async Task<ImagenesPrueba> GetByIdAsync(int id)
-//        {
-//            if (id <= 0)
-//            {
-//                throw new ArgumentException("El ID debe ser mayor que cero.");
-//            }
-
-//            var imagen = new ImagenesPrueba { Id = id };
-//            return await ImagenesPruebaDAL.GetByIdAsync(imagen);
-//        }
-
-//        // Obtener todas las imágenes de prueba
-//        public async Task<List<ImagenesPrueba>> GetAllAsync()
-//        {
-//            return await ImagenesPruebaDAL.GetAllAsync();
-//        }
-
-//        public async Task<List<ImagenesPrueba>> SearchAsync(ImagenesPrueba imagenesPruebas)
-//        {
-//            return await ImagenesPruebaDAL.SearchAsync(imagenesPruebas);
-//        }
-
-//        public async Task<List<ImagenesPrueba>> SearchIncludeAdAsync(ImagenesPrueba imagenesPruebas)
-//        {
-//            return await ImagenesPruebaDAL.SearchIncludeAdAsync(imagenesPruebas);
-//        }
-//    }
-//}
+}

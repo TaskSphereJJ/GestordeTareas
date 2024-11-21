@@ -1,10 +1,12 @@
 ﻿using GestordeTaras.EN;
+using GestordeTareas.DAL;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GestordeTareas.DAL
@@ -143,7 +145,7 @@ namespace GestordeTareas.DAL
                 var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == idTarea);
                 if (tareaBD != null)
                 {
-                    //accedo a actualizar la atera
+                    //accedo a actualizar la tarea
                     tareaBD.IdEstadoTarea = idEstadoTarea;
                     bdContexto.Update(tareaBD);
                     //aqui se guardan los cambios
@@ -151,6 +153,19 @@ namespace GestordeTareas.DAL
                 }
             }
             return result;
+        }
+        public static async Task<List<Tarea>> GetTareasFinalizadas()
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                return await dbContext.Tarea
+                    .Include(c => c.Categoria)
+                    .Include(p => p.Prioridad)
+                    .Include(e => e.EstadoTarea)
+                    .Include(r => r.Proyecto)
+                    .Where(t => t.IdEstadoTarea == 3) 
+                    .ToListAsync();
+            }
         }
 
     }

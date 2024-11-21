@@ -1,6 +1,8 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
 using GestordeTareas.DAL;
+using GestordeTareas.EN;
+using GestordeTareas.UI.Helpers;
 using Humanizer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace GestordeTareas.UI.Controllers
@@ -23,6 +26,7 @@ namespace GestordeTareas.UI.Controllers
         private readonly UsuarioBL _usuarioBL;
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
         private readonly ElegirTareaBL _elegirTareaBL;
+        private readonly ImagenesPruebaBL _imagenesTareaBL;
 
         public TareaController()
         {
@@ -379,19 +383,31 @@ namespace GestordeTareas.UI.Controllers
                 return Forbid("No tienes acceso a este proyecto.");
             }
 
-            // Obtener las tareas que el usuario ha elegido en el proyecto
             var tareasElegidas = await _elegirTareaBL.ObtenerTareasElegidasPorUsuarioAsync(idUsuario.Value, idProyecto);
 
-            // Verificar si hay tareas elegidas
             if (tareasElegidas == null || !tareasElegidas.Any())
             {
-                // Establecer el mensaje en TempData 
                 TempData["NoHayTareas"] = "No hay tareas elegidas.";
             }
-            // Pasar las tareas a la vista
             return View(tareasElegidas);
         }
 
+        //public async Task<IActionResult> TareasFinalizadas()
+        //{
+        //    try
+        //    {
+        //        // Obtener las tareas finalizadas para el proyecto ya asociado
+        //        var tareasFinalizadas = await _tareaBL.GetTareasFinalizadas(); // Si el proyecto ya está asociado al usuario o contexto
+
+        //        return View(tareasFinalizadas);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Error = "Ocurrió un error al cargar las tareas finalizadas.";
+        //        Debug.WriteLine($"Error: {ex.Message}");
+        //        return View(new List<Tarea>());
+        //    }
+        //}
 
     }
 }

@@ -1,0 +1,117 @@
+﻿@model IEnumerable<GestordeTaras.EN.TareaFinalizada>
+
+@{
+    ViewData["Title"] = "Tareas Finalizadas";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center text-primary">@ViewData["Title"]</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>FechaFinalizacion</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tarea in Model)
+                {
+                    <tr>
+                        <td>@tarea.IdTarea</td>
+                        <td>@tarea.FechaFinalizacion</td>
+                        <td>@tarea.Comentarios</td>
+                        <td>@tarea.IdEstadoTarea == 3 ? "Finalizada" : "Otro" </td>
+                        <td>
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalAgregarComentario" data-tareaid="@tarea.IdTarea">
+                                <i class="fas fa-image"></i> Agregar Imagen
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No hay tareas finalizadas disponibles.
+        </div>
+    }
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAgregarComentario" tabindex="-1" role="dialog" aria-labelledby="modalAgregarComentarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalAgregarComentarioLabel">Agregar Imagen y Comentario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarComentario" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="IdTarea" name="IdTarea" />
+
+                    <div class="form-group">
+                        <label for="comentario">Comentario:</label>
+                        <textarea id="comentario" name="comentario" class="form-control" rows="4" placeholder="Escribe tu comentario aquí..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imagen">Imágenes:</label>
+                        <input type="file" id="imagen" name="formFiles" class="form-control-file" multiple required />
+                        <small class="form-text text-muted">Puedes subir una o más imágenes relacionadas con la tarea.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+    // Configurar el modal al abrirlo
+    $('#modalAgregarComentario').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Botón que activó el modal
+        var tareaId = button.data('tareaid'); // ID de la tarea seleccionada
+
+        // Establecer el ID de la tarea en el campo oculto del formulario
+        var modal = $(this);
+        modal.find('#IdTarea').val(tareaId);
+    });
+
+    // Manejar el envío del formulario
+    $('#formAgregarComentario').submit(async function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        try {
+            var response = await fetch('@Url.Action("ImagenTareaFinalizada", "TareaFinalizada")', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('Imagen y comentario guardados con éxito.');
+                location.reload();
+            } else {
+                alert('Error al guardar los datos.');
+            }
+        } catch (error) {
+            alert('Error de conexión con el servidor.');
+        }
+    });
+</script>
