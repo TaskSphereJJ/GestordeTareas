@@ -21,10 +21,12 @@ namespace GestordeTareas.UI.Controllers
         UsuarioBL _usuarioBL = new UsuarioBL();
         CargoBL cargoBL = new CargoBL();
         private readonly CargoBL _cargoBL;
+        private readonly EmailService _emailService;
 
-        public UsuarioController()
+        public UsuarioController(EmailService emailService)
         {
             _cargoBL = new CargoBL();
+            _emailService = emailService;
 
         }
 
@@ -103,7 +105,7 @@ namespace GestordeTareas.UI.Controllers
         {
             var user = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
             user.Cargo = await cargoBL.GetById(new Cargo { Id = user.IdCargo });
-            return View("Details", user);
+            return PartialView("Details", user);
         }
 
         // GET: UsuarioController/Create
@@ -149,7 +151,7 @@ namespace GestordeTareas.UI.Controllers
 
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                TempData["ErrorMessage"] = ex.Message;
                 await LoadDropDownListsAsync();
                 return View(usuario);
             }
@@ -338,7 +340,6 @@ namespace GestordeTareas.UI.Controllers
                 }
 
                 var nombreUsuario = User.Identity.Name;
-                Debug.WriteLine($"Valor de nombreUsuario: '{nombreUsuario}'");
 
                 // Se verifica si userId es null o vacío
                 if (string.IsNullOrEmpty(nombreUsuario))
@@ -366,6 +367,7 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si la eliminación fue exitosa
                 if (result > 0)
                 {
+                    await HttpContext.SignOutAsync();
                     TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
                     return RedirectToAction("Login", "Usuario");
                 }
@@ -407,7 +409,7 @@ namespace GestordeTareas.UI.Controllers
                 if (userDb == null)
                 {
                     // Si el usuario no existe
-                    TempData["ErrorMessage"] = "El nombre de usuario no existe.";
+                    TempData["ErrorMessage"] = "El correo electrónico ingresado no existe.";
                     return View(new Usuario { NombreUsuario = user.NombreUsuario });
                 }
 
@@ -476,39 +478,177 @@ namespace GestordeTareas.UI.Controllers
 
         }
 
-        ////MÉTODO PRIVADO PARA SUBIR FOTO DE PERFIL
-        //private async Task<string> SaveProfileImage(IFormFile fotoPerfil)
-        //{
-        //    if (fotoPerfil == null || fotoPerfil.Length == 0)
-        //    {
-        //        return null; // Retorna null si no hay foto
-        //    }
+        // GET: UsuarioController/ForgotPassword
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
 
-        //    // Validar el tamaño del archivo
-        //    if (fotoPerfil.Length > 2 * 1024 * 1024) // 2 MB
-        //    {
-        //        throw new InvalidOperationException("El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.");
-        //    }
+        //MÉTODO PARA ENVIAR EL CORREO CON EL CODIGO DE VERIFICACION
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> SolicitarRestablecimiento(string nombreUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(nombreUsuario))
+            {
+                return Json(new { success = false, message = "El correo electrónico no puede estar vacío." });
 
-        //    // Ruta donde se guardará la imagen
-        //    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
-        //    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fotoPerfil.FileName);
-        //    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            }
 
-        //    // Crear la carpeta si no existe
-        //    if (!Directory.Exists(uploadsFolder))
-        //    {
-        //        Directory.CreateDirectory(uploadsFolder);
-        //    }
+            try
+            {
+                // Busca al usuario por su NombreUsuario que corresponde al correo en este caso
+                var usuario = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = nombreUsuario });
+                var usuarioEncontrado = usuario.FirstOrDefault();
 
-        //    // Guardar la imagen en el servidor
-        //    using (var fileStream = new FileStream(filePath, FileMode.Create))
-        //    {
-        //        await fotoPerfil.CopyToAsync(fileStream);
-        //    }
+                if (usuarioEncontrado != null)
+                {
+                    //se almacena el usuario en tempdata
+                    TempData["IdUsuario"] = usuarioEncontrado.Id;
+                    // Genera el código de restablecimiento
+                    int codigo = await _usuarioBL.GenerarCodigoRestablecimientoAsync(usuarioEncontrado);
 
-        //    return "/images/profiles/" + uniqueFileName; // Retorna la ruta relativa
-        //}
+                    if (codigo == 0)
+                    {
+                        return Json(new { success = false, message = "Error al generar el código de restablecimeiento." });
+
+                    }
+
+                    try
+                    {
+                        // Envía el código de restablecimiento al usuario
+                        await _emailService.EnviarCorreoRestablecimientoAsync(usuarioEncontrado.NombreUsuario, codigo);
+                        return Json(new { success = true, message = "Código de verificación enviado." });
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { success = false, message = $"Error al enviar el correo: {ex.Message}" });
+
+                    }
+                }
+                else
+                {
+                    // Si el usuario no existe, muestra un mensaje de error
+                    return Json(new { success = false, message = "El correo electrónico ingresado no existe en nuestros registros." });
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Hubo un problema al procesar tu solicitud: {ex.Message}" });
+
+            }
+        }
+
+
+        //MÉTODO PARA VERIFICAR SI EL CODIGO COINCIDE CON EL ENVIADO
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ValidarCodigo(string codigo)
+        {
+            var idUsuario = TempData["IdUsuario"] as int?;
+            TempData["IdUsuario"] = idUsuario;
+
+            if (idUsuario == null)
+            {
+                return Json(new { success = false, message = "No se encontró información del usuario. Vuelve a solicitar el código." });
+
+            }
+
+            if (string.IsNullOrWhiteSpace(codigo))
+            {
+                return Json(new { success = false, message = "Por favor, ingresa el código de verificación." });
+
+            }
+
+            // Verifica si el código ingresado es correcto
+            bool esCodigoValido = await _usuarioBL.ValidarCodigoRestablecimientoAsync(idUsuario.Value, codigo);
+
+            if (!esCodigoValido)
+            {
+                // Si el código no es válido o ha expirado
+                return Json(new { success = false, message = "El código ingresado es incorrecto o ha expirado." });
+
+            }
+
+            // Guarda el código en TempData para ser usado en el siguiente metodo
+            TempData["CodigoRestablecimiento"] = codigo;
+
+            return Json(new { success = true, message = "El código es válido. Ahora puedes restablecer tu contraseña." });
+
+        }
+
+
+        //MÉTODO PARA CAMBIAR LA CONTRASEÑA UNA VEZ HA SIDO VERIFICADO EL CODIGO
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> RestablecerContrasena(string nuevaContrasena, string confirmarContrasena)
+        {
+            var idUsuario = TempData["IdUsuario"] as int?;
+            TempData["IdUsuario"] = idUsuario;
+
+            if (idUsuario == null)
+            {
+                return Json(new { success = false, message = "No se encontró información del usuario. Vuelve a solicitar el código." });
+
+            }
+
+            if (string.IsNullOrWhiteSpace(nuevaContrasena) || string.IsNullOrWhiteSpace(confirmarContrasena))
+            {
+                return Json(new { success = false, message = "Por favor, ingresa ambas contraseñas." });
+
+            }
+
+            if (nuevaContrasena != confirmarContrasena)
+            {
+                return Json(new { success = false, message = "Las contraseñas no coinciden. Por favor, intenta nuevamente." });
+
+            }
+
+            if (nuevaContrasena.Length < 8)  
+            {
+                return Json(new { success = false, message = "La contraseña debe tener al menos 8 caracteres." });
+
+            }
+
+            try
+            {
+                // Recupera el código de verificación desde TempData (si ya se validó previamente)
+                var codigoGuardado = TempData["CodigoRestablecimiento"] as string;
+
+                if (string.IsNullOrWhiteSpace(codigoGuardado))
+                {
+                    return Json(new { success = false, message = "El código de verificación no es válido o ha expirado." });
+
+                }
+
+                // Si la nueva contraseña se ha ingresado, intenta restablecerla
+                var resultado = await _usuarioBL.RestablecerContrasenaAsync(idUsuario.Value, codigoGuardado, nuevaContrasena);
+
+                if (resultado > 0)
+                {
+                    // Si la contraseña fue actualizada correctamente
+                    return Json(new { success = true, message = "Tu contraseña ha sido actualizada exitosamente." });
+
+                }
+                else
+                {
+                    // Si hubo algún problema al restablecer la contraseña
+                    return Json(new { success = false, message = "No se pudo restablecer la contraseña. Intenta nuevamente." });
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier excepción y muestra un mensaje de error
+                return Json(new { success = false, message = $"Hubo un problema al procesar tu solicitud: {ex.Message}" });
+
+            }
+        }
 
     }
 

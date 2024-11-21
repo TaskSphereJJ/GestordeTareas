@@ -52,48 +52,65 @@ namespace GestordeTareas.DAL
         }
 
 
-        //METODO PARA VERIFICAR SI EL NOMBRE DE USUARIO YA EXISTE
+        // MÉTODO PARA VERIFICAR SI EL NOMBRE DE USUARIO O TELÉFONO YA EXISTE
         private static async Task<bool> ExistsLogin(Usuario user, ContextoBD context)
         {
             bool result = false;
-            // Consulta en la base de datos si ya existe un usuario con el mismo nombre de usuario pero con un ID diferente.
+
+            // Consulta en la base de datos si ya existe un usuario con el mismo nombre de usuario (correo) pero con un ID diferente.
             var userLoginExists = await context.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == user.NombreUsuario && u.Id != user.Id);
 
-            // Si se encuentra un usuario que cumpla con las condiciones, el método devolverá 'true'.
-            if (userLoginExists != null && userLoginExists.Id > 0 && userLoginExists.NombreUsuario == user.NombreUsuario)
+            // Consulta en la base de datos si ya existe un usuario con el mismo número de teléfono pero con un ID diferente.
+            var userPhoneExists = await context.Usuario.FirstOrDefaultAsync(u => u.Telefono == user.Telefono && u.Id != user.Id);
+
+            // Si ya existe un usuario con el mismo nombre de usuario o teléfono, el método devolverá 'true'.
+            if (userLoginExists != null || userPhoneExists != null)
+            {
                 result = true;
+            }
 
             return result;
         }
+
 
 
         // MÉTODO PARA CREAR UN NUEVO USUARIO 
         public static async Task<int> Create(Usuario usuario)
-
         {
             int result = 0;
             using (var dbContext = new ContextoBD())
             {
+                // Verificar si ya existe un usuario con el mismo correo o teléfono
+                var userLoginExists = await dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario && u.Id != usuario.Id);
+                var userPhoneExists = await dbContext.Usuario.FirstOrDefaultAsync(u => u.Telefono == usuario.Telefono && u.Id != usuario.Id);
 
-                bool existsLogin = await ExistsLogin(usuario, dbContext);
-                if (existsLogin == false)
+                // Si el correo ya está registrado
+                if (userLoginExists != null)
                 {
-                    usuario.FechaRegistro = DateTime.Now;
-                    EncryptMD5(usuario);
-
-                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
-                    {
-                        usuario.FotoPerfil = usuario.FotoPerfil;
-                    }
-
-                    dbContext.Usuario.Add(usuario);
-                    result = await dbContext.SaveChangesAsync();
+                    throw new Exception("El correo electrónico ya pertenece a un usuario");
                 }
-                else
-                    throw new Exception("El nombre de usuario ya existe");
+
+                // Si el teléfono ya está registrado
+                if (userPhoneExists != null)
+                {
+                    throw new Exception("Este número de teléfono ya está registrado");
+                }
+
+                // Si no hay duplicados, continúa con la creación del usuario
+                usuario.FechaRegistro = DateTime.Now;
+                EncryptMD5(usuario);
+
+                if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                {
+                    usuario.FotoPerfil = usuario.FotoPerfil;
+                }
+
+                dbContext.Usuario.Add(usuario);
+                result = await dbContext.SaveChangesAsync();
             }
             return result;
         }
+
 
 
         // MÉTODO PARA ACTUALIZAR UN USUARIO EXISTENTE 
@@ -135,7 +152,7 @@ namespace GestordeTareas.DAL
                     result = await dbContext.SaveChangesAsync();
                 }
                 else
-                    throw new Exception("El nombre de usuario ya existe");
+                    throw new Exception("Este correo electrónico ya existe en los registros");
             }
             return result;
         }
@@ -250,7 +267,7 @@ namespace GestordeTareas.DAL
             using (var dbContext = new ContextoBD())
             {
                 var select = dbContext.Usuario.AsQueryable();
-                select = QuerySelect(select, usuarios).Include(u => u.Cargo); 
+                select = QuerySelect(select, usuarios).Include(u => u.Cargo);
                 users = await select.ToListAsync();
             }
             return users;
@@ -319,6 +336,80 @@ namespace GestordeTareas.DAL
             }
         }
 
+        // Método para generar un token de restablecimiento y asignarlo al usuario
+        public static async Task<int> GenerarCodigoRestablecimientoAsync(Usuario usuario)
+        {
+            // Generar un código de 6 dígitos aleatorio
+            Random random = new Random();
+            int codigo = random.Next(100000, 999999);
 
+            // Generar el hash MD5 del código
+            string codigoEncriptado = HashMD5(codigo.ToString());
+
+            var passwordResetCode = new PasswordResetCode
+            {
+                IdUsuario = usuario.Id,
+                Codigo = codigoEncriptado,
+                Expiration = DateTime.Now.AddMinutes(15) // Expira en 15 minutos
+            };
+
+            using (var dbContext = new ContextoBD())
+            {
+                dbContext.PasswordResetCode.Add(passwordResetCode);
+                await dbContext.SaveChangesAsync();
+            }
+            return codigo;
+        }
+
+        // Método para verificar si el token de restablecimiento es válido
+        public static async Task<bool> ValidarCodigoRestablecimientoAsync(int Idusuario, string codigo)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Generar el hash del código ingresado
+                string codigoIngresadoEncriptado = HashMD5(codigo.ToString());
+
+                var resetCode = await dbContext.PasswordResetCode
+                    .FirstOrDefaultAsync(c => c.IdUsuario == Idusuario && c.Codigo == codigoIngresadoEncriptado);
+
+                // Si el token existe y no ha expirado
+                if (resetCode != null && resetCode.Expiration >= DateTime.Now)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // Método para restablecer la contraseña del usuario
+        public static async Task<int> RestablecerContrasenaAsync(int Idusuario, string codigo, string nuevaContrasena)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                string codigoIngresadoEncriptado = HashMD5(codigo.ToString());
+
+                var resetCode = await dbContext.PasswordResetCode
+                    .FirstOrDefaultAsync(c => c.IdUsuario == Idusuario && c.Codigo == codigoIngresadoEncriptado);
+
+                if (resetCode != null && resetCode.Expiration >= DateTime.Now)
+                {
+                    var usuario = await dbContext.Usuario.FindAsync(Idusuario);
+
+                    // Encripta la nueva contraseña y actualiza
+                    usuario.Pass = HashMD5(nuevaContrasena);
+
+                    // Elimina el token después de restablecer la contraseña
+                    dbContext.PasswordResetCode.Remove(resetCode);
+
+                    dbContext.Usuario.Update(usuario);
+                    return await dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("Token inválido o expirado.");
+                }
+            }
+        }
     }
+
 }

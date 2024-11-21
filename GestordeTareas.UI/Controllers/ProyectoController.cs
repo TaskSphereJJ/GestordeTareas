@@ -241,6 +241,8 @@ namespace GestordeTareas.UI.Controllers
                     {
                         // URL LOCAL DE LA APLICACION
                         string baseUrl = "https://localhost:7297";
+                        // URL DESPLEGADA DE LA APLICACION
+                        //string baseUrl = "https://appservice-webappgestordetareas.azurewebsites.net";
 
                         // ENLACES DE INVITACIÓN CON EL TOKEN Y LA DECISIÓN (ACEPTAR O RECHAZAR)
                         string enlaceAceptar = $"{baseUrl}/Proyecto/AceptarInvitacion?token={invitacion.Token}&decision=aceptar";
@@ -393,6 +395,7 @@ namespace GestordeTareas.UI.Controllers
 
         // Método GET para mostrar las invitaciones de un proyecto específico
         [HttpGet]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<IActionResult> Invitaciones(int id)
         {
             try
@@ -401,10 +404,10 @@ namespace GestordeTareas.UI.Controllers
                 var invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorProyectoAsync(id);
 
                 // Verificar si se encontraron invitaciones
-                if (invitaciones == null || !invitaciones.Any())
-                {
-                    TempData["InfoMessage"] = "No hay invitaciones para mostrar.";
-                }
+                //if (invitaciones == null || !invitaciones.Any())
+                //{
+                //    TempData["InfoMessage"] = "No hay invitaciones para mostrar.";
+                //}
 
                 ViewBag.IdProyecto = id;
 
@@ -429,6 +432,7 @@ namespace GestordeTareas.UI.Controllers
 
         // Método para filtrar invitaciones por estado
         [HttpGet]
+        [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<IActionResult> FiltrarInvitaciones(int id, string estado)
         {
             try

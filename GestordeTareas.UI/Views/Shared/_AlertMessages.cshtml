@@ -4,7 +4,7 @@
         Swal.fire({
             icon: 'success',
             title: '¡Éxito!',
-            text: '@TempData["SuccessMessage"]',
+            text: '@Html.Raw(TempData["SuccessMessage"])',
             confirmButtonText: 'OK'
         });
     </script>
@@ -16,7 +16,7 @@
         Swal.fire({
             icon: 'error',
             title: '¡Error!',
-            text: '@TempData["ErrorMessage"]',
+            text: '@Html.Raw(TempData["ErrorMessage"])',
             confirmButtonText: 'OK'
         });
     </script>

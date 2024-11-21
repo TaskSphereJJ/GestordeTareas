@@ -56,5 +56,23 @@ namespace GestordeTareas.BL
             return await UsuarioDAL.LoginAsync(usuarios);
         }
 
+        // Método para generar un token de restablecimiento de contraseña
+        public async Task<int> GenerarCodigoRestablecimientoAsync(Usuario usuario)
+        {
+            return await UsuarioDAL.GenerarCodigoRestablecimientoAsync(usuario);
+        }
+
+        // Método para validar un token de restablecimiento de contraseña
+        public async Task<bool> ValidarCodigoRestablecimientoAsync(int Idusuario, string codigo)
+        {
+            return await UsuarioDAL.ValidarCodigoRestablecimientoAsync(Idusuario, codigo);
+        }
+
+        // Método para restablecer la contraseña del usuario usando un token
+        public async Task<int> RestablecerContrasenaAsync(int Idusuario, string codigo, string nuevaContrasena)
+        {
+            return await UsuarioDAL.RestablecerContrasenaAsync(Idusuario, codigo, nuevaContrasena);
+        }
+
     }
 }

@@ -126,6 +126,14 @@ CREATE TABLE InvitacionProyecto (
 
 GO
 
+CREATE TABLE PasswordResetCode (
+    Id INT IDENTITY(1,1) PRIMARY KEY,              
+    Codigo NVARCHAR(50) NOT NULL,                       
+    Expiration DATETIME NOT NULL,             
+	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id)
+);
+
+select* from InvitacionProyecto
 
 -- Tabla de tarea finalizada
 --CREATE TABLE TareaFinalizada (
@@ -136,7 +144,6 @@ GO
 --);
 
 --GO
-
 
 ---- Tabla de Imagenes de Pruebas
 --CREATE TABLE ImagenesPrueba (

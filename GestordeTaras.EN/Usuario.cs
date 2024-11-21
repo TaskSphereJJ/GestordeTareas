@@ -9,6 +9,8 @@ namespace GestordeTaras.EN
 
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Foto de perfil")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string FotoPerfil { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
@@ -31,11 +33,13 @@ namespace GestordeTaras.EN
         public string ConfirmarPass { get; set; }
 
         [MaxLength(20, ErrorMessage = "Maximo 20 caracteres")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Telefono { get; set; } = string.Empty;
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha de nacimiento")]
-        public DateTime FechaNacimiento { get; set; }
+        [Required(ErrorMessage = "Campo obligatorio")]
+        public DateTime FechaNacimiento { get; set; } = DateTime.Now;
 
 
         [Required(ErrorMessage = "El estado es requerido")]
@@ -64,6 +68,8 @@ namespace GestordeTaras.EN
 
         public Cargo Cargo { get; set; } // propiedad de navegación
         public virtual ICollection<ProyectoUsuario> ProyectoUsuario { get; set; }
+
+        public ICollection<PasswordResetCode> PasswordResetCode { get; set; }
     }
     public enum User_Status
     {

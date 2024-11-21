@@ -49,6 +49,9 @@
                     @Html.DisplayNameFor(model => model.First().Id)
                 </th>
                 <th scope="col" class="px-6 py-3">
+                    @Html.DisplayNameFor(model => model.First().FotoPerfil)
+                </th>
+                <th scope="col" class="px-6 py-3">
                     @Html.DisplayNameFor(model => model.First().Nombre)
                 </th>
                 <th scope="col" class="px-6 py-3">
@@ -79,6 +82,9 @@
             {
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td class="px-6 py-4">
+                        <img src="@item.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
+                    </td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.Apellido)</td>
                     <td class="px-6 py-4">@Html.DisplayFor(modelItem => item.NombreUsuario)</td>

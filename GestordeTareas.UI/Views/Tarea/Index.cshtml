@@ -102,11 +102,12 @@
                                 <td class="px-6 py-4 text-center">
                                     @if (item.ElegirTarea != null) // Verifica si la tarea ha sido elegida
                                     {
-                                        <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"  
+                                        <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"
                                              alt="Foto de perfil"
                                              class="w-8 h-8 rounded-full inline-block mr-2" />
                                         @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Nombre)
-                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido) //foto
+                                        @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido)
+                                        //foto
                                     }
                                     else
                                     {
@@ -201,7 +202,7 @@
                             }
                             else if (item.ElegirTarea != null && item.ElegirTarea.Usuario != null)
                             {
-                                <div class="flex items-center gap-2"> 
+                                <div class="flex items-center gap-2">
                                     <span>
                                         <img src="@Url.Content(item.ElegirTarea.Usuario.FotoPerfil)"
                                              alt="Foto de perfil"
@@ -209,7 +210,7 @@
                                         @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Nombre)
                                         @Html.DisplayFor(modelItem => item.ElegirTarea.Usuario.Apellido)
                                     </span>
-                                </div> 
+                                </div>
                             }
                         </div>
                     </div>
@@ -482,7 +483,7 @@ else
                             celda.forEach(cell => {
                                 cell.textContent = data.nombreEstado;
                             });
-                            
+
 
 
                             showMessage('Tarea actualizada con éxito', 'success');
