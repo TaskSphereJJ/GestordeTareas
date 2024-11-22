@@ -36,7 +36,7 @@ namespace GestordeTareas.DAL
             {
                 return await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdUsuario == idUsuario)
-                    .Include(pu => pu.Proyecto) // Asegúrate de tener la relación configurada
+                    .Include(pu => pu.Proyecto) 
                     .Select(pu => pu.Proyecto)
                     .ToListAsync();
             }
@@ -48,7 +48,7 @@ namespace GestordeTareas.DAL
             {
                 return await context.ProyectoUsuario
                     .Where(pu => pu.IdProyecto == idProyecto)
-                    .Select(pu => pu.Usuario) // Asumiendo que ProyectoUsuario tiene una propiedad Usuario
+                    .Select(pu => pu.Usuario) 
                     .ToListAsync();
             }
         }
@@ -122,7 +122,7 @@ namespace GestordeTareas.DAL
                 // Buscar el encargado del proyecto
                 var encargado = await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdProyecto == idProyecto && pu.Encargado)
-                    .Select(pu => pu.Usuario) // Asegúrate de tener la relación configurada
+                    .Select(pu => pu.Usuario) 
                     .FirstOrDefaultAsync();
 
                 return encargado; // Retorna el usuario encargado o null si no existe

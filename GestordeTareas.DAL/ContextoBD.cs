@@ -25,7 +25,7 @@ namespace GestordeTareas.DAL
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
         public DbSet<InvitacionProyecto> InvitacionProyecto { get; set; }
         public DbSet<PasswordResetCode> PasswordResetCode { get; set; }
-        
+        public DbSet<Comment> Comment { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -44,6 +44,18 @@ namespace GestordeTareas.DAL
         //}
 
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<InvitacionProyecto>()
+                .HasOne(i => i.Usuario)  // Relación con Usuario
+                .WithMany()  // Usuario puede tener muchas invitaciones
+                .HasForeignKey(i => i.IdUsuario)  // Clave foránea en InvitacionProyecto
+                .OnDelete(DeleteBehavior.Cascade);  // Eliminar invitaciones asociadas cuando se elimina el usuario
+
+
+        }
+
     }
 }

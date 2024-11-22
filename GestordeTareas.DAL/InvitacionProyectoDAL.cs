@@ -100,6 +100,17 @@ namespace GestordeTareas.DAL
             }
         }
 
+        // MÉTODO PARA VERIFICAR SI YA EXISTE UNA INVITACIÓN PENDIENTE PARA UN CORREO Y UN PROYECTO
+        public static async Task<InvitacionProyecto> ObtenerInvitacionPendienteAsync(string correoElectronico, int idProyecto)
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                // Buscar una invitación pendiente para el correo y el proyecto proporcionado
+                return await dbContext.InvitacionProyecto
+                    .FirstOrDefaultAsync(i => i.CorreoElectronico == correoElectronico && i.IdProyecto == idProyecto && i.Estado == "Pendiente");
+            }
+        }
+
 
 
     }

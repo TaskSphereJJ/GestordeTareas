@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,11 @@ namespace GestordeTaras.EN
     public class InvitacionProyecto
     {
         public int Id { get; set; }
+        [ForeignKey("Proyecto")]
+        [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
+        [ForeignKey("Usuario")]
+        [Display(Name = "Usuario")]
         public int? IdUsuario { get; set; }
 
         [Required(ErrorMessage = "El correo electrónico es requerido.")]
@@ -24,6 +29,7 @@ namespace GestordeTaras.EN
 
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaExpiracion { get; set; }
+        public Usuario Usuario { get; set; }
     }
 
 

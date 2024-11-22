@@ -8,9 +8,37 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css" rel="stylesheet"> 
 
 }
+﻿<div id="alertContainer" class="fixed bottom-4 right-4 z-50">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div role="alert"
+             class="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 dark:border-green-700 text-green-900 dark:text-green-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-green-200 dark:hover:bg-green-800 transform hover:scale-105">
+            <svg stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 class="h-6 w-6 flex-shrink-0 mr-3 text-green-600"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      stroke-width="2"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"></path>
+            </svg>
+            <p class="text-sm font-semibold">@TempData["SuccessMessage"]</p>
+        </div>
+    }
+</div>
 
-@await Html.PartialAsync("_Alerts")
-
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '@Html.Raw(TempData["ErrorMessage"])',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyectos</h1>
 
@@ -72,7 +100,7 @@
 
                                 <!-- Opción de Eliminar -->
                                 <li class="flex items-center gap-3 text-gray-700 cursor-pointer p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-red-500 hover:text-white active:scale-95"
-                                    onclick="mostrarTarjetaEliminar(@item.Id); return false;">
+                                    onclick="cargarVistaDelete(@item.Id)">
                                     <i class="fas fa-trash-alt text-black-500"></i>
                                     <span class="font-medium">Eliminar</span>
                                 </li>
@@ -163,11 +191,18 @@
                         </a>
 
                     }
+                    <!-- Botón de Ingresar con AJAX -->
+                    @* <a href="javascript:void(0);"
+                       data-proyecto-id="@item.Id"
+                       class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out ingresar-tarea">
+                        <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
+                    </a> *@
                     <!-- Botón de Ingresar -->
                     <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
                        class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out">
                         <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
                     </a>
+
                 </div>
 
             </div>
@@ -204,12 +239,8 @@ else
                 <button type="button" class="btn btn-primary bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onclick="submitcreateForm('createForm')">
                     <i class="fas fa-save"></i> Guardar
                 </button>
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -232,34 +263,28 @@ else
                 <button type="button" class="btn btn-primary bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onclick="submiteditForm('editForm')">
                     <i class="fas fa-save"></i> Guardar
                 </button>
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Tarjeta de eliminación -->
-<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60 transition-opacity duration-300">
-    <div class="w-80 rounded-xl bg-white shadow-lg transform transition-all duration-300">
-        <div class="p-4 pb-2 text-center">
-            <h2 class="mt-4 text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-            <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.</p>
-        </div>
-        <div class="bg-gray-100 px-4 py-3 flex justify-between rounded-b-xl">
-            <button type="button"
-                    class="flex-1 mr-1 px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-200"
-                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
-                Cancelar
-            </button>
-            <form id="deleteForm" method="post" asp-action="Delete" class="flex-1">
-                <input type="hidden" name="Id" id="deleteProjectId" />
-                <button type="submit"
-                        class="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition duration-200">
-                    Eliminar
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-red-600 text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Proyecto</h5>
+                <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
-            </form>
+            </div>
+            <div class="modal-body" id="deleteModalContent">
+                <!-- Contenido de la vista de eliminación se cargará aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="eliminarProyecto()">Eliminar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -350,6 +375,20 @@ else
         });
     }
 
+    function eliminarProyecto() { // Función para eliminar un proyecto mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar el proyecto
+            url: '/Proyecto/Delete', // URL de la acción POST para eliminar el proyecto
+            type: 'POST', // Método POST para enviar la solicitud
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del Proyecto)
+            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
+                window.location.reload(); // Recargar la página después de eliminar el Proyecto
+            },
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                alert('Error al eliminar el proyecto: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
+            }
+        });
+    }
+
     function cargarVistaCreate() { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista create
             url: "/Proyecto/Create", // URL de la vista que se va a cargar
@@ -372,16 +411,18 @@ else
         });
     }
 
-    function mostrarTarjetaEliminar(proyectoId) {
-        // Establecer el ID del proyecto en el campo oculto
-        document.getElementById('deleteProjectId').value = proyectoId;
-        // Mostrar la tarjeta de confirmación
-        document.getElementById('confirmDeleteCard').classList.remove('hidden');
-    }
-
-    // Función para ocultar la tarjeta (ya está en el botón "Cancelar")
-    function ocultarTarjetaEliminar() {
-        document.getElementById('confirmDeleteCard').classList.add('hidden');
+    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista delete
+            url: "/Proyecto/Delete/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
+                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
+            },
+            error: function () { // Función a ejecutar si la solicitud AJAX falla
+                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
+            }
+        });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -397,4 +438,28 @@ else
             }, 4000); // Esperar 4 segundos
         }
     });
+
+    @* $(document).on('click', '.ingresar-tarea', function () {
+        var proyectoId = $(this).data('proyecto-id');
+        $.ajax({
+            url: '@Url.Action("Index", "Tarea")',  // Llamar a la acción en el controlador
+            data: { proyectoId: proyectoId },
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = '@Url.Action("Index", "Tarea")?proyectoId=' + proyectoId;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: response.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }); *@
+
+
+
 </script>

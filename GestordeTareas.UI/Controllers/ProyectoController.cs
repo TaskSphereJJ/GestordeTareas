@@ -118,13 +118,13 @@ namespace GestordeTareas.UI.Controllers
                 proyecto.CodigoAcceso = codigoAcceso;
 
                 int result = await _proyectoBL.CreateAsync(proyecto);
-                TempData["SuccessMessage"] = "Proyecto creado correctamente.";
-                return Json(new { success = true, message = "Proyecto creado correctamente." });
+                TempData["SuccessMessage"] = "Proyecto creado correctamente";
+                return Json(new { success = true, message = "Proyecto creado correctamente" });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al crear el proyecto.";
+                TempData["ErrorMessage"] = "Hubo un problema al crear el proyecto";
                 return Json(new { success = false, message = "Hubo un problema al crear el proyecto: " + ex.Message });
             }
         }
@@ -147,13 +147,13 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _proyectoBL.UpdateAsync(proyecto);
-                TempData["SuccessMessage"] = "Proyecto actualizado correctamente.";
-                return Json(new { success = true, message = "Proyecto actualizado correctamente." });
+                TempData["SuccessMessage"] = "Proyecto actualizado correctamente";
+                return Json(new { success = true, message = "Proyecto actualizado correctamente" });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al actualizar el proyecto.";
+                TempData["ErrorMessage"] = "Hubo un problema al actualizar el proyecto";
                 return Json(new { success = false, message = "Hubo un problema al actualizar el proyecto: " + ex.Message });
             }
         }
@@ -175,14 +175,14 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 await _proyectoBL.DeleteAsync(proyecto);
-                TempData["SuccessMessage"] = "Proyecto eliminado correctamente.";
-                return RedirectToAction(nameof(Index));
+                TempData["SuccessMessage"] = "Proyecto eliminado correctamente";
+                return Json(new { success = true, message = "Proyecto eliminado correctamente" });
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al eliminar el proyecto.";
-                return RedirectToAction(nameof(Index));
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario";
+                return Json(new { success = false, message = "Hubo un problema al eliminar el usuario: " + ex.Message });
             }
         }
 
@@ -197,11 +197,11 @@ namespace GestordeTareas.UI.Controllers
 
                 if (resultado)
                 {
-                    TempData["SuccessMessage"] = "Usuario asignado como encargado correctamente.";
+                    TempData["SuccessMessage"] = "Usuario asignado como encargado correctamente";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Ya existe un encargado para este proyecto.";
+                    TempData["ErrorMessage"] = "Ya existe un encargado para este proyecto";
                 }
             }
             catch (Exception ex)
@@ -231,12 +231,25 @@ namespace GestordeTareas.UI.Controllers
                     var proyecto = await _proyectoBL.GetById(new Proyecto { Id = invitacion.IdProyecto });
                     if (proyecto == null)
                     {
-                        TempData["ErrorMessage"] = "El proyecto no existe.";
+                        TempData["ErrorMessage"] = "El proyecto no existe";
                         return RedirectToAction("Details", new { id = invitacion.IdProyecto });
                     }
 
                     // INTENTAR ENVIAR LA INVITACIÓN
                     var result = await _invitacionProyectoBL.EnviarInvitacionAsync(invitacion);
+
+                    // Manejamos los diferentes casos de retorno de la lógica de negocio
+                    if (result == -1)
+                    {
+                        TempData["ErrorMessage"] = "El usuario ya está unido a este proyecto.";
+                        return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });
+                    }
+                    else if (result == -2)
+                    {
+                        TempData["ErrorMessage"] = "Ya se ha enviado una invitación a este correo electrónico.";
+                        return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });
+                    }
+
                     if (result > 0)
                     {
                         // URL LOCAL DE LA APLICACION
@@ -255,11 +268,11 @@ namespace GestordeTareas.UI.Controllers
                         await _emailService.SendEmailAsync(invitacion.CorreoElectronico, "Invitación a un proyecto", cuerpo);
 
 
-                        TempData["SuccessMessage"] = "Invitación enviada correctamente.";
+                        TempData["SuccessMessage"] = "Invitación enviada correctamente";
                         return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });
                     }
 
-                    TempData["ErrorMessage"] = "Hubo un problema al enviar la invitación.";
+                    TempData["ErrorMessage"] = "Hubo un problema al enviar la invitación";
                 }
                 catch (Exception ex)
                 {
@@ -267,7 +280,7 @@ namespace GestordeTareas.UI.Controllers
                 }
             }
 
-            TempData["ErrorMessage"] = "Los datos de la invitación son inválidos.";
+            TempData["ErrorMessage"] = "Los datos de la invitación son inválidos";
             return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });
         }
 
@@ -280,7 +293,7 @@ namespace GestordeTareas.UI.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                TempData["ErrorMessage"] = "El token no puede estar vacío.";
+                TempData["ErrorMessage"] = "El token no puede estar vacío";
                 return RedirectToAction("Index");
             }
 
@@ -301,14 +314,14 @@ namespace GestordeTareas.UI.Controllers
             var invitacion = await _invitacionProyectoBL.ObtenerPorTokenAsync(token);
             if (invitacion == null)
             {
-                TempData["ErrorMessage"] = "La invitación no existe o es inválida.";
+                TempData["ErrorMessage"] = "La invitación no existe o a expirado";
                 return RedirectToAction("Index");
             }
 
             // SE VERIFICA SI EL CORREO DEL USUARIO COINCIDE CON EL CORREO DE LA INVITACION
             if (invitacion.CorreoElectronico != correoUsuario)
             {
-                TempData["ErrorMessage"] = "El correo electrónico no coincide con la invitación.";
+                TempData["ErrorMessage"] = "El correo electrónico no coincide con la invitación";
                 return RedirectToAction("Index");
             }
 
@@ -318,19 +331,19 @@ namespace GestordeTareas.UI.Controllers
                 var result = await _invitacionProyectoBL.AceptarInvitacionAsync(token, idUsuario, correoUsuario);
                 if (result > 0)
                 {
-                    TempData["SuccessMessage"] = "Has aceptado la invitación y te has unido al proyecto.";
+                    TempData["SuccessMessage"] = "Has aceptado la invitación y te has unido al proyecto";
                 }
                 else if (result == -1)
                 {
-                    TempData["ErrorMessage"] = "Ya perteneces a este proyecto.";
+                    TempData["ErrorMessage"] = "Ya perteneces a este proyecto";
                 }
                 else if (result == -3)
                 {
-                    TempData["ErrorMessage"] = "La invitación ya ha sido procesada.";
+                    TempData["ErrorMessage"] = "La invitación ya ha sido procesada";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "No se pudo aceptar la invitación.";
+                    TempData["ErrorMessage"] = "No se pudo aceptar la invitación";
                 }
             }
             else if (decision == "rechazar")
@@ -338,7 +351,7 @@ namespace GestordeTareas.UI.Controllers
                 // SE VERIFICA SI LA INVITACION YA HA SIDO PROCESADA (ACEPTADA O RECHAZADA)
                 if (invitacion.Estado != "Pendiente")
                 {
-                    TempData["ErrorMessage"] = "No puedes rechazar esta invitación porque ya ha sido procesada.";
+                    TempData["ErrorMessage"] = "No puedes rechazar esta invitación porque ya ha sido procesada";
                 }
                 else
                 {
@@ -346,17 +359,17 @@ namespace GestordeTareas.UI.Controllers
                     var result = await _invitacionProyectoBL.RechazarInvitacionAsync(token, idUsuario, correoUsuario);
                     if (result > 0)
                     {
-                        TempData["SuccessMessage"] = "Invitación rechazada correctamente.";
+                        TempData["SuccessMessage"] = "Invitación rechazada correctamente";
                     }
                     else
                     {
-                        TempData["ErrorMessage"] = "No se pudo rechazar la invitación.";
+                        TempData["ErrorMessage"] = "No se pudo rechazar la invitación";
                     }
                 }
             }
             else
             {
-                TempData["ErrorMessage"] = "Decisión no válida.";
+                TempData["ErrorMessage"] = "Decisión no válida";
             }
 
             // LIMPIA LOS TEMPDATA LUEGO DE PROCESAR LA INVITACION
@@ -377,11 +390,11 @@ namespace GestordeTareas.UI.Controllers
                 bool eliminado = await _invitacionProyectoBL.LimpiarInvitacionPorIdAsync(id);
                 if (eliminado)
                 {
-                    TempData["SuccessMessage"] = " La invitación ha sido eliminada.";
+                    TempData["SuccessMessage"] = " La invitación ha sido eliminada";
                 }
                 else
                 {
-                    TempData["InfoMessage"] = "No se encontró la invitación o no se puede eliminar.";
+                    TempData["InfoMessage"] = "No se encontró la invitación o no se puede eliminar";
                 }
             }
             catch (Exception ex)
@@ -424,7 +437,7 @@ namespace GestordeTareas.UI.Controllers
             {
                 // Registrar el error en el log (puedes usar ILogger)
                 Console.WriteLine($"Error: {ex.Message}");
-                TempData["ErrorMessage"] = "Ocurrió un error al obtener las invitaciones.";
+                TempData["ErrorMessage"] = "Ocurrió un error al obtener las invitaciones";
                 return View("Error"); // Cambia a tu vista de error
             }
         }
@@ -452,7 +465,7 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si se encontraron invitaciones
                 if (invitaciones == null || !invitaciones.Any())
                 {
-                    TempData["InfoMessage"] = "No hay invitaciones que coincidan con el filtro.";
+                    TempData["InfoMessage"] = "No hay invitaciones que coincidan con el filtro";
                 }
 
                 ViewBag.IdProyecto = id;
@@ -472,7 +485,7 @@ namespace GestordeTareas.UI.Controllers
             {
                 // Registrar el error en el log (puedes usar ILogger)
                 Console.WriteLine($"Error: {ex.Message}");
-                TempData["ErrorMessage"] = "Ocurrió un error al filtrar las invitaciones.";
+                TempData["ErrorMessage"] = "Ocurrió un error al filtrar las invitaciones";
                 return View("Error"); // Cambia a tu vista de error
             }
         }

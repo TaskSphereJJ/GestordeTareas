@@ -104,9 +104,8 @@
                         <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDetails(@item.Id)">
                             <i class="fas fa-eye text-lg"></i>
                         </a>
-                        <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded"
-                           onclick="mostrarTarjetaEliminar(@item.Id); return false;">
-                            <i class="fas fa-trash-alt text-lg"></i>
+                        <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded" onclick="cargarVistaDelete(@item.Id)">
+                            <i class="fas fa-trash text-lg"></i>
                         </a>
 
                     </td>
@@ -119,7 +118,7 @@
 
 <!-- Modal de edición -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-purple-700 text-white">
                 <h5 class="modal-title" id="editModalLabel">Editar Usuario</h5>
@@ -129,15 +128,15 @@
             <div class="modal-body">
                 <div id="editModalContent">
                     <!-- Contenido de la vista de edición se cargará aquí -->
-                </div>
+                    <!-- <div class="modal-body md:max-h-full md:overflow-visible max-h-96 overflow-y-auto">-->
+
+                    </div>                  
             </div>
             <div class="modal-footer flex justify-center">
                 <button type="button" class="btn btn-primary bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onclick="submiteditForm('editForm')">
                     <i class="fas fa-save"></i> Guardar
                 </button>
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -159,37 +158,28 @@
                 </div>
             </div>
             <div class="modal-footer flex justify-center">
-                <button type="button" class="btn btn-secondary bg-gray-300 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cerrar
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Tarjeta de eliminacion -->
-<div id="confirmDeleteCard" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-    <div class="max-w-xs rounded-lg overflow-hidden bg-white shadow-md transition-shadow duration-300">
-        <div class="p-6 mt-6">
-            <div class="flex justify-center items-center bg-red-200 rounded-full w-16 h-16 mx-auto">
-                <img src="https://cdn-icons-png.freepik.com/256/5055/5055247.png?semt=ais_hybrid" alt="Eliminar" class="h-12 w-12 text-red-600" />
-            </div>
-            <h2 class="mt-4 text-center text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-            <p class="mt-2 text-center text-sm text-gray-600">¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
-        </div>
-        <div class="bg-gray-50 p-4 flex justify-between">
-            <button type="button"
-                    class="flex-1 mr-2 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded hover:bg-gray-400 transition duration-200"
-                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
-                Cancelar
-            </button>
-            <form id="deleteForm" method="post" asp-action="Delete">
-                <input type="hidden" name="Id" id="deleteUserId" /> <!-- Campo oculto para el ID del usuario -->
-                <button type="submit"
-                        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200">
-                    Eliminar
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-red-600 text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Usuario</h5>
+                <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
-            </form>
+            </div>
+            <div class="modal-body" id="deleteModalContent">
+                <!-- Contenido de la vista de eliminación se cargará aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="eliminarUsuario()">Eliminar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -233,6 +223,20 @@
         });
     }
 
+    function eliminarUsuario() { // Función para eliminar un Usuario mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar el Usuario
+            url: '/Usuario/Delete', // URL de la acción POST para eliminar la Usuario
+            type: 'POST', // Método POST para enviar la solicitud
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID de  Usuario)
+            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
+                window.location.reload(); // Recargar la página después de eliminar el Usuario
+            },
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                alert('Error al eliminar el Usuario: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
+            }
+        });
+    }
+
     function cargarVistaEdit(id) { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista edit
             url: "/Usuario/Edit/" + id, // URL de la vista que se va a cargar
@@ -255,16 +259,19 @@
         });
     }
 
-    function mostrarTarjetaEliminar(userId) {
-        // Establecer el ID del usuario en el campo oculto
-        document.getElementById('deleteUserId').value = userId;
-        // Mostrar la tarjeta de confirmación
-        document.getElementById('confirmDeleteCard').classList.remove('hidden');
-    }
-
-    // Función para ocultar la tarjeta (ya está en el botón "Cancelar")
-    function ocultarTarjetaEliminar() {
-        document.getElementById('confirmDeleteCard').classList.add('hidden');
+    function cargarVistaDelete(id) {
+        $.ajax({
+            url: "/Usuario/Delete/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#deleteModalContent").html(data);
+                $("#deleteUserId").val(id);  // Actualiza el campo oculto con el ID del usuario
+                $("#deleteModal").modal("show");
+            },
+            error: function () {
+                alert("Error al cargar la vista de eliminación.");
+            }
+        });
     }
 
 </script>

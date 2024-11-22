@@ -58,7 +58,7 @@ CREATE TABLE Proyecto (
     Id INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     Titulo VARCHAR(50) NOT NULL,
     Descripcion VARCHAR(MAX) NOT NULL,
-	CodigoAcceso NVARCHAR(50) NOT NULL,
+	CodigoAcceso NVARCHAR(50) NOT NULL UNIQUE,
 	FechaFinalizacion DATE NOT NULL,
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
 	--CONSTRAINT UQ_CodigoAcceso UNIQUE (CodigoAcceso)
@@ -107,6 +107,7 @@ CREATE TABLE ProyectoUsuario(
 
 GO
 
+select * from ProyectoUsuario
 
 --Tabla de invitacion de usuario a proyecto especifico y dependiendo de la respuesta lo une al proyecto osea hace un ProyectoUsuario
 CREATE TABLE InvitacionProyecto (
@@ -119,9 +120,21 @@ CREATE TABLE InvitacionProyecto (
     FechaCreacion DATETIME NOT NULL,
     FechaExpiracion DATETIME NOT NULL,
     CONSTRAINT FK_InvitacionProyecto_Proyecto FOREIGN KEY (IdProyecto) REFERENCES Proyecto(Id),
-    CONSTRAINT FK_InvitacionProyecto_Usuario FOREIGN KEY (IdUsuario) REFERENCES Usuario(Id),
+    CONSTRAINT FK_InvitacionProyecto_Usuario FOREIGN KEY (IdUsuario) REFERENCES Usuario(Id) ON DELETE CASCADE,
     CONSTRAINT UQ_InvitacionProyecto_Correo_Proyecto UNIQUE (CorreoElectronico, IdProyecto) -- Se asegura que un mismo correo no pueda recibir varias invitaciones al mismo proyecto
 );
+
+--ON DELETE CASCADE
+
+--ALTER TABLE InvitacionProyecto
+--DROP CONSTRAINT FK_InvitacionProyecto_Usuario;  -- Elimina la clave foránea actual
+
+--ALTER TABLE InvitacionProyecto
+--ADD CONSTRAINT FK_InvitacionProyecto_Usuario 
+--    FOREIGN KEY (IdUsuario) 
+--    REFERENCES Usuario(Id)
+--    ON DELETE CASCADE;  -- Configura la eliminación en cascada
+
 
 
 GO
@@ -133,7 +146,17 @@ CREATE TABLE PasswordResetCode (
 	IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id)
 );
 
-select* from InvitacionProyecto
+-- Tabla comentario
+CREATE TABLE Comment (
+	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Content NVARCHAR(MAX) NOT NULL,
+    FechaComentario DATETIME NOT NULL,
+    IdUsuario INT NOT NULL FOREIGN KEY REFERENCES Usuario(Id),
+	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id)
+);
+
+
+
 
 -- Tabla de tarea finalizada
 --CREATE TABLE TareaFinalizada (

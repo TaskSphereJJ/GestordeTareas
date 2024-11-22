@@ -90,8 +90,8 @@ namespace GestordeTareas.DAL
             {
                 var proyectos = await dbContext.Proyecto
                             .Include(p => p.Usuario)
-                            .Include(p => p.ProyectoUsuario) // Relación con ProyectoUsuario
-                                .ThenInclude(pu => pu.Usuario) // Se incluyen los usuarios relacionados
+                            .Include(p => p.ProyectoUsuario) 
+                                .ThenInclude(pu => pu.Usuario) 
                             .ToListAsync();
                 return proyectos;
             }
