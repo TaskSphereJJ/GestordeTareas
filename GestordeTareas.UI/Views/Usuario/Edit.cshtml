@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700">
+<form asp-action="Edit" id="editForm" class="bg-white rounded px-8 pt-6 pb-8 mb-4 border border-purple-700 grid grid-cols-1 sm:grid-cols-2 gap-4">
     <input type="hidden" asp-for="Id" />
     <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
 
@@ -35,7 +35,7 @@
 
     <div class="mb-4">
         <label for="idCargo" class="block text-gray-700 text-sm font-bold mb-2">Cargo</label>
-        <select asp-for="IdCargo" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" id="idCargo" asp-items="@ViewBag.Cargos">
+        <select asp-for="IdCargo" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" asp-items="@ViewBag.Cargos" required>
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdCargo" class="text-red-500 text-xs italic"></span>
@@ -49,9 +49,9 @@
       
     <div class="mb-4">
         <label asp-for="Status" class="block text-gray-700 text-sm font-bold mb-2">Estado</label>
-        <select asp-for="Status" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500">
-            <option value="1">ACTIVO</option>
-            <option value="2">INACTIVO</option>
+        <select asp-for="Status" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white">
+            <option value="1">Activo</option>
+            <option value="2">Inactivo</option>
         </select>
         <span asp-validation-for="Status" class="text-purple-700 text-xs italic"></span>
     </div>

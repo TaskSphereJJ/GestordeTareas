@@ -36,19 +36,19 @@ namespace GestordeTareas.DAL
             {
                 return await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdUsuario == idUsuario)
-                    .Include(pu => pu.Proyecto) // Asegúrate de tener la relación configurada
+                    .Include(pu => pu.Proyecto)
                     .Select(pu => pu.Proyecto)
                     .ToListAsync();
             }
         }
-           
+
         public static async Task<List<Usuario>> ObtenerUsuariosUnidosAsync(int idProyecto)
         {
             using (var context = new ContextoBD())
             {
                 return await context.ProyectoUsuario
                     .Where(pu => pu.IdProyecto == idProyecto)
-                    .Select(pu => pu.Usuario) // Asumiendo que ProyectoUsuario tiene una propiedad Usuario
+                    .Select(pu => pu.Usuario)
                     .ToListAsync();
             }
         }
@@ -122,62 +122,12 @@ namespace GestordeTareas.DAL
                 // Buscar el encargado del proyecto
                 var encargado = await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdProyecto == idProyecto && pu.Encargado)
-                    .Select(pu => pu.Usuario) // Asegúrate de tener la relación configurada
+                    .Select(pu => pu.Usuario)
                     .FirstOrDefaultAsync();
 
                 return encargado; // Retorna el usuario encargado o null si no existe
             }
         }
 
-        // Obtener todos los proyectos
-        public static async Task<List<Proyecto>> ObtenerTodosAsync()
-        {
-            using (var dbContext = new ContextoBD())
-            {
-                return await dbContext.Proyecto
-                    .Include(p => p.Usuario) // Incluye el administrador
-                    .Include(p => p.ProyectoUsuario) // Incluye usuarios asociados
-                    .ToListAsync();
-            }
-        }
-
-        // Buscar proyectos por título
-        public static async Task<List<Proyecto>> BuscarPorTituloAsync(string query)
-        {
-            using (var dbContext = new ContextoBD())
-            {
-                return await dbContext.Proyecto
-                    .Where(p => EF.Functions.Like(p.Titulo, $"%{query}%")) // Búsqueda parcial
-                    .Include(p => p.Usuario)
-                    .ToListAsync();
-            }
-        }
-
-        // Buscar proyectos por nombre del administrador
-        public static async Task<List<Proyecto>> BuscarPorAdministradorAsync(string query)
-        {
-            using (var dbContext = new ContextoBD())
-            {
-                return await dbContext.Proyecto
-                    .Where(p => EF.Functions.Like(p.Usuario.Nombre, $"%{query}%") ||
-                                EF.Functions.Like(p.Usuario.Apellido, $"%{query}%")) // Búsqueda parcial
-                    .Include(p => p.Usuario)
-                    .ToListAsync();
-            }
-        }
-
-        // Buscar proyectos por título o administrador
-        public static async Task<List<Proyecto>> BuscarPorTituloOAdministradorAsync(string query)
-        {
-            using (var dbContext = new ContextoBD())
-            {
-                return await dbContext.Proyecto
-                    .Where(p => EF.Functions.Like(p.Titulo, $"%{query}%") ||
-                                EF.Functions.Like(p.Usuario.Nombre, $"%{query}%") ||
-                                EF.Functions.Like(p.Usuario.Apellido, $"%{query}%"))
-                    .Include(p => p.Usuario)
-                    .ToListAsync();
-            }
-        }
     }
 }

@@ -30,7 +30,7 @@
 
     <div class="form-group">
         <label asp-for="IdCategoria" class="control-label"></label>
-        <select asp-for="IdCategoria" class="form-control" asp-items="@ViewBag.Categorias">
+        <select asp-for="IdCategoria" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" asp-items="@ViewBag.Categorias" required>
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdCategoria" class="text-danger"></span>
@@ -38,7 +38,7 @@
 
     <div class="form-group">
         <label asp-for="IdPrioridad" class="control-label"></label>
-        <select asp-for="IdPrioridad" class="form-control" asp-items="@ViewBag.Prioridades">
+        <select asp-for="IdPrioridad" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" asp-items="@ViewBag.Prioridades" required>
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdPrioridad" class="text-danger"></span>
@@ -46,7 +46,7 @@
 
     <div class="form-group">
         <label asp-for="IdEstadoTarea" class="control-label"></label>
-        <select asp-for="IdEstadoTarea" class="form-control" asp-items="@ViewBag.EstadosTarea">
+        <select asp-for="IdEstadoTarea" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" asp-items="@ViewBag.EstadosTarea" required>
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdEstadoTarea" class="text-danger"></span>

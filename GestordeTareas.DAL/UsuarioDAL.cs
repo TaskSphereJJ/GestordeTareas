@@ -317,12 +317,12 @@ namespace GestordeTareas.DAL
         {
             using (var dbContext = new ContextoBD())
             {
-                // Verifica si el usuario tiene referencias en la tabla InvitacionProyecto
-                bool tieneInvitaciones = await dbContext.InvitacionProyecto.AnyAsync(ip => ip.IdUsuario == usuarioId);
-                if (tieneInvitaciones)
-                {
-                    return "Este usuario tiene invitaciones pendientes en proyectos.";
-                }
+                //// Verifica si el usuario tiene referencias en la tabla InvitacionProyecto
+                //bool tieneInvitaciones = await dbContext.InvitacionProyecto.AnyAsync(ip => ip.IdUsuario == usuarioId);
+                //if (tieneInvitaciones)
+                //{
+                //    return "Este usuario tiene invitaciones pendientes en proyectos.";
+                //}
 
                 // Verifica si el usuario tiene referencias en la tabla ProyectoUsuario
                 bool tieneProyectos = await dbContext.ProyectoUsuario.AnyAsync(pu => pu.IdUsuario == usuarioId);

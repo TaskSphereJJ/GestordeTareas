@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<GestordeTaras.EN.Proyecto>
+
 @{
     ViewData["Title"] = "Index";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -7,34 +8,62 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css" rel="stylesheet"> 
 
 }
+﻿<div id="alertContainer" class="fixed bottom-4 right-4 z-50">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div role="alert"
+             class="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 dark:border-green-700 text-green-900 dark:text-green-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out hover:bg-green-200 dark:hover:bg-green-800 transform hover:scale-105">
+            <svg stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 class="h-6 w-6 flex-shrink-0 mr-3 text-green-600"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 16h-1v-4h1m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      stroke-width="2"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"></path>
+            </svg>
+            <p class="text-sm font-semibold">@TempData["SuccessMessage"]</p>
+        </div>
+    }
+</div>
 
-@await Html.PartialAsync("_Alerts")
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '@Html.Raw(TempData["ErrorMessage"])',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
 
-
-<h1 class="mb-8 mt-4 text-5xl font-extrabold dark:text-white">Proyectos</h1>
+<h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Proyectos</h1>
 
 @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
 {
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
         <p>
-            <a href="#" class="inline-flex items-center rounded-full bg-purple-700 px-4 py-2 text-center text-lg font-medium text-white no-underline hover:no-underline hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900" onclick="cargarVistaCreate()">
+            <a href="#" class="no-underline hover:no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-lg px-4 py-2 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center" onclick="cargarVistaCreate()">
                 <i class="fas fa-plus mr-2"></i> Nuevo
             </a>
         </p>
 
         <!-- Formulario de búsqueda -->
         <form method="get" asp-action="Index" class="flex items-center">
-            <div class="mr-4 flex items-center">
+            <div class="flex items-center mr-4">
                 <span class="mr-2">Buscar por:</span>
-                <select name="filter" class="w-32 rounded-md border border-gray-300 p-2">
+                <select name="filter" class="border border-gray-300 rounded-md p-2 w-32">
                     <option value="Titulo">Título</option>
                     <option value="Administrador">Administrador</option>
                 </select>
             </div>
             <div class="flex items-center">
                 <label for="query" class="sr-only">Ingrese el término de búsqueda:</label>
-                <input type="text" name="query" class="rounded-md border border-gray-300 p-2" placeholder="Buscar..." aria-label="Ingrese el término de búsqueda" />
-                <button type="submit" class="ml-2 rounded-md bg-purple-500 p-2 font-semibold text-white transition duration-200 hover:bg-purple-600">
+                <input type="text" name="query" class="border border-gray-300 rounded-md p-2" placeholder="Buscar..." aria-label="Ingrese el término de búsqueda" />
+                <button type="submit" class="bg-purple-500 text-white font-semibold rounded-md p-2 ml-2 hover:bg-purple-600 transition duration-200">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -45,33 +74,33 @@
 
 @if (Model != null && Model.Any())
 {
-    <div class="grid-cols-1 grid gap-4 md:grid-cols-2">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @foreach (var item in Model)
         {
-            <div class="relative mb-4 w-full rounded-lg border border-gray-300 bg-white p-6 shadow-sm dark:bg-gray-800">
+            <div class="relative rounded-lg border border-gray-300 p-6 bg-white dark:bg-gray-800 shadow-sm w-full mb-4">
                 <!-- Botón principal flotante y menú desplegable -->
-                <div class="absolute right-0 top-0 mr-1 mt-1">
+                <div class="absolute top-0 right-0 mt-1 mr-1">
                     @if (User.IsInRole("Administrador"))
                     {
                         <!-- Botón principal flotante -->
-                        <button class="flex h-10 w-10 transform items-center justify-center rounded-full bg-gray-200 shadow-lg transition-all duration-300 hover:scale-110 hover:rotate-180 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
-                            <i class="fas fa-ellipsis-v text-xl text-gray-800"></i>
+                        <button class="rounded-full bg-gray-200 w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-110 hover:rotate-180 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" id="menuButton-@item.Id" onclick="toggleMenu(@item.Id)">
+                            <i class="fas fa-ellipsis-v text-gray-800 text-xl"></i>
                         </button>
 
                         <!-- Menú desplegable -->
-                        <div id="menu-@item.Id" class="z-10 absolute right-0 mt-2 hidden w-36 transform rounded-lg bg-white py-2 shadow-md transition-all duration-300 ease-out">
+                        <div id="menu-@item.Id" class="absolute right-0 mt-2 w-36 bg-white rounded-lg py-2 shadow-md hidden z-10 transition-all duration-300 ease-out transform">
                             <ul class="space-y-1 px-3">
 
                                 <!-- Opción de Editar -->
-                                <li class="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-gray-700 transition-all duration-200 ease-in-out hover:bg-blue-500 hover:text-white active:scale-95"
+                                <li class="flex items-center gap-3 text-gray-700 cursor-pointer p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-blue-500 hover:text-white active:scale-95"
                                     onclick="cargarVistaEdit(@item.Id)">
                                     <i class="fas fa-edit text-black-500"></i>
                                     <span class="font-medium">Editar</span>
                                 </li>
 
                                 <!-- Opción de Eliminar -->
-                                <li class="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-gray-700 transition-all duration-200 ease-in-out hover:bg-red-500 hover:text-white active:scale-95"
-                                    onclick="mostrarTarjetaEliminar(@item.Id); return false;">
+                                <li class="flex items-center gap-3 text-gray-700 cursor-pointer p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-red-500 hover:text-white active:scale-95"
+                                    onclick="cargarVistaDelete(@item.Id)">
                                     <i class="fas fa-trash-alt text-black-500"></i>
                                     <span class="font-medium">Eliminar</span>
                                 </li>
@@ -82,11 +111,11 @@
                 </div>
 
                 <!-- Título del proyecto -->
-                <h2 class="mb-4 text-center text-xl font-bold text-gray-900">@item.Titulo</h2>
+                <h2 class="text-xl font-bold text-gray-900 mb-4 text-center">@item.Titulo</h2>
 
                 <!-- Administrador del proyecto -->
-                <div class="mb-4 flex items-center justify-center">
-                    <img class="border-2 mr-3 h-10 w-10 rounded-full border-gray-300" src="@item.Usuario.FotoPerfil" alt="@item.Usuario.Nombre @item.Usuario.Apellido" />
+                <div class="flex items-center justify-center mb-4">
+                    <img class="h-10 w-10 rounded-full border-2 border-gray-300 mr-3" src="@item.Usuario.FotoPerfil" alt="@item.Usuario.Nombre @item.Usuario.Apellido" />
                     <p class="text-sm text-gray-500">
                         <span class="font-semibold">Administrador:</span> @item.Usuario.Nombre @item.Usuario.Apellido
                     </p>
@@ -94,7 +123,7 @@
 
 
                 <!-- Descripción -->
-                <p class="mb-4 text-center text-gray-700 dark:text-gray-400">
+                <p class="text-gray-700 dark:text-gray-400 mb-4 text-center">
                     @if (item.Descripcion.Length > 100)
                     {
                         <text>@item.Descripcion.Substring(0, 100)...</text>
@@ -106,30 +135,30 @@
                 </p>
 
                 <!-- Fecha de Finalización -->
-                <p class="mb-4 text-center text-sm text-gray-500">
+                <p class="text-sm text-gray-500 mb-4 text-center">
                     <span class="font-semibold text-gray-500 dark:text-gray-400">Fecha de finalización:</span> @item.FechaFinalizacion.ToShortDateString()
                 </p>
 
                 <!-- Contador de Usuarios -->
-                <div class="mb-2 flex items-center justify-center text-gray-500">
+                <div class="flex items-center justify-center text-gray-500 mb-2">
                     <i class="fas fa-users mr-2"></i>
                     <span class="text-sm">@((item.ProyectoUsuario?.Count ?? 0)) usuarios unidos</span>
                 </div>
 
                 <!-- Imágenes de miembros -->
-                <div class="mb-4 flex min-h-[32px] justify-center">
+                <div class="flex justify-center mb-4 min-h-[32px]">
                     <div class="flex -space-x-2">
                         @if (item.ProyectoUsuario != null && item.ProyectoUsuario.Any())
                         {
                             @foreach (var proyectoUsuario in item.ProyectoUsuario.Take(3))
                             {
-                                <img class="border-2 h-8 w-8 rounded-full border-white"
+                                <img class="h-8 w-8 rounded-full border-2 border-white"
                                      src="@proyectoUsuario.Usuario.FotoPerfil"
                                      alt="@proyectoUsuario.Usuario.Nombre" />
                             }
                             @if (item.ProyectoUsuario.Count() > 3)
                             {
-                                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+                                <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
                                     <span class="text-xs font-medium">+@(item.ProyectoUsuario.Count() - 3)</span>
                                 </div>
                             }
@@ -137,19 +166,19 @@
                         else
                         {
                             <!-- Espacio reservado cuando no hay usuarios -->
-                            <img class="opacity-0 h-8 w-8" src="" alt="placeholder" />
+                            <img class="h-8 w-8 opacity-0" src="" alt="placeholder" />
                         }
                     </div>
                 </div>
 
 
                 <!-- Botones de acción -->
-                <div class="mt-4 flex justify-between">
+                <div class="flex justify-between mt-4">
                     <!-- Botón de Unirse -->
                     @if (User.IsInRole("Administrador"))
                     {
                         <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
-                           class="flex items-center justify-center rounded-lg border border-gray-400 px-4 py-2 text-sm font-medium text-gray-700 no-underline transition-all duration-200 ease-out hover:bg-gray-300 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="flex items-center justify-center px-4 py-2 border border-gray-400 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 text-sm font-medium no-underline transition-all duration-200 ease-out">
                             <i class="fa-solid fa-sliders mr-4"></i> Detalles
                         </a>
 
@@ -157,16 +186,23 @@
                     else if (User.IsInRole("Colaborador"))
                     {
                         <a href="@Url.Action("Details", "Proyecto", new { id = item.Id })"
-                           class="flex items-center justify-center rounded-lg border border-green-400 px-4 py-2 text-sm font-medium text-gray-700 no-underline transition-all duration-200 ease-out hover:bg-green-300 dark:text-gray-300 dark:hover:bg-green-700">
+                           class="flex items-center justify-center px-4 py-2 border border-green-400 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-green-300 dark:hover:bg-green-700 text-sm font-medium no-underline transition-all duration-200 ease-out">
                             <i class="fas fa-user-plus mr-4"></i> Unirse
                         </a>
 
                     }
+                    <!-- Botón de Ingresar con AJAX -->
+                    @* <a href="javascript:void(0);"
+                       data-proyecto-id="@item.Id"
+                       class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out ingresar-tarea">
+                        <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
+                    </a> *@
                     <!-- Botón de Ingresar -->
                     <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
-                       class="flex items-center justify-center rounded-lg bg-purple-800 px-4 py-2 text-sm font-medium text-white no-underline transition-all duration-200 ease-out hover:bg-purple-600">
+                       class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out">
                         <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
                     </a>
+
                 </div>
 
             </div>
@@ -176,8 +212,8 @@
 }
 else
 {
-    <div class="mt-10 flex flex-col items-center justify-center">
-        <img src="~/img/found.svg" alt="No hay proyectos disponibles" class="mb-4 h-36 w-36" />
+    <div class="flex flex-col items-center justify-center mt-10">
+        <img src="~/img/found.svg" alt="No hay proyectos disponibles" class="w-36 h-36 mb-4" />
         <h1 class="text-2xl font-bold text-gray-700">No hay proyectos disponibles</h1>
         <p class="mt-2 text-gray-500">Crea un nuevo proyecto para comenzar a trabajar.</p>
     </div>
@@ -200,15 +236,11 @@ else
                 </div>
             </div>
             <div class="modal-footer flex justify-center">
-                <button type="button" class="btn btn-primary mb-2 me-2 rounded-lg bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 px-5 py-2.5 text-sm font-medium hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-blue-800" onclick="submitcreateForm('createForm')">
+                <button type="button" class="btn btn-primary bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onclick="submitcreateForm('createForm')">
                     <i class="fas fa-save"></i> Guardar
                 </button>
-                <button type="button" class="btn btn-secondary mb-2 me-2 rounded-lg bg-gray-300 px-5 py-2.5 text-base font-medium hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -228,37 +260,31 @@ else
                 </div>
             </div>
             <div class="modal-footer flex justify-center">
-                <button type="button" class="btn btn-primary mb-2 me-2 rounded-lg bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 px-5 py-2.5 text-sm font-medium hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-purple-800" onclick="submiteditForm('editForm')">
+                <button type="button" class="btn btn-primary bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-2 focus:ring-purple-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onclick="submiteditForm('editForm')">
                     <i class="fas fa-save"></i> Guardar
                 </button>
-                <button type="button" class="btn btn-secondary mb-2 me-2 rounded-lg bg-gray-300 px-5 py-2.5 text-base font-medium hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none focus:ring-opacity-50 dark:focus:ring-gray-800" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Tarjeta de eliminación -->
-<div id="confirmDeleteCard" class="bg-opacity-60 fixed inset-0 z-50 flex hidden items-center justify-center bg-gray-800 transition-opacity duration-300">
-    <div class="w-80 transform rounded-xl bg-white shadow-lg transition-all duration-300">
-        <div class="p-4 pb-2 text-center">
-            <h2 class="mt-4 text-lg font-semibold text-gray-900">Confirmar Eliminación</h2>
-            <p class="mt-2 text-sm text-gray-500">¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.</p>
-        </div>
-        <div class="flex justify-between rounded-b-xl bg-gray-100 px-4 py-3">
-            <button type="button"
-                    class="flex-1 mr-1 rounded bg-gray-200 px-4 py-2 font-medium text-gray-700 transition duration-200 hover:bg-gray-300"
-                    onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">
-                Cancelar
-            </button>
-            <form id="deleteForm" method="post" asp-action="Delete" class="flex-1">
-                <input type="hidden" name="Id" id="deleteProjectId" />
-                <button type="submit"
-                        class="flex-1 rounded bg-red-500 px-4 py-2 font-semibold text-white transition duration-200 hover:bg-red-600">
-                    Eliminar
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-red-600 text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Proyecto</h5>
+                <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close">
                 </button>
-            </form>
+            </div>
+            <div class="modal-body" id="deleteModalContent">
+                <!-- Contenido de la vista de eliminación se cargará aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="eliminarProyecto()">Eliminar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -349,6 +375,20 @@ else
         });
     }
 
+    function eliminarProyecto() { // Función para eliminar un proyecto mediante una solicitud AJAX
+        $.ajax({ // Enviar una solicitud AJAX para eliminar el proyecto
+            url: '/Proyecto/Delete', // URL de la acción POST para eliminar el proyecto
+            type: 'POST', // Método POST para enviar la solicitud
+            data: $("#deleteForm").serialize(), // Serializar los datos del formulario (que incluye el ID del Proyecto)
+            success: function (response) { // Función a ejecutar si la solicitud AJAX es exitosa
+                window.location.reload(); // Recargar la página después de eliminar el Proyecto
+            },
+            error: function (xhr, status, error) { // Función a ejecutar si hay un error en la solicitud AJAX
+                alert('Error al eliminar el proyecto: ' + xhr.responseText); // Mostrar una alerta con el mensaje de error recibido del servidor
+            }
+        });
+    }
+
     function cargarVistaCreate() { // Funcion para cargar la vista en un modal
         $.ajax({ //solicitud AJAX para obtener la vista create
             url: "/Proyecto/Create", // URL de la vista que se va a cargar
@@ -371,16 +411,18 @@ else
         });
     }
 
-    function mostrarTarjetaEliminar(proyectoId) {
-        // Establecer el ID del proyecto en el campo oculto
-        document.getElementById('deleteProjectId').value = proyectoId;
-        // Mostrar la tarjeta de confirmación
-        document.getElementById('confirmDeleteCard').classList.remove('hidden');
-    }
-
-    // Función para ocultar la tarjeta (ya está en el botón "Cancelar")
-    function ocultarTarjetaEliminar() {
-        document.getElementById('confirmDeleteCard').classList.add('hidden');
+    function cargarVistaDelete(id) { // Funcion para cargar la vista en un modal
+        $.ajax({ //solicitud AJAX para obtener la vista delete
+            url: "/Proyecto/Delete/" + id, // URL de la vista que se va a cargar
+            type: "GET", // Solicitud para obtener la vista
+            success: function (data) { // Función a ejecutar si la solicitud AJAX es exitosa
+                $("#deleteModalContent").html(data); // Inserta el contenido HTML recibido en el elemento con ID "deleteModalContent"
+                $("#deleteModal").modal("show"); // Muestra el modal con ID "deleteModal" después de cargar la vista
+            },
+            error: function () { // Función a ejecutar si la solicitud AJAX falla
+                alert("Error al cargar la vista de eliminación."); //Se muestra un mensaje de error que no se pudo mostrar el modal
+            }
+        });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -396,4 +438,28 @@ else
             }, 4000); // Esperar 4 segundos
         }
     });
+
+    @* $(document).on('click', '.ingresar-tarea', function () {
+        var proyectoId = $(this).data('proyecto-id');
+        $.ajax({
+            url: '@Url.Action("Index", "Tarea")',  // Llamar a la acción en el controlador
+            data: { proyectoId: proyectoId },
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = '@Url.Action("Index", "Tarea")?proyectoId=' + proyectoId;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: response.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }); *@
+
+
+
 </script>

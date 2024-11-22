@@ -47,17 +47,5 @@ namespace GestordeTareas.BL
         {
             return await ProyectoDAL.BuscarPorTituloOAdministradorAsync(query);
         }
-
-        // Buscar proyectos por título
-        public async Task<List<Proyecto>> BuscarPorTituloAsync(string query)
-        {
-            return await ProyectoDAL.BuscarPorTituloOAdministradorAsync(query);
-        }
-
-        // Buscar proyectos por administrador
-        public  async Task<List<Proyecto>> BuscarPorAdministradorAsync(string query)
-        {
-            return await ProyectoDAL.BuscarPorTituloOAdministradorAsync(query);
-        }
     }
 }

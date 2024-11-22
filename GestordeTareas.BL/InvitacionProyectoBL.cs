@@ -13,6 +13,20 @@ namespace GestordeTareas.BL
         // MÉTODO PARA CREAR UNA NUEVA INVITACIÓN
         public async Task<int> EnviarInvitacionAsync(InvitacionProyecto invitacion)
         {
+            // Verificar si el usuario ya está unido al proyecto
+            var usuariosUnidos = await ProyectoUsuarioDAL.ObtenerUsuariosUnidosAsync(invitacion.IdProyecto);
+            if (usuariosUnidos.Any(u => u.NombreUsuario == invitacion.CorreoElectronico))
+            {
+                return -1; // Usuario ya está unido al proyecto
+            }
+
+            // Verificar si ya existe una invitación pendiente
+            var invitacionPendiente = await VerificarInvitacionPendiente(invitacion.CorreoElectronico, invitacion.IdProyecto);
+            if (invitacionPendiente != null)
+            {
+                return -2; // Ya existe una invitación pendiente
+            }
+
             return await InvitacionProyectoDAL.CrearInvitacionAsync(invitacion);
         }
 
@@ -110,7 +124,11 @@ namespace GestordeTareas.BL
             return await InvitacionProyectoDAL.ObtenerInvitacionesPorProyectoAsync(idProyecto);
         }
 
-
+        // Método para verificar si ya existe una invitación pendiente
+        public async Task<InvitacionProyecto> VerificarInvitacionPendiente(string correoElectronico, int idProyecto)
+        {
+            return await InvitacionProyectoDAL.ObtenerInvitacionPendienteAsync(correoElectronico, idProyecto);
+        }
 
     }
 }

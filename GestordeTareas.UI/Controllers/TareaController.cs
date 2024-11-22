@@ -42,7 +42,7 @@ namespace GestordeTareas.UI.Controllers
         {
             if (!await VerificarAcceso(proyectoId))
             {
-                TempData["ErrorMessage"] = "No tienes acceso a este proyecto.";
+                TempData["ErrorMessage"] = "No tienes acceso a este proyecto";
                 return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos
             }
 
@@ -105,8 +105,8 @@ namespace GestordeTareas.UI.Controllers
 
                 if (!esEncargado)
                 {
-                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
-                    return Json(new { success = false, message = "No tienes permisos para realizar cambios." });
+                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios";
+                    return Json(new { success = false, message = "No tienes permisos para realizar cambios" });
                 }
             }
             try
@@ -119,7 +119,7 @@ namespace GestordeTareas.UI.Controllers
 
                 int result = await _tareaBL.CreateAsync(tarea);
                 TempData["SuccessMessage"] = "Tarea creada correctamente.";
-                return Json(new { success = true, message = "Tarea creada correctamente.", id = idProyecto });
+                return Json(new { success = true, message = "Tarea creada correctamente", id = idProyecto });
 
             }
             catch (Exception ex)
@@ -159,17 +159,17 @@ namespace GestordeTareas.UI.Controllers
         [Authorize(Roles = "Administrador, Colaborador")]
         public async Task<ActionResult> Edit(int id, Tarea tarea)
         {
-            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); 
+            int idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if (!User.IsInRole("Administrador"))
-            {      
+            {
                 // Verificar si el usuario es el encargado del proyecto
                 bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(tarea.IdProyecto, idUsuario);
 
                 if (!esEncargado)
                 {
-                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
-                    return Json(new { success = false, message = "No tienes permisos para realizar cambios." });
+                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios";
+                    return Json(new { success = false, message = "No tienes permisos para realizar cambios" });
                 }
             }
 
@@ -177,7 +177,7 @@ namespace GestordeTareas.UI.Controllers
             {
                 int result = await _tareaBL.UpdateAsync(tarea);
                 TempData["SuccessMessage"] = "Tarea modificada correctamente.";
-                return Json(new { success = true, message = "Tarea modificada correctamente.", id = tarea.IdProyecto });
+                return Json(new { success = true, message = "Tarea modificada correctamente", id = tarea.IdProyecto });
             }
             catch (Exception ex)
             {
@@ -205,7 +205,7 @@ namespace GestordeTareas.UI.Controllers
             var tareaObtenida = await _tareaBL.GetById(new Tarea { Id = id });
             if (tareaObtenida == null)
             {
-                return NotFound("Tarea no encontrada.");
+                return NotFound("Tarea no encontrada");
             }
 
             if (!User.IsInRole("Administrador"))
@@ -215,21 +215,21 @@ namespace GestordeTareas.UI.Controllers
 
                 if (!esEncargado)
                 {
-                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios.";
+                    TempData["ErrorMessage"] = "No tienes permisos para realizar cambios";
                     return RedirectToAction("Index");
                 }
             }
             try
             {
                 await _tareaBL.DeleteAsync(tareaObtenida);
-                TempData["SuccessMessage"] = "Tarea eliminada correctamente.";
+                TempData["SuccessMessage"] = "Tarea eliminada correctamente";
                 return RedirectToAction("Index", new { proyectoId = tareaObtenida.IdProyecto });
 
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al eliminar la tarea.";
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar la tarea";
                 return Json(new { success = false, message = $"Error al eliminar la tarea: {ex.Message}" });
             }
         }
@@ -248,9 +248,9 @@ namespace GestordeTareas.UI.Controllers
                         var estadoValido = await bdContexto.EstadoTarea.FindAsync(model.IdEstadoTarea);
                         if (estadoValido == null)
                         {
-                            return BadRequest("Estado no válido.");
+                            return BadRequest("Estado no válido");
                         }
-                            
+
 
                         tareaBD.IdEstadoTarea = model.IdEstadoTarea;
                         bdContexto.Update(tareaBD);
@@ -259,7 +259,7 @@ namespace GestordeTareas.UI.Controllers
                     }
                     else
                     {
-                        return NotFound("Tarea no encontrada.");
+                        return NotFound("Tarea no encontrada");
                     }
                 }
             }
@@ -314,7 +314,7 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si el usuario existe
                 if (idUsuario == null)
                 {
-                    TempData["ErrorMessage"] = "Usuario no encontrado.";
+                    TempData["ErrorMessage"] = "Usuario no encontrado";
                     return View("Index");
                 }
 
@@ -324,7 +324,7 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si la tarea existe
                 if (tarea == null)
                 {
-                    TempData["ErrorMessage"] = "Tarea no encontrada.";
+                    TempData["ErrorMessage"] = "Tarea no encontrada";
                     return View("Index");
                 }
 
@@ -343,11 +343,11 @@ namespace GestordeTareas.UI.Controllers
                     // Actualizar estado de la tarea a "En Proceso"
                     const int ID_ESTADO_EN_PROCESO = 2;
                     await _tareaBL.ActualizarEstadoTareaAsync(idTarea, ID_ESTADO_EN_PROCESO);
-                    TempData["SuccessMessage"] = "Tarea elegida correctamente .";
+                    TempData["SuccessMessage"] = "Tarea elegida correctamente";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "No se pudo elegir la tarea.";
+                    TempData["ErrorMessage"] = "No se pudo elegir la tarea";
                 }
 
                 var tareasDelProyecto = await _tareaBL.GetTareasByProyectoIdAsync(tarea.IdProyecto);
@@ -357,7 +357,7 @@ namespace GestordeTareas.UI.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ocurrió un error inesperado."+ ex.Message;
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado: " + ex.Message;
                 return RedirectToAction("Index");
             }
         }

@@ -18,10 +18,11 @@
         <label asp-for="FechaVencimiento" class="block text-gray-700 text-sm font-bold mb-2">FechaVencimiento</label>
         <input asp-for="FechaVencimiento" class="border-b-2 border-purple-700 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-purple-500" placeholder="Fecha de Vencimiento" type="date"/>
         <span asp-validation-for="FechaVencimiento" class="text-purple-700 text-xs italic"></span>
-    </div>
+    </div>    
+
     <div class="form-group">
         <label asp-for="IdCategoria" class="control-label"></label>
-        <select asp-for="IdCategoria" class="form-control" asp-items="@ViewBag.Categorias">
+        <select asp-for="IdCategoria" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" asp-items="@ViewBag.Categorias" required>
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdCategoria" class="text-danger"></span>
@@ -29,7 +30,7 @@
 
     <div class="form-group">
         <label asp-for="IdPrioridad" class="control-label"></label>
-        <select asp-for="IdPrioridad" class="form-control" asp-items="@ViewBag.Prioridades">
+        <select asp-for="IdPrioridad" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" asp-items="@ViewBag.Prioridades" required>
             <option value="">Seleccionar</option>
         </select>
         <span asp-validation-for="IdPrioridad" class="text-danger"></span>

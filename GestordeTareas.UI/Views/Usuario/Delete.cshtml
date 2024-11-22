@@ -5,12 +5,29 @@
 }
 
 <div class="flex justify-center items-center">
-    <div class="p-4 md:p-5 text-center">
-        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
-        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">¿Estás seguro de eliminar al usuario <span class="text-red-600 font-bold">@Html.DisplayFor(model => model.NombreUsuario)</span>?</h3>
+    <div class="p-3 text-center">
+        <!-- Mensaje de Confirmación -->
+        <h3 class="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">
+            ¿Estás seguro de eliminar al usuario?
+            <p class="text-gray-500 text-sm font-semibold">Esta acción no se puede deshacer</p>
+        </h3>
+
+        <!-- Información del Usuario -->
+        <div class="flex items-center justify-center mb-4">
+            <!-- Foto de perfil del usuario -->
+            <img src="@Model.FotoPerfil" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover border-2 border-gray-300" />
+
+            <!-- Nombre y apellido del usuario -->
+            <div class="ml-3 text-left">
+                <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-300">@Model.Nombre @Model.Apellido</h4>
+                <!-- Nombre de usuario -->
+                <p class="text-sm text-gray-500 text-red-600 font-semibold">@Model.NombreUsuario</p>
+            </div>
+        </div>
+
+        <!-- Formulario de eliminación -->
         <form asp-action="Delete" id="deleteForm" method="post">
+            <!-- Input oculto para pasar el ID -->
             <input type="hidden" id="deleteUserId" name="id" />
         </form>
     </div>

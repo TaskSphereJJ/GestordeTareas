@@ -227,7 +227,6 @@
             preview.src = reader.result;
         }
 
-        if (file) {
             reader.readAsDataURL(file);
         } else {
             preview.src = "@Url.Content(Model.FotoPerfil ?? "~/default-profile.png")";

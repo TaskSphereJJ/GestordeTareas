@@ -24,9 +24,7 @@ namespace GestordeTaras.EN
         public string CodigoAcceso { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
-
         [Display(Name = "Fecha de finalizacion")]
-        [DataType(DataType.Date)]
         public DateTime FechaFinalizacion { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Campo obligatorio")]

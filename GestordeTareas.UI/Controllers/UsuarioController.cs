@@ -94,7 +94,7 @@ namespace GestordeTareas.UI.Controllers
             catch (Exception ex)
             {
                 // Manejar la excepción de forma adecuada, por ejemplo, registrándola o mostrando un mensaje de error
-                ViewBag.ErrorMessage = "Ocurrió un error al cargar la información del usuario.";
+                ViewBag.ErrorMessage = "Ocurrió un error al cargar la información del usuario";
                 return View(); // Puedes redirigir a una vista de error específica si lo deseas
             }
         }
@@ -124,6 +124,11 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(usuario.Pass) || usuario.Pass.Length < 8)
+                {
+                    TempData["ErrorMessage"] = "La contraseña debe tener al menos 8 caracteres";
+                    return View(usuario);
+                }
 
                 usuario.Status = (byte)User_Status.ACTIVO; // Valor predeterminado al crear usuario
 
@@ -134,18 +139,18 @@ namespace GestordeTareas.UI.Controllers
                 }
 
                 if (User.IsInRole("Administrador"))
-                  {
-                      int createresult = await _usuarioBL.Create(usuario);
-                      TempData["SuccessMessage"] = "Usuario creado correctamente.";
-                      return RedirectToAction(nameof(Index));
-                  }
+                {
+                    int createresult = await _usuarioBL.Create(usuario);
+                    TempData["SuccessMessage"] = "Usuario creado correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
 
                 // Si no es administrador, asigna un rol predeterminado
                 var cargoColaboradorId = await CargoDAL.GetCargoColaboradorIdAsync(); // Método para obtener el ID del cargo predeterminado
                 usuario.IdCargo = cargoColaboradorId;
 
                 int result = await _usuarioBL.Create(usuario);
-                TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicie sesión.";
+                TempData["SuccessMessage"] = "Usuario creado correctamente. Por favor, inicia sesión";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -189,8 +194,8 @@ namespace GestordeTareas.UI.Controllers
                 var existingUser = await _usuarioBL.GetByIdAsync(new Usuario { Id = id });
                 if (existingUser == null)
                 {
-                    TempData["ErrorMessage"] = "El usuario no fue encontrado.";
-                    return Json(new { success = false, message = "Usuario no encontrado." });
+                    TempData["ErrorMessage"] = "El usuario no fue encontrado";
+                    return Json(new { success = false, message = "Usuario no encontrado" });
                 }
 
                 // Mantener la contraseña existente
@@ -199,12 +204,12 @@ namespace GestordeTareas.UI.Controllers
                 // Llamar al método de actualización
                 int result = await _usuarioBL.Update(usuario);
                 TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
-                return Json(new { success = true, message = "Usuario actualizado correctamente." });
+                return Json(new { success = true, message = "Usuario actualizado correctamente" });
             }
 
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Hubo un problema al actualizar el usuario.";
+                TempData["ErrorMessage"] = "Hubo un problema al actualizar el usuario";
                 return Json(new { success = false, message = "Hubo un problema al actualizar el usuario: " + ex.Message });
             }
 
@@ -221,7 +226,7 @@ namespace GestordeTareas.UI.Controllers
                 var existingUser = await _usuarioBL.GetByIdAsync(usuario);
                 if (existingUser == null)
                 {
-                    TempData["ErrorMessage"] = "El usuario no fue encontrado.";
+                    TempData["ErrorMessage"] = "El usuario no fue encontrado";
                     return RedirectToAction("Perfil");
                 }
 
@@ -232,14 +237,14 @@ namespace GestordeTareas.UI.Controllers
                     // Verifica si la contraseña actual coincide con la almacenada
                     if (UsuarioDAL.HashMD5(currentPassword) != existingUser.Pass)
                     {
-                        TempData["ErrorMessage"] = "La contraseña actual es incorrecta.";
+                        TempData["ErrorMessage"] = "La contraseña actual es incorrecta";
                         return RedirectToAction("Perfil");
                     }
 
                     // Verificar que la nueva contraseña y la confirmación coincidan
                     if (usuario.Pass != usuario.ConfirmarPass)
                     {
-                        TempData["ErrorMessage"] = "La nueva contraseña y la confirmación no coinciden.";
+                        TempData["ErrorMessage"] = "La nueva contraseña y la confirmación no coinciden";
                         return RedirectToAction("Perfil");
                     }
 
@@ -271,7 +276,7 @@ namespace GestordeTareas.UI.Controllers
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.GivenName));
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Surname));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre)); 
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, existingUser.Nombre));
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, existingUser.Apellido));
                 claimsIdentity.RemoveClaim(claimsIdentity.FindFirst("FotoPerfil")); // Eliminar el claim viejo si existe
                 claimsIdentity.AddClaim(new Claim("FotoPerfil", existingUser.FotoPerfil)); // Agregar el nuevo claim de foto de perfil
@@ -283,7 +288,7 @@ namespace GestordeTareas.UI.Controllers
 
                 // Actualiza el usuario en la base de datos
                 await _usuarioBL.Update(existingUser);
-                TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
+                TempData["SuccessMessage"] = "Perfil actualizado correctamente";
                 return RedirectToAction("Perfil");
             }
 
@@ -314,14 +319,14 @@ namespace GestordeTareas.UI.Controllers
             try
             {
                 int result = await _usuarioBL.Delete(usuario);
-                TempData["SuccessMessage"] = "Usuario eliminado correctamente.";
-                return RedirectToAction(nameof(Index));
+                TempData["SuccessMessage"] = "Usuario eliminado correctamente";
+                return Json(new { success = true, message = "Usuario eliminado correctamente" });
+
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario. " + ex.Message;
-                return RedirectToAction(nameof(Index));
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar el usuario: " + ex.Message;
+                return Json(new { success = false, message = "Hubo un problema al eliminar el usuario: " + ex.Message });
             }
         }
 
@@ -335,7 +340,7 @@ namespace GestordeTareas.UI.Controllers
                 // Verifica si el usuario está autenticado
                 if (!User.Identity.IsAuthenticated)
                 {
-                    TempData["ErrorMessage"] = "Usuario no autenticado.";
+                    TempData["ErrorMessage"] = "Usuario no autenticado";
                     return RedirectToAction("Login", "Usuario");
                 }
 
@@ -344,7 +349,7 @@ namespace GestordeTareas.UI.Controllers
                 // Se verifica si userId es null o vacío
                 if (string.IsNullOrEmpty(nombreUsuario))
                 {
-                    TempData["ErrorMessage"] = "No se pudo encontrar el usuario.";
+                    TempData["ErrorMessage"] = "No se pudo encontrar el usuario";
                     return RedirectToAction("Perfil");
                 }
 
@@ -367,20 +372,20 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si la eliminación fue exitosa
                 if (result > 0)
                 {
-                    await HttpContext.SignOutAsync();
-                    TempData["SuccessMessage"] = "Cuenta eliminada correctamente.";
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    TempData["SuccessMessage"] = "Cuenta eliminada correctamente";
                     return RedirectToAction("Login", "Usuario");
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "No se pudo eliminar la cuenta.";
+                    TempData["ErrorMessage"] = "No se pudo eliminar la cuenta";
                     return RedirectToAction("Perfil");
                 }
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                TempData["ErrorMessage"] = "Hubo un problema al eliminar la cuenta. " + ex.Message;
+                TempData["ErrorMessage"] = "Hubo un problema al eliminar la cuenta: " + ex.Message;
                 return RedirectToAction("Perfil");
             }
         }
@@ -409,7 +414,14 @@ namespace GestordeTareas.UI.Controllers
                 if (userDb == null)
                 {
                     // Si el usuario no existe
-                    TempData["ErrorMessage"] = "El correo electrónico ingresado no existe.";
+                    TempData["ErrorMessage"] = "El correo electrónico ingresado no existe";
+                    return View(new Usuario { NombreUsuario = user.NombreUsuario });
+                }
+
+                // Verificar el estado del usuario
+                if (userDb.Status != (byte)User_Status.ACTIVO)
+                {
+                    TempData["ErrorMessage"] = "Tu cuenta está inactiva. Por favor, contacta al administrador.";
                     return View(new Usuario { NombreUsuario = user.NombreUsuario });
                 }
 
@@ -417,47 +429,47 @@ namespace GestordeTareas.UI.Controllers
                 if (userDb.Pass != UsuarioDAL.HashMD5(user.Pass))  // Usamos HashMD5 para comparar contraseñas cifradas
                 {
                     // Si la contraseña es incorrecta
-                    TempData["ErrorMessage"] = "La contraseña es incorrecta.";
+                    TempData["ErrorMessage"] = "La contraseña es incorrecta";
                     return View(new Usuario { NombreUsuario = user.NombreUsuario });
                 }
 
-                    // Verifica si la propiedad FotoPerfil tiene un valor
-                    var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
+                // Verifica si la propiedad FotoPerfil tiene un valor
+                var fotoPerfil = string.IsNullOrEmpty(userDb.FotoPerfil) ? "/img/usuario.png" : userDb.FotoPerfil;
 
-                    userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
-                    var claims = new[] {
+                userDb.Cargo = await cargoBL.GetById(new Cargo { Id = userDb.IdCargo });
+                var claims = new[] {
                     new Claim(ClaimTypes.Name, userDb.NombreUsuario),
                     new Claim(ClaimTypes.Role, userDb.Cargo.Nombre),
-                    new Claim(ClaimTypes.GivenName, userDb.Nombre),   
+                    new Claim(ClaimTypes.GivenName, userDb.Nombre),
                     new Claim(ClaimTypes.Surname, userDb.Apellido),
                     new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
                     new Claim("FotoPerfil", fotoPerfil)
             };
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                    TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
+                TempData["SuccessMessage"] = "Inicio de sesión exitoso";
 
-                    // Verificar si hay un token y una decisión almacenados en TempData
-                    if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
-                    {
-                        string token = TempData["Token"].ToString();
-                        string decision = TempData["Decision"].ToString();
+                // Verificar si hay un token y una decisión almacenados en TempData
+                if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
+                {
+                    string token = TempData["Token"].ToString();
+                    string decision = TempData["Decision"].ToString();
 
-                        // Limpiar TempData después de redirigir
-                        TempData.Remove("Token");
-                        TempData.Remove("Decision");
+                    // Limpiar TempData después de redirigir
+                    TempData.Remove("Token");
+                    TempData.Remove("Decision");
 
-                        return RedirectToAction("AceptarInvitacion", "Proyecto", new { token = token, decision = decision });
-                    }
+                    return RedirectToAction("AceptarInvitacion", "Proyecto", new { token = token, decision = decision });
+                }
 
-                    // Si no hay token, redirigir al returnUrl o a la vista predeterminada
-                    if (!string.IsNullOrWhiteSpace(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
+                // Si no hay token, redirigir al returnUrl o a la vista predeterminada
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
-                    return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
 
             }
             catch (Exception ex)
@@ -493,7 +505,7 @@ namespace GestordeTareas.UI.Controllers
         {
             if (string.IsNullOrWhiteSpace(nombreUsuario))
             {
-                return Json(new { success = false, message = "El correo electrónico no puede estar vacío." });
+                return Json(new { success = false, message = "El correo electrónico no puede estar vacío" });
 
             }
 
@@ -512,7 +524,7 @@ namespace GestordeTareas.UI.Controllers
 
                     if (codigo == 0)
                     {
-                        return Json(new { success = false, message = "Error al generar el código de restablecimeiento." });
+                        return Json(new { success = false, message = "Error al generar el código de restablecimeiento" });
 
                     }
 
@@ -520,7 +532,7 @@ namespace GestordeTareas.UI.Controllers
                     {
                         // Envía el código de restablecimiento al usuario
                         await _emailService.EnviarCorreoRestablecimientoAsync(usuarioEncontrado.NombreUsuario, codigo);
-                        return Json(new { success = true, message = "Código de verificación enviado." });
+                        return Json(new { success = true, message = "Código de verificación enviado" });
 
 
                     }
@@ -533,7 +545,7 @@ namespace GestordeTareas.UI.Controllers
                 else
                 {
                     // Si el usuario no existe, muestra un mensaje de error
-                    return Json(new { success = false, message = "El correo electrónico ingresado no existe en nuestros registros." });
+                    return Json(new { success = false, message = "El correo electrónico ingresado no existe en nuestros registros" });
 
                 }
             }
@@ -555,13 +567,13 @@ namespace GestordeTareas.UI.Controllers
 
             if (idUsuario == null)
             {
-                return Json(new { success = false, message = "No se encontró información del usuario. Vuelve a solicitar el código." });
+                return Json(new { success = false, message = "No se encontró información del usuario. Vuelve a solicitar el código" });
 
             }
 
             if (string.IsNullOrWhiteSpace(codigo))
             {
-                return Json(new { success = false, message = "Por favor, ingresa el código de verificación." });
+                return Json(new { success = false, message = "Por favor, ingresa el código de verificación" });
 
             }
 
@@ -571,14 +583,14 @@ namespace GestordeTareas.UI.Controllers
             if (!esCodigoValido)
             {
                 // Si el código no es válido o ha expirado
-                return Json(new { success = false, message = "El código ingresado es incorrecto o ha expirado." });
+                return Json(new { success = false, message = "El código ingresado es incorrecto o ha expirado" });
 
             }
 
             // Guarda el código en TempData para ser usado en el siguiente metodo
             TempData["CodigoRestablecimiento"] = codigo;
 
-            return Json(new { success = true, message = "El código es válido. Ahora puedes restablecer tu contraseña." });
+            return Json(new { success = true, message = "El código es válido. Ahora puedes restablecer tu contraseña" });
 
         }
 
@@ -593,25 +605,25 @@ namespace GestordeTareas.UI.Controllers
 
             if (idUsuario == null)
             {
-                return Json(new { success = false, message = "No se encontró información del usuario. Vuelve a solicitar el código." });
+                return Json(new { success = false, message = "No se encontró información del usuario. Vuelve a solicitar el código" });
 
             }
 
             if (string.IsNullOrWhiteSpace(nuevaContrasena) || string.IsNullOrWhiteSpace(confirmarContrasena))
             {
-                return Json(new { success = false, message = "Por favor, ingresa ambas contraseñas." });
+                return Json(new { success = false, message = "Por favor, ingresa ambas contraseñas" });
 
             }
 
             if (nuevaContrasena != confirmarContrasena)
             {
-                return Json(new { success = false, message = "Las contraseñas no coinciden. Por favor, intenta nuevamente." });
+                return Json(new { success = false, message = "Las contraseñas no coinciden. Por favor, intenta nuevamente" });
 
             }
 
-            if (nuevaContrasena.Length < 8)  
+            if (nuevaContrasena.Length < 8)
             {
-                return Json(new { success = false, message = "La contraseña debe tener al menos 8 caracteres." });
+                return Json(new { success = false, message = "La contraseña debe tener al menos 8 caracteres" });
 
             }
 
@@ -622,7 +634,7 @@ namespace GestordeTareas.UI.Controllers
 
                 if (string.IsNullOrWhiteSpace(codigoGuardado))
                 {
-                    return Json(new { success = false, message = "El código de verificación no es válido o ha expirado." });
+                    return Json(new { success = false, message = "El código de verificación no es válido o ha expirado" });
 
                 }
 
@@ -632,13 +644,13 @@ namespace GestordeTareas.UI.Controllers
                 if (resultado > 0)
                 {
                     // Si la contraseña fue actualizada correctamente
-                    return Json(new { success = true, message = "Tu contraseña ha sido actualizada exitosamente." });
+                    return Json(new { success = true, message = "Tu contraseña ha sido actualizada exitosamente" });
 
                 }
                 else
                 {
                     // Si hubo algún problema al restablecer la contraseña
-                    return Json(new { success = false, message = "No se pudo restablecer la contraseña. Intenta nuevamente." });
+                    return Json(new { success = false, message = "No se pudo restablecer la contraseña. Intenta nuevamente" });
 
                 }
             }
