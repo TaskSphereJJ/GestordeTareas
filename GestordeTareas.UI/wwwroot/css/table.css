@@ -1,0 +1,196 @@
+
+
+/* Contenedor de tabla */
+.table-container {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark table {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+/* Encabezados */
+table th {
+    background-color: white;
+    color: black;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 1rem;
+}
+
+.dark table th {
+    background-color: #151920;
+    color: white;
+}
+
+/* Filas */
+table td {
+    padding: 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.dark table td {
+    border-bottom: 1px solid #14171d;
+    color: #d5d5e4;
+}
+
+/* Hover en fila */
+table tr:hover {
+    background-color: rgba(108, 40, 217, 0.034);
+    cursor: pointer;
+}
+
+.dark table tr:hover {
+    background-color: rgba(61, 52, 77, 0.2);
+}
+
+/* Estados */
+.status {
+    font-weight: bold;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    display: inline-block;
+    text-align: center;
+    min-width: 100px;
+    transition: all 0.3s ease;
+}
+
+/* Finalizada */
+.status.finalized {
+    background-color: rgba(16, 185, 129, 0.2);
+    /* Verde suave */
+    color: green;
+}
+
+/* Pendiente */
+.status.pending {
+    background-color: rgba(239, 68, 68, 0.2);
+    /* Rojo suave */
+    color: red;
+}
+
+/* En Proceso */
+.status.in-progress {
+    background-color: rgba(108, 40, 217, 0.219);
+    /* Morado suave */
+    color: #6D28D9;
+}
+
+/* Prioridades */
+.priority {
+    font-weight: bold;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+    transition: all 0.3s ease;
+}
+
+/* Prioridad Baja */
+.priority.low {
+    background-color: rgba(59, 246, 84, 0.2);
+    /* Azul suave */
+    color: green;
+    /* Azul */
+}
+
+.dark .priority.priority.low {
+    color: rgb(29, 207, 29);
+}
+
+/* Prioridad Media */
+.priority.medium {
+    background-color: rgba(234, 179, 8, 0.2);
+    /* Amarillo suave */
+    color: orangered;
+    /* Amarillo */
+}
+
+.dark .priority.medium {
+    color: #eaab08;
+}
+
+/* Prioridad Alta */
+.priority.high {
+    background-color: rgba(220, 38, 38, 0.2);
+    /* Rojo suave */
+    color: #dc2626;
+    /* Rojo */
+}
+
+.priority.high {
+    color: #cf0a0a;
+}
+
+/* Transiciones */
+.status:hover,
+.priority:hover {
+    transform: scale(1.05);
+    /* Efecto de aumento */
+}
+
+/* Botones */
+.action-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--white);
+    margin-right: 0.3rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.action-btn.view {
+    background-color: rgb(36, 145, 36);
+}
+
+.action-btn.edit {
+    background-color: var(--primary);
+}
+
+.action-btn.delete {
+    background-color: var(--danger);
+}
+
+.action-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+
+    table th,
+    table td {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .action-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+}

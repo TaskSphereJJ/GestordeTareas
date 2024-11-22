@@ -1,0 +1,188 @@
+﻿@model GestordeTaras.EN.Usuario
+@{
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+@await Html.PartialAsync("_Alerts")
+
+<div class="login_container max-w-screen-xl mx-auto bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
+    <div class="lg:w-1/2 flex-1 xl:w-5/12 p-4 sm:p-4 mt-0">
+        <div class="mt-4 flex flex-col items-center">
+            <h1 class="text-lg no-underline inicio xl:text-xl font-extrabold underline">
+                CREAR UNA CUENTA
+            </h1>
+            <div class="w-full flex-1 mt-2 mb-2">
+                <div class="my-4 border-b text-center">
+                    <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2">
+                        Complete los campos para crear una nueva cuenta
+                    </div>
+                </div>
+                <form asp-action="Create" enctype="multipart/form-data"> <!-- Agregar enctype -->               
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mx-auto max-w-sm">
+                        <!-- Campo para la Foto de Perfil -->
+                        <div class="mt-2">
+                            <label for="FotoPerfil" class="block text-gray-700 text-sm font-medium mb-2">Foto de Perfil</label>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
+                                    @if (Model?.FotoPerfil == null)
+                                    {
+                                        <!-- Muestra un ícono si no hay foto de perfil -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+                                            <path d="M12 12c2.28 0 4-1.72 4-4s-1.72-4-4-4-4 1.72-4 4 1.72 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z" />
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <!-- Si hay foto de perfil, mostrarla -->
+                                        <img id="previewImage" src="@Model.FotoPerfil" alt="Foto de perfil" class="w-full h-full object-cover" />
+                                    }
+                                </div>
+
+                                <div class="flex-1">
+                                    <label for="FotoPerfil" class="cursor-pointer bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 inline-block">
+                                        <span class="flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            Elegir Foto
+                                        </span>
+                                    </label>
+                                    <input id="FotoPerfil" asp-for="FotoPerfil" type="file" accept="image/*" class="hidden" onchange="previewFile()" />
+                                </div>
+                            </div>
+                            <span asp-validation-for="FotoPerfil" class="text-danger mt-2 block"></span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="mb-2">
+                                <label for="Nombre" class="block text-gray-700 text-sm font-medium mb-2">Nombre</label>
+                                <input asp-for="Nombre" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Nombre" required />
+                                <span asp-validation-for="Nombre" class="text-danger text-xs mt-1"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="Apellido" class="block text-gray-700 text-sm font-medium mb-2">Apellido</label>
+                                <input asp-for="Apellido" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Apellido" required />
+                                <span asp-validation-for="Apellido" class="text-danger text-xs mt-1"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="NombreUsuario" class="block text-gray-700 text-sm font-medium mb-2">Correo electrónico</label>
+                                <input asp-for="NombreUsuario" type="email" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Correo electrónico" required />
+                                <span asp-validation-for="NombreUsuario" class="text-danger text-xs mt-1"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="Pass" class="block text-gray-700 text-sm font-medium mb-2">Contraseña</label>
+                                <input asp-for="Pass" type="password" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Contraseña" required />
+                                <span asp-validation-for="Pass" class="text-danger text-xs mt-1"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="Telefono" class="block text-gray-700 text-sm font-medium mb-2">Teléfono</label>
+                                <input asp-for="Telefono" type="tel" maxlength="8" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" placeholder="Teléfono" required />
+                                <span asp-validation-for="Telefono" class="text-danger text-xs mt-1"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="FechaNacimiento" class="block text-gray-700 text-sm font-medium mb-2">Fecha de nacimiento</label>
+                                <input asp-for="FechaNacimiento" type="date" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="date" required />
+                                <span asp-validation-for="FechaNacimiento" class="text-danger text-xs mt-1"></span>
+                            </div>
+
+                            <div class="mb-2 md:col-span-2">
+                                @if (User.IsInRole("Administrador"))
+                                {
+                                    <label for="IdCargo" class="block text-gray-700 text-sm font-medium mb-2">Cargo</label>
+                                    <select asp-for="IdCargo" class="w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"required>
+                                        <option value="">Seleccionar</option>
+                                        @foreach (var item in ViewBag.Cargos)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="IdCargo" class="text-danger text-xs mt-1"></span>
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(model => model.IdCargo, new { Value = ViewBag.CargoColaboradorId })
+                                }
+                            </div>
+                        </div>
+
+                        <button type="submit" class="mt-4 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-2 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                            <span class="ml-3">
+                                <i class="fas fa-user-plus"></i>
+                                Crear Cuenta
+                            </span>
+                        </button>
+                        <div class="flex justify-center mt-4">
+                            <a asp-action="Index" class="flex items-center justify-center px-4 py-2 border border-gray-400 rounded-lg text-indigo-500 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 text-sm font-medium no-underline transition-all duration-200 ease-out">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Regresar
+                            </a>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+        <div class="m-4 xl:m-4 w-full bg-contain bg-center bg-no-repeat" style="background-image: url('/img/create login-amico.svg');">
+            @* background-size: 200px 200px; *@
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+    // Limpiar el preview si el formulario ha sido enviado con errores de validación
+    var previewImage = document.getElementById('previewImage');
+    var previewContainer = document.querySelector('.w-24.h-24.bg-gray-200.rounded-full.overflow-hidden');
+
+    if (previewImage && !document.getElementById('FotoPerfil').files.length) {
+        previewImage.src = ''; // Limpiar la imagen en preview
+
+            // Mostrar el SVG si no hay imagen
+            previewContainer.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+                    <path d="M12 12c2.28 0 4-1.72 4-4s-1.72-4-4-4-4 1.72-4 4 1.72 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z" />
+                </svg>
+            `;
+    }
+});
+
+    function previewFile() {
+        var previewContainer = document.querySelector('.w-24.h-24.bg-gray-200.rounded-full.overflow-hidden');
+        var preview = document.getElementById('previewImage');
+
+        if (!preview) {
+            preview = document.createElement('img');
+            preview.id = 'previewImage';
+            preview.className = 'w-full h-full object-cover';
+            previewContainer.innerHTML = '';
+            previewContainer.appendChild(preview);
+        }
+
+        var file = document.getElementById('FotoPerfil').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "/img/default-avatar.png";
+        }
+    }
+    
+</script>
+

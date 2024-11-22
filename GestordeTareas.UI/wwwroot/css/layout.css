@@ -1,0 +1,103 @@
+:root {
+  --formularioDark: #151920;
+  --formularioLight: #fdfdfd;
+
+  --bagroundDark: #1F232A;
+
+  --borderLight: #eeeeee;
+  --borderDark: #16191f;
+
+  --textDark: #e4e2e2;
+
+  --headerHeight: 4rem;
+  /* Altura fija del header */
+  --sidebarWidth: 16rem;
+  /* Ancho fijo del sidebar */
+
+  --bg-sidebar-ligth: #ffffff;
+  --bg-sidebar-dark: #1F232A;
+
+  --bg-main-dark: #1F232A;
+  --bg-main-light: #f5f5f5;
+}
+
+body {
+  background-color: var(--bg-main-light);
+}
+
+.dark body {
+  background-color: var(--bg-main-dark);
+}
+
+/* Sidebar */
+#sidebar {
+  background-color: var(--bg-sidebar-ligth);
+  height: 100vh;
+  width: var(--sidebarWidth);
+  box-sizing: border-box;
+  z-index: 50;
+  border-right: 2px solid var(--borderLight);
+  border-top-right-radius: 5%;
+  border-bottom-right-radius: 5%;
+}
+
+.dark #sidebar {
+  background-color: var(--bg-sidebar-dark);
+}
+
+/* Header */
+.headerlayout {
+  height: var(--headerHeight);
+  background-color: var(--bg-main-light);
+  margin-left: var(--sidebarWidth);
+  /* Espacio para el sidebar */
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  position: sticky;
+  /* Se mantiene en la parte superior */
+  top: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark .headerlayout {
+  background-color: var(--bg-main-dark);
+}
+
+.main {
+  margin-left: var(--sidebarWidth);
+  /* Espacio para el sidebar */
+  padding: 2rem;
+  background-color: var(--bg-main-light);
+  overflow-y: auto;
+  /* Scroll solo en el contenido */
+  height: calc(100vh - var(--headerHeight));
+  /* Altura dinámica para contenido */
+}
+
+.dark .main {
+  background-color: var(--bg-main-dark);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  #sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+  }
+
+  #sidebar.translate-x-0 {
+    transform: translateX(0);
+    /* Muestra el sidebar */
+  }
+
+  .headerlayout {
+    margin-left: 0;
+    /* Header ocupa todo el ancho en pantallas pequeñas */
+  }
+
+  .main {
+    margin-left: 0;
+    /* Main también ocupa todo el ancho */
+  }
+}

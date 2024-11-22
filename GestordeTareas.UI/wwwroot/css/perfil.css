@@ -1,0 +1,18 @@
+:root {
+    --formularioDark: #151920;
+    --formularioLight: #fdfdfd;
+
+    --bagroundDark: #1F232A;
+
+    --borderLigth: #eeeeee;
+    --borderDark: #16191f;
+
+    --textoDark: #e4e2e2;
+
+    --nameLigth: #999999;
+    --nameDark: #d5d6d6;
+}
+
+.dark .perfil {
+    background-color: var(--bagroundDark);
+}

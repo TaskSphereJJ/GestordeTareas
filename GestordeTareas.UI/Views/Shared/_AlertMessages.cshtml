@@ -1,0 +1,23 @@
+﻿@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '@Html.Raw(TempData["SuccessMessage"])',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '@Html.Raw(TempData["ErrorMessage"])',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}

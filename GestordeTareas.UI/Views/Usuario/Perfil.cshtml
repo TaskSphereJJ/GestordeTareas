@@ -1,0 +1,242 @@
+﻿@model GestordeTaras.EN.Usuario
+
+<div class="perfil min-h-screen">
+    <div class="container mx-auto p-4">
+        <div class="mx-auto max-w-4xl overflow-hidden rounded-lg">
+            <div class="p-8">
+                <div class="mb-6 flex items-center justify-between">
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Mi Perfil @Model.Nombre</h1>
+                </div>
+
+                @await Html.PartialAsync("_Alerts")
+
+                <!-- Profile Display Card -->
+                <div id="profileDisplay" class="flex flex-col items-start gap-8 md:flex-row">
+                    <!-- Profile Picture -->
+                    <div class="relative">
+                        <div class="h-32 w-32 overflow-hidden rounded-full bg-purple-100 dark:bg-purple-900">
+                            <img id="profileImage" src="@Url.Content(Model.FotoPerfil ?? "~/default-profile.png")" alt="Foto de perfil" class="h-full w-full object-cover" />
+                        </div>
+                        <label for="fotoPerfil" class="absolute bottom-0 right-0 cursor-pointer rounded-full bg-purple-600 p-2 text-white shadow-md transition-colors hover:bg-purple-700">
+                            <span class="material-icons text-sm">photo_camera</span>
+                        </label>
+                        <input type="file" id="fotoPerfil" name="FotoPerfil" accept="image/*" class="hidden" onchange="previewFile()" />
+                    </div>
+
+                    <!-- Profile Info -->
+                    <div class="flex-1">
+                        <div class="mb-2 flex items-center gap-2">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">@Model.Nombre @Model.Apellido</h2>
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <span class="rounded-full bg-purple-600 px-3 py-1 text-xs font-bold text-white">Administrador</span>
+                            }
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Miembro desde @Model.FechaRegistro.ToString("dd/MM/yyyy")</p>
+
+                        <!-- Profile Details -->
+                        <div class="grid-cols-1 mt-6 grid gap-4 md:grid-cols-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="material-icons text-purple-500">email</span>
+                                <span class="text-gray-700 dark:text-gray-300">@Model.NombreUsuario</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="material-icons text-purple-500">phone</span>
+                                <span class="text-gray-700 dark:text-gray-300">@Model.Telefono</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="material-icons text-purple-500">cake</span>
+                                <span class="text-gray-700 dark:text-gray-300">
+                                    @(Model.FechaNacimiento != DateTime.MinValue ? Model.FechaNacimiento.ToString("dd/MM/yyyy") : "No especificada")
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="mt-6 flex justify-start space-x-4">
+                            <button id="editProfileBtn" class="rounded-lg bg-purple-600 px-6 py-2 text-white transition duration-300 hover:bg-purple-700" onclick="toggleEditMode()">Editar Perfil</button>
+                            <button class="rounded-lg bg-red-500 px-6 py-2 text-white transition duration-300 hover:bg-red-600" onclick="toggleDeleteConfirmation()">Eliminar Cuenta</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Form -->
+                <form id="profileForm" class="mt-8 hidden space-y-6 dark:bg-blue-700" method="post" asp-action="EditOwn" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <input type="hidden" asp-for="Id" />
+
+                    <!-- Profile Picture Edit Section -->
+                    <div class="mb-4 flex flex-col items-center md:flex-row md:space-x-8">
+                        <div class="relative">
+                            <div class="h-32 w-32 overflow-hidden rounded-full bg-purple-100 dark:bg-purple-900">
+                                <img id="editProfileImage" src="@Url.Content(Model.FotoPerfil ?? "~/default-profile.png")" alt="Foto de perfil" class="h-full w-full object-cover" />
+                            </div>
+                            <label for="editFotoPerfil" class="absolute bottom-0 right-0 cursor-pointer rounded-full bg-purple-600 p-2 text-white shadow-md transition-colors hover:bg-purple-700">
+                                <span class="material-icons text-sm">photo_camera</span>
+                            </label>
+                            <input type="file" id="editFotoPerfil" name="FotoPerfil" accept="image/*" class="hidden" onchange="previewEditFile()" />
+                        </div>
+                        <div class="mt-4 text-center text-gray-600 dark:text-gray-400 md:mt-0 md:text-left">
+                            <p>Haz clic en el icono de la cámara para cambiar la foto de perfil</p>
+                            <!-- Status Toggle -->
+                            <div class="mt-4 flex items-center space-x-2">
+                                <span>Estado:</span>
+                                <label class="relative inline-flex cursor-pointer items-center">
+                                    <input type="checkbox" id="editStatusSwitch" name="Status" class="peer sr-only" checked="@(Model.Status == 1)" onclick="confirmToggleStatus()">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editable Fields -->
+                    <div class="grid-cols-1 grid gap-6 md:grid-cols-2">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
+                            <input type="text" asp-for="Nombre" class="w-full rounded-lg border p-2 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellido</label>
+                            <input type="text" asp-for="Apellido" class="w-full rounded-lg border p-2 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo electrónico</label>
+                            <input type="email" asp-for="NombreUsuario" class="w-full rounded-lg border bg-gray-100 p-2 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300" readonly />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
+                            <input type="tel" asp-for="Telefono" class="w-full rounded-lg border p-2 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña Actual</label>
+                            <div class="relative">
+                                <input type="password" name="currentPassword" id="currentPassword" class="w-full rounded-lg border p-2 pr-10 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <button type="button" onclick="togglePassword('currentPassword')" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <span class="material-icons text-gray-500">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nueva Contraseña</label>
+                            <div class="relative">
+                                <input type="password" asp-for="Pass" id="newPassword" class="w-full rounded-lg border p-2 pr-10 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <button type="button" onclick="togglePassword('newPassword')" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <span class="material-icons text-gray-500">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirmar Nueva Contraseña</label>
+                            <div class="relative">
+                                <input type="password" name="ConfirmarPass" id="confirmPassword" class="w-full rounded-lg border p-2 pr-10 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <button type="button" onclick="togglePassword('confirmPassword')" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <span class="material-icons text-gray-500">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de nacimiento</label>
+                            <input type="date" asp-for="FechaNacimiento" class="w-full rounded-lg border p-2 focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required value="@(Model.FechaNacimiento != DateTime.MinValue ? Model.FechaNacimiento.ToString("yyyy-MM-dd") : "")" />
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-6 flex justify-between">
+                        <button type="submit" class="rounded-lg bg-purple-600 px-6 py-2 text-white transition duration-300 hover:bg-purple-700">Guardar cambios</button>
+                        <button type="button" class="rounded-lg bg-gray-200 px-6 py-2 text-gray-700 transition duration-300 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600" onclick="toggleEditMode()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="confirmDeleteCard" class="bg-opacity-60 fixed inset-0 z-50 flex hidden items-center justify-center bg-gray-800 transition-opacity duration-300">
+    <div class="w-80 transform rounded-xl bg-white shadow-lg transition-all duration-300 dark:bg-gray-800">
+        <div class="p-4 pb-2 text-center">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Confirmar Eliminación</h2>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="flex justify-between rounded-b-xl bg-gray-100 px-4 py-3 dark:bg-gray-700">
+            <button type="button" class="flex-1 mr-1 rounded bg-gray-200 px-4 py-2 font-medium text-gray-700 transition duration-200 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500" onclick="document.getElementById('confirmDeleteCard').classList.add('hidden');">Cancelar</button>
+            <form method="post" asp-action="DeleteOwn">
+                <button type="submit" class="flex-1 rounded bg-red-500 px-4 py-2 font-semibold text-white transition duration-200 hover:bg-red-600">Eliminar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEditMode() {
+        const profileForm = document.getElementById('profileForm');
+        const profileDisplay = document.getElementById('profileDisplay');
+        profileForm.classList.toggle('hidden');
+        profileDisplay.classList.toggle('hidden');
+    }
+
+    function toggleDeleteConfirmation() {
+        document.getElementById('confirmDeleteCard').classList.toggle('hidden');
+    }
+
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.nextElementSibling.querySelector('.material-icons');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.textContent = 'visibility_off';
+        } else {
+            input.type = 'password';
+            icon.textContent = 'visibility';
+        }
+    }
+
+    function validateForm() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword !== confirmPassword) {
+            alert('Las contraseñas no coinciden');
+            return false;
+        }
+        return true;
+    }
+
+    function previewFile() {
+        const preview = document.getElementById('profileImage');
+        const file = document.getElementById('fotoPerfil').files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "@Url.Content(Model.FotoPerfil ?? "~/default-profile.png")";
+        }
+    }
+
+    function previewEditFile() {
+        const preview = document.getElementById('editProfileImage');
+        const file = document.getElementById('editFotoPerfil').files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "@Url.Content(Model.FotoPerfil ?? "~/default-profile.png")";
+        }
+    }
+
+    function confirmToggleStatus() {
+        if (!confirm("¿Estás seguro de que deseas cambiar el estado de la cuenta?")) {
+            document.getElementById('editStatusSwitch').checked = !document.getElementById('editStatusSwitch').checked;
+        }
+    }
+</script>
