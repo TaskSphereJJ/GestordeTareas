@@ -215,11 +215,11 @@
         Swal.fire({
             title: `<h3 class="text-2xl font-bold mb-2 text-gray-800 mt-4">Ingrese el código de acceso para poder unirse al proyecto</h3>`,
             html: `
-                                <form id="joinForm" action="@Url.Action("UnirUsuarioAProyecto", "ProyectoUsuario")" method="post">
-                            <input type="hidden" name="idProyecto" value="@Model.Id" />
-                            <input type="text" name="CodigoAcceso" placeholder="Código de acceso" class="swal2-input" required />
-                        </form>
-                    `,
+                                    <form id="joinForm" action="@Url.Action("UnirUsuarioAProyecto", "ProyectoUsuario")" method="post">
+                                <input type="hidden" name="idProyecto" value="@Model.Id" />
+                                <input type="text" name="CodigoAcceso" placeholder="Código de acceso" class="swal2-input" required />
+                            </form>
+                        `,
             showCloseButton: true,
             showCancelButton: true,
             cancelButtonText: 'Cancelar',

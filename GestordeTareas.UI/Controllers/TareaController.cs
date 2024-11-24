@@ -1,7 +1,6 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
 using GestordeTareas.DAL;
-using GestordeTareas.EN;
 using GestordeTareas.UI.Helpers;
 using Humanizer;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,7 +25,6 @@ namespace GestordeTareas.UI.Controllers
         private readonly UsuarioBL _usuarioBL;
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
         private readonly ElegirTareaBL _elegirTareaBL;
-        private readonly ImagenesPruebaBL _imagenesTareaBL;
 
         public TareaController()
         {
@@ -371,6 +369,12 @@ namespace GestordeTareas.UI.Controllers
         // GET: TareaController/TareasElegidas
         public async Task<IActionResult> TareasElegidas(int idProyecto)
         {
+            // Verificar que el usuario esté autenticado y tenga un nombre de usuario
+            if (User.Identity?.Name == null)
+            {
+                return Unauthorized("No se puede determinar el usuario actual.");
+            }
+
             // Obtener el ID del usuario actual
             var usuario = await _usuarioBL.SearchAsync(new Usuario { NombreUsuario = User.Identity.Name, Top_Aux = 1 });
             var idUsuario = usuario.FirstOrDefault()?.Id;
@@ -388,14 +392,18 @@ namespace GestordeTareas.UI.Controllers
                 return Forbid("No tienes acceso a este proyecto.");
             }
 
+            // Obtener las tareas elegidas por el usuario para el proyecto
             var tareasElegidas = await _elegirTareaBL.ObtenerTareasElegidasPorUsuarioAsync(idUsuario.Value, idProyecto);
 
+            // Verificar si hay tareas elegidas
             if (tareasElegidas == null || !tareasElegidas.Any())
             {
                 TempData["NoHayTareas"] = "No hay tareas elegidas.";
             }
+
             return View(tareasElegidas);
         }
+
 
         //public async Task<IActionResult> TareasFinalizadas()
         //{

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using GestordeTaras.EN;
 using TuNamespace;
 using static System.Net.Mime.MediaTypeNames;
-using GestordeTareas.EN;
 
 namespace GestordeTaras.EN
 {
@@ -61,8 +60,8 @@ namespace GestordeTaras.EN
 
         public ElegirTarea ElegirTarea { get; set; }
 
-        [NotMapped]
-        public List<ImagenesPrueba>? ImagenesTarea { get; set; } 
+        //[NotMapped]
+        //public List<ImagenesPrueba>? ImagenesTarea { get; set; } 
 
     }
 
