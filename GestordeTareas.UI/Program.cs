@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using GestordeTareas.BL;
+using Microsoft.AspNetCore.SignalR;
+using GestordeTareas.UI.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GestordeTareasUIContextConnection") ?? throw new InvalidOperationException("Connection string 'GestordeTareasUIContextConnection' not found.");
@@ -12,38 +15,30 @@ builder.Services.AddDbContext<GestordeTareasUIContext>(options => options.UseSql
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<GestordeTareasUIContext>();
 var configuration = builder.Configuration;
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<EmailService>();
 
-// configurar la autenticaci�n
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
-    AddCookie((options) =>
-    {
+// Configuración de SignalR
+builder.Services.AddSignalR();
 
+// Configuración de autenticación
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
         options.LoginPath = new PathString("/Usuario/Login");
         options.AccessDeniedPath = new PathString("/home/index");
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = true;
-
-
     });
 
 var app = builder.Build();
-
-
-//autenticacion con Google
-//builder.Services.AddAuthentication().AddGoogle(googleOptions =>
-//{
-//    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
-//    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-//});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -52,9 +47,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication(); // poner en uso la autenticaci�n
+// Mapear el hub de SignalR
+app.MapHub<ChatHub>("/chatHub"); // Aquí definimos la ruta para SignalR
 
 app.MapControllerRoute(
     name: "default",

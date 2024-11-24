@@ -17,11 +17,8 @@
         @foreach (var comentario in Model)
         {
             <div class="chat-message @((comentario.IdUsuario == userId) ? "sent" : "received")">
-                <!-- Foto de perfil del otro usuario -->
-                @if (comentario.IdUsuario != userId)
-                {
-                    <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="profile-pic">
-                }
+                <!-- Foto de perfil siempre visible -->
+                <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="profile-pic">
 
                 <!-- Contenido del mensaje -->
                 <div class="message-content">
