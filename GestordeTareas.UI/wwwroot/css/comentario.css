@@ -172,6 +172,13 @@
 .chat-messages::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+#typing-indicator {
+    font-size: 14px;
+    color: #666;
+    margin: 10px 0;
+    display: none;
+}
+
 
 /* Mejoras en la responsividad */
 @media (max-width: 640px) {

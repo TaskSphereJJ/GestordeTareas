@@ -66,6 +66,5 @@ namespace GestordeTareas.DAL
                     .FirstOrDefaultAsync(c => c.Id == idComment);
             }
         }
-
     }
 }

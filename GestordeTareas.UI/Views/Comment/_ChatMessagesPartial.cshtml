@@ -1,0 +1,20 @@
+@model List<GestordeTaras.EN.Comment>
+@using System.Security.Claims
+
+@{
+    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+}
+
+@foreach (var comentario in Model)
+{
+    <div class="chat-message @((comentario.IdUsuario == userId) ? "sent" : "received")">
+        <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="profile-pic">
+        <div class="message-content">
+            <div class="message-header">
+                <p class="user-name">@comentario.Usuario.Nombre @comentario.Usuario.Apellido</p>
+                <p class="timestamp">@comentario.FechaComentario.ToString("hh:mm tt")</p>
+            </div>
+            <p class="message-text">@comentario.Content</p>
+        </div>
+    </div>
+}

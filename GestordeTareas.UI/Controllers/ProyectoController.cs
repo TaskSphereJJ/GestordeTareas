@@ -413,23 +413,26 @@ namespace GestordeTareas.UI.Controllers
         {
             try
             {
-                // Obtener las invitaciones para el proyecto con el ID especificado
-                var invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorProyectoAsync(id);
-
-                // Verificar si se encontraron invitaciones
-                //if (invitaciones == null || !invitaciones.Any())
-                //{
-                //    TempData["InfoMessage"] = "No hay invitaciones para mostrar.";
-                //}
-
-                ViewBag.IdProyecto = id;
-
                 // Obtener el ID del usuario actual
                 int idUsuarioActual = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 // Verificar si el usuario es encargado
                 bool esEncargado = await _proyectoUsuarioBL.IsUsuarioEncargadoAsync(id, idUsuarioActual);
+
+                // Si el usuario no es un Administrador ni un Colaborador encargado, redirigir con un mensaje de error
+                if (!esEncargado && !User.IsInRole("Administrador"))
+                {
+                    TempData["ErrorMessage"] = "No tienes permisos para acceder a las invitaciones de este proyecto.";
+                    return RedirectToAction("Index", "Proyecto"); // Redirige a la vista de proyectos o a una vista de error
+                }
+
+                // Obtener las invitaciones para el proyecto con el ID especificado
+                var invitaciones = await _invitacionProyectoBL.ObtenerInvitacionesPorProyectoAsync(id);
+
+                ViewBag.IdProyecto = id;
+           
                 ViewBag.EsEncargado = esEncargado;
+
                 // Retornar la vista con las invitaciones
                 return View(invitaciones);
             }

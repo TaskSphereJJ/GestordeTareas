@@ -206,6 +206,8 @@
         <main role="main" class="main flex-1 overflow-y-auto p-6">
             @RenderBody()
         </main>
+            <!-- Renderizar la sección Scripts si está definida -->
+            @RenderSection("Scripts", required: false)
     </div>
 </div>
 >

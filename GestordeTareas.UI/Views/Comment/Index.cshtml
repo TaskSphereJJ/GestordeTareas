@@ -1,42 +1,26 @@
 ﻿@model List<GestordeTaras.EN.Comment>
 @using System.Security.Claims
+
 @{
     ViewData["Title"] = "Comentarios del Proyecto";
     var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 }
 
 <div class="chat-container">
-    <!-- Encabezado del chat -->
     <div class="chat-header">
         <h2>Comentarios del Proyecto</h2>
         <p>Última actividad: @DateTime.Now.ToString("dd-MM-yyyy")</p>
     </div>
 
-    <!-- Contenedor de mensajes -->
-    <div class="chat-messages">
-        @foreach (var comentario in Model)
-        {
-            <div class="chat-message @((comentario.IdUsuario == userId) ? "sent" : "received")">
-                <!-- Foto de perfil siempre visible -->
-                <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="profile-pic">
-
-                <!-- Contenido del mensaje -->
-                <div class="message-content">
-                    <div class="message-header">
-                        <p class="user-name">@comentario.Usuario.Nombre @comentario.Usuario.Apellido</p>
-                        <p class="timestamp">@comentario.FechaComentario.ToString("hh:mm tt")</p>
-                    </div>
-                    <p class="message-text">@comentario.Content</p>
-                </div>
-            </div>
-        }
+    <div class="chat-messages" id="chat-messages">
+        @await Html.PartialAsync("_ChatMessagesPartial", Model)
     </div>
 
-    <!-- Campo para escribir mensajes -->
     <div class="chat-input-container">
-        <form asp-action="Create" method="post" class="chat-form">
-            <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
-            <textarea name="contenido" class="chat-input" placeholder="Escribe tu mensaje..."></textarea>
+        <form id="chat-form" class="chat-form">
+            <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" id="idProyecto" />
+            <textarea name="contenido" class="chat-input" id="chat-input"
+                placeholder="Escribe tu mensaje..."></textarea>
             <button type="submit" class="send-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
                     <path d="M4 21V15L18.66 12L4 9V3L22 12L4 21Z" />
@@ -45,10 +29,61 @@
         </form>
     </div>
 </div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script>
+        const projectId = document.getElementById("idProyecto").value;
 
+        // Configuración de SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
 
-<script type="text/javascript">
-    function confirmDelete() {
-        return confirm("¿Estás seguro de que deseas eliminar este comentario?");
-    }
-</script>
+        // Refrescar mensajes al recibir el evento
+        connection.on("RefreshChat", async () => {
+            const response = await fetch(`/Comment/GetComments?idProyecto=${projectId}`);
+            const html = await response.text();
+            document.getElementById("chat-messages").innerHTML = html;
+        });
+
+        connection.start().catch(err => console.error("Error al conectar con SignalR:", err));
+
+        // Manejar el envío del formulario
+        document.getElementById("chat-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const input = document.getElementById("chat-input");
+            const message = input.value.trim();
+            const projectId = document.getElementById("idProyecto").value;
+
+            if (message) {
+                const data = {
+                    IdProyecto: parseInt(projectId), // Asegurarse de que es un entero
+                    Content: message
+                };
+
+                alert(`Enviando datos al backend:\n${JSON.stringify(data)}`); // Debug
+
+                try {
+                    const response = await fetch("/Comment/Create", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        input.value = ""; // Limpiar el campo de entrada
+                    } else {
+                        const errorText = await response.text();
+                        alert(`Error al enviar el mensaje:\n${errorText}`);
+                    }
+                } catch (err) {
+                    alert(`Error de conexión:\n${err}`);
+                }
+            } else {
+                alert("El mensaje no puede estar vacío.");
+            }
+        });
+
+    </script>
+}
