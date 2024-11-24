@@ -2,64 +2,53 @@
 @using System.Security.Claims
 @{
     ViewData["Title"] = "Comentarios del Proyecto";
-    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value); // Obtener el ID del usuario logueado
+    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 }
 
-@await Html.PartialAsync("_Alerts")
+<div class="chat-container">
+    <!-- Encabezado del chat -->
+    <div class="chat-header">
+        <h2>Comentarios del Proyecto</h2>
+        <p>Última actividad: @DateTime.Now.ToString("dd-MM-yyyy")</p>
+    </div>
 
-<div>
-    @foreach (var comentario in Model)
-    {
-        <!-- Contenedor del comentario -->
-        <div class="flex @((comentario.IdUsuario == userId) ? "justify-end" : "justify-start") mb-4">
-
-            <!-- Foto de perfil y contenido del comentario -->
-            <div class="flex items-start space-x-4">
-
-                <!-- Foto de perfil -->
+    <!-- Contenedor de mensajes -->
+    <div class="chat-messages">
+        @foreach (var comentario in Model)
+        {
+            <div class="chat-message @((comentario.IdUsuario == userId) ? "sent" : "received")">
+                <!-- Foto de perfil del otro usuario -->
                 @if (comentario.IdUsuario != userId)
                 {
-                    <!-- Foto del otro usuario alineada a la izquierda -->
-                    <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
+                    <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="profile-pic">
                 }
 
-                <div class="flex flex-col space-y-1">
-                    <!-- Nombre y fecha -->
-                    <p><strong>@comentario.Usuario.Nombre @comentario.Usuario.Apellido</strong></p>
-                    <p class="text-sm text-gray-500">Comentó el @comentario.FechaComentario.ToString("dd/MM/yyyy HH:mm"):</p>
-
-                    <!-- Contenido del comentario -->
-                    <div class="bg-gray-100 p-3 rounded-lg @((comentario.IdUsuario == userId) ? "max-w-xs" : "max-w-md")">
-                        @comentario.Content
+                <!-- Contenido del mensaje -->
+                <div class="message-content">
+                    <div class="message-header">
+                        <p class="user-name">@comentario.Usuario.Nombre @comentario.Usuario.Apellido</p>
+                        <p class="timestamp">@comentario.FechaComentario.ToString("hh:mm tt")</p>
                     </div>
+                    <p class="message-text">@comentario.Content</p>
                 </div>
-
-                <!-- Foto del usuario logueado alineada a la derecha -->
-                @if (comentario.IdUsuario == userId)
-                {
-                    <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
-                }
-
-                <!-- Mostrar el botón de eliminar solo si han pasado menos de 15 minutos -->
-                @if (comentario.IdUsuario == userId && comentario.FechaComentario.AddMinutes(15) > DateTime.Now)
-                {
-                    <form asp-action="Delete" method="post" class="mt-2" onsubmit="return confirmDelete()">
-                        <input type="hidden" name="idComentario" value="@comentario.Id" />
-                        <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-                }
             </div>
-        </div>
-    }
+        }
+    </div>
+
+    <!-- Campo para escribir mensajes -->
+    <div class="chat-input-container">
+        <form asp-action="Create" method="post" class="chat-form">
+            <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
+            <textarea name="contenido" class="chat-input" placeholder="Escribe tu mensaje..."></textarea>
+            <button type="submit" class="send-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                    <path d="M4 21V15L18.66 12L4 9V3L22 12L4 21Z" />
+                </svg>
+            </button>
+        </form>
+    </div>
 </div>
 
-<!-- Formulario para agregar un nuevo comentario -->
-<form asp-action="Create" method="post">
-    <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
-    <textarea name="contenido" rows="4" cols="50" placeholder="Escribe tu comentario"></textarea>
-    <button type="submit">Agregar Comentario</button>
-</form>
 
 <script type="text/javascript">
     function confirmDelete() {

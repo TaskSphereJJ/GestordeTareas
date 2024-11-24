@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/perfil.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/proyecto.css" asp-append-version="true" />
-    
+    <link rel="stylesheet" href="~/css/comentario.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/tarea.css" asp-append-version="true" />
     @* <link href="~/css/tailwind.css" rel="stylesheet" /> *@
@@ -44,7 +44,7 @@
 <div class="flex min-h-screen">
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 z-40 h-full w-64  p-4">
+        class="z-40 fixed left-0 top-0 h-full w-64 p-4">
         <!-- Contenido del Sidebar -->
         <div class="mb-4">
             <div class="profile-container text-center">
@@ -178,7 +178,7 @@
     </aside>
 
     <!-- Contenedor principal -->
-    <div class="flex flex-col flex-1">
+    <div class="flex-1 flex flex-col">
         <!-- Header -->
         <header
             class="headerlayout flex items-center justify-between bg-lightPurple px-3 py-4 shadow-md dark:bg-gray-800">
@@ -203,7 +203,7 @@
         </header>
 
         <!-- Main -->
-        <main role="main" class="main flex-1 p-6 overflow-y-auto">
+        <main role="main" class="main flex-1 overflow-y-auto p-6">
             @RenderBody()
         </main>
     </div>

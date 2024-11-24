@@ -25,13 +25,12 @@ namespace GestordeTareas.DAL
         public DbSet<ProyectoUsuario> ProyectoUsuario { get; set; }
         public DbSet<InvitacionProyecto> InvitacionProyecto { get; set; }
         public DbSet<PasswordResetCode> PasswordResetCode { get; set; }
-
+        public DbSet<Comment> Comment { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-T97E6M3;Initial Catalog=GestordeTareasBD;Integrated Security=True;TrustServerCertificate=True");
         }
-
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
