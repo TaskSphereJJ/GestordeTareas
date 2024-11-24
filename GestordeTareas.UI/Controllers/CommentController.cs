@@ -44,6 +44,7 @@ namespace GestordeTareas.UI.Controllers
 
             var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
             ViewBag.IdProyecto = idProyecto;
+
             return View(comentarios);
         }
 
@@ -55,14 +56,16 @@ namespace GestordeTareas.UI.Controllers
             // Obtener el ID del usuario logueado
             int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            // Obtener los usuarios unidos al proyecto
-            var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
-
-            // Verificar si el usuario está unido al proyecto
-            if (!usuariosUnidos.Any(u => u.Id == idUsuario))
+            if (!User.IsInRole("Administrador"))
             {
-                TempData["ErrorMessage"] = "No estás unido a este proyecto, no puedes crear comentarios.";
-                return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos o a una página de error
+                // Obtener los usuarios unidos al proyecto
+                var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
+                // Verificar si el usuario está unido al proyecto
+                if (!usuariosUnidos.Any(u => u.Id == idUsuario))
+                {
+                    TempData["ErrorMessage"] = "No estás unido a este proyecto, no puedes crear comentarios.";
+                    return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos o a una página de error
+                }
             }
 
             if (!string.IsNullOrEmpty(contenido))
@@ -116,8 +119,16 @@ namespace GestordeTareas.UI.Controllers
                 TempData["ErrorMessage"] = "Hubo un error al eliminar el comentario.";
             }
 
-            return RedirectToAction("Index", new { idProyecto });
+            return RedirectToAction("Index", new { idProyecto = idProyecto });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerComentarios(int idProyecto)
+        {
+            var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
+            return PartialView("_Comentarios", comentarios);  // Devuelve solo la vista parcial
+        }
+
 
     }
 }

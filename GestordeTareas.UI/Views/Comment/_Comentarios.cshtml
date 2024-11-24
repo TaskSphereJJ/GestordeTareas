@@ -1,0 +1,49 @@
+﻿@model List<GestordeTaras.EN.Comment>
+@using System.Security.Claims
+@{
+    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value); // Obtener el ID del usuario logueado
+}
+
+@foreach (var comentario in Model)
+{
+    <!-- Contenedor del comentario -->
+    <div class="flex @((comentario.IdUsuario == userId) ? "justify-end" : "justify-start") mb-4">
+
+        <!-- Foto de perfil y contenido del comentario -->
+        <div class="flex items-start space-x-4">
+
+            <!-- Foto de perfil -->
+            @if (comentario.IdUsuario != userId)
+            {
+                <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
+            }
+
+            <div class="flex flex-col space-y-1">
+                <!-- Nombre y fecha -->
+                <p><strong>@comentario.Usuario.Nombre @comentario.Usuario.Apellido</strong></p>
+                <p class="text-sm text-gray-500">Comentó el @comentario.FechaComentario.ToString("dd/MM/yyyy HH:mm"):</p>
+
+                <!-- Contenido del comentario -->
+                <div class="bg-gray-100 p-3 rounded-lg @((comentario.IdUsuario == userId) ? "max-w-xs" : "max-w-md")">
+                    @comentario.Content
+                </div>
+            </div>
+
+            <!-- Foto del usuario logueado alineada a la derecha -->
+            @if (comentario.IdUsuario == userId)
+            {
+                <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
+            }
+
+            <!-- Mostrar el botón de eliminar solo si han pasado menos de 15 minutos -->
+            @if (comentario.IdUsuario == userId && comentario.FechaComentario.AddMinutes(15) > DateTime.Now)
+            {
+                <form asp-action="Delete" method="post" class="mt-2" onsubmit="return confirmDelete()">
+                    <input type="hidden" name="idComentario" value="@comentario.Id" />
+                    <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            }
+        </div>
+    </div>
+}
