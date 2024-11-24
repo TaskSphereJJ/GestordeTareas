@@ -76,7 +76,6 @@ namespace GestordeTareas.UI.Controllers
                 // Verificar si el comentario se guardó correctamente
                 if (result > 0)
                 {
-                    TempData["SuccessMessage"] = "Comentario creado con éxito.";
                     return RedirectToAction("Index", new { idProyecto });
                 }
                 else
