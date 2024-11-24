@@ -119,7 +119,7 @@ namespace GestordeTareas.UI.Controllers
                 TempData["ErrorMessage"] = "Hubo un error al eliminar el comentario.";
             }
 
-            return RedirectToAction("Index", new { idProyecto = idProyecto });
+            return RedirectToAction("Index", new { idProyecto });
         }
 
         [HttpGet]

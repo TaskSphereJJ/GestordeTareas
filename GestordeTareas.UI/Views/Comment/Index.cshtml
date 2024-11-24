@@ -16,6 +16,26 @@
         return confirm("¿Estás seguro de que deseas eliminar este comentario?");
     }
 
+    $(document).on('submit', 'form', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const idProyecto = $('input[name="idProyecto"]', form).val();
+
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: form.serialize(),
+            success: function () {
+                // Recargar la vista parcial con los comentarios actualizados
+                $('#comentariosContainer').load(`/Comment/ObtenerComentarios?idProyecto=${idProyecto}`);
+            },
+            error: function () {
+                alert('Ocurrió un error al intentar eliminar el comentario.');
+            }
+        });
+    });
+
     // Función de polling para obtener comentarios actualizados
     function obtenerComentarios() {
         let idProyecto = @ViewBag.IdProyecto;
