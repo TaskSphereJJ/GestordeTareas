@@ -30,8 +30,6 @@ namespace GestordeTareas.BL
             return await InvitacionProyectoDAL.CrearInvitacionAsync(invitacion);
         }
 
-
-
         // MÉTODO PARA ACEPTAR UNA INVITACIÓN
         public async Task<int> AceptarInvitacionAsync(string token, int idUsuario, string correoUsuario)
         {

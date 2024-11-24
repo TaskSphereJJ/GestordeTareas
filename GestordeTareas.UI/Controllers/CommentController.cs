@@ -1,26 +1,47 @@
 ﻿﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace GestordeTareas.UI.Controllers
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class CommentController : Controller
     {
         private readonly CommentBL _commentBL;
         private readonly ProyectoBL _proyectoBL;
         private readonly UsuarioBL _usuarioBL;
+        private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
+
 
         public CommentController()
         {
             _commentBL = new CommentBL();
             _proyectoBL = new ProyectoBL();
             _usuarioBL = new UsuarioBL();
+            _proyectoUsuarioBL = new ProyectoUsuarioBL();
+
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Index(int idProyecto)
         {
+            // Obtener el ID del usuario logueado
+            int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (!User.IsInRole("Administrador"))
+            {
+                // Verificar si el usuario está unido al proyecto
+                var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
+                if (!usuariosUnidos.Any(u => u.Id == idUsuario))
+                {
+                    TempData["ErrorMessage"] = "No estás unido a este proyecto, no puedes ver los comentarios.";
+                    return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos o a una página de error
+                }
+            }
+
             var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
             ViewBag.IdProyecto = idProyecto;
             return View(comentarios);
@@ -33,6 +54,16 @@ namespace GestordeTareas.UI.Controllers
         {
             // Obtener el ID del usuario logueado
             int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            // Obtener los usuarios unidos al proyecto
+            var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
+
+            // Verificar si el usuario está unido al proyecto
+            if (!usuariosUnidos.Any(u => u.Id == idUsuario))
+            {
+                TempData["ErrorMessage"] = "No estás unido a este proyecto, no puedes crear comentarios.";
+                return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos o a una página de error
+            }
 
             if (!string.IsNullOrEmpty(contenido))
             {
