@@ -20,13 +20,16 @@
     --primary-hover: #5a21b6;
 }
 
-
-/* Estilo para tarjetas en modo oscuro */
-.dark .bgtarjeta {
+/* Estilo en modo oscuro para las tarjetas */
+.dark .draggable-card {
     background-color: var(--formularioDark);
     color: var(--textoDark);
+    transition: var(--transition);
 }
 
-.bgtarjeta{
-    border: 1px solid var(--borderDark);
+/* Asegura que las sombras y escalas también cambien en modo oscuro */
+.dark .draggable-card:hover {
+    background-color: var(--backgroundDark);
+    color: var(--textoDark);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
