@@ -1,30 +1,247 @@
 ﻿:root {
-    --formularioDark: #151920;
-    --formularioLight: #fdfdfd;
+  --formularioDark: #151920;
+  --formularioLight: #ffffff;
 
-    --backgroundDark: #1F232A;
-    --backgroundLight: #ffffff;
+  --bagroundDark: #1F232A;
+  --backgroundLight: #f5f5f5;
 
-    --borderLight: #eeeeee;
-    --borderDark: #16191f;
+  --borderLight: #e3e3e3;
+  --borderDark: #1a1d22;
 
-    --textoDark: #e4e2e2;
-    --textoLight: #333333;
+  --textDark: #dcdcdc;
+  --textLight: #333333;
 
-    --subtitleLight: #666666;
-    --subtitleDark: #b5b5b5;
+  --headerHeight: 4rem;
+  --sidebarWidth: 16rem;
 
-    --transition: all 0.3s ease-in-out;
+  --bg-sidebar-light: #ffffff;
+  --bg-sidebar-dark: #1F232A;
 
-    --primary: #6d28d9;
-    --primary-hover: #5a21b6;
+  --bg-main-dark: #1F232A;
+  --bg-main-light: #fdfdfd;
+
+  --transition: all 0.3s ease-in-out;
+  --accent-color: #784bff;
+  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+/* Modo oscuro */
+.dark {
+  background-color: var(--bagroundDark);
+  color: var(--textDark);
+}
+
+/* Contenedor principal */
+.task-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  position: relative; /* Contexto para elementos absolutos */
+}
+
+/* Header Styles */
+.task-header {
+  background-color: var(--formularioLight);
+  color: var(--textLight);
+  width: 100%;
+  height: var(--headerHeight);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky; /* Fijo al contenedor principal */
+  top: 0; /* Siempre visible en el top */
+  z-index: 1000;
+  border-bottom: 1px solid var(--borderLight);
+  box-shadow: var(--shadow-light); /* Opcional para efecto visual */
+}
+
+.dark .task-header {
+  background-color: var(--formularioDark);
+  color: white;
+  border-bottom: 1px solid var(--borderDark);
+  box-shadow: var(--shadow-dark);
+}
+
+/* Enlaces del header */
+.task-nav-link {
+  color: var(--textLight);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 8px 16px;
+  position: relative;
+}
+
+.dark .task-nav-link {
+  color: white;
+}
+
+.task-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease-in-out;
+}
+
+.task-nav-link:hover::after {
+  width: 100%;
+}
+
+.task-nav-link:hover {
+  color: var(--accent-color);
+}
+
+/* Main Content Styles */
+.task-main {
+  flex: 1;
+  background-color: var(--bg-main-light);
+  margin-top: var(--headerHeight); /* Evita que el contenido quede detrás del header */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark .task-main {
+  background-color: var(--bagroundDark);
+}
+
+/* Footer Styles */
+.task-footer {
+  background-color: var(--formularioLight);
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-light);
+  color: var(--textLight);
+  margin-top: 20px;
+}
+
+.dark .task-footer {
+  background-color: var(--formularioDark);
+  color: var(--textDark);
+  box-shadow: var(--shadow-dark);
+}
+
+/* Resumen del footer */
+.task-summary {
+  display: flex;
+  gap: 15px;
+}
+
+/* Tarjetas */
+.task-card {
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 150px;
+  font-weight: bold;
+  border-left: 6px solid transparent;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+}
+
+.dark .task-card {
+  color: var(--textDark);
+  background-color: transparent;
+  border: 1px solid var(--borderDark);
+  box-shadow: var(--shadow-dark);
+}
+
+/* Colores específicos para tarjetas */
+.task-pending {
+  background-color: #ffe5e5;
+  border-left: 6px solid var(--accent-color);
+}
+
+.dark .task-pending {
+  background-color: rgba(231, 77, 60, 0.412);
+  border-left: 6px solid var(--accent-color);
+}
+
+.task-in-progress {
+  background-color: #e5f3ff;
+  border-left: 6px solid #3498db;
+}
+
+.dark .task-in-progress {
+  background-color: rgba(52, 152, 219, 0.209);
+  border-left: 6px solid #3498db;
+}
+
+.task-completed {
+  background-color: #e6ffe6;
+  border-left: 6px solid #2ecc71;
+}
+
+.dark .task-completed {
+  background-color: rgba(46, 204, 112, 0.249);
+  border-left: 6px solid #2ecc71;
+}
+
+.task-card:hover {
+  transform: scale(1.09);
+  background-color: var(--formularioDark);
+  color: var(--textDark);
+  cursor: pointer;
+}
+
+.dark .task-card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--textDark);
+}
+
+/* Botón para agregar */
+.task-add-btn {
+  background-color: #6d28d9;
+  color: var(--formularioLight);
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+}
+
+.task-add-btn:hover {
+  background-color: #5a21b6;
+  transform: scale(1.1);
+  box-shadow: var(--shadow-dark);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .task-footer {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .task-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+
 
 /* Estilo en modo oscuro para las tarjetas */
 .dark .draggable-card {
     background-color: var(--formularioDark);
     color: var(--textoDark);
-    transition: var(--transition);
 }
 
 /* Asegura que las sombras y escalas también cambien en modo oscuro */

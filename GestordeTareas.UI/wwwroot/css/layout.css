@@ -42,7 +42,29 @@ body {
 }
 
 .dark #sidebar {
-  background-color: var(--bg-sidebar-dark);
+  background-color: var(--formularioDark);
+  border-right: 2px solid var(--borderDark);
+}
+
+.dark #sidebar nav a {
+  color: var(--textDark);
+}
+
+.dark #sidebar nav a:hover {
+  background: var(--bg-sidebar-dark);
+  color: #a068fb;
+}
+
+.dark #sidebar .subtitulo {
+  color: white;
+}
+
+#sidebar .username {
+  color: rgb(255, 255, 255);
+}
+
+#sidebar .user-email {
+  color: #ffe0e0;
 }
 
 /* Header */
