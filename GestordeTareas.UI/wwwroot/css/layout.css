@@ -59,12 +59,20 @@ body {
   color: white;
 }
 
-#sidebar .username {
+.dark #sidebar .username {
   color: rgb(255, 255, 255);
 }
 
-#sidebar .user-email {
+.dark #sidebar .user-email {
   color: #ffe0e0;
+}
+
+#sidebar .username {
+  color: #777f8a;
+}
+
+#sidebar .user-email {
+  color: #9e9e9e;
 }
 
 /* Header */
@@ -79,7 +87,6 @@ body {
   position: sticky;
   /* Se mantiene en la parte superior */
   top: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dark .headerlayout {
@@ -89,7 +96,7 @@ body {
 .main {
   margin-left: var(--sidebarWidth);
   /* Espacio para el sidebar */
-  padding: 2rem;
+  padding: 1rem;
   background-color: var(--bg-main-light);
   overflow-y: auto;
   /* Scroll solo en el contenido */

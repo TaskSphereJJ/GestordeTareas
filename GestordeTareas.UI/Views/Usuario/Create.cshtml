@@ -3,14 +3,12 @@
     ViewData["Title"] = "Crear Cuenta";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    integrity="sha512-rfwlPRxWExv5sf0pd4l71r5Id3vYkQIm0IaOH1VlqzLX8ASwbS7qHwXy1Fm5zH4JAr6Drl7HDe5Kr1yzE+yyCg=="
-    crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 @await Html.PartialAsync("_Alerts")
 
-<div class="login_container max-w-screen-xl mx-auto bg-white shadow sm:rounded-lg flex justify-center flex-1
-    overflow-hidden">
+<div
+    class="login_container max-w-screen-xl mx-auto bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
     <div class="lg:w-1/2 flex-1 xl:w-5/12 p-4 sm:p-4 mt-0">
         <div class="mt-4 flex flex-col items-center">
             <h1 class="text-lg no-underline inicio xl:text-xl font-extrabold underline">
@@ -89,7 +87,7 @@
                                     electrónico</label>
                                 <input asp-for="NombreUsuario" type="email"
                                     class="dynamic-border w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white"
-                                    placeholder="ejemplo@gmail.com" required />
+                                    placeholder="Correo electrónico" required />
                                 <span asp-validation-for="NombreUsuario" class="text-danger text-xs mt-1"></span>
                             </div>
 
@@ -109,18 +107,19 @@
                                     class="block text-gray-700 text-sm font-medium mb-2">Teléfono</label>
                                 <input asp-for="Telefono" type="tel" maxlength="8"
                                     class="dynamic-border w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white"
-                                    placeholder="+503 XXXXXXXX" pattern="\+503\s\d{8}" value="+503 " required />
+                                    placeholder="Teléfono" required />
                                 <span asp-validation-for="Telefono" class="text-danger text-xs mt-1"></span>
                             </div>
 
                             <div class="mb-2">
                                 <label for="FechaNacimiento" class="block text-gray-700 text-sm font-medium mb-2">Fecha
                                     de nacimiento</label>
-                                <input asp-for="FechaNacimiento" id="FechaNacimiento" type="date"
+                                <input asp-for="FechaNacimiento" type="date"
                                     class="dynamic-border w-full px-3 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white"
                                     required />
                                 <span asp-validation-for="FechaNacimiento" class="text-danger text-xs mt-1"></span>
                             </div>
+
                             <div class="mb-2 md:col-span-2">
                                 @if (User.IsInRole("Administrador"))
                                 {
@@ -159,66 +158,60 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
     <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
         <div class="m-4 xl:m-4 w-full bg-contain bg-center bg-no-repeat"
             style="background-image: url('/img/create login-amico.svg');">
+            @* background-size: 200px 200px; *@
         </div>
     </div>
 </div>
 
 <script>
+
     document.addEventListener("DOMContentLoaded", function () {
-        const inputs = document.querySelectorAll(".dynamic-border");
-        inputs.forEach(input => {
-            input.addEventListener("input", function () {
-                if (this.value.trim() !== "") {
-                    this.classList.add("border-green-500");
-                } else {
-                    this.classList.remove("border-green-500");
-                }
-            });
-        });
-    });
+        // Limpiar el preview si el formulario ha sido enviado con errores de validación
+        var previewImage = document.getElementById('previewImage');
+        var previewContainer = document.querySelector('.w-24.h-24.bg-gray-200.rounded-full.overflow-hidden');
 
-    function togglePasswordVisibility() {
-        const passwordInput = document.getElementById("passwordInput");
-        const toggleIcon = document.getElementById("togglePassword");
-        const isPassword = passwordInput.type === "password";
-        passwordInput.type = isPassword ? "text" : "password";
-        toggleIcon.classList.toggle("fa-eye", isPassword);
-        toggleIcon.classList.toggle("fa-eye-slash", !isPassword);
-    }
+        if (previewImage && !document.getElementById('FotoPerfil').files.length) {
+            previewImage.src = ''; // Limpiar la imagen en preview
 
-    function previewFile() {
-        const preview = document.getElementById('previewImage');
-        const file = document.getElementById('FotoPerfil').files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            preview.src = reader.result;
-        };
-        if (file) reader.readAsDataURL(file);
-    }
-
-    // Restricción para la fecha de nacimiento
-    document.addEventListener("DOMContentLoaded", function () {
-        const fechaInput = document.getElementById("FechaNacimiento");
-        const today = new Date();
-        const maxDate = new Date(today.getFullYear() - 90, today.getMonth(), today.getDate()); // Máximo 90 años atrás
-        const minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate()); // Mínimo 18 años atrás
-
-        fechaInput.max = maxDate.toISOString().split("T")[0];
-        fechaInput.min = minDate.toISOString().split("T")[0];
-    });
-
-    // Validación para mantener el prefijo de teléfono
-    const telefonoInput = document.querySelector('input[asp-for="Telefono"]');
-    telefonoInput.addEventListener("input", function (event) {
-        if (!telefonoInput.value.startsWith("+503 ")) {
-            telefonoInput.value = "+503 ";
+            // Mostrar el SVG si no hay imagen
+            previewContainer.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+                    <path d="M12 12c2.28 0 4-1.72 4-4s-1.72-4-4-4-4 1.72-4 4 1.72 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z" />
+                </svg>
+            `;
         }
     });
+
+    function previewFile() {
+        var previewContainer = document.querySelector('.w-24.h-24.bg-gray-200.rounded-full.overflow-hidden');
+        var preview = document.getElementById('previewImage');
+
+        if (!preview) {
+            preview = document.createElement('img');
+            preview.id = 'previewImage';
+            preview.className = 'w-full h-full object-cover';
+            previewContainer.innerHTML = '';
+            previewContainer.appendChild(preview);
+        }
+
+        var file = document.getElementById('FotoPerfil').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "/img/default-avatar.png";
+        }
+    }
+
 </script>

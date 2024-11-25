@@ -48,7 +48,7 @@
 
     @if (User.Identity.IsAuthenticated)
     {
-        <div class="flex min-h-screen">
+        <div class="flex min-w-full">
             <!-- Sidebar -->
             <aside id="sidebar" class="z-40 fixed left-0 top-0 h-full w-64 p-4">
                 <!-- Contenido del Sidebar -->
@@ -209,7 +209,7 @@
                 </header>
 
                 <!-- Main -->
-                <main role="main" class="main flex-1 overflow-y-auto p-6">
+                <main role="main" class="main flex-1 ">
                     @RenderBody()
                 </main>
                 <!-- Renderizar la sección Scripts si está definida -->
@@ -225,12 +225,12 @@
         </div>
     </div>
 
-
-    <div class="container mt-28">
-        <main role="main" class="pb-3">
+    @* 
+    <div class=" ">
+        <main role="main" class="">
             @RenderBody()
         </main>
-    </div>
+    </div> *@
 
 
     <!-- Scripts -->
@@ -351,6 +351,13 @@
                     target.closest('[onclick="toggleEditMode()"]')
                 ) {
                     return;  // No activar el loader en el botón de cancelar
+                }
+                // Excluir el formulario de creación de comentarios
+                if (
+                    form &&
+                    form.action.includes('/Comment/Create') // Verifica que sea el formulario de comentarios
+                ) {
+                    return; // No activar el loader para este formulario
                 }
 
                 // Si es un enlace (a) con href

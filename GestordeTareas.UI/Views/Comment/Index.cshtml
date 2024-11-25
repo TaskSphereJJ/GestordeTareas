@@ -1,17 +1,145 @@
 ﻿@model List<GestordeTaras.EN.Comment>
 
-<div id="comentariosContainer">
-    @await Html.PartialAsync("_Comentarios", Model) <!-- Inicializar con los comentarios actuales -->
+<div class="chat-container">
+    <!-- Contenedor de los mensajes -->
+    <div id="comentariosContainer" class="chat-messages">
+        @await Html.PartialAsync("_Comentarios", Model)
+    </div>
+
+    <!-- Formulario para agregar un nuevo comentario -->
+    <form class="chat-form" asp-action="Create" method="post">
+        <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
+        <div class="chat-input-container">
+            <textarea name="contenido" class="chat-input" rows="1" placeholder="Escribe tu mensaje..."></textarea>
+            <button type="submit" class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+            <!-- Botón para ir hacia abajo -->
+            <button id="scrollToBottom" class="scroll-to-bottom hidden" type="button">
+                <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+    </form>
 </div>
 
-@await Html.PartialAsync("_Alerts")
+<!-- Cargar bibliotecas -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Biblioteca para renderizar Markdown -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- jQuery -->
 
-<!-- Formulario para agregar un nuevo comentario -->
-<form asp-action="Create" method="post">
-    <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
-    <textarea name="contenido" rows="4" cols="50" placeholder="Escribe tu comentario"></textarea>
-    <button type="submit">Agregar Comentario</button>
-</form>
+<script>
+    // Función para hacer scroll hacia abajo con suavidad
+    function scrollToBottom() {
+        const chatMessages = document.querySelector('.chat-messages');
+        chatMessages.scrollTo({
+            top: chatMessages.scrollHeight,
+            behavior: 'smooth' // Desplazamiento suave
+        });
+    }
+
+    // Inicializar el scroll hacia abajo al cargar la página
+    document.addEventListener('DOMContentLoaded', scrollToBottom);
+
+    // Mostrar u ocultar el botón de desplazamiento hacia abajo
+    // Detectar el scroll en el contenedor de mensajes
+    document.querySelector('.chat-messages').addEventListener('scroll', function () {
+        const chatMessages = document.querySelector('.chat-messages');
+        const scrollToBottomBtn = document.getElementById('scrollToBottom');
+
+        // Verificar si el usuario no está al final del scroll
+        if (chatMessages.scrollTop + chatMessages.clientHeight < chatMessages.scrollHeight - 50) {
+            scrollToBottomBtn.classList.remove('hidden'); // Mostrar el botón
+        } else {
+            scrollToBottomBtn.classList.add('hidden'); // Ocultar el botón
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatMessages = document.querySelector('.chat-messages');
+        const scrollToBottomBtn = document.getElementById('scrollToBottom');
+
+        // Asegurar que el botón sea visible inicialmente
+        scrollToBottomBtn.classList.remove('hidden');
+
+        // Validar si el usuario ya está al final del scroll al cargar
+        if (chatMessages.scrollTop + chatMessages.clientHeight >= chatMessages.scrollHeight - 50) {
+            scrollToBottomBtn.classList.add('hidden'); // Ocultar si está al final
+        } else {
+            scrollToBottomBtn.classList.remove('hidden'); // Mostrar si no está al final
+        }
+    });
+    // Función para desplazarse al final del chat
+    function scrollToBottom() {
+        const chatMessages = document.querySelector('.chat-messages');
+        chatMessages.scrollTo({
+            top: chatMessages.scrollHeight, // Desplazarse al final
+            behavior: 'smooth' // Movimiento suave
+        });
+    }
+
+
+    // Mostrar loader mientras se actualizan comentarios
+    function showLoader() {
+        document.getElementById('loadingIndicator').classList.remove('hidden');
+    }
+
+    function hideLoader() {
+        document.getElementById('loadingIndicator').classList.add('hidden');
+    }
+
+    // Función para renderizar mensajes con Markdown
+    function renderMarkdownMessages() {
+        const messages = document.querySelectorAll('.chat-message'); // Seleccionar los mensajes
+        messages.forEach(message => {
+            const rawContent = message.getAttribute('data-raw'); // Obtener el texto crudo
+            if (rawContent) {
+                message.innerHTML = marked.parse(rawContent); // Renderizar el contenido en formato Markdown
+            }
+        });
+    }
+
+    // Lógica para manejar el polling y actualizar los comentarios
+    $(document).on('submit', 'form', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const idProyecto = $('input[name="idProyecto"]', form).val();
+        const textArea = form.find('textarea'); // Referencia al textarea para limpiarlo
+
+        const messageContent = textArea.val(); // Obtener el contenido del textarea
+        if (!messageContent.trim()) {
+            // Si el contenido está vacío, no enviamos
+            alert('No puedes enviar un mensaje vacío.');
+            return;
+        }
+
+        showLoader(); // Mostrar loader
+        textArea.val(''); // Limpiar el campo inmediatamente tras hacer clic en enviar
+
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: form.serialize(),
+            success: function () {
+                // Recargar la vista parcial con los comentarios actualizados
+                $('#comentariosContainer').load(`/Comment/ObtenerComentarios?idProyecto=${idProyecto}`, function () {
+                    scrollToBottom(); // Mantener el scroll al final tras cargar nuevos comentarios
+                    hideLoader(); // Ocultar loader
+                });
+            },
+            error: function () {
+                alert('Ocurrió un error al intentar enviar el mensaje.');
+                hideLoader(); // Ocultar loader en caso de error
+            }
+        });
+    });
+
+    // Renderizar Markdown al cargar la página
+    document.addEventListener('DOMContentLoaded', renderMarkdownMessages);
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <script>
     function confirmDelete() {
@@ -57,7 +185,7 @@
     }
 
     // Ejecutar el polling cada 5 segundos
-    setInterval(obtenerComentarios, 3000);  // 5000 ms = 5 segundos
+    setInterval(obtenerComentarios, 2000);  // 5000 ms = 5 segundos
 
     // Detener el polling cuando el usuario abandone la página
     window.onbeforeunload = function () {

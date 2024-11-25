@@ -116,7 +116,7 @@
 
 /* Footer Styles */
 .task-footer {
-  background-color: var(--formularioLight);
+  background-color: red;
   padding: 20px;
   border-radius: 12px;
   display: flex;
@@ -130,7 +130,6 @@
 .dark .task-footer {
   background-color: var(--formularioDark);
   color: var(--textDark);
-  box-shadow: var(--shadow-dark);
 }
 
 /* Resumen del footer */

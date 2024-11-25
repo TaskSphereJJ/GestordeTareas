@@ -8,23 +8,26 @@
 {
     <!-- Contenedor del comentario -->
     <div class="flex @((comentario.IdUsuario == userId) ? "justify-end" : "justify-start") mb-4">
-
-        <!-- Foto de perfil y contenido del comentario -->
         <div class="flex items-start space-x-4">
-
-            <!-- Foto de perfil -->
+            <!-- Foto de perfil (solo para otros usuarios) -->
             @if (comentario.IdUsuario != userId)
             {
                 <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
             }
 
+            <!-- Contenedor de texto -->
             <div class="flex flex-col space-y-1">
                 <!-- Nombre y fecha -->
-                <p><strong>@comentario.Usuario.Nombre @comentario.Usuario.Apellido</strong></p>
-                <p class="text-sm text-gray-500">Comentó el @comentario.FechaComentario.ToString("dd/MM/yyyy HH:mm"):</p>
+                <p class="text-sm font-bold @((comentario.IdUsuario == userId) ? "text-purple-600" : "text-gray-700")">
+                    @comentario.Usuario.Nombre @comentario.Usuario.Apellido
+                </p>
+                <p class="text-xs text-gray-500">
+                    Comentó el @comentario.FechaComentario.ToString("dd/MM/yyyy HH:mm"):
+                </p>
 
                 <!-- Contenido del comentario -->
-                <div class="bg-gray-100 p-3 rounded-lg @((comentario.IdUsuario == userId) ? "max-w-xs" : "max-w-md")">
+                <div
+                    class="p-3 shadow-md rounded-lg @((comentario.IdUsuario == userId) ? "bg-purple-500 text-white" : "bg-gray-100 text-gray-800")">
                     @comentario.Content
                 </div>
             </div>
@@ -35,15 +38,96 @@
                 <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
             }
 
-            <!-- Mostrar el botón de eliminar solo si han pasado menos de 15 minutos -->
+            <!-- Botón de eliminar (solo si el usuario es el propietario y dentro de los 15 minutos) -->
             @if (comentario.IdUsuario == userId && comentario.FechaComentario.AddMinutes(15) > DateTime.Now)
             {
                 <form asp-action="Delete" method="post" class="mt-2" onsubmit="return confirmDelete()">
                     <input type="hidden" name="idComentario" value="@comentario.Id" />
                     <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </form>
             }
         </div>
     </div>
 }
+
+<style>
+    /* Contenedor del comentario */
+    .flex {
+        margin-bottom: 16px;
+    }
+
+    /* Foto de perfil */
+    .flex img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* Nombre del usuario */
+    .flex .text-sm.font-bold {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    /* Fecha del comentario */
+    .flex .text-xs {
+        font-size: 12px;
+        color: #888;
+    }
+
+    /* Comentarios enviados por el usuario logueado */
+    .flex .bg-purple-500 {
+        background: #9860f8;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        font-size: 15px;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+
+    /* Comentarios recibidos de otros usuarios */
+    .flex .bg-gray-100 {
+        background: #f3f3f3;
+        color: #333;
+        padding: 12px 16px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        font-size: 15px;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+
+    /* Botón de eliminar */
+    .btn-danger {
+        background: #e3342f;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-danger i {
+        font-size: 14px;
+    }
+
+    .btn-danger:hover {
+        background: #cc1f1a;
+        transform: scale(1.05);
+    }
+
+    .btn-danger:active {
+        transform: scale(0.95);
+    }
+</style>

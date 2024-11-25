@@ -156,7 +156,7 @@ namespace GestordeTareas.UI.Controllers
 
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un problema al crear la cuenta";
+                TempData["ErrorMessage"] = "Error: " + ex.Message;
                 await LoadDropDownListsAsync();
                 return View(usuario);
             }
@@ -448,11 +448,11 @@ namespace GestordeTareas.UI.Controllers
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                    // Verificar si hay un token y una decisión almacenados en TempData
-                    if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
-                    {
-                        string token = TempData["Token"].ToString();
-                        string decision = TempData["Decision"].ToString();
+                // Verificar si hay un token y una decisión almacenados en TempData
+                if (TempData.ContainsKey("Token") && TempData.ContainsKey("Decision"))
+                {
+                    string token = TempData["Token"].ToString();
+                    string decision = TempData["Decision"].ToString();
 
                     // Limpiar TempData después de redirigir
                     TempData.Remove("Token");

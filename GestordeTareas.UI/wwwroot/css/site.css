@@ -18,10 +18,6 @@
   --nameDark: #d5d6d6;
 }
 
-html {
-  font-size: 14px;
-}
-
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -83,13 +79,13 @@ body {
 
 /* Estilo para el riel de la barra de desplazamiento */
 ::-webkit-scrollbar-track {
-  background: #62645A;
+  background: #b3b4b3;
   /* Color de fondo del riel */
 }
 
 /* Estilo para el pulgar de la barra de desplazamiento (la parte que se arrastra) */
 ::-webkit-scrollbar-thumb {
-  background: var(--Morado);
+  background: rgb(165, 163, 163);
   /* Color del pulgar de la barra de desplazamiento */
 }
 
