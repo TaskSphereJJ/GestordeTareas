@@ -12,7 +12,9 @@
             <!-- Foto de perfil (solo para otros usuarios) -->
             @if (comentario.IdUsuario != userId)
             {
-                <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
+                <div class="comment-image-container">
+                    <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="comment-image">
+                </div>
             }
 
             <!-- Contenedor de texto -->
@@ -35,7 +37,9 @@
             <!-- Foto del usuario logueado alineada a la derecha -->
             @if (comentario.IdUsuario == userId)
             {
-                <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover">
+                <div class="comment-image-container">
+                    <img src="@comentario.Usuario.FotoPerfil" alt="Foto de perfil" class="comment-image">
+                </div>
             }
 
             <!-- Botón de eliminar (solo si el usuario es el propietario y dentro de los 15 minutos) -->
@@ -59,11 +63,22 @@
         margin-bottom: 16px;
     }
 
-    /* Foto de perfil */
-    .flex img {
-        width: 40px;
-        height: 40px;
+    /* Contenedor de la imagen */
+    .comment-image-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Imagen */
+    .comment-image {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
     }
 

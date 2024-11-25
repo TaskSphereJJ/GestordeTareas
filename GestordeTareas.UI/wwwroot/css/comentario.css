@@ -2,14 +2,34 @@
 .chat-container {
     max-width: 100%;
     margin: 0 auto;
-    background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     height: 85vh;
     position: relative;
     overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado del chat */
+.chat-header {
+    padding: 15px 20px;
+    background: #9860f8;
+    /* Color semitransparente */
+    color: white;
+    text-align: left;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    /* Efecto de desenfoque */
+    -webkit-backdrop-filter: blur(50px);
+    /* Soporte para Safari */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    /* Línea de separación suave */
 }
 
 /* Mensajes del chat */
@@ -22,7 +42,6 @@
     gap: 15px;
 }
 
-/* Botón para ir hacia abajo */
 /* Botón para ir hacia abajo */
 .scroll-to-bottom {
     position: relative;
@@ -60,9 +79,7 @@
 .chat-input-container {
     display: flex;
     align-items: center;
-    /* Centrar los elementos verticalmente */
     gap: 8px;
-    /* Espaciado entre los elementos */
     border-top: 1px solid #eee;
     padding: 10px 20px;
     background: #ffffff;

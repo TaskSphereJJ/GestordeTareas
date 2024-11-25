@@ -1,6 +1,11 @@
 ﻿@model List<GestordeTaras.EN.Comment>
 
 <div class="chat-container">
+    <!-- Encabezado del chat -->
+    <div class="chat-header">
+        <h2>Comentarios del proyecto</h2>
+    </div>
+
     <!-- Contenedor de los mensajes -->
     <div id="comentariosContainer" class="chat-messages">
         @await Html.PartialAsync("_Comentarios", Model)
@@ -21,6 +26,7 @@
         </div>
     </form>
 </div>
+
 
 <!-- Cargar bibliotecas -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Biblioteca para renderizar Markdown -->
