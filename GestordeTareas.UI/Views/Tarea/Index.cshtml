@@ -12,7 +12,10 @@
   <header class="task-header flex justify-between items-center">
         <nav class="task-nav">
             <span>|</span>
-            <a href="/foro" class="task-nav-link">Ver foro</a>
+              <!-- Botón para ver comentarios fuera del foreach -->
+    <a href="@Url.Action("Index", "Comment", new { idProyecto = ViewBag.ProyectoId })" class="task-nav-link">
+        Ver Foro
+    </a>
             <span>|</span>
             <a href="/integrantes" class="task-nav-link">Integrantes del grupo</a>
                 <span>|</span>

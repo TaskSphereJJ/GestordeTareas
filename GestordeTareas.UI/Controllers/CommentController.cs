@@ -1,13 +1,9 @@
 ﻿using GestordeTaras.EN;
 using GestordeTareas.BL;
-using GestordeTareas.UI.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace GestordeTareas.UI.Controllers
 {
@@ -15,98 +11,123 @@ namespace GestordeTareas.UI.Controllers
     public class CommentController : Controller
     {
         private readonly CommentBL _commentBL;
+        private readonly ProyectoBL _proyectoBL;
         private readonly UsuarioBL _usuarioBL;
         private readonly ProyectoUsuarioBL _proyectoUsuarioBL;
-        private readonly IHubContext<ChatHub> _hubContext;
 
-        public CommentController(IHubContext<ChatHub> hubContext)
+
+        public CommentController()
         {
             _commentBL = new CommentBL();
+            _proyectoBL = new ProyectoBL();
             _usuarioBL = new UsuarioBL();
             _proyectoUsuarioBL = new ProyectoUsuarioBL();
-            _hubContext = hubContext;
+
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-        public async Task<IActionResult> Index(int idProyecto)
+        public async Task<ActionResult> Index(int idProyecto)
         {
-            try
+            // Obtener el ID del usuario logueado
+            int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (!User.IsInRole("Administrador"))
             {
-                var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
-                ViewBag.IdProyecto = idProyecto;
-                return View(comentarios);
+                // Verificar si el usuario está unido al proyecto
+                var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
+                if (!usuariosUnidos.Any(u => u.Id == idUsuario))
+                {
+                    TempData["ErrorMessage"] = "No estás unido a este proyecto, no puedes ver los comentarios.";
+                    return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos o a una página de error
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al cargar la vista de comentarios: {ex.Message}");
-                TempData["ErrorMessage"] = "Hubo un error al cargar los comentarios.";
-                return RedirectToAction("Index", "Proyecto");
-            }
+
+            var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
+            ViewBag.IdProyecto = idProyecto;
+
+            return View(comentarios);
         }
+
         // Acción para crear un comentario
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Comment comment)
+        public async Task<IActionResult> Create(int idProyecto, string contenido)
         {
-            try
+            // Obtener el ID del usuario logueado
+            int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (!User.IsInRole("Administrador"))
             {
-                Console.WriteLine($"Datos recibidos: IdProyecto={comment.IdProyecto}, Content={comment.Content}");
-
-                // Validar entrada nula o vacía
-                if (comment == null || string.IsNullOrWhiteSpace(comment.Content))
-                {
-                    return BadRequest("El contenido del comentario no puede estar vacío.");
-                }
-
-                // Obtener el ID del usuario autenticado
-                int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
+                // Obtener los usuarios unidos al proyecto
+                var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(idProyecto);
                 // Verificar si el usuario está unido al proyecto
-                var usuariosUnidos = await _proyectoUsuarioBL.ObtenerUsuariosUnidosAsync(comment.IdProyecto);
                 if (!usuariosUnidos.Any(u => u.Id == idUsuario))
                 {
-                    return BadRequest("No estás unido a este proyecto, no puedes crear comentarios.");
+                    TempData["ErrorMessage"] = "No estás unido a este proyecto, no puedes crear comentarios.";
+                    return RedirectToAction("Index", "Proyecto"); // Redirigir a la vista de proyectos o a una página de error
                 }
+            }
 
-                // Asignar el usuario autenticado y la fecha al comentario
-                comment.IdUsuario = idUsuario;
-                comment.FechaComentario = DateTime.Now;
+            if (!string.IsNullOrEmpty(contenido))
+            {
+                // Crear el comentario a través del BL
+                int result = await _commentBL.CrearComentarioAsync(idProyecto, idUsuario, contenido);
 
-                // Guardar el comentario en la base de datos
-                int result = await _commentBL.CrearComentarioAsync(comment.IdProyecto, comment.IdUsuario, comment.Content);
-
+                // Verificar si el comentario se guardó correctamente
                 if (result > 0)
                 {
-                    // Notificar al Hub para actualizar el chat
-                    await _hubContext.Clients.All.SendAsync("RefreshChat");
-                    return Ok();
+                    return RedirectToAction("Index", new { idProyecto });
                 }
                 else
                 {
-                    return StatusCode(500, "Error al guardar el comentario en la base de datos.");
+                    TempData["ErrorMessage"] = "Hubo un error al crear el comentario";
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error al crear comentario: {ex.Message}");
-                return StatusCode(500, "Ocurrió un error inesperado al crear el comentario.");
+                TempData["ErrorMessage"] = "El contenido del comentario no puede estar vacío";
             }
+
+            return RedirectToAction("Index", new { idProyecto });
+        }
+
+        // Acción para eliminar un comentario
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int idComentario, int idProyecto)
+        {
+            int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            // Eliminar el comentario a través del BL
+            int result = await _commentBL.EliminarComentarioAsync(idComentario, idUsuario);
+
+            if (result > 0)
+            {
+                TempData["InfoMessage"] = "Comentario eliminado";
+            }
+            else if (result == -1)
+            {
+                TempData["ErrorMessage"] = "No puedes eliminar un comentario que no te pertenece";
+            }
+            else if (result == -2)
+            {
+                TempData["ErrorMessage"] = "El tiempo para eliminar el comentario ha expirado (más de 15 minutos)";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Hubo un error al eliminar el comentario";
+            }
+
+            return RedirectToAction("Index", new { idProyecto });
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComments(int idProyecto)
+        public async Task<IActionResult> ObtenerComentarios(int idProyecto)
         {
-            try
-            {
-                var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
-                return PartialView("_ChatMessagesPartial", comentarios);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al obtener los comentarios: {ex.Message}");
-                return StatusCode(500, "Error al obtener los comentarios.");
-            }
+            var comentarios = await _commentBL.ObtenerComentariosPorProyectoAsync(idProyecto);
+            return PartialView("_Comentarios", comentarios);  // Devuelve solo la vista parcial
         }
+
+
     }
 }

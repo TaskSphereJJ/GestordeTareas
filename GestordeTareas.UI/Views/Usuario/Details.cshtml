@@ -3,69 +3,66 @@
     ViewData["Title"] = "Detalles de los Usuarios";
 }
 
-<div>
-    <dl class="row">
+<!-- Contenedor del modal sin fondo blanco y sin sombra -->
+<div class="p-6 max-w-3xl mx-auto">
+    <dl class="space-y-6">
+        <div class="flex flex-col items-center space-y-3 mb-6">
+            <dt class="sr-only">@Html.DisplayNameFor(model => model.FotoPerfil)</dt>
+            <dd>
+                <img src="@Model.FotoPerfil" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover">
+            </dd>
+            <div class="text-center">
+                <h2 class="text-2xl font-bold">
+                    @Html.DisplayFor(model => model.Nombre) @Html.DisplayFor(model => model.Apellido)
+                </h2>
+                <span class="px-2 py-1 text-xs font-semibold rounded-full @(Model.Status == 1 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
+                    @(Model.Status == 1 ? "ACTIVO" : "INACTIVO")
+                </span>
+            </div>
+        </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.FotoPerfil)
-        </dt>
-        <dd class="col-sm-9">
-            <img src="@Model.FotoPerfil" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover">
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+        <!-- Diseño de dos columnas dentro del modal -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-phone-alt text-gray-500 text-xl"></i>
+                <div>
+                    <dt class="font-bold">@Html.DisplayNameFor(model => model.Telefono)</dt>
+                    <dd class="text-gray-600">@Html.DisplayFor(model => model.Telefono)</dd>
+                </div>
+            </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
+            <div class="flex items-center gap-4">
+                <i class="fas fa-birthday-cake text-gray-500 text-xl"></i>
+                <div>
+                    <dt class="font-bold">@Html.DisplayNameFor(model => model.FechaNacimiento)</dt>
+                    <dd class="text-gray-600">@Html.DisplayFor(model => model.FechaNacimiento)</dd>
+                </div>
+            </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Telefono)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Telefono)
-        </dd>
+            <div class="flex items-center gap-4">
+                <i class="fas fa-briefcase text-gray-500 text-xl"></i>
+                <div>
+                    <dt class="font-bold">@Html.DisplayNameFor(model => model.Cargo)</dt>
+                    <dd class="text-gray-600">@Html.DisplayFor(model => model.Cargo.Nombre)</dd>
+                </div>
+            </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.FechaNacimiento)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.FechaNacimiento)
-        </dd>
+            <div class="flex items-center gap-4">
+                <i class="fas fa-user-circle text-gray-500 text-xl"></i>
+                <div>
+                    <dt class="font-bold">@Html.DisplayNameFor(model => model.NombreUsuario)</dt>
+                    <dd class="text-gray-600">@Html.DisplayFor(model => model.NombreUsuario)</dd>
+                </div>
+            </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Cargo)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Cargo.Nombre)
-        </dd>
-
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.NombreUsuario)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.NombreUsuario)
-        </dd>
-
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-9">
-            @(Model.Status == 1 ? "ACTIVO" : "INACTIVO")
-        </dd>
-
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.FechaRegistro)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.FechaRegistro)
-        </dd>
+            <div class="flex items-center gap-4">
+                <i class="fas fa-calendar-day text-gray-500 text-xl"></i>
+                <div>
+                    <dt class="font-bold">@Html.DisplayNameFor(model => model.FechaRegistro)</dt>
+                    <dd class="text-gray-600">@Html.DisplayFor(model => model.FechaRegistro)</dd>
+                </div>
+            </div>
+        </div>
     </dl>
 </div>
+
