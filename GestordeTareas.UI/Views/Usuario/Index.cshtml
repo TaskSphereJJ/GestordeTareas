@@ -5,20 +5,23 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-   
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 @await Html.PartialAsync("_Alerts")
 
 <h1 class="text-5xl mb-8 mt-4 font-extrabold dark:text-white">Usuarios</h1>
+<div class="d-flex align-items-center justify-content-start gap-3 mb-2">
+    <a asp-action="Create"
+        class="no-underline text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-md px-3 py-1 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 inline-flex items-center">
+        <i class="fas fa-plus text-lg mr-2"></i> Nuevo
+    </a>
 
-<div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-    <!-- Buscador en tiempo real -->
     <div class="d-flex align-items-center">
-        <label for="searchBox" class="mr-2">Buscar:</label>
+        <label for="searchBox" class="mr-2 font-medium">Buscar:</label>
         <input type="text" id="searchBox" class="form-control w-auto" placeholder="Buscar por nombre o apellido">
     </div>
 </div>
+
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
     <table id="userTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -39,7 +42,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                   
+
                 <tr
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td class="px-6 py-4">@item.Id</td>
@@ -58,15 +61,14 @@
                         }
                         @statusName
                     </td>
-                           
+
                     <td class="px-6 py-4 flex justify-center items-center space-x-2">
                         <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded"
                             onclick="cargarVistaEdit(@item.Id)">
-                           
+
                             <i class="fas fa-edit text-lg"></i>
                         </a>
                         <a href="#" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded"
-                           
                             onclick="cargarVistaDetails(@item.Id)">
                             <i class="fas fa-eye text-lg"></i>
                         </a>
@@ -78,7 +80,7 @@
                 </tr>
             }
         </tbody>
-    </table> 
+    </table>
 </div>
 
 <script>
@@ -172,6 +174,64 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Contenedor principal */
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+        /* Espaciado entre elementos */
+        align-items: center;
+        /* Alineación vertical */
+        gap: 10px;
+        /* Espaciado entre elementos */
+        margin-bottom: 10px;
+        /* Menor margen inferior */
+    }
+
+    /* Botón de "Nuevo" */
+    .d-flex a {
+        padding: 8px 12px;
+        /* Espaciado interno más compacto */
+        font-size: 14px;
+        /* Fuente más pequeña */
+        border-radius: 6px;
+        /* Bordes menos redondeados */
+    }
+
+    /* Contenedor del buscador */
+    .d-flex .d-flex.align-items-center {
+        margin-left: auto;
+        /* Alineación derecha */
+    }
+
+    /* Input del buscador */
+    #searchBox {
+        width: 200px;
+        /* Ancho fijo para evitar que ocupe mucho espacio */
+        padding: 6px 10px;
+        /* Espaciado interno */
+        font-size: 14px;
+        /* Fuente más pequeña */
+        border-radius: 6px;
+        /* Bordes redondeados */
+        border: 1px solid #ddd;
+        /* Borde gris claro */
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        /* Transición suave */
+    }
+
+    /* Efecto al enfocar */
+    #searchBox:focus {
+        border-color: #7e22ce;
+        /* Borde morado */
+        box-shadow: 0 0 5px rgba(123, 36, 200, 0.3);
+        /* Sombra ligera morada */
+        outline: none;
+        /* Sin contorno adicional */
+    }
+</style>
+>
 
 
 <!-- Bootstrap JavaScript -->
