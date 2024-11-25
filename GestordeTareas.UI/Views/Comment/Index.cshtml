@@ -4,6 +4,8 @@
     @await Html.PartialAsync("_Comentarios", Model) <!-- Inicializar con los comentarios actuales -->
 </div>
 
+@await Html.PartialAsync("_Alerts")
+
 <!-- Formulario para agregar un nuevo comentario -->
 <form asp-action="Create" method="post">
     <input type="hidden" name="idProyecto" value="@ViewBag.IdProyecto" />

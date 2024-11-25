@@ -9,7 +9,7 @@ namespace GestordeTaras.EN
 
         [Key]
         public int Id { get; set; }
-        [Display(Name = "Foto de perfil")]
+        [Display(Name = "Foto")]
         [Required(ErrorMessage = "Campo obligatorio")]
         public string FotoPerfil { get; set; }
 

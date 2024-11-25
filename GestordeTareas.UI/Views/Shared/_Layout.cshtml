@@ -238,6 +238,13 @@
         </div>
     </div>
 
+    <div id="loader-overlay">
+        <div class="item">
+            <div class="loader-pulse"></div>
+        </div>
+    </div>
+
+
     <div class="container mt-28">
         <main role="main" class="pb-3">
             @RenderBody() 
@@ -323,6 +330,80 @@
                     userMenuOptions.style.display = 'none';
                 }
             });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const loaderOverlay = document.getElementById('loader-overlay');
+
+            // Mostrar el loader antes de cambiar de vista
+            function showLoader() {
+                loaderOverlay.classList.add('active');
+            }
+
+            // Detectar clics en todos los enlaces y formularios
+            document.body.addEventListener('click', function (event) {
+                const target = event.target;
+                const link = target.closest('a');
+
+                // Excluir los botones y enlaces que abren modales
+                if (
+                    target.closest('[data-bs-toggle="modal"]') ||// Ignorar clics que abren modales
+                      target.closest('[onclick*="cargarVistaEdit"]') ||
+                    target.closest('[onclick*="cargarVistaCreate"]') ||
+                        target.closest('[onclick*="cargarVistaDetails"]') ||
+                        target.closest('[onclick*="cargarVistaDelete"]')
+                    ) {
+                    return;
+                }
+
+                if (
+                    target.closest('form[action*="DeleteOwn"]') &&
+                    target.tagName === 'BUTTON' &&
+                    target.type === 'submit'
+                ) {
+                    return;  // No activar el loader en el formulario de eliminación
+                }
+
+                // Excluir el botón de Cancelar (onclick="toggleEditMode()")
+                if (
+                    target.closest('[onclick="toggleEditMode()"]')
+                ) {
+                    return;  // No activar el loader en el botón de cancelar
+                }
+
+                // Si es un enlace (a) con href
+                if (link && link.hasAttribute('href')) {
+                    // Evitar la acción predeterminada del enlace
+                    event.preventDefault();
+
+                    // Mostrar el loader
+                    showLoader();
+
+                    // Redirigir después de un pequeño retraso para permitir que el loader sea visible
+                    setTimeout(function () {
+                        window.location.href = link.href;
+                    }, 200);  // Ajusta el tiempo de retraso según sea necesario
+                }
+
+                // Solo activar el loader para enlaces internos o formularios
+                if (
+                    target.tagName === 'A' && target.getAttribute('href') &&
+                    !target.getAttribute('target') // Ignorar enlaces con target="_blank"
+                ) {
+                    showLoader();
+                } else if (target.tagName === 'BUTTON' || (target.tagName === 'INPUT' && target.type === 'submit')) {
+                    // Solo activar el loader para botones o inputs tipo submit dentro de un formulario
+                    const form = target.closest('form');
+                    if (form) {
+                        showLoader();
+                    }
+                }
+            });
+
+            // Ocultar el loader cuando la página termine de cargar
+            window.onload = function () {
+                loaderOverlay.classList.remove('active');
+            };
         });
 
     </script>

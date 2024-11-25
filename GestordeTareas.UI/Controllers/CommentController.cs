@@ -80,12 +80,12 @@ namespace GestordeTareas.UI.Controllers
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Hubo un error al crear el comentario.";
+                    TempData["ErrorMessage"] = "Hubo un error al crear el comentario";
                 }
             }
             else
             {
-                TempData["ErrorMessage"] = "El contenido del comentario no puede estar vacío.";
+                TempData["ErrorMessage"] = "El contenido del comentario no puede estar vacío";
             }
 
             return RedirectToAction("Index", new { idProyecto });
@@ -103,19 +103,19 @@ namespace GestordeTareas.UI.Controllers
 
             if (result > 0)
             {
-                TempData["SuccessMessage"] = "Comentario eliminado con éxito.";
+                TempData["InfoMessage"] = "Comentario eliminado";
             }
             else if (result == -1)
             {
-                TempData["ErrorMessage"] = "No puedes eliminar un comentario que no te pertenece.";
+                TempData["ErrorMessage"] = "No puedes eliminar un comentario que no te pertenece";
             }
             else if (result == -2)
             {
-                TempData["ErrorMessage"] = "El tiempo para eliminar el comentario ha expirado (más de 15 minutos).";
+                TempData["ErrorMessage"] = "El tiempo para eliminar el comentario ha expirado (más de 15 minutos)";
             }
             else
             {
-                TempData["ErrorMessage"] = "Hubo un error al eliminar el comentario.";
+                TempData["ErrorMessage"] = "Hubo un error al eliminar el comentario";
             }
 
             return RedirectToAction("Index", new { idProyecto });
