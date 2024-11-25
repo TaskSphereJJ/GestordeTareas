@@ -62,7 +62,7 @@ public class EmailService
 
                     <hr style=""border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;"">
 
-                    <p style=""margin-bottom: 10px; text-align: center; font-size: 16px;"">Saludos cordiales,<br><strong>El equipo de Gestión de Tareas</strong></p>
+                    <p style=""margin-bottom: 10px; text-align: center; font-size: 16px;"">Saludos cordiales,<br><strong>El equipo de Gestor de Tareas</strong></p>
                 </div>
                 <div style=""background-color: #f8f8f8; padding: 20px; text-align: center;"">
                     <p style=""font-size: 12px; color: #888888; margin: 0;"">Este es un correo electrónico automático, por favor no responda a este mensaje.</p>

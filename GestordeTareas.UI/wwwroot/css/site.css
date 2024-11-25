@@ -301,6 +301,11 @@ table {
     transition: visibility 0s, opacity 0.5s ease; /* Suavidad para aparecer y desaparecer */
 }
 
+/* Fondo oscuro para el modo oscuro */
+.dark #loader-overlay {
+    background: rgba(0, 0, 0, 0.7); /* Fondo negro semi-transparente */
+}
+
     /* Mostrar el loader */
     #loader-overlay.active {
         visibility: visible;

@@ -371,6 +371,14 @@
                     return;  // No activar el loader en el botón de cancelar
                 }
 
+                // Excluir el formulario de creación de comentarios
+                if (
+                    form &&
+                    form.action.includes('/Comment/Create') // Verifica que sea el formulario de comentarios
+                ) {
+                    return; // No activar el loader para este formulario
+                }
+
                 // Si es un enlace (a) con href
                 if (link && link.hasAttribute('href')) {
                     // Evitar la acción predeterminada del enlace

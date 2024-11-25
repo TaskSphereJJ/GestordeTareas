@@ -156,7 +156,7 @@ namespace GestordeTareas.UI.Controllers
 
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un problema al crear la cuenta";
+                TempData["ErrorMessage"] = "Error: " + ex.Message;
                 await LoadDropDownListsAsync();
                 return View(usuario);
             }
