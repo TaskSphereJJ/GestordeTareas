@@ -52,5 +52,11 @@ namespace GestordeTareas.BL
             return await ProyectoUsuarioDAL.ObtenerEncargadoPorProyectoAsync(idProyecto);
         }
 
+        public async Task<List<ProyectoUsuario>> ObtenerTodosAsync()
+        {
+            return await ProyectoUsuarioDAL.ObtenerTodosAsync();
+        }
+
+
     }
 }

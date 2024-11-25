@@ -51,6 +51,7 @@ namespace GestordeTareas.UI.Controllers
         // Acción para crear un comentario
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Create(int idProyecto, string contenido)
         {
             // Obtener el ID del usuario logueado
@@ -94,6 +95,7 @@ namespace GestordeTareas.UI.Controllers
         // Acción para eliminar un comentario
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Delete(int idComentario, int idProyecto)
         {
             int idUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);

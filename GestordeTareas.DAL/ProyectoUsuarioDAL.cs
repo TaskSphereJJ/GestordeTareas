@@ -129,5 +129,16 @@ namespace GestordeTareas.DAL
             }
         }
 
+        public static async Task<List<ProyectoUsuario>> ObtenerTodosAsync()
+        {
+            using (var dbContext = new ContextoBD())
+            {
+                return await dbContext.ProyectoUsuario
+                    .Include(pu => pu.Proyecto)  // Incluye los proyectos asociados
+                    .Include(pu => pu.Usuario)   // Incluye los usuarios asociados
+                    .ToListAsync();              // Devuelve todos los registros
+            }
+        }
+
     }
 }
