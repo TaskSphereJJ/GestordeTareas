@@ -1,0 +1,214 @@
+﻿/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.profile-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    text-align: center;
+    color: #1a73e8;
+    margin-bottom: 2rem;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: row; /* Foto y datos en fila */
+    align-items: center; /* Alinea verticalmente */
+    gap: 2rem;
+    justify-content: space-between; /* Asegura que los elementos tengan espacio adecuado */
+    width: 100%;
+    max-width: 100%;
+}
+
+
+.profile-photo, .profile-photo-display {
+    flex: 0 0 150px; /* Ajusta el tamaño de la foto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.photo-wrapper {
+    text-align: center;
+}
+
+.photo-frame {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 4px solid #1a73e8;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.change-photo-btn {
+    background-color: #1a73e8;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .change-photo-btn:hover {
+        background-color: #1557b0;
+    }
+
+/* Form Styles */
+.profile-details, .profile-info {
+    flex: 1; /* Asegura que la información ocupe el resto del espacio */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+    .form-input:focus {
+        outline: none;
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+    }
+
+.form-validation-error {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Button Styles */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancel-btn, .save-btn, .edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn {
+    background-color: #f1f3f4;
+    color: #5f6368;
+}
+
+.save-btn, .edit-btn {
+    background-color: #1a73e8;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #e8eaed;
+}
+
+.save-btn:hover, .edit-btn:hover {
+    background-color: #1557b0;
+}
+
+.delete-btn:hover {
+    background-color: #b71c1c;
+}
+
+/* Profile Display Styles */
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem 0 0.5rem;
+}
+
+.profile-position {
+    color: #5f6368;
+    margin-bottom: 0.5rem;
+}
+
+.info-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.form-text {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Icon Styles */
+.edit-icon, .delete-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .profile-card {
+        flex-direction: column;
+    }
+
+    .profile-photo, .profile-photo-display {
+        margin-bottom: 2rem;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .cancel-btn, .save-btn, .edit-btn, .delete-btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
