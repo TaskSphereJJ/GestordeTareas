@@ -155,30 +155,8 @@ CREATE TABLE Comment (
 	IdProyecto INT NOT NULL FOREIGN KEY REFERENCES Proyecto(Id)
 );
 
-select * from Comment
+delete  from Comment
 
-INSERT INTO Comment (Content, FechaComentario, IdUsuario, IdProyecto)
-VALUES 
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1),
-    ('hola', GETDATE(), 25, 1);
 
 -- Tabla de tarea finalizada
 --CREATE TABLE TareaFinalizada (

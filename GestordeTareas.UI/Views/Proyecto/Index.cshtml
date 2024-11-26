@@ -202,12 +202,7 @@
                         </a>
 
                     }
-                    <!-- Botón de Ingresar con AJAX -->
-                    @* <a href="javascript:void(0);"
-                       data-proyecto-id="@item.Id"
-                       class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out ingresar-tarea">
-                        <i class="fas fa-sign-in-alt mr-4"></i> Ingresar
-                    </a> *@
+ 
                     <!-- Botón de Ingresar -->
                     <a href="@Url.Action("Index", "Tarea", new { proyectoId = item.Id })"
                        class="flex items-center justify-center px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-600 text-sm font-medium no-underline transition-all duration-200 ease-out">
@@ -449,28 +444,5 @@ else
             }, 4000); // Esperar 4 segundos
         }
     });
-
-    @* $(document).on('click', '.ingresar-tarea', function () {
-        var proyectoId = $(this).data('proyecto-id');
-        $.ajax({
-            url: '@Url.Action("Index", "Tarea")',  // Llamar a la acción en el controlador
-            data: { proyectoId: proyectoId },
-            type: 'GET',
-            success: function (response) {
-                if (response.success) {
-                    window.location.href = '@Url.Action("Index", "Tarea")?proyectoId=' + proyectoId;
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '¡Error!',
-                        text: response.message,
-                        confirmButtonText: 'OK'
-                    });
-                }
-            }
-        });
-    }); *@
-
-
 
 </script>
