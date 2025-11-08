@@ -30,7 +30,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetByIdAsync(new EstadoTarea { Id = id });
             return PartialView("Details", estadoTarea);
         }
 
@@ -60,7 +60,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea   { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetByIdAsync(new EstadoTarea   { Id = id });
             return PartialView("Edit", estadoTarea);
         }
 
@@ -84,7 +84,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: CategoriaController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var estadoTarea = await _estadoTareaBL.GetById(new EstadoTarea { Id = id });
+            var estadoTarea = await _estadoTareaBL.GetByIdAsync(new EstadoTarea { Id = id });
             return PartialView("Delete", estadoTarea);
 
         }

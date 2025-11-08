@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TuNamespace;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace GestordeTareas.DAL
@@ -27,17 +26,16 @@ namespace GestordeTareas.DAL
         public DbSet<PasswordResetCode> PasswordResetCode { get; set; }
         public DbSet<Comment> Comment { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data source = DESKTOP-UMST7PO; Initial Catalog = GestordeTareasBD; Integrated Security = True; Encrypt = false; trustServerCertificate =true");
+            optionsbuilder.UseSqlServer(@"data source = desktop-l1nkjnu\sqlexpress; initial catalog = GestordeTareasBD; integrated security = true; encrypt = false; trustservercertificate =true");
 
         }
 
+
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    optionsBuilder.UseSqlServer(@"Data Source=SQL9001.site4now.net; 
-        //                          Initial Catalog=db_aaef22_gestordetareas; 
-        //                          User Id=db_aaef22_gestordetareas_admin; 
+        //    optionsBuilder.UseSqlServer(@"Data Source=SQL1003.site4now.net;Initial Catalog=db_ab72aa_gestordetareas;User Id=db_ab72aa_gestordetareas_admin; 
         //                          Password=gestor123456;
         //                          Encrypt=True; 
         //                          TrustServerCertificate=True;");

@@ -10,6 +10,7 @@ namespace GestordeTaras.EN
 {
     public class PasswordResetCode
     {
+        [Key]
         public int Id { get; set; }
         public string Codigo { get; set; }
         public DateTime Expiration { get; set; }

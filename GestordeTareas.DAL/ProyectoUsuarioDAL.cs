@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GestordeTareas.DAL
@@ -36,42 +35,40 @@ namespace GestordeTareas.DAL
             {
                 return await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdUsuario == idUsuario)
-                    .Include(pu => pu.Proyecto) 
+                    .Include(pu => pu.Proyecto)
                     .Select(pu => pu.Proyecto)
                     .ToListAsync();
             }
         }
-           
+
+        // Método para obtener los usuarios unidos a un proyecto
         public static async Task<List<Usuario>> ObtenerUsuariosUnidosAsync(int idProyecto)
         {
-            using (var context = new ContextoBD())
+            using (var dbContext = new ContextoBD())
             {
-                return await context.ProyectoUsuario
+                return await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdProyecto == idProyecto)
-                    .Select(pu => pu.Usuario) 
+                    .Select(pu => pu.Usuario)
                     .ToListAsync();
             }
         }
 
+        // Método para eliminar la unión de un usuario con un proyecto
         public static async Task<int> EliminarUsuarioDeProyectoAsync(int idProyecto, int idUsuario)
         {
             int result = 0;
-
             using (var dbContext = new ContextoBD())
             {
-                // Buscar el registro en la tabla ProyectoUsuario que asocia al usuario con el proyecto
                 var proyectoUsuario = await dbContext.ProyectoUsuario
                     .FirstOrDefaultAsync(pu => pu.IdProyecto == idProyecto && pu.IdUsuario == idUsuario);
 
                 if (proyectoUsuario != null)
                 {
-                    // Si se encuentra, eliminar el registro
                     dbContext.ProyectoUsuario.Remove(proyectoUsuario);
-                    result = await dbContext.SaveChangesAsync(); // Guardar los cambios en la base de datos
+                    result = await dbContext.SaveChangesAsync();
                 }
             }
-
-            return result; // Retornar el número de registros afectados
+            return result;
         }
 
         // Método para asignar un usuario como encargado de un proyecto
@@ -79,33 +76,27 @@ namespace GestordeTareas.DAL
         {
             using (var dbContext = new ContextoBD())
             {
-                // Verificar si ya existe un encargado para este proyecto
                 var encargadoExistente = await dbContext.ProyectoUsuario
                     .FirstOrDefaultAsync(pu => pu.IdProyecto == idProyecto && pu.Encargado);
 
-                // Si ya existe un encargado, no se puede asignar otro
                 if (encargadoExistente != null)
-                {
-                    return false; // Ya existe un encargado para este proyecto
-                }
+                    return false; // Ya existe un encargado
 
-                // Buscar el registro para el nuevo encargado
                 var nuevoEncargado = await dbContext.ProyectoUsuario
                     .FirstOrDefaultAsync(pu => pu.IdProyecto == idProyecto && pu.IdUsuario == idUsuarioNuevoEncargado);
 
                 if (nuevoEncargado != null)
                 {
-                    // Asignar como encargado
                     nuevoEncargado.Encargado = true;
-                    await dbContext.SaveChangesAsync(); // Guardar los cambios
-                    return true; // Asignación exitosa
+                    await dbContext.SaveChangesAsync();
+                    return true;
                 }
 
-                return false; // No se encontró el usuario para asignar como encargado
+                return false;
             }
         }
 
-        // Método para verificar si un usuario es el encargado de un proyecto
+        // Método para verificar si un usuario es encargado de un proyecto
         public static async Task<bool> IsUsuarioEncargadoAsync(int idProyecto, int idUsuario)
         {
             using (var dbContext = new ContextoBD())
@@ -115,30 +106,28 @@ namespace GestordeTareas.DAL
             }
         }
 
+        // Método para obtener el encargado de un proyecto
         public static async Task<Usuario> ObtenerEncargadoPorProyectoAsync(int idProyecto)
         {
             using (var dbContext = new ContextoBD())
             {
-                // Buscar el encargado del proyecto
-                var encargado = await dbContext.ProyectoUsuario
+                return await dbContext.ProyectoUsuario
                     .Where(pu => pu.IdProyecto == idProyecto && pu.Encargado)
-                    .Select(pu => pu.Usuario) 
+                    .Select(pu => pu.Usuario)
                     .FirstOrDefaultAsync();
-
-                return encargado; // Retorna el usuario encargado o null si no existe
             }
         }
 
+        // Método para obtener todos los registros de ProyectoUsuario
         public static async Task<List<ProyectoUsuario>> ObtenerTodosAsync()
         {
             using (var dbContext = new ContextoBD())
             {
                 return await dbContext.ProyectoUsuario
-                    .Include(pu => pu.Proyecto)  // Incluye los proyectos asociados
-                    .Include(pu => pu.Usuario)   // Incluye los usuarios asociados
-                    .ToListAsync();              // Devuelve todos los registros
+                    .Include(pu => pu.Proyecto)
+                    .Include(pu => pu.Usuario)
+                    .ToListAsync();
             }
         }
-
     }
 }

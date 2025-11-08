@@ -22,7 +22,7 @@ namespace GestordeTareas.BL
         {
             return await ProyectoDAL.DeleteAsync(proyecto);
         }
-        public async Task<Proyecto> GetById(Proyecto proyecto)
+        public async Task<Proyecto> GetByIdAsync(Proyecto proyecto)
         {
             return await ProyectoDAL.GetByIdAsync(proyecto);
         }

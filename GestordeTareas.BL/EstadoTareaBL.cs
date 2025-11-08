@@ -22,7 +22,7 @@ namespace GestordeTareas.BL
         {
             return await EstadoTareaDAL.DeleteAsync(estadoTarea);
         }
-        public async Task<EstadoTarea> GetById(EstadoTarea estadoTarea)
+        public async Task<EstadoTarea> GetByIdAsync(EstadoTarea estadoTarea)
         {
             return await EstadoTareaDAL.GetByIdAsync(estadoTarea);
         }

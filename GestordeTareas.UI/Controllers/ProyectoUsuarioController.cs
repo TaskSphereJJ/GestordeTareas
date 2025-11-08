@@ -39,7 +39,7 @@ namespace GestordeTareas.UI.Controllers
             int idUsuario = actualUser.Id;
 
             // Obtener el proyecto
-            var proyecto = await _proyectoBL.GetById(new Proyecto { Id = idProyecto });
+            var proyecto = await _proyectoBL.GetByIdAsync(new Proyecto { Id = idProyecto });
             
             if (proyecto == null)
             {

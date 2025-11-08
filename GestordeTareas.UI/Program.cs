@@ -14,8 +14,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<EmailService>();
-
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 // configurar la autenticaci�n
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
     AddCookie((options) =>

@@ -25,8 +25,9 @@ namespace GestordeTaras.EN
         [ForeignKey("ElegirTarea")]
         [Display(Name = "Elegir Tarea")]
         public int IdElegirTarea { get; set; }
+        public ElegirTarea ElegirTarea { get; set; }
 
-        
+
     }
 
 }

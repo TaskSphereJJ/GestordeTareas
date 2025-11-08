@@ -68,7 +68,7 @@ namespace GestordeTareas.UI.Controllers
         // Nuevo
         private async Task<int> GetProyectoIdAsync(Proyecto proyecto)
         {
-            var result = await _proyectoBL.GetById(proyecto);
+            var result = await _proyectoBL.GetByIdAsync(proyecto);
             int proyectoId = Convert.ToInt32(result);
             return proyectoId;
         }

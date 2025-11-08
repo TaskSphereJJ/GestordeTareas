@@ -10,6 +10,7 @@ namespace GestordeTaras.EN
 {
     public class ProyectoUsuario
     {
+        [Key]
         public int Id { get; set; }
         public DateTime FechaAsignacion { get; set; }
         public bool Encargado { get; set; }

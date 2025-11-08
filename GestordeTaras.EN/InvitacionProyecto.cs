@@ -10,6 +10,7 @@ namespace GestordeTaras.EN
 {
     public class InvitacionProyecto
     {
+        [Key]
         public int Id { get; set; }
         [ForeignKey("Proyecto")]
         [Display(Name = "Proyecto")]
@@ -30,6 +31,7 @@ namespace GestordeTaras.EN
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaExpiracion { get; set; }
         public Usuario Usuario { get; set; }
+        public Proyecto Proyecto { get; set; }
     }
 
 

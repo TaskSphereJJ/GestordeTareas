@@ -13,14 +13,12 @@ namespace GestordeTaras.EN
         [Key]
         public int Id { get; set; }
 
-        //anotaciones de validacion
         [Required(ErrorMessage = "Este campo es obligatorio")]
         [StringLength(50, ErrorMessage = "Maximo de caracteres 50")]
-        public string Nombre { get; set; } = string.Empty; //inicializo qeu es un string de logitud cero
+        public string Nombre { get; set; } = string.Empty; 
 
-        ////OTRAS QUE NO ESTAN EN LA Bd
         [NotMapped]
-        public int Top_Aux { get; set; } //controla cuantos registros quiero traer
+        public int Top_Aux { get; set; } 
 
     }
 }

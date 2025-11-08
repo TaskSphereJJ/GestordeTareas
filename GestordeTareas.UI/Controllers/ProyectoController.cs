@@ -22,9 +22,9 @@ namespace GestordeTareas.UI.Controllers
         private readonly ProyectoBL _proyectoBL;
         private readonly UsuarioBL _usuarioBL;
         private readonly InvitacionProyectoBL _invitacionProyectoBL;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
-        public ProyectoController(EmailService emailService)
+        public ProyectoController(IEmailService emailService)
         {
             _proyectoUsuarioBL = new ProyectoUsuarioBL();
             _proyectoBL = new ProyectoBL();
@@ -59,7 +59,7 @@ namespace GestordeTareas.UI.Controllers
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Details(int id)
         {
-            var proyecto = await _proyectoBL.GetById(new Proyecto { Id = id });
+            var proyecto = await _proyectoBL.GetByIdAsync(new Proyecto { Id = id });
 
             if (proyecto == null)
             {
@@ -133,7 +133,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: ProyectoController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var proyecto = await _proyectoBL.GetById(new Proyecto { Id = id });
+            var proyecto = await _proyectoBL.GetByIdAsync(new Proyecto { Id = id });
             return PartialView("Edit", proyecto);
         }
 
@@ -161,7 +161,7 @@ namespace GestordeTareas.UI.Controllers
         // GET: ProyectoController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var proyecto = await _proyectoBL.GetById(new Proyecto { Id = id });
+            var proyecto = await _proyectoBL.GetByIdAsync(new Proyecto { Id = id });
             return PartialView("Delete", proyecto);
 
         }
@@ -228,7 +228,7 @@ namespace GestordeTareas.UI.Controllers
                 try
                 {
                     // SE VERIFICA QUE EL PROYECTO EXISTA
-                    var proyecto = await _proyectoBL.GetById(new Proyecto { Id = invitacion.IdProyecto });
+                    var proyecto = await _proyectoBL.GetByIdAsync(new Proyecto { Id = invitacion.IdProyecto });
                     if (proyecto == null)
                     {
                         TempData["ErrorMessage"] = "El proyecto no existe";
@@ -255,18 +255,19 @@ namespace GestordeTareas.UI.Controllers
                         // URL LOCAL DE LA APLICACION
                         string baseUrl = "https://localhost:7297";
                         // URL DESPLEGADA DE LA APLICACION
-                        //string baseUrl = "https://appservice-webappgestordetareas.azurewebsites.net";
+                        //string baseUrl = "https://gestordetareasui20250402111455.azurewebsites.net";
 
                         // ENLACES DE INVITACIÓN CON EL TOKEN Y LA DECISIÓN (ACEPTAR O RECHAZAR)
                         string enlaceAceptar = $"{baseUrl}/Proyecto/AceptarInvitacion?token={invitacion.Token}&decision=aceptar";
                         string enlaceRechazar = $"{baseUrl}/Proyecto/AceptarInvitacion?token={invitacion.Token}&decision=rechazar";
 
-                        // SE GENERA EL CUERPO DEL CORREO CON EL NUEVO METODO EN EMAILSERVICE
-                        string cuerpo = _emailService.GenerateInvitationEmailBody(invitacion.CorreoElectronico, proyecto.Titulo, enlaceAceptar, enlaceRechazar, invitacion.FechaExpiracion);
-
-                        // SE ENVIA EL CORREO CON EL MENSAJE 
-                        await _emailService.SendEmailAsync(invitacion.CorreoElectronico, "Invitación a un proyecto", cuerpo);
-
+                        await _emailService.SendProjectInvitationAsync(
+                            invitacion.CorreoElectronico,
+                            proyecto.Titulo,
+                            enlaceAceptar,
+                            enlaceRechazar,
+                            invitacion.FechaExpiracion
+                        );
 
                         TempData["SuccessMessage"] = "Invitación enviada correctamente";
                         return RedirectToAction("Invitaciones", new { id = invitacion.IdProyecto });

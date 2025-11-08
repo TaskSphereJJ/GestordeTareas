@@ -27,8 +27,8 @@ namespace GestordeTaras.EN
         [ForeignKey("Proyecto")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
-        public Proyecto Proyecto { get; set; } // Propiedad de navegación
-        public Usuario Usuario { get; set; } // Propiedad de navegación
+        public Proyecto Proyecto { get; set; } 
+        public Usuario Usuario { get; set; } 
 
     }
 }

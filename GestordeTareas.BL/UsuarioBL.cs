@@ -14,17 +14,17 @@ namespace GestordeTareas.BL
     {
         public async Task<int> Create(Usuario usuario)
         {
-            return await UsuarioDAL.Create(usuario);
+            return await UsuarioDAL.CreateAsync(usuario);
         }
 
         public async Task<int> Update(Usuario usuario)
         {
-            return await UsuarioDAL.Update(usuario);
+            return await UsuarioDAL.UpdateAsync(usuario);
         }
 
         public async Task<int> Delete(Usuario usuario)
         {
-            return await UsuarioDAL.Delete(usuario);
+            return await UsuarioDAL.DeleteAsync(usuario);
         }
 
         public async Task<Usuario> GetByIdAsync(Usuario usuario)

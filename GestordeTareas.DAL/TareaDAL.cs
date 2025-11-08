@@ -4,148 +4,293 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GestordeTareas.DAL
 {
     public class TareaDAL
     {
-        //--------------------------------METODO CREAR Tarea.--------------------------
+        // Crear una tarea
         public static async Task<int> CreateAsync(Tarea tarea)
         {
-            int result = 0;
-            using (var dbContexto = new ContextoBD()) //el comando using hace un proceso de ejecucion
-            {
-                dbContexto.Tarea.Add(tarea); //agrego una nueva tarea
-                result = await dbContexto.SaveChangesAsync();//se guarda a la base de datos
-            }
-            return result;
+            using var dbContext = new ContextoBD();
+            await dbContext.Tarea.AddAsync(tarea);
+            return await dbContext.SaveChangesAsync();
         }
 
-        //--------------------------------METODO MODIFICAR TArea.--------------------------
+        // Actualizar una tarea
         public static async Task<int> UpdateAsync(Tarea tarea)
         {
-            int result = 0;
-            using (var bdContexto = new ContextoBD())
-            {
-                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(c => c.Id == tarea.Id);
-                if (tareaBD != null)
-                {
-                    // Actualizar solo las propiedades que necesitan ser actualizadas
-                    tareaBD.Nombre = tarea.Nombre;
-                    tareaBD.Descripcion = tarea.Descripcion;
-                    tareaBD.FechaCreacion = tarea.FechaCreacion;
-                    tareaBD.FechaVencimiento = tarea.FechaVencimiento;
-                    tareaBD.IdCategoria = tarea.IdCategoria;
-                    tareaBD.IdPrioridad = tarea.IdPrioridad;
-                    tareaBD.IdEstadoTarea = tarea.IdEstadoTarea;
-                    tareaBD.IdProyecto = tarea.IdProyecto;
+            using var dbContext = new ContextoBD();
+            var tareaDB = await dbContext.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id);
 
+            if (tareaDB == null)
+                return 0;
 
-                    // Guardar cambios solo si hay propiedades actualizadas
-                    bdContexto.Update(tareaBD);
-                    result = await bdContexto.SaveChangesAsync();
-                }
-            }
-            return result;
+            tareaDB.Nombre = tarea.Nombre;
+            tareaDB.Descripcion = tarea.Descripcion;
+            tareaDB.FechaCreacion = tarea.FechaCreacion;
+            tareaDB.FechaVencimiento = tarea.FechaVencimiento;
+            tareaDB.IdCategoria = tarea.IdCategoria;
+            tareaDB.IdPrioridad = tarea.IdPrioridad;
+            tareaDB.IdEstadoTarea = tarea.IdEstadoTarea;
+            tareaDB.IdProyecto = tarea.IdProyecto;
+
+            dbContext.Tarea.Update(tareaDB);
+            return await dbContext.SaveChangesAsync();
         }
 
-        //...............--------------METODO ELIMINAR---------------------------
+        // Eliminar una tarea
         public static async Task<int> DeleteAsync(Tarea tarea)
         {
+            using var dbContext = new ContextoBD();
+            var tareaDB = await dbContext.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id);
 
-            int result = 0;
-            using (var bdContexto = new ContextoBD()) //istancio la coneccion
-            {
-                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
-                if (tareaBD != null)//verifico que no este nulo
-                {
-                    bdContexto.Tarea.Remove(tareaBD);//elimino anivel de memoria la tarea
-                    result = await bdContexto.SaveChangesAsync();//le digo a la BD que se elimine y se guarde
-                }
-            }
-            return result;
+            if (tareaDB == null)
+                return 0;
+
+            dbContext.Tarea.Remove(tareaDB);
+            return await dbContext.SaveChangesAsync();
         }
-        //--------------------------------METODO obtenerporID Tareas.--------------------------
+
+        // Obtener tarea por ID
         public static async Task<Tarea> GetByIdAsync(Tarea tarea)
         {
-            var tareaBD = new Tarea();
-            using (var bdContexto = new ContextoBD())
-            {
-                tareaBD = await bdContexto.Tarea
-                    .Include(c => c.Categoria)
-                    .Include(p => p.Prioridad)
-                    .Include(e => e.EstadoTarea)
-                    .Include(r => r.Proyecto)
-                    .FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
-            }
-            return tareaBD;
+            using var dbContext = new ContextoBD();
+            return await dbContext.Tarea
+                .Include(c => c.Categoria)
+                .Include(p => p.Prioridad)
+                .Include(e => e.EstadoTarea)
+                .Include(r => r.Proyecto)
+                .FirstOrDefaultAsync(t => t.Id == tarea.Id);
         }
 
-        //--------------------------------METODO obtener todas las tareas.--------------------------
+        // Obtener todas las tareas
         public static async Task<List<Tarea>> GetAllAsync()
         {
-            using (var dbContext = new ContextoBD())
+            using var dbContext = new ContextoBD();
+            return await dbContext.Tarea
+                .Include(c => c.Categoria)
+                .Include(p => p.Prioridad)
+                .Include(e => e.EstadoTarea)
+                .Include(r => r.Proyecto)
+                .ToListAsync();
+        }
+
+        // Obtener tareas por ID de proyecto
+        public static async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
+        {
+            try
             {
+                using var dbContext = new ContextoBD();
                 var tareas = await dbContext.Tarea
                     .Include(c => c.Categoria)
                     .Include(p => p.Prioridad)
                     .Include(e => e.EstadoTarea)
                     .Include(r => r.Proyecto)
+                    .Where(t => t.IdProyecto == proyectoId)
                     .ToListAsync();
 
+                Debug.WriteLine($"Tareas encontradas: {tareas.Count}");
                 return tareas;
-            }
-        }
-
-        // Filtra las tareas por el ID del proyecto proporcionado 
-        public static async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
-        {
-            try
-            {
-                using (var dbContext = new ContextoBD())
-                {
-                    var tareas = await dbContext.Tarea
-                        .Include(c => c.Categoria)
-                        .Include(p => p.Prioridad)
-                        .Include(e => e.EstadoTarea)
-                        .Include(r => r.Proyecto)
-                        .Where(t => t.IdProyecto == proyectoId)
-                        .ToListAsync();
-
-                    // Verificar el conteo de tareas
-                    Debug.WriteLine($"Tareas encontradas: {tareas.Count}");
-
-                    return tareas;
-                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error: {ex.Message}");
-                return new List<Tarea>(); // Retorna una lista vacía en caso de error
+                Debug.WriteLine($"Error en GetTareasByProyectoIdAsync: {ex.Message}");
+                return new List<Tarea>();
             }
         }
 
-
-        //metodo para poder cambiar el estado de las tareas
+        // Actualizar el estado de una tarea
         public static async Task<int> ActualizarEstadoTareaAsync(int idTarea, int idEstadoTarea)
         {
-            int result = 0;
-            using (var bdContexto = new ContextoBD())
-            {
-                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == idTarea);
-                if (tareaBD != null)
-                {
-                    //accedo a actualizar la atera
-                    tareaBD.IdEstadoTarea = idEstadoTarea;
-                    bdContexto.Update(tareaBD);
-                                               //aqui se guardan los cambios
-                    result = await bdContexto.SaveChangesAsync();
-                }
-            }
-            return result;
-        }
+            using var dbContext = new ContextoBD();
+            var tareaDB = await dbContext.Tarea.FirstOrDefaultAsync(t => t.Id == idTarea);
 
+            if (tareaDB == null)
+                return 0;
+
+            tareaDB.IdEstadoTarea = idEstadoTarea;
+            dbContext.Tarea.Update(tareaDB);
+            return await dbContext.SaveChangesAsync();
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//using GestordeTaras.EN;
+//using Microsoft.EntityFrameworkCore;
+//using System;
+//using System.Collections.Generic;
+//using System.Diagnostics;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+
+//namespace GestordeTareas.DAL
+//{
+//    public class TareaDAL
+//    {
+//        //--------------------------------METODO CREAR Tarea.--------------------------
+//        public static async Task<int> CreateAsync(Tarea tarea)
+//        {
+//            int result = 0;
+//            using (var dbContexto = new ContextoBD()) //el comando using hace un proceso de ejecucion
+//            {
+//                dbContexto.Tarea.Add(tarea); //agrego una nueva tarea
+//                result = await dbContexto.SaveChangesAsync();//se guarda a la base de datos
+//            }
+//            return result;
+//        }
+
+//        //--------------------------------METODO MODIFICAR TArea.--------------------------
+//        public static async Task<int> UpdateAsync(Tarea tarea)
+//        {
+//            int result = 0;
+//            using (var bdContexto = new ContextoBD())
+//            {
+//                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(c => c.Id == tarea.Id);
+//                if (tareaBD != null)
+//                {
+//                    // Actualizar solo las propiedades que necesitan ser actualizadas
+//                    tareaBD.Nombre = tarea.Nombre;
+//                    tareaBD.Descripcion = tarea.Descripcion;
+//                    tareaBD.FechaCreacion = tarea.FechaCreacion;
+//                    tareaBD.FechaVencimiento = tarea.FechaVencimiento;
+//                    tareaBD.IdCategoria = tarea.IdCategoria;
+//                    tareaBD.IdPrioridad = tarea.IdPrioridad;
+//                    tareaBD.IdEstadoTarea = tarea.IdEstadoTarea;
+//                    tareaBD.IdProyecto = tarea.IdProyecto;
+
+
+//                    // Guardar cambios solo si hay propiedades actualizadas
+//                    bdContexto.Update(tareaBD);
+//                    result = await bdContexto.SaveChangesAsync();
+//                }
+//            }
+//            return result;
+//        }
+
+//        //...............--------------METODO ELIMINAR---------------------------
+//        public static async Task<int> DeleteAsync(Tarea tarea)
+//        {
+
+//            int result = 0;
+//            using (var bdContexto = new ContextoBD()) //istancio la coneccion
+//            {
+//                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
+//                if (tareaBD != null)//verifico que no este nulo
+//                {
+//                    bdContexto.Tarea.Remove(tareaBD);//elimino anivel de memoria la tarea
+//                    result = await bdContexto.SaveChangesAsync();//le digo a la BD que se elimine y se guarde
+//                }
+//            }
+//            return result;
+//        }
+//        //--------------------------------METODO obtenerporID Tareas.--------------------------
+//        public static async Task<Tarea> GetByIdAsync(Tarea tarea)
+//        {
+//            var tareaBD = new Tarea();
+//            using (var bdContexto = new ContextoBD())
+//            {
+//                tareaBD = await bdContexto.Tarea
+//                    .Include(c => c.Categoria)
+//                    .Include(p => p.Prioridad)
+//                    .Include(e => e.EstadoTarea)
+//                    .Include(r => r.Proyecto)
+//                    .FirstOrDefaultAsync(t => t.Id == tarea.Id); //busco el id
+//            }
+//            return tareaBD;
+//        }
+
+//        //--------------------------------METODO obtener todas las tareas.--------------------------
+//        public static async Task<List<Tarea>> GetAllAsync()
+//        {
+//            using (var dbContext = new ContextoBD())
+//            {
+//                var tareas = await dbContext.Tarea
+//                    .Include(c => c.Categoria)
+//                    .Include(p => p.Prioridad)
+//                    .Include(e => e.EstadoTarea)
+//                    .Include(r => r.Proyecto)
+//                    .ToListAsync();
+
+//                return tareas;
+//            }
+//        }
+
+//        // Filtra las tareas por el ID del proyecto proporcionado 
+//        public static async Task<List<Tarea>> GetTareasByProyectoIdAsync(int proyectoId)
+//        {
+//            try
+//            {
+//                using (var dbContext = new ContextoBD())
+//                {
+//                    var tareas = await dbContext.Tarea
+//                        .Include(c => c.Categoria)
+//                        .Include(p => p.Prioridad)
+//                        .Include(e => e.EstadoTarea)
+//                        .Include(r => r.Proyecto)
+//                        .Where(t => t.IdProyecto == proyectoId)
+//                        .ToListAsync();
+
+//                    // Verificar el conteo de tareas
+//                    Debug.WriteLine($"Tareas encontradas: {tareas.Count}");
+
+//                    return tareas;
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                Debug.WriteLine($"Error: {ex.Message}");
+//                return new List<Tarea>(); // Retorna una lista vacía en caso de error
+//            }
+//        }
+
+
+//        //metodo para poder cambiar el estado de las tareas
+//        public static async Task<int> ActualizarEstadoTareaAsync(int idTarea, int idEstadoTarea)
+//        {
+//            int result = 0;
+//            using (var bdContexto = new ContextoBD())
+//            {
+//                var tareaBD = await bdContexto.Tarea.FirstOrDefaultAsync(t => t.Id == idTarea);
+//                if (tareaBD != null)
+//                {
+//                    //accedo a actualizar la atera
+//                    tareaBD.IdEstadoTarea = idEstadoTarea;
+//                    bdContexto.Update(tareaBD);
+//                                               //aqui se guardan los cambios
+//                    result = await bdContexto.SaveChangesAsync();
+//                }
+//            }
+//            return result;
+//        }
+
+//    }
+//}

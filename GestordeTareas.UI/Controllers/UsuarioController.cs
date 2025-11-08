@@ -21,9 +21,9 @@ namespace GestordeTareas.UI.Controllers
         UsuarioBL _usuarioBL = new UsuarioBL();
         CargoBL cargoBL = new CargoBL();
         private readonly CargoBL _cargoBL;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
-        public UsuarioController(EmailService emailService)
+        public UsuarioController(IEmailService emailService)
         {
             _cargoBL = new CargoBL();
             _emailService = emailService;
@@ -529,7 +529,7 @@ namespace GestordeTareas.UI.Controllers
                     try
                     {
                         // Envía el código de restablecimiento al usuario
-                        await _emailService.EnviarCorreoRestablecimientoAsync(usuarioEncontrado.NombreUsuario, codigo);
+                        await _emailService.SendPasswordResetAsync(usuarioEncontrado.NombreUsuario, codigo);
                         return Json(new { success = true, message = "Código de verificación enviado" });
 
 

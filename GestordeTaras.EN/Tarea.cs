@@ -37,24 +37,24 @@ namespace GestordeTaras.EN
         [Required(ErrorMessage = " La Categoría es Requerida")]
         [Display(Name = "Categoria")]
         public int IdCategoria { get; set; }
-        public Categoria Categoria { get; set; } // Propiedad de navegación
+        public Categoria Categoria { get; set; } 
 
         [ForeignKey("Prioridad")]
         [Required(ErrorMessage = "La Prioridad es Requerida")]
         [Display(Name = "Prioridad")]
         public int IdPrioridad { get; set; }
-        public Prioridad Prioridad { get; set; } // Propiedad de navegación
+        public Prioridad Prioridad { get; set; }
 
         [ForeignKey("EstadoTarea")]
         [Required(ErrorMessage = "El Estado es Requerido")]
         [Display(Name = "Estado")]
         public int IdEstadoTarea { get; set; }
-        public EstadoTarea EstadoTarea { get; set; } // Propiedad de navegación
+        public EstadoTarea EstadoTarea { get; set; } 
 
         [ForeignKey("Proyecto")]
         [Display(Name = "Proyecto")]
         public int IdProyecto { get; set; }
-        public Proyecto Proyecto { get; set; } // Propiedad de navegación
+        public Proyecto Proyecto { get; set; } 
     }
 
 
